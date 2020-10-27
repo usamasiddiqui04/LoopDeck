@@ -12,7 +12,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion compileSdk
     defaultConfig {
-        applicationId "com.obs.marveleditor"
+//        applicationId "com.obs.marveleditor"
         minSdkVersion minSdk
         targetSdkVersion targetSdk
         versionCode 1

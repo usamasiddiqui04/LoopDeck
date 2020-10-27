@@ -1,189 +1,192 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:2:1-37:12
-INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:2:1-37:12
-INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:2:1-37:12
-INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:2:1-37:12
-MERGED from [com.android.support:design:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/design-26.1.0.aar/9228f6a14c94b9077a51ee80be155982/AndroidManifest.xml:17:1-31:12
-MERGED from [com.android.support:appcompat-v7:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/55b6faa12cf56f4f69197055400dbb75/AndroidManifest.xml:17:1-31:12
-MERGED from [com.android.support:transition:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/transition-26.1.0.aar/9dcaf1695e79651196820045c7813e63/AndroidManifest.xml:17:1-28:12
-MERGED from [com.android.support:support-v4:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/9e0bbfeb0e414de7cafa0f7899831adb/AndroidManifest.xml:17:1-31:12
-MERGED from [com.jakewharton:butterknife:8.8.1] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/butterknife-8.8.1.aar/cf5fa2361949a7921d8ce635c031f35c/AndroidManifest.xml:2:1-7:12
-MERGED from [com.android.support:recyclerview-v7:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/recyclerview-v7-26.1.0.aar/acc5ea8296838155af16235d737ad2cd/AndroidManifest.xml:17:1-28:12
-MERGED from [com.android.support:support-media-compat:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/cec27953d10b685f26c5027b35ac2e15/AndroidManifest.xml:17:1-31:12
-MERGED from [com.android.support:support-fragment:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/491d8ef546f43339058c55405311046d/AndroidManifest.xml:17:1-31:12
-MERGED from [com.android.support:support-core-utils:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/1a0a34892625ba92ada9bb7f6fccc235/AndroidManifest.xml:17:1-31:12
-MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/8de897efde4c0be77bf1a8c82d45a246/AndroidManifest.xml:17:1-28:12
-MERGED from [com.android.support:support-core-ui:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/cad508eaf07f9f67a3ee7cd239d88653/AndroidManifest.xml:17:1-31:12
-MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/7c596d7f8ca7f99dda248fd2bad1158c/AndroidManifest.xml:17:1-28:12
-MERGED from [com.android.support:support-compat:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/544a2cd1281ca51634fd8adff067c78b/AndroidManifest.xml:17:1-31:12
-MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/runtime-1.0.0.aar/77b6f290815dad54ff9a4c7505fa6470/AndroidManifest.xml:17:1-30:12
-INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:2:1-37:12
-INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:2:1-37:12
-INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:2:1-37:12
+ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:2:1-35:12
+INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:2:1-35:12
+INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:2:1-35:12
+INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:2:1-35:12
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/658d36fb919e60e5724bb85925202a33/legacy-support-v4-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [com.google.android.material:material:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/fd3c2164c55dc11ea8b7a34a237597cb/material-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [com.jakewharton:butterknife:8.8.1] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/c961be474c5e516b1b6b96310ae99e7d/jetified-butterknife-8.8.1/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.recyclerview:recyclerview:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/842142e74885c9422100376a4e299f9d/recyclerview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.media:media:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/1a935625b8c1a0c0813bf27e92631210/media-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.appcompat:appcompat:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/39bac0e91ebd0f2507ae9f66f56e6920/appcompat-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.fragment:fragment:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/bf9f90769550e1864cfea5ad91c3eb3d/fragment-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/aa6584a252a707c99e57f8ae99ecbca6/vectordrawable-animated-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/4df444dff12f49e85d152f060cc44987/legacy-support-core-ui-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/3025a18289c360946f5a37cfd5f70634/legacy-support-core-utils-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.transition:transition:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/f04200e0c8e15322d8e0543ad68145d5/transition-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/942f312b80e1e7619d0a4c60f676210b/loader-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/3a077b87d6d228ca64a0eb5ad93f4f24/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/6ddb437786cce3bf021c9092b7469609/coordinatorlayout-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/64ced66a213e35e6bfafd2572c9d6193/drawerlayout-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/fc31f1ba1e0919b4887c8f25735e7dcb/slidingpanelayout-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.customview:customview:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/a560a4ec3fd8da2628ebe50565a3a822/customview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/6df3662a28be36077d555b905f533a37/swiperefreshlayout-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/e7ff1863608185737296bd15d2238989/asynclayoutinflater-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/1db5a07ad7fbf3781814b63a85ca90e5/vectordrawable-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/f8e5ba105120da1285d5212b5d6f5ab2/core-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.cardview:cardview:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/016eb7fedc3eabc31b317e685a8006c4/cardview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/f68eb73b605db1403bd9f8c0f023e99d/versionedparcelable-1.0.0/AndroidManifest.xml:17:1-25:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/5b7182dc4f4c6e37d955bf070304fec8/lifecycle-runtime-2.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.documentfile:documentfile:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/4ad254c760abca231626fe43def313c6/documentfile-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/11d27e721a185c58cee5158adca79a1e/localbroadcastmanager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/7bc37b7780771b866d8e7a020ee86318/print-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/0bd619628a3b98e7ebbe43e99831f5f6/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/0336836fa8836b626caf89b408b1cd40/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/3d71c758532c2cbfdf947e9e68596eea/lifecycle-viewmodel-2.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/5dcea2ce1786a846ff144c6c1ac78b8d/lifecycle-livedata-2.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/9743e1b37455a7071e3445d4cd58ef43/lifecycle-livedata-core-2.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.arch.core:core-runtime:2.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/6cfb5720d97d2c00b7a7a033f9951698/core-runtime-2.0.0/AndroidManifest.xml:17:1-22:12
+INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:2:1-35:12
+INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:2:1-35:12
+INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:2:1-35:12
 	package
-		ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:3:5-32
-		INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml
-		INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml
+		ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:3:5-32
+		INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml
+		INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml
 	android:versionName
-		ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:5:5-30
-		INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml
-		INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml
+		ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:5:5-30
+		INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml
+		INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml
 	xmlns:android
-		ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:2:11-69
+		ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:2:11-69
 	android:versionCode
-		ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:4:5-28
-		INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml
-		INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml
+		ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:4:5-28
+		INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml
+		INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml
 uses-sdk
-ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:7:5-9:41
-INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:7:5-9:41
-INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:7:5-9:41
-MERGED from [com.android.support:design:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/design-26.1.0.aar/9228f6a14c94b9077a51ee80be155982/AndroidManifest.xml:21:5-23:62
-MERGED from [com.android.support:design:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/design-26.1.0.aar/9228f6a14c94b9077a51ee80be155982/AndroidManifest.xml:21:5-23:62
-MERGED from [com.android.support:appcompat-v7:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/55b6faa12cf56f4f69197055400dbb75/AndroidManifest.xml:21:5-23:78
-MERGED from [com.android.support:appcompat-v7:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/55b6faa12cf56f4f69197055400dbb75/AndroidManifest.xml:21:5-23:78
-MERGED from [com.android.support:transition:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/transition-26.1.0.aar/9dcaf1695e79651196820045c7813e63/AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:transition:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/transition-26.1.0.aar/9dcaf1695e79651196820045c7813e63/AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-v4:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/9e0bbfeb0e414de7cafa0f7899831adb/AndroidManifest.xml:21:5-23:54
-MERGED from [com.android.support:support-v4:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/9e0bbfeb0e414de7cafa0f7899831adb/AndroidManifest.xml:21:5-23:54
-MERGED from [com.jakewharton:butterknife:8.8.1] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/butterknife-8.8.1.aar/cf5fa2361949a7921d8ce635c031f35c/AndroidManifest.xml:5:5-43
-MERGED from [com.jakewharton:butterknife:8.8.1] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/butterknife-8.8.1.aar/cf5fa2361949a7921d8ce635c031f35c/AndroidManifest.xml:5:5-43
-MERGED from [com.android.support:recyclerview-v7:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/recyclerview-v7-26.1.0.aar/acc5ea8296838155af16235d737ad2cd/AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:recyclerview-v7:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/recyclerview-v7-26.1.0.aar/acc5ea8296838155af16235d737ad2cd/AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-media-compat:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/cec27953d10b685f26c5027b35ac2e15/AndroidManifest.xml:21:5-23:63
-MERGED from [com.android.support:support-media-compat:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/cec27953d10b685f26c5027b35ac2e15/AndroidManifest.xml:21:5-23:63
-MERGED from [com.android.support:support-fragment:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/491d8ef546f43339058c55405311046d/AndroidManifest.xml:21:5-23:60
-MERGED from [com.android.support:support-fragment:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/491d8ef546f43339058c55405311046d/AndroidManifest.xml:21:5-23:60
-MERGED from [com.android.support:support-core-utils:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/1a0a34892625ba92ada9bb7f6fccc235/AndroidManifest.xml:21:5-23:61
-MERGED from [com.android.support:support-core-utils:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/1a0a34892625ba92ada9bb7f6fccc235/AndroidManifest.xml:21:5-23:61
-MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/8de897efde4c0be77bf1a8c82d45a246/AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/8de897efde4c0be77bf1a8c82d45a246/AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-core-ui:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/cad508eaf07f9f67a3ee7cd239d88653/AndroidManifest.xml:21:5-23:58
-MERGED from [com.android.support:support-core-ui:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/cad508eaf07f9f67a3ee7cd239d88653/AndroidManifest.xml:21:5-23:58
-MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/7c596d7f8ca7f99dda248fd2bad1158c/AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/7c596d7f8ca7f99dda248fd2bad1158c/AndroidManifest.xml:20:5-44
-MERGED from [com.android.support:support-compat:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/544a2cd1281ca51634fd8adff067c78b/AndroidManifest.xml:21:5-23:58
-MERGED from [com.android.support:support-compat:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/544a2cd1281ca51634fd8adff067c78b/AndroidManifest.xml:21:5-23:58
-MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/runtime-1.0.0.aar/77b6f290815dad54ff9a4c7505fa6470/AndroidManifest.xml:20:5-22:41
-MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/runtime-1.0.0.aar/77b6f290815dad54ff9a4c7505fa6470/AndroidManifest.xml:20:5-22:41
-INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:7:5-9:41
-INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:7:5-9:41
-	tools:overrideLibrary
-		ADDED from [com.android.support:design:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/design-26.1.0.aar/9228f6a14c94b9077a51ee80be155982/AndroidManifest.xml:23:9-59
+ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:7:5-47
+INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:7:5-47
+INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:7:5-47
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/658d36fb919e60e5724bb85925202a33/legacy-support-v4-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/658d36fb919e60e5724bb85925202a33/legacy-support-v4-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.material:material:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/fd3c2164c55dc11ea8b7a34a237597cb/material-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.material:material:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/fd3c2164c55dc11ea8b7a34a237597cb/material-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [com.jakewharton:butterknife:8.8.1] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/c961be474c5e516b1b6b96310ae99e7d/jetified-butterknife-8.8.1/AndroidManifest.xml:5:5-43
+MERGED from [com.jakewharton:butterknife:8.8.1] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/c961be474c5e516b1b6b96310ae99e7d/jetified-butterknife-8.8.1/AndroidManifest.xml:5:5-43
+MERGED from [androidx.recyclerview:recyclerview:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/842142e74885c9422100376a4e299f9d/recyclerview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/842142e74885c9422100376a4e299f9d/recyclerview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media:media:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/1a935625b8c1a0c0813bf27e92631210/media-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media:media:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/1a935625b8c1a0c0813bf27e92631210/media-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/39bac0e91ebd0f2507ae9f66f56e6920/appcompat-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/39bac0e91ebd0f2507ae9f66f56e6920/appcompat-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.fragment:fragment:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/bf9f90769550e1864cfea5ad91c3eb3d/fragment-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.fragment:fragment:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/bf9f90769550e1864cfea5ad91c3eb3d/fragment-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/aa6584a252a707c99e57f8ae99ecbca6/vectordrawable-animated-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/aa6584a252a707c99e57f8ae99ecbca6/vectordrawable-animated-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/4df444dff12f49e85d152f060cc44987/legacy-support-core-ui-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/4df444dff12f49e85d152f060cc44987/legacy-support-core-ui-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/3025a18289c360946f5a37cfd5f70634/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/3025a18289c360946f5a37cfd5f70634/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.transition:transition:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/f04200e0c8e15322d8e0543ad68145d5/transition-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.transition:transition:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/f04200e0c8e15322d8e0543ad68145d5/transition-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/942f312b80e1e7619d0a4c60f676210b/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/942f312b80e1e7619d0a4c60f676210b/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/3a077b87d6d228ca64a0eb5ad93f4f24/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/3a077b87d6d228ca64a0eb5ad93f4f24/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/6ddb437786cce3bf021c9092b7469609/coordinatorlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/6ddb437786cce3bf021c9092b7469609/coordinatorlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/64ced66a213e35e6bfafd2572c9d6193/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/64ced66a213e35e6bfafd2572c9d6193/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/fc31f1ba1e0919b4887c8f25735e7dcb/slidingpanelayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/fc31f1ba1e0919b4887c8f25735e7dcb/slidingpanelayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/a560a4ec3fd8da2628ebe50565a3a822/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/a560a4ec3fd8da2628ebe50565a3a822/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/6df3662a28be36077d555b905f533a37/swiperefreshlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/6df3662a28be36077d555b905f533a37/swiperefreshlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/e7ff1863608185737296bd15d2238989/asynclayoutinflater-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/e7ff1863608185737296bd15d2238989/asynclayoutinflater-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/1db5a07ad7fbf3781814b63a85ca90e5/vectordrawable-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/1db5a07ad7fbf3781814b63a85ca90e5/vectordrawable-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/f8e5ba105120da1285d5212b5d6f5ab2/core-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/f8e5ba105120da1285d5212b5d6f5ab2/core-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/016eb7fedc3eabc31b317e685a8006c4/cardview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/016eb7fedc3eabc31b317e685a8006c4/cardview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/f68eb73b605db1403bd9f8c0f023e99d/versionedparcelable-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/f68eb73b605db1403bd9f8c0f023e99d/versionedparcelable-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/5b7182dc4f4c6e37d955bf070304fec8/lifecycle-runtime-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/5b7182dc4f4c6e37d955bf070304fec8/lifecycle-runtime-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/4ad254c760abca231626fe43def313c6/documentfile-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/4ad254c760abca231626fe43def313c6/documentfile-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/11d27e721a185c58cee5158adca79a1e/localbroadcastmanager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/11d27e721a185c58cee5158adca79a1e/localbroadcastmanager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/7bc37b7780771b866d8e7a020ee86318/print-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/7bc37b7780771b866d8e7a020ee86318/print-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/0bd619628a3b98e7ebbe43e99831f5f6/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/0bd619628a3b98e7ebbe43e99831f5f6/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/0336836fa8836b626caf89b408b1cd40/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/0336836fa8836b626caf89b408b1cd40/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/3d71c758532c2cbfdf947e9e68596eea/lifecycle-viewmodel-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/3d71c758532c2cbfdf947e9e68596eea/lifecycle-viewmodel-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/5dcea2ce1786a846ff144c6c1ac78b8d/lifecycle-livedata-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/5dcea2ce1786a846ff144c6c1ac78b8d/lifecycle-livedata-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/9743e1b37455a7071e3445d4cd58ef43/lifecycle-livedata-core-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/9743e1b37455a7071e3445d4cd58ef43/lifecycle-livedata-core-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/6cfb5720d97d2c00b7a7a033f9951698/core-runtime-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/6cfb5720d97d2c00b7a7a033f9951698/core-runtime-2.0.0/AndroidManifest.xml:20:5-44
+INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:7:5-47
+INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:7:5-47
 	android:targetSdkVersion
-		ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:9:9-38
-		INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml
-		INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml
+		ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:7:15-44
+		INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml
+		INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml
 	android:minSdkVersion
-		ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:8:9-34
-		INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml
-		INJECTED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml
+		ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:7:5-47
+		INJECTED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml
 uses-permission#android.permission.READ_EXTERNAL_STORAGE
-ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:11:5-80
+ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:9:5-80
 	android:name
-		ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:11:22-77
+		ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:9:22-77
 application
-ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:13:5-35:19
-MERGED from [com.android.support:design:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/design-26.1.0.aar/9228f6a14c94b9077a51ee80be155982/AndroidManifest.xml:25:5-29:19
-MERGED from [com.android.support:design:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/design-26.1.0.aar/9228f6a14c94b9077a51ee80be155982/AndroidManifest.xml:25:5-29:19
-MERGED from [com.android.support:appcompat-v7:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/55b6faa12cf56f4f69197055400dbb75/AndroidManifest.xml:25:5-29:19
-MERGED from [com.android.support:appcompat-v7:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/55b6faa12cf56f4f69197055400dbb75/AndroidManifest.xml:25:5-29:19
-MERGED from [com.android.support:transition:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/transition-26.1.0.aar/9dcaf1695e79651196820045c7813e63/AndroidManifest.xml:22:5-26:19
-MERGED from [com.android.support:transition:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/transition-26.1.0.aar/9dcaf1695e79651196820045c7813e63/AndroidManifest.xml:22:5-26:19
-MERGED from [com.android.support:support-v4:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/9e0bbfeb0e414de7cafa0f7899831adb/AndroidManifest.xml:25:5-29:19
-MERGED from [com.android.support:support-v4:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/9e0bbfeb0e414de7cafa0f7899831adb/AndroidManifest.xml:25:5-29:19
-MERGED from [com.android.support:recyclerview-v7:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/recyclerview-v7-26.1.0.aar/acc5ea8296838155af16235d737ad2cd/AndroidManifest.xml:22:5-26:19
-MERGED from [com.android.support:recyclerview-v7:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/recyclerview-v7-26.1.0.aar/acc5ea8296838155af16235d737ad2cd/AndroidManifest.xml:22:5-26:19
-MERGED from [com.android.support:support-media-compat:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/cec27953d10b685f26c5027b35ac2e15/AndroidManifest.xml:25:5-29:19
-MERGED from [com.android.support:support-media-compat:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/cec27953d10b685f26c5027b35ac2e15/AndroidManifest.xml:25:5-29:19
-MERGED from [com.android.support:support-fragment:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/491d8ef546f43339058c55405311046d/AndroidManifest.xml:25:5-29:19
-MERGED from [com.android.support:support-fragment:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/491d8ef546f43339058c55405311046d/AndroidManifest.xml:25:5-29:19
-MERGED from [com.android.support:support-core-utils:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/1a0a34892625ba92ada9bb7f6fccc235/AndroidManifest.xml:25:5-29:19
-MERGED from [com.android.support:support-core-utils:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/1a0a34892625ba92ada9bb7f6fccc235/AndroidManifest.xml:25:5-29:19
-MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/8de897efde4c0be77bf1a8c82d45a246/AndroidManifest.xml:22:5-26:19
-MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/8de897efde4c0be77bf1a8c82d45a246/AndroidManifest.xml:22:5-26:19
-MERGED from [com.android.support:support-core-ui:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/cad508eaf07f9f67a3ee7cd239d88653/AndroidManifest.xml:25:5-29:19
-MERGED from [com.android.support:support-core-ui:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/cad508eaf07f9f67a3ee7cd239d88653/AndroidManifest.xml:25:5-29:19
-MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/7c596d7f8ca7f99dda248fd2bad1158c/AndroidManifest.xml:22:5-26:19
-MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/7c596d7f8ca7f99dda248fd2bad1158c/AndroidManifest.xml:22:5-26:19
-MERGED from [com.android.support:support-compat:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/544a2cd1281ca51634fd8adff067c78b/AndroidManifest.xml:25:5-29:19
-MERGED from [com.android.support:support-compat:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/544a2cd1281ca51634fd8adff067c78b/AndroidManifest.xml:25:5-29:19
-MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/runtime-1.0.0.aar/77b6f290815dad54ff9a4c7505fa6470/AndroidManifest.xml:24:5-28:19
-MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/runtime-1.0.0.aar/77b6f290815dad54ff9a4c7505fa6470/AndroidManifest.xml:24:5-28:19
+ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:11:5-33:19
+MERGED from [com.google.android.material:material:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/fd3c2164c55dc11ea8b7a34a237597cb/material-1.0.0/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.material:material:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/fd3c2164c55dc11ea8b7a34a237597cb/material-1.0.0/AndroidManifest.xml:22:5-20
+MERGED from [androidx.core:core:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/f8e5ba105120da1285d5212b5d6f5ab2/core-1.0.0/AndroidManifest.xml:22:5-89
+MERGED from [androidx.core:core:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/f8e5ba105120da1285d5212b5d6f5ab2/core-1.0.0/AndroidManifest.xml:22:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/f68eb73b605db1403bd9f8c0f023e99d/versionedparcelable-1.0.0/AndroidManifest.xml:22:5-23:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/f68eb73b605db1403bd9f8c0f023e99d/versionedparcelable-1.0.0/AndroidManifest.xml:22:5-23:19
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.0.0] /Users/ahmedurrehman/.gradle/caches/transforms-2/files-2.1/f8e5ba105120da1285d5212b5d6f5ab2/core-1.0.0/AndroidManifest.xml:22:18-86
 	android:label
-		ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:16:9-41
+		ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:14:9-41
 	android:icon
-		ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:15:9-45
+		ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:13:9-45
 	android:allowBackup
-		ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:14:9-35
+		ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:12:9-35
 	android:theme
-		ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:17:9-40
+		ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:15:9-40
 activity#com.luminous.pick.MainActivity
-ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:18:9-26:20
+ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:16:9-24:20
 	android:label
-		ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:20:13-45
+		ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:18:13-45
 	android:name
-		ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:19:13-58
+		ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:17:13-58
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:21:13-25:29
+ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:19:13-23:29
 action#android.intent.action.MAIN
-ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:22:17-69
+ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:20:17-69
 	android:name
-		ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:22:25-66
+		ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:20:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:24:17-77
+ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:22:17-77
 	android:name
-		ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:24:27-74
+		ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:22:27-74
 activity#com.luminous.pick.CustomGalleryActivity
-ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:27:9-34:20
+ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:25:9-32:20
 	android:name
-		ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:27:19-55
+		ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:25:19-55
 intent-filter#action:name:luminous.ACTION_MULTIPLE_PICK+action:name:luminous.ACTION_PICK+category:name:android.intent.category.DEFAULT
-ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:28:13-33:29
+ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:26:13-31:29
 action#luminous.ACTION_PICK
-ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:29:17-63
+ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:27:17-63
 	android:name
-		ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:29:25-60
+		ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:27:25-60
 action#luminous.ACTION_MULTIPLE_PICK
-ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:30:17-72
+ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:28:17-72
 	android:name
-		ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:30:25-69
+		ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:28:25-69
 category#android.intent.category.DEFAULT
-ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:32:17-76
+ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:30:17-76
 	android:name
-		ADDED from /Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/AndroidManifest.xml:32:27-73
-meta-data#android.support.VERSION
-ADDED from [com.android.support:design:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/design-26.1.0.aar/9228f6a14c94b9077a51ee80be155982/AndroidManifest.xml:26:9-28:38
-MERGED from [com.android.support:appcompat-v7:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/55b6faa12cf56f4f69197055400dbb75/AndroidManifest.xml:26:9-28:38
-MERGED from [com.android.support:appcompat-v7:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/appcompat-v7-26.1.0.aar/55b6faa12cf56f4f69197055400dbb75/AndroidManifest.xml:26:9-28:38
-MERGED from [com.android.support:transition:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/transition-26.1.0.aar/9dcaf1695e79651196820045c7813e63/AndroidManifest.xml:23:9-25:38
-MERGED from [com.android.support:transition:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/transition-26.1.0.aar/9dcaf1695e79651196820045c7813e63/AndroidManifest.xml:23:9-25:38
-MERGED from [com.android.support:support-v4:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/9e0bbfeb0e414de7cafa0f7899831adb/AndroidManifest.xml:26:9-28:38
-MERGED from [com.android.support:support-v4:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-v4-26.1.0.aar/9e0bbfeb0e414de7cafa0f7899831adb/AndroidManifest.xml:26:9-28:38
-MERGED from [com.android.support:recyclerview-v7:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/recyclerview-v7-26.1.0.aar/acc5ea8296838155af16235d737ad2cd/AndroidManifest.xml:23:9-25:38
-MERGED from [com.android.support:recyclerview-v7:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/recyclerview-v7-26.1.0.aar/acc5ea8296838155af16235d737ad2cd/AndroidManifest.xml:23:9-25:38
-MERGED from [com.android.support:support-media-compat:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/cec27953d10b685f26c5027b35ac2e15/AndroidManifest.xml:26:9-28:38
-MERGED from [com.android.support:support-media-compat:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-media-compat-26.1.0.aar/cec27953d10b685f26c5027b35ac2e15/AndroidManifest.xml:26:9-28:38
-MERGED from [com.android.support:support-fragment:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/491d8ef546f43339058c55405311046d/AndroidManifest.xml:26:9-28:38
-MERGED from [com.android.support:support-fragment:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-fragment-26.1.0.aar/491d8ef546f43339058c55405311046d/AndroidManifest.xml:26:9-28:38
-MERGED from [com.android.support:support-core-utils:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/1a0a34892625ba92ada9bb7f6fccc235/AndroidManifest.xml:26:9-28:38
-MERGED from [com.android.support:support-core-utils:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-core-utils-26.1.0.aar/1a0a34892625ba92ada9bb7f6fccc235/AndroidManifest.xml:26:9-28:38
-MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/8de897efde4c0be77bf1a8c82d45a246/AndroidManifest.xml:23:9-25:38
-MERGED from [com.android.support:animated-vector-drawable:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/animated-vector-drawable-26.1.0.aar/8de897efde4c0be77bf1a8c82d45a246/AndroidManifest.xml:23:9-25:38
-MERGED from [com.android.support:support-core-ui:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/cad508eaf07f9f67a3ee7cd239d88653/AndroidManifest.xml:26:9-28:38
-MERGED from [com.android.support:support-core-ui:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-core-ui-26.1.0.aar/cad508eaf07f9f67a3ee7cd239d88653/AndroidManifest.xml:26:9-28:38
-MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/7c596d7f8ca7f99dda248fd2bad1158c/AndroidManifest.xml:23:9-25:38
-MERGED from [com.android.support:support-vector-drawable:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-vector-drawable-26.1.0.aar/7c596d7f8ca7f99dda248fd2bad1158c/AndroidManifest.xml:23:9-25:38
-MERGED from [com.android.support:support-compat:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/544a2cd1281ca51634fd8adff067c78b/AndroidManifest.xml:26:9-28:38
-MERGED from [com.android.support:support-compat:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/support-compat-26.1.0.aar/544a2cd1281ca51634fd8adff067c78b/AndroidManifest.xml:26:9-28:38
-	android:value
-		ADDED from [com.android.support:design:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/design-26.1.0.aar/9228f6a14c94b9077a51ee80be155982/AndroidManifest.xml:28:13-35
-	android:name
-		ADDED from [com.android.support:design:26.1.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/design-26.1.0.aar/9228f6a14c94b9077a51ee80be155982/AndroidManifest.xml:27:13-51
-meta-data#android.arch.lifecycle.VERSION
-ADDED from [android.arch.lifecycle:runtime:1.0.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/runtime-1.0.0.aar/77b6f290815dad54ff9a4c7505fa6470/AndroidManifest.xml:25:9-27:47
-	android:value
-		ADDED from [android.arch.lifecycle:runtime:1.0.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/runtime-1.0.0.aar/77b6f290815dad54ff9a4c7505fa6470/AndroidManifest.xml:27:13-44
-	android:name
-		ADDED from [android.arch.lifecycle:runtime:1.0.0] /Users/mac/Documents/gradle-2.2/caches/transforms-1/files-1.1/runtime-1.0.0.aar/77b6f290815dad54ff9a4c7505fa6470/AndroidManifest.xml:26:13-58
+		ADDED from /Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/AndroidManifest.xml:30:27-73

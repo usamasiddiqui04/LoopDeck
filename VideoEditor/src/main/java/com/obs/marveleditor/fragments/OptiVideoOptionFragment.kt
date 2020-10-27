@@ -8,11 +8,11 @@
 package com.obs.marveleditor.fragments
 
 import android.os.Bundle
-import android.support.v7.widget.AppCompatImageView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
 import com.obs.marveleditor.R
 import com.obs.marveleditor.interfaces.OptiDialogueHelper
 import java.io.File

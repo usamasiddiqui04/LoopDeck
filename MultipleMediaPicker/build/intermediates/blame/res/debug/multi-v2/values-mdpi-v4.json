@@ -1,27 +1,29 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/mac/AndroidStudioProjects/MultipleImagePick/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-mdpi-v4/values-mdpi-v4.xml",
+            "outputFile": "/Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/build/intermediates/incremental/mergeDebugResources/merged.dir/values-mdpi-v4/values-mdpi-v4.xml",
             "map": [
                 {
-                    "source": "/Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/res/values-mdpi/strings.xml",
+                    "source": "/Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/res/values-mdpi/styles.xml",
                     "from": {
-                        "startLines": "3,4,5,6",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "56,110,148,203",
-                        "endColumns": "53,37,54,69",
-                        "endOffsets": "105,143,198,268"
+                        "startLines": "6,16,22",
+                        "startColumns": "4,0,0",
+                        "startOffsets": "211,711,837",
+                        "endLines": "14,19,25",
+                        "endColumns": "12,8,8",
+                        "endOffsets": "709,834,966"
                     },
                     "to": {
-                        "startLines": "11,12,13,14",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "469,523,561,616",
-                        "endColumns": "53,37,54,69",
-                        "endOffsets": "518,556,611,681"
+                        "startLines": "15,24,28",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "686,1189,1317",
+                        "endLines": "23,27,31",
+                        "endColumns": "12,8,8",
+                        "endOffsets": "1184,1312,1446"
                     }
                 },
                 {
-                    "source": "/Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/res/values-mdpi/colors.xml",
+                    "source": "/Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/res/values-mdpi/colors.xml",
                     "from": {
                         "startLines": "17,8,21,15,16,19,23",
                         "startColumns": "4,4,4,4,4,4,4",
@@ -38,7 +40,7 @@
                     }
                 },
                 {
-                    "source": "/Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/res/values-mdpi/dimen.xml",
+                    "source": "/Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/res/values-mdpi/dimen.xml",
                     "from": {
                         "startLines": "4,3",
                         "startColumns": "4,4",
@@ -55,22 +57,20 @@
                     }
                 },
                 {
-                    "source": "/Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/res/values-mdpi/styles.xml",
+                    "source": "/Users/ahmedurrehman/Documents/Development/Android_Projects/Loopdeck_RnD/LoopDeck/MultipleMediaPicker/src/main/res/values-mdpi/strings.xml",
                     "from": {
-                        "startLines": "6,16,22",
-                        "startColumns": "4,0,0",
-                        "startOffsets": "211,711,837",
-                        "endLines": "14,19,25",
-                        "endColumns": "12,8,8",
-                        "endOffsets": "709,834,966"
+                        "startLines": "3,4,5,6",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "56,110,148,203",
+                        "endColumns": "53,37,54,69",
+                        "endOffsets": "105,143,198,268"
                     },
                     "to": {
-                        "startLines": "15,24,28",
-                        "startColumns": "4,4,4",
-                        "startOffsets": "686,1189,1317",
-                        "endLines": "23,27,31",
-                        "endColumns": "12,8,8",
-                        "endOffsets": "1184,1312,1446"
+                        "startLines": "11,12,13,14",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "469,523,561,616",
+                        "endColumns": "53,37,54,69",
+                        "endOffsets": "518,556,611,681"
                     }
                 }
             ]
