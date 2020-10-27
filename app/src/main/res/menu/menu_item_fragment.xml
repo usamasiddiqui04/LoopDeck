@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item
+            android:id="@+id/action_refresh"
+            android:icon="@android:drawable/ic_menu_rotate"
+            android:title="@string/refresh"
+            android:orderInCategory="20"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/action_download"
+            android:icon="@android:drawable/ic_menu_save"
+            android:title="@string/download"
+            android:orderInCategory="21"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/action_rename"
+            android:icon="@android:drawable/ic_menu_edit"
+            android:title="@string/rename"
+            android:orderInCategory="22"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/action_create_link"
+            android:icon="@android:drawable/ic_menu_share"
+            android:title="@string/create_link"
+            android:orderInCategory="23"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/action_set_copy_destination"
+            android:icon="@android:drawable/btn_star_big_off"
+            android:title="@string/set_copy_destination"
+            android:enabled="true"
+            android:visible="true"
+            android:checkable="true"
+            android:orderInCategory="24"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/action_copy"
+            android:icon="@android:drawable/ic_menu_compass"
+            android:title="@string/copy_item"
+            android:enabled="true"
+            android:visible="true"
+            android:orderInCategory="25"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/action_navigate_by_path"
+            android:icon="@android:drawable/ic_dialog_map"
+            android:title="@string/navigate_by_path"
+            android:enabled="true"
+            android:visible="true"
+            android:orderInCategory="26"
+            app:showAsAction="never" />
+    </group>
+
+    <group>
+        <item
+            android:id="@+id/action_create_folder"
+            android:title="@string/create_folder"
+            android:icon="@android:drawable/ic_menu_add"
+            android:orderInCategory="30"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/action_upload_file"
+            android:icon="@android:drawable/ic_menu_upload"
+            android:title="@string/upload_file"
+            android:orderInCategory="31"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/action_view_delta"
+            android:icon="@android:drawable/ic_menu_recent_history"
+            android:title="@string/view_delta"
+            android:orderInCategory="32"
+            app:showAsAction="ifRoom" />
+    </group>
+
+    <group>
+        <item
+            android:id="@+id/action_delete"
+            android:icon="@android:drawable/ic_menu_delete"
+            android:title="Delete"
+            android:orderInCategory="40"
+            app:showAsAction="ifRoom" />
+    </group>
+
+</menu>

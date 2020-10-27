@@ -9,15 +9,15 @@ package com.obs.marveleditor.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.BottomSheetDialogFragment
-import android.support.v7.widget.AppCompatTextView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatTextView
 import com.github.guilhe.views.SeekBarRangedView
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.OptiVideoEditor
 import com.obs.marveleditor.R
@@ -40,10 +40,12 @@ class OptiTrimFragment : BottomSheetDialogFragment(), OptiFFMpegCallback {
     private var duration: Long? = null
     private var mContext: Context? = null
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.opti_fragment_trim, container, false)
         return rootView
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,13 +69,12 @@ class OptiTrimFragment : BottomSheetDialogFragment(), OptiFFMpegCallback {
 
             OptiVideoEditor.with(context!!)
                 .setType(OptiConstant.VIDEO_TRIM)
-                .setFile(videoFile!!)
+                .setVideoFile(videoFile!!)
                 .setOutputPath(outputFile.path)
                 .setStartTime(actvStartTime?.text.toString())
                 .setEndTime(actvEndTime?.text.toString())
                 .setCallback(this)
                 .main()
-
             helper?.showLoading(true)
             dismiss()
         }
