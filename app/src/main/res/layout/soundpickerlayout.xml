@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#100C1C"
+    android:layout_height="wrap_content">
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/soundthumbnail"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:scaleType="fitXY"
+        android:layout_margin="10dp"
+        android:src="@drawable/logo_transparent"
+        app:riv_corner_radius="10dp"
+        app:riv_border_width="2dip"
+        app:riv_border_color="#333333"
+        app:riv_mutate_background="true"
+        android:layout_height="75sp"
+        android:layout_width="75sp" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/cardviewplay"
+        app:layout_constraintStart_toStartOf="@id/soundthumbnail"
+        app:layout_constraintEnd_toEndOf="@id/soundthumbnail"
+        app:layout_constraintTop_toTopOf="@id/soundthumbnail"
+        app:layout_constraintBottom_toBottomOf="@id/soundthumbnail"
+        app:cardBackgroundColor="@color/black_trasp"
+        app:cardCornerRadius="360dp">
+
+        <ImageView
+            android:id="@+id/play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:src="@drawable/ic_iconplay" />
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:src="@drawable/ic_baseline_pause_24" />
+
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearlayout"
+        app:layout_constraintStart_toEndOf="@id/soundthumbnail"
+        app:layout_constraintTop_toTopOf="@id/soundthumbnail"
+        app:layout_constraintBottom_toBottomOf="@id/soundthumbnail"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/songtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/soundthumbnail"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Sound Title"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/songalbum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/soundthumbnail"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Sound Alnum"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/songduration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/linearlayout"
+        android:text="56:18"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:textColor="@color/white" />
+
+    <View
+        app:layout_constraintTop_toBottomOf="@id/soundthumbnail"
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:background="#292142"
+        android:layout_height="1dp">
+
+    </View>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/fileImage"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:riv_corner_radius="5dp"
+        android:src="@drawable/iconapplephoto"
+        android:layout_margin="@dimen/_10sdp" />
+
+    <LinearLayout
+        android:id="@+id/fileInformation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/_10sdp"
+        app:layout_constraintStart_toEndOf="@id/fileImage"
+        app:layout_constraintTop_toTopOf="@id/fileImage"
+        app:layout_constraintBottom_toBottomOf="@id/fileImage">
+
+        <TextView
+            android:id="@+id/filename"
+            android:maxLength="15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="File Name"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/fileduration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:90"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textPublished"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Published"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintEnd_toStartOf="@id/publishimg"
+        app:layout_constraintTop_toTopOf="@id/fileImage"
+        app:layout_constraintBottom_toBottomOf="@id/fileImage"
+        android:textColor="@color/battleshipGrey" />
+
+
+    <ImageView
+        android:id="@+id/publishimg"
+        android:layout_margin="@dimen/_10sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/fileImage"
+        app:layout_constraintBottom_toBottomOf="@id/fileImage"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:src="@drawable/oval" />
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/publishimg"
+        app:layout_constraintTop_toTopOf="@id/publishimg"
+        app:layout_constraintEnd_toEndOf="@id/publishimg"
+        app:layout_constraintBottom_toBottomOf="@id/publishimg"
+        android:src="@drawable/iconcheck" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintTop_toBottomOf="@id/fileImage"
+        android:background="#e5e8eb"
+        android:layout_margin="@dimen/_10sdp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorPrimaryDark">#0E2547</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="grey">#F1F4F6</color>
+    <color name="drawer">#100C1C</color>
+    <color name="drawer2">#0E2547</color>
+    <color name="stickersborder">#292142</color>
+    <color name="battleshipGrey">#6c7b8a</color>
+    <color name="tabindicator">#3458f3</color>
+    <color name="warmBlue">#3458f3</color>
+
+    <color name="coral">#ff5c3d</color>
+    <color name="reddishpink">#ff2a5f</color>
+
+    <color name="colorDivider">#aaaaaa</color>
+    <color name="text_grey">#949495</color>
+
+    <color name="blue_color_picker">#0066FF</color>
+    <color name="brown_color_picker">#AF593E</color>
+    <color name="green_color_picker">#01A368</color>
+    <color name="orange_color_picker">#FF861F</color>
+    <color name="red_color_picker">#ED0A3F</color>
+    <color name="red_orange_color_picker">#FF3F34</color>
+    <color name="sky_blue_color_picker">#76D7EA</color>
+    <color name="violet_color_picker">#8359A3</color>
+    <color name="yellow_color_picker">#FBE870</color>
+    <color name="yellow_green_color_picker">#C5E17A</color>
+    <color name="tool_bg">#151414</color>
+    <color name="main_menu">#100D1C</color>
+
+    <color name="text_header">#5f5f5f</color>
+    <color name="line_color">#7a7a7a</color>
+
+    <color name="black_trasp">#99000000</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+
 </resources>
