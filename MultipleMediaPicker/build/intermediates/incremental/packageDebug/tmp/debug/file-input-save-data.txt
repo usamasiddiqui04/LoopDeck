@@ -1,0 +1,7 @@
+#Internal package file, do not edit.
+#Tue Oct 27 17:32:55 PKT 2020
+0.baseType=DIRECTORY
+0.base=/Users/mac/AndroidStudioProjects/MultipleImagePick/app/build/intermediates/transforms/dexMerger/debug/0
+0.path=classes.dex
+0.set=DEX
+count=1

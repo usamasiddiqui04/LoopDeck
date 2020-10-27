@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="accent">#ba8e95</color>
+    <color name="bg_light_blue">#EBF5FF</color>
+    <color name="blue_avail">#005baa</color>
+    <color name="primary">#592c06</color>
+    <color name="primaryDark">#472304</color>
+    <color name="transparent">#00ffffff</color>
+    <dimen name="photo_height">100dp</dimen>
+    <dimen name="photo_width">100dp</dimen>
+    <drawable name="light_black_">#33000000</drawable>
+    <string name="app_name">Luminous Gallery</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_pick">Pick From Gallery</string>
+    <string name="btn_pick_mul">Pick From Gallery (Multiple)</string>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">@color/accent</item>
+
+        <!--<item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
+        <!--&lt;!&ndash;<item name="android:statusBarColor">#AA1a3f69</item>&ndash;&gt;-->
+        <!--<item name="android:windowTranslucentStatus">false</item>-->
+    </style>
+    <style name="btn">
+    <item name="android:textColor">#ffffff</item>
+    <item name="android:textSize">18sp</item>
+</style>
+    <style name="title_bar">
+    <item name="android:textColor">#d9f3ff</item>
+    <item name="android:textSize">22sp</item>
+</style>
+</resources>

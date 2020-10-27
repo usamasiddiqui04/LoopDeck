@@ -1,0 +1,79 @@
+{
+    "logs": [
+        {
+            "outputFile": "/Users/mac/AndroidStudioProjects/MultipleImagePick/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-mdpi-v4/values-mdpi-v4.xml",
+            "map": [
+                {
+                    "source": "/Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/res/values-mdpi/strings.xml",
+                    "from": {
+                        "startLines": "3,4,5,6",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "56,110,148,203",
+                        "endColumns": "53,37,54,69",
+                        "endOffsets": "105,143,198,268"
+                    },
+                    "to": {
+                        "startLines": "11,12,13,14",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "469,523,561,616",
+                        "endColumns": "53,37,54,69",
+                        "endOffsets": "518,556,611,681"
+                    }
+                },
+                {
+                    "source": "/Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/res/values-mdpi/colors.xml",
+                    "from": {
+                        "startLines": "17,8,21,15,16,19,23",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "726,313,862,638,680,768,908",
+                        "endColumns": "40,47,44,41,45,47,54",
+                        "endOffsets": "762,356,902,675,721,811,958"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6,7,10",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "55,96,144,189,231,277,414",
+                        "endColumns": "40,47,44,41,45,47,54",
+                        "endOffsets": "91,139,184,226,272,320,464"
+                    }
+                },
+                {
+                    "source": "/Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/res/values-mdpi/dimen.xml",
+                    "from": {
+                        "startLines": "4,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "100,56",
+                        "endColumns": "44,43",
+                        "endOffsets": "140,95"
+                    },
+                    "to": {
+                        "startLines": "8,9",
+                        "startColumns": "4,4",
+                        "startOffsets": "325,370",
+                        "endColumns": "44,43",
+                        "endOffsets": "365,409"
+                    }
+                },
+                {
+                    "source": "/Users/mac/AndroidStudioProjects/MultipleImagePick/app/src/main/res/values-mdpi/styles.xml",
+                    "from": {
+                        "startLines": "6,16,22",
+                        "startColumns": "4,0,0",
+                        "startOffsets": "211,711,837",
+                        "endLines": "14,19,25",
+                        "endColumns": "12,8,8",
+                        "endOffsets": "709,834,966"
+                    },
+                    "to": {
+                        "startLines": "15,24,28",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "686,1189,1317",
+                        "endLines": "23,27,31",
+                        "endColumns": "12,8,8",
+                        "endOffsets": "1184,1312,1446"
+                    }
+                }
+            ]
+        }
+    ]
+}

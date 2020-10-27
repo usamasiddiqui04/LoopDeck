@@ -1,0 +1,6 @@
+include ':PhotoEditor'
+include ':photoeditor'
+include ':VideoEditor'
+include ':MultipleMediaPicker'
+include ':app'
+rootProject.name = "LoopDeck"
