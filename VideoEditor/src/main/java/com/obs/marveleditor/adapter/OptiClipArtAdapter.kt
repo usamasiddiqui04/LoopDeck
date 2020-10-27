@@ -10,12 +10,13 @@ package com.obs.marveleditor.adapter
 import android.content.Context
 import android.graphics.Color
 import android.net.Uri
-import android.support.v7.widget.RecyclerView
+
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
 import com.obs.marveleditor.R
 import com.obs.marveleditor.interfaces.OptiClipArtListener
 import java.io.File

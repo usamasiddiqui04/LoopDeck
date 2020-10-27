@@ -23,18 +23,18 @@ import android.os.Environment
 import android.os.Handler
 import android.provider.MediaStore
 import android.provider.Settings
-import android.support.design.widget.BottomSheetDialogFragment
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.FileProvider
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.FFmpegLoadBinaryResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException
@@ -44,24 +44,21 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.util.Util
-import com.obs.marveleditor.OptiVideoEditor
-import com.obs.marveleditor.utils.OptiCommonMethods
-import com.obs.marveleditor.utils.OptiConstant
-import com.obs.marveleditor.R
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.obs.marveleditor.OptiTrimmerActivity
-import com.obs.marveleditor.utils.OptiSessionManager
+import com.obs.marveleditor.OptiVideoEditor
+import com.obs.marveleditor.R
 import com.obs.marveleditor.adapter.OptiVideoOptionsAdapter
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.interfaces.OptiVideoOptionListener
-import com.obs.marveleditor.utils.OptiUtils
-import com.obs.marveleditor.utils.VideoUtils
-import com.obs.marveleditor.utils.VideoFrom
+import com.obs.marveleditor.utils.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.CallBacks, OptiVideoOptionListener,
-    OptiFFMpegCallback  {
+class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.CallBacks,
+    OptiVideoOptionListener,
+    OptiFFMpegCallback {
 
     private var tagName: String = OptiMasterProcessorFragment::class.java.simpleName
     private lateinit var rootView: View
@@ -90,10 +87,21 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
     private var isLargeVideo: Boolean? = false
     private var mContext: Context? = null
     private var tvInfo: TextView? = null
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    private val sharedPrefFile = "videoPath"
+    var videoPath: String? = null
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.opti_video_processor_fragment, container, false)
+        val sharedPreferences: SharedPreferences =
+            requireActivity().getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+        videoPath = sharedPreferences.getString("videoPath", "defaultname")
+
+        masterVideoFile = File(videoPath)
         initView(rootView)
+        initializePlayer()
         return rootView
     }
 
@@ -127,7 +135,12 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
         //videoOptions.add(OptiConstant.TRANSITION)
 
         optiVideoOptionsAdapter =
-            OptiVideoOptionsAdapter(videoOptions, activity!!.applicationContext, this, orientationLand)
+            OptiVideoOptionsAdapter(
+                videoOptions,
+                activity!!.applicationContext,
+                this,
+                orientationLand
+            )
         rvVideoOptions.adapter = optiVideoOptionsAdapter
         optiVideoOptionsAdapter.notifyDataSetChanged()
 
@@ -174,7 +187,8 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
                     if (masterVideoFile != null) {
                         val outputFile = createSaveVideoFile()
                         OptiCommonMethods.copyFile(masterVideoFile, outputFile)
-                        Toast.makeText(context, R.string.successfully_saved, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.successfully_saved, Toast.LENGTH_SHORT)
+                            .show()
                         OptiUtils.refreshGallery(outputFile.absolutePath, context!!)
                         tvSave!!.visibility = View.GONE
                     }
@@ -183,14 +197,14 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
                 .show()
         }
 
-        tvInfo?.setOnClickListener{
+        tvInfo?.setOnClickListener {
             OptiVideoOptionFragment.newInstance().apply {
                 setHelper(this@OptiMasterProcessorFragment)
             }.show(fragmentManager, "OptiVideoOptionFragment")
         }
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
+    override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         //for playing video in landscape mode
         if (newConfig!!.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -201,7 +215,12 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
             orientationLand = false
         }
         optiVideoOptionsAdapter =
-            OptiVideoOptionsAdapter(videoOptions, activity!!.applicationContext, this, orientationLand)
+            OptiVideoOptionsAdapter(
+                videoOptions,
+                activity!!.applicationContext,
+                this,
+                orientationLand
+            )
         rvVideoOptions.adapter = optiVideoOptionsAdapter
         optiVideoOptionsAdapter.notifyDataSetChanged()
     }
@@ -226,7 +245,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
         val extension = OptiCommonMethods.getFileExtension(masterVideoFile!!.absolutePath)
 
         //check video format before playing into exoplayer
-        if(extension == OptiConstant.AVI_FORMAT){
+        if (extension == OptiConstant.AVI_FORMAT) {
             convertAviToMp4() //avi format is not supported in exoplayer
         } else {
             playbackPosition = 0
@@ -284,7 +303,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
             Log.v(tagName, "videoPath1: " + videoFile!!.absolutePath)
             videoUri = FileProvider.getUriForFile(
                 context!!,
-                "com.obs.marveleditor.provider", videoFile!!
+                "com.example.loopdeck.fileprovider", videoFile!!
             )
             cameraIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 240) //4 minutes
             cameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1)
@@ -295,7 +314,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
 
     private fun checkStoragePermission(permission: Array<String>) {
         val blockedPermission = checkHasPermission(activity, permission)
-        if (blockedPermission != null && blockedPermission.size > 0) {
+        if (blockedPermission.size > 0) {
             val isBlocked = isPermissionBlocked(activity, blockedPermission)
             if (isBlocked) {
                 callPermissionSettings()
@@ -419,7 +438,10 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
 
     private var isFirstTimePermission: Boolean
         get() = preferences.getBoolean("isFirstTimePermission", false)
-        set(isFirstTime) = preferences.edit().putBoolean("isFirstTimePermission", isFirstTime).apply()
+        @RequiresApi(Build.VERSION_CODES.GINGERBREAD)
+        set(isFirstTime) = preferences.edit().putBoolean("isFirstTimePermission", isFirstTime)
+            .apply()
+
 
     private val isMarshmallow: Boolean
         get() = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) or (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1)
@@ -428,7 +450,11 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
         permissionList = ArrayList()
         if (isMarshmallow && context != null && permissions != null) {
             for (permission in permissions) {
-                if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(
+                        context,
+                        permission
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
                     permissionList.add(permission)
                 }
             }
@@ -465,7 +491,14 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
                     Log.v(tagName, "data: " + data.data)
 
                     if (resultCode == RESULT_OK) {
-                        masterVideoFile = OptiCommonMethods.writeIntoFile(activity, data, videoFile)
+                        masterVideoFile = activity?.let { it1 ->
+                            videoFile?.let { it2 ->
+                                OptiCommonMethods.writeIntoFile(
+                                    it1, data,
+                                    it2
+                                )
+                            }
+                        }
 
                         val timeInMillis = OptiUtils.getVideoDuration(context!!, masterVideoFile!!)
                         Log.v(tagName, "timeInMillis: $timeInMillis")
@@ -478,12 +511,19 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
                             currentWindow = 0
                             initializePlayer()
                         } else {
-                            Toast.makeText(activity, getString(R.string.error_select_smaller_video), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                activity,
+                                getString(R.string.error_select_smaller_video),
+                                Toast.LENGTH_SHORT
+                            ).show()
 
                             val uri = Uri.fromFile(masterVideoFile)
                             val intent = Intent(context, OptiTrimmerActivity::class.java)
                             intent.putExtra("VideoPath", masterVideoFile!!.absolutePath)
-                            intent.putExtra("VideoDuration", OptiCommonMethods.getMediaDuration(context, uri))
+                            intent.putExtra(
+                                "VideoDuration",
+                                OptiCommonMethods.getMediaDuration(context, uri)
+                            )
                             startActivityForResult(intent, OptiConstant.MAIN_VIDEO_TRIM)
                         }
                     }
@@ -493,7 +533,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
             OptiConstant.MAIN_VIDEO_TRIM -> {
                 if (resultCode == RESULT_OK) {
                     val startPosition = data!!.getIntExtra("startPosition", 0)
-                    val endPosition = data.getIntExtra("endPosition",0)
+                    val endPosition = data.getIntExtra("endPosition", 0)
 
                     val startPos = VideoUtils.secToTime(startPosition.toLong())
                     val endPos = VideoUtils.secToTime(endPosition.toLong())
@@ -504,7 +544,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
 
                     OptiVideoEditor.with(context!!)
                         .setType(OptiConstant.VIDEO_TRIM)
-                        .setFile(masterVideoFile!!)
+                        .setVideoFile(masterVideoFile!!)
                         .setOutputPath(outputFile.path)
                         .setStartTime(startPos)
                         .setEndTime(endPos)
@@ -536,7 +576,8 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
                         Log.v(tagName, "filePath: $filePath")
                         masterVideoFile = File(filePath)
 
-                        val extension = OptiCommonMethods.getFileExtension(masterVideoFile!!.absolutePath)
+                        val extension =
+                            OptiCommonMethods.getFileExtension(masterVideoFile!!.absolutePath)
 
                         val timeInMillis = OptiUtils.getVideoDuration(context!!, masterVideoFile!!)
                         Log.v(tagName, "timeInMillis: $timeInMillis")
@@ -546,7 +587,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
                         //check if video is more than 4 minutes
                         if (duration < OptiConstant.VIDEO_LIMIT) {
                             //check video format before playing into exoplayer
-                            if(extension == OptiConstant.AVI_FORMAT){
+                            if (extension == OptiConstant.AVI_FORMAT) {
                                 convertAviToMp4() //avi format is not supported in exoplayer
                             } else {
                                 playbackPosition = 0
@@ -554,13 +595,20 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
                                 initializePlayer()
                             }
                         } else {
-                            Toast.makeText(activity, getString(R.string.error_select_smaller_video), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                activity,
+                                getString(R.string.error_select_smaller_video),
+                                Toast.LENGTH_SHORT
+                            ).show()
 
                             isLargeVideo = true
                             val uri = Uri.fromFile(masterVideoFile)
                             val intent = Intent(context, OptiTrimmerActivity::class.java)
                             intent.putExtra("VideoPath", filePath)
-                            intent.putExtra("VideoDuration", OptiCommonMethods.getMediaDuration(context, uri))
+                            intent.putExtra(
+                                "VideoDuration",
+                                OptiCommonMethods.getMediaDuration(context, uri)
+                            )
                             startActivityForResult(intent, OptiConstant.MAIN_VIDEO_TRIM)
                         }
                     }
@@ -575,7 +623,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
         super.onResume()
         if (Util.SDK_INT <= 23 || exoPlayer == null) {
             masterVideoFile?.let {
-                if(!isLargeVideo!!) { //for the larger video player shouldn't resume on cancel in trimming view
+                if (!isLargeVideo!!) { //for the larger video player shouldn't resume on cancel in trimming view
                     initializePlayer()
                 }
             }
@@ -603,8 +651,8 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
     }
 
     private fun initializePlayer() {
-        try{
-            tvInfo!!.visibility= View.GONE
+        try {
+            tvInfo!!.visibility = View.GONE
 
             ePlayer?.useController = true
             exoPlayer = ExoPlayerFactory.newSimpleInstance(
@@ -621,10 +669,11 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
 
             exoPlayer?.prepare(VideoUtils.buildMediaSource(Uri.fromFile(masterVideoFile), VideoFrom.LOCAL))
 
+
             exoPlayer?.seekTo(0)
 
             exoPlayer?.seekTo(currentWindow, playbackPosition)
-        } catch (exception: Exception){
+        } catch (exception: Exception) {
             Log.v(tagName, "exception: " + exception.localizedMessage)
         }
     }
@@ -636,7 +685,10 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
         override fun onSeekProcessed() {
         }
 
-        override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
+        override fun onTracksChanged(
+            trackGroups: TrackGroupArray?,
+            trackSelections: TrackSelectionArray?
+        ) {
         }
 
         override fun onPlayerError(error: ExoPlaybackException?) {
@@ -686,7 +738,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
 
                 OptiVideoEditor.with(context!!)
                     .setType(OptiConstant.CONVERT_AVI_TO_MP4)
-                    .setFile(masterVideoFile!!)
+                    .setVideoFile(masterVideoFile!!)
                     .setOutputPath(outputFile.path)
                     .setCallback(this)
                     .main()
@@ -719,13 +771,21 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
     }
 
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
 
             OptiConstant.VIDEO_GALLERY -> {
                 for (permission in permissions) {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(activity as Activity, permission)) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(
+                            activity as Activity,
+                            permission
+                        )
+                    ) {
                         Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
                         break
                     } else {
@@ -736,7 +796,10 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
                         ) {
                             //call the gallery intent
                             OptiUtils.refreshGalleryAlone(context!!)
-                            val i = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
+                            val i = Intent(
+                                Intent.ACTION_PICK,
+                                MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                            )
                             i.type = "video/*"
                             i.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("video/*"))
                             startActivityForResult(i, OptiConstant.VIDEO_GALLERY)
@@ -750,7 +813,11 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
 
             OptiConstant.AUDIO_GALLERY -> { //not used
                 for (permission in permissions) {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(activity as Activity, permission)) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(
+                            activity as Activity,
+                            permission
+                        )
+                    ) {
                         Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
                     } else {
                         if (ActivityCompat.checkSelfPermission(
@@ -760,7 +827,10 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
                         ) {
                             //call the gallery intent
                             OptiUtils.refreshGalleryAlone(context!!)
-                            val i = Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI)
+                            val i = Intent(
+                                Intent.ACTION_PICK,
+                                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                            )
                             i.type = "video/*"
                             i.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("video/*"))
                             startActivityForResult(i, OptiConstant.AUDIO_GALLERY)
@@ -774,7 +844,11 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
 
             OptiConstant.RECORD_VIDEO -> {
                 for (permission in permissions) {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(activity as Activity, permission)) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(
+                            activity as Activity,
+                            permission
+                        )
+                    ) {
                         Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
                         break
                     } else {
@@ -805,7 +879,11 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
 
             OptiConstant.ADD_ITEMS_IN_STORAGE -> {
                 for (permission in permissions) {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(activity as Activity, permission)) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(
+                            activity as Activity,
+                            permission
+                        )
+                    ) {
                         Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
                         break
                     } else {
@@ -834,11 +912,13 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
     }
 
     private fun createSaveVideoFile(): File {
-        val timeStamp: String = SimpleDateFormat(OptiConstant.DATE_FORMAT, Locale.getDefault()).format(Date())
+        val timeStamp: String =
+            SimpleDateFormat(OptiConstant.DATE_FORMAT, Locale.getDefault()).format(Date())
         val imageFileName: String = OptiConstant.APP_NAME + timeStamp + "_"
 
         val path =
-            Environment.getExternalStorageDirectory().toString() + File.separator + OptiConstant.APP_NAME + File.separator + OptiConstant.MY_VIDEOS + File.separator
+            Environment.getExternalStorageDirectory()
+                .toString() + File.separator + OptiConstant.APP_NAME + File.separator + OptiConstant.MY_VIDEOS + File.separator
         val folder = File(path)
         if (!folder.exists())
             folder.mkdirs()
@@ -901,7 +981,6 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
                         setDuration(timeInMillis)
                     }.show(fragmentManager, "OptiAddMusicFragment")
                 }
-
                 if (masterVideoFile == null) {
                     OptiUtils.showGlideToast(
                         activity!!,

@@ -15,12 +15,12 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.DialogFragment
 import android.widget.Toast
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import java.io.File
 import android.webkit.MimeTypeMap
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.DialogFragment
 import com.obs.marveleditor.R
 
 abstract class OptiBaseCreatorDialogFragment : DialogFragment() {
@@ -39,11 +39,19 @@ abstract class OptiBaseCreatorDialogFragment : DialogFragment() {
         when (requestCode) {
             130 -> {
                 for (permission in permissions) {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(activity as Activity, permission)) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(
+                            activity as Activity,
+                            permission
+                        )
+                    ) {
                         //denied
                         Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
                     } else {
-                        if (ActivityCompat.checkSelfPermission(context!!, permissionsRequired[0]) == PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.checkSelfPermission(
+                                context!!,
+                                permissionsRequired[0]
+                            ) == PackageManager.PERMISSION_GRANTED
+                        ) {
                             //SaveImage()
                         } else {
                             callPermissionSettings()
@@ -55,10 +63,10 @@ abstract class OptiBaseCreatorDialogFragment : DialogFragment() {
         }
     }
 
-    override fun onCancel(dialog: DialogInterface?) {
-        super.onCancel(dialog)
-        stopRunningProcess()
-    }
+//    override fun onCancel(dialog: DialogInterface?) {
+//        super.onCancel(dialog)
+//        stopRunningProcess()
+//    }
 
     private fun callPermissionSettings() {
         val intent = Intent()
