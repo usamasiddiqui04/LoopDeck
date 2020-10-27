@@ -12,15 +12,15 @@ import android.graphics.Bitmap
 import android.media.ThumbnailUtils
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.design.widget.BottomSheetDialogFragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.obs.marveleditor.OptiVideoEditor
 import com.obs.marveleditor.R
 import com.obs.marveleditor.adapter.OptiFilterAdapter
@@ -133,7 +133,7 @@ class OptiFilterFragment : BottomSheetDialogFragment(), OptiFilterListener, Opti
 
         OptiVideoEditor.with(context!!)
             .setType(OptiConstant.VIDEO_FLIRT)
-            .setFile(videoFile!!)
+            .setVideoFile(videoFile!!)
             .setFilter(command)
             .setOutputPath(outputFile.path)
             .setCallback(this)

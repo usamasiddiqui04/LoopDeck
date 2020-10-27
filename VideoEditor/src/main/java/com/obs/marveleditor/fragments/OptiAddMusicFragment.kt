@@ -17,15 +17,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
-import android.support.v4.app.ActivityCompat
-import android.support.v7.widget.AppCompatButton
-import android.support.v7.widget.AppCompatImageView
-import android.support.v7.widget.AppCompatTextView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.app.ActivityCompat
 import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.R
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
@@ -269,7 +269,7 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
         this.helper = helper
     }
 
-    override fun setDuration(duration: Long) {
+    fun setDuration(duration: Long) {
         this.seekToValue = duration
     }
 
@@ -394,6 +394,10 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
         Log.d("getMimeType = ", "" + getMimeType(videoFile!!.absolutePath))
     }
 
+    override fun duration(duration: Long) {
+        TODO("Not yet implemented")
+    }
+
     override fun onProgress(progress: String) {
         Log.v(tagName, "onProgress()")
         if (nextAction == 1) {
@@ -442,6 +446,7 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
         }
     }
 
+
     private fun muxVideoPlayer() {
 
         stopRunningProcess()
@@ -453,15 +458,19 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
 
             nextAction = 2
 
-            OptiVideoEditor.with(context!!)
-                .setType(OptiConstant.VIDEO_AUDIO_MERGE)
-                .setFile(videoFile!!)
-                .setAudioFile(audioFile!!)
-                .setOutputPath(outputFile.path)
-                .setCallback(this)
-                .main()
 
-            helper?.showLoading(true)
+            if(audioFile != null && videoFile != null){
+                OptiVideoEditor.with(context!!)
+                    .setType(OptiConstant.VIDEO_AUDIO_MERGE)
+                    .setVideoFile(videoFile!!)
+                    .setAudioFile(audioFile!!)
+                    .setOutputPath(outputFile.path)
+                    .setCallback(this)
+                    .main()
+
+                helper?.showLoading(true)
+            }
+
         } else {
             showInProgressToast()
         }

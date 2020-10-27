@@ -8,7 +8,7 @@
 <resources>
     <string name="app_name">Video Editor </string>
 
-    <string name="video_editing">Video Editor</string>
+    <string name="video_editing">Loopdeck Editor</string>
     <string name="save">Save</string>
     <string name="processing_video">Processing Video</string>
     <string name="video_1">Video 1</string>
