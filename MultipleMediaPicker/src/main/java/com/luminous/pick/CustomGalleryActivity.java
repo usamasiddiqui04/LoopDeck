@@ -7,13 +7,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.luminous.pick.Adapter.ImageListRecyclerAdapter;
 import com.luminous.pick.utils.Utils;
@@ -28,16 +29,16 @@ import butterknife.ButterKnife;
 
 public class CustomGalleryActivity extends BaseActivity {
 
-//    @BindView(R.id.gridGallery)
+//    //@BindView(R.id.gridGallery)
 //    GridView gridGallery;
 
-    @BindView(R.id.recyclerView)
+    //@BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
-    @BindView(R.id.imgNoMedia)
+    //@BindView(R.id.imgNoMedia)
     ImageView imgNoMedia;
 
-    @BindView(R.id.btnGalleryOk)
+    //@BindView(R.id.btnGalleryOk)
     Button btnGalleryOk;
 
     String action;

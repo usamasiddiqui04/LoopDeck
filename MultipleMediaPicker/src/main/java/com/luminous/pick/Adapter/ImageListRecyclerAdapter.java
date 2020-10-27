@@ -2,12 +2,12 @@ package com.luminous.pick.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.luminous.pick.CustomGallery;
 import com.luminous.pick.R;
@@ -157,11 +157,11 @@ public class ImageListRecyclerAdapter extends RecyclerView.Adapter<ImageListRecy
 
 
     public class VerticalItemHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.imgQueue)
+//        //@BindView(R.id.imgQueue)
         ImageView imgQueue;
-        @BindView(R.id.imgQueueMultiSelected)
+//        //@BindView(R.id.imgQueueMultiSelected)
         ImageView imgQueueMultiSelected;
-        @BindView(R.id.container)
+//        //@BindView(R.id.container)
         View container;
 
         public VerticalItemHolder(View itemView, ImageListRecyclerAdapter adapter) {

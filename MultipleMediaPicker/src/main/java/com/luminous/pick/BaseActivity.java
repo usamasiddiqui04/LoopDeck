@@ -1,6 +1,7 @@
 package com.luminous.pick;
 
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.luminous.pick.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
