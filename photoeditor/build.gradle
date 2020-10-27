@@ -1,5 +1,4 @@
-apply plugin: 'com.android.application'
-
+apply plugin: 'com.android.library'
 android {
     compileSdkVersion compileSdk
     buildToolsVersion "30.0.2"

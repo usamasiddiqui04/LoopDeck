@@ -12,3 +12,11 @@
 /captures
 .externalNativeBuild
 .cxx
+/MultipleMediaPicker/build/outputs/logs/manifest-merger-debug-report.txt
+/MultipleMediaPicker/build/generated/source/buildConfig/debug/com/luminous/pick/BuildConfig.java
+/MultipleMediaPicker/src/main/java/com/luminous/pick/Adapter/ImageListRecyclerAdapter.java
+/MultipleMediaPicker/src/main/java/com/luminous/pick/BaseActivity.java
+/MultipleMediaPicker/src/main/java/com/luminous/pick/CustomGalleryActivity.java
+/MultipleMediaPicker/src/main/java/com/luminous/pick/MainActivity.java
+/MultipleMediaPicker/src/main/AndroidManifest.xml
+/MultipleMediaPicker/build.gradle
