@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import com.luminous.pick.Adapter.ImageListRecyclerAdapter;
 import com.luminous.pick.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -24,7 +25,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
@@ -60,7 +60,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
-        ButterKnife.bind(this);
+       // ButterKnife.bind(MainActivity.this);
 
         initImageLoader();
         init();
@@ -76,8 +76,12 @@ public class MainActivity extends BaseActivity {
     private void init() {
 
         handler = new Handler();
+        recyclerView = findViewById(R.id.recyclerView);
+        imgSinglePick = findViewById(R.id.imgSinglePick);
+        btnGalleryPick = findViewById(R.id.btnGalleryPick);
+        viewSwitcher = findViewById(R.id.viewSwitcher);
+        btnGalleryPickMul = findViewById(R.id.btnGalleryPickMul);
         recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
-//		gridGallery.setFastScrollEnabled(true);
         imageListRecyclerAdapter = new ImageListRecyclerAdapter(getApplicationContext());
         imageListRecyclerAdapter.setMultiplePick(false);
         recyclerView.setAdapter(imageListRecyclerAdapter);
@@ -141,22 +145,20 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);
+        super.onBackPressed();
+        finish();
     }
+
+    //        this.doubleBackToExitPressedOnce = true;
+//        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+//
+//        new Handler().postDelayed(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                doubleBackToExitPressedOnce = false;
+//            }
+//        }, 2000);
 
     ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT , 0) {

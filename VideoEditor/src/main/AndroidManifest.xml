@@ -21,37 +21,29 @@
             android:roundIcon="@mipmap/ic_launcher"
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
-            tools:replace="android:appComponentFactory"
-            android:appComponentFactory="whateverString"
             android:allowBackup="false">
-
         <!--OptiSplashScreen-->
-        <activity android:name="com.obs.marveleditor.OptiSplashScreen">
+        <activity android:name=".OptiSplashScreen">
 
         </activity>
 
         <!--MainActivity-->
-        <activity android:name="com.obs.marveleditor.MainActivity"
+        <activity android:name=".MainActivity"
                   android:screenOrientation="portrait"
                   android:configChanges="orientation|keyboardHidden">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
         <!--OptiTrimmerActivity-->
-        <activity android:name="com.obs.marveleditor.OptiTrimmerActivity"
+        <activity android:name=".OptiTrimmerActivity"
                   android:screenOrientation="portrait"
                   android:configChanges="orientation|keyboardHidden">
         </activity>
 
-<!--        &lt;!&ndash;FileProvider&ndash;&gt;-->
+
 <!--        <provider-->
-<!--                android:name="android.support.v4.content.FileProvider"-->
-<!--                android:authorities="${applicationId}.provider"-->
+<!--                android:name="androidx.core.content.FileProvider"-->
+<!--                android:authorities="com.obs.marveleditor.fileprovider"-->
 <!--                android:exported="false"-->
 <!--                android:grantUriPermissions="true">-->
 <!--            <meta-data-->

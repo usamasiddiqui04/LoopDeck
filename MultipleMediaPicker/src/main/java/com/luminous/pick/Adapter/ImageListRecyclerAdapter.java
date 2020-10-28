@@ -166,7 +166,11 @@ public class ImageListRecyclerAdapter extends RecyclerView.Adapter<ImageListRecy
 
         public VerticalItemHolder(View itemView, ImageListRecyclerAdapter adapter) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+//            ButterKnife.bind(this, itemView);
+
+            imgQueue = itemView.findViewById(R.id.imgQueue);
+            imgQueueMultiSelected = itemView.findViewById(R.id.imgQueueMultiSelected);
+            container = itemView.findViewById(R.id.container);
         }
 
 

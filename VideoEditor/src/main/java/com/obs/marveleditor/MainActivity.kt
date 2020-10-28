@@ -18,9 +18,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Fresco.initialize(this)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main_video_editor)
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.frame_container, OptiMasterProcessorFragment()).commit()
+        fragmentTransaction.replace(R.id.frame_container1, OptiMasterProcessorFragment()).commit()
     }
 }

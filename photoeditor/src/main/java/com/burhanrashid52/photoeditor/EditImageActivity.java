@@ -206,38 +206,25 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-
-            case R.id.imgUndo:
-                mPhotoEditor.undo();
-                break;
-
-            case R.id.imgRedo:
-                mPhotoEditor.redo();
-                break;
-
-            case R.id.imgSave:
-                saveImage();
-                break;
-
-            case R.id.imgClose:
-                onBackPressed();
-                break;
-            case R.id.imgShare:
-                shareImage();
-                break;
-
-            case R.id.imgCamera:
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, CAMERA_REQUEST);
-                break;
-
-            case R.id.imgGallery:
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_REQUEST);
-                break;
+        int id = view.getId();
+        if (id == R.id.imgUndo) {
+            mPhotoEditor.undo();
+        } else if (id == R.id.imgRedo) {
+            mPhotoEditor.redo();
+        } else if (id == R.id.imgSave) {
+            saveImage();
+        } else if (id == R.id.imgClose) {
+            onBackPressed();
+        } else if (id == R.id.imgShare) {
+            shareImage();
+        } else if (id == R.id.imgCamera) {
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, CAMERA_REQUEST);
+        } else if (id == R.id.imgGallery) {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_REQUEST);
         }
     }
 

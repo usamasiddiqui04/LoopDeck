@@ -53,7 +53,7 @@ public class CustomGalleryActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.gallery);
-        ButterKnife.bind(this);
+//        ButterKnife.bind(this);
 
         action = getIntent().getAction();
         if (action == null) {
@@ -73,6 +73,9 @@ public class CustomGalleryActivity extends BaseActivity {
     private void init() {
 
         handler = new Handler();
+        recyclerView = findViewById(R.id.recyclerView);
+        imgNoMedia = findViewById(R.id.imgNoMedia);
+        btnGalleryOk = findViewById(R.id.btnGalleryOk);
         imgNoMedia.setVisibility(View.GONE);
         recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
         imageListRecyclerAdapter = new ImageListRecyclerAdapter(getApplicationContext());
