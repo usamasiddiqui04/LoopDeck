@@ -1,111 +1,85 @@
-package com.burhanrashid52.photoeditor;
+package com.burhanrashid52.photoeditor
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
-import androidx.annotation.NonNull;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.annotation.SuppressLint
+import android.app.Dialog
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import ja.burhanrashid52.photoeditor.PhotoEditor
 
-import java.util.ArrayList;
+class EmojiBSFragment : BottomSheetDialogFragment() {
+    private var mEmojiListener: EmojiListener? = null
 
-import ja.burhanrashid52.photoeditor.PhotoEditor;
-
-public class EmojiBSFragment extends BottomSheetDialogFragment {
-
-    public EmojiBSFragment() {
-        // Required empty public constructor
+    interface EmojiListener {
+        fun onEmojiClick(emojiUnicode: String?)
     }
 
-    private EmojiListener mEmojiListener;
-
-    public interface EmojiListener {
-        void onEmojiClick(String emojiUnicode);
-    }
-
-    private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback = new BottomSheetBehavior.BottomSheetCallback() {
-
-        @Override
-        public void onStateChanged(@NonNull View bottomSheet, int newState) {
-            if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-                dismiss();
+    private val mBottomSheetBehaviorCallback: BottomSheetBehavior.BottomSheetCallback =
+        object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    dismiss()
+                }
             }
 
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         }
-
-        @Override
-        public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-        }
-    };
 
     @SuppressLint("RestrictedApi")
-    @Override
-    public void setupDialog(Dialog dialog, int style) {
-        super.setupDialog(dialog, style);
-        View contentView = View.inflate(getContext(), R.layout.fragment_bottom_sticker_emoji_dialog, null);
-        dialog.setContentView(contentView);
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) contentView.getParent()).getLayoutParams();
-        CoordinatorLayout.Behavior behavior = params.getBehavior();
-
-        if (behavior != null && behavior instanceof BottomSheetBehavior) {
-            ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
+    override fun setupDialog(dialog: Dialog, style: Int) {
+        super.setupDialog(dialog, style)
+        val contentView = View.inflate(context, R.layout.fragment_bottom_sticker_emoji_dialog, null)
+        dialog.setContentView(contentView)
+        val params = (contentView.parent as View).layoutParams as CoordinatorLayout.LayoutParams
+        val behavior = params.behavior
+        if (behavior != null && behavior is BottomSheetBehavior<*>) {
+            behavior.setBottomSheetCallback(mBottomSheetBehaviorCallback)
         }
-        ((View) contentView.getParent()).setBackgroundColor(getResources().getColor(android.R.color.transparent));
-        RecyclerView rvEmoji = contentView.findViewById(R.id.rvEmoji);
-
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 5);
-        rvEmoji.setLayoutManager(gridLayoutManager);
-        EmojiAdapter emojiAdapter = new EmojiAdapter();
-        rvEmoji.setAdapter(emojiAdapter);
+        (contentView.parent as View).setBackgroundColor(resources.getColor(android.R.color.transparent))
+        val rvEmoji: RecyclerView = contentView.findViewById(R.id.rvEmoji)
+        val gridLayoutManager = GridLayoutManager(activity, 5)
+        rvEmoji.layoutManager = gridLayoutManager
+        val emojiAdapter = EmojiAdapter()
+        rvEmoji.adapter = emojiAdapter
     }
 
-    public void setEmojiListener(EmojiListener emojiListener) {
-        mEmojiListener = emojiListener;
+    fun setEmojiListener(emojiListener: EmojiListener?) {
+        mEmojiListener = emojiListener
     }
 
-
-    public class EmojiAdapter extends RecyclerView.Adapter<EmojiAdapter.ViewHolder> {
-
-        ArrayList<String> emojisList = PhotoEditor.getEmojis(getActivity());
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_emoji, parent, false);
-            return new ViewHolder(view);
+    inner class EmojiAdapter : RecyclerView.Adapter<EmojiAdapter.ViewHolder>() {
+        var emojisList = PhotoEditor.getEmojis(activity)
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view =
+                LayoutInflater.from(parent.context).inflate(R.layout.row_emoji, parent, false)
+            return ViewHolder(view)
         }
 
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.txtEmoji.setText(emojisList.get(position));
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.txtEmoji.text = emojisList[position]
         }
 
-        @Override
-        public int getItemCount() {
-            return emojisList.size();
+        override fun getItemCount(): Int {
+            return emojisList.size
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
-            TextView txtEmoji;
+        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            var txtEmoji: TextView
 
-            ViewHolder(View itemView) {
-                super(itemView);
-                txtEmoji = itemView.findViewById(R.id.txtEmoji);
-
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (mEmojiListener != null) {
-                            mEmojiListener.onEmojiClick(emojisList.get(getLayoutPosition()));
-                        }
-                        dismiss();
+            init {
+                txtEmoji = itemView.findViewById(R.id.txtEmoji)
+                itemView.setOnClickListener {
+                    if (mEmojiListener != null) {
+                        mEmojiListener!!.onEmojiClick(emojisList[layoutPosition])
                     }
-                });
+                    dismiss()
+                }
             }
         }
     }

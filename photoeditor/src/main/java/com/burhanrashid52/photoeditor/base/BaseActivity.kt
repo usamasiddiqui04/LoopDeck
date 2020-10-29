@@ -1,76 +1,79 @@
-package com.burhanrashid52.photoeditor.base;
+package com.burhanrashid52.photoeditor.base
 
-import android.app.ProgressDialog;
-import android.content.pm.PackageManager;
-import androidx.annotation.NonNull;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Toast;
+import android.R
+import android.app.ProgressDialog
+import android.content.pm.PackageManager
+import android.view.View
+import android.view.Window
+import android.view.WindowManager
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
 
 /**
  * Created by Burhanuddin Rashid on 1/17/2018.
  */
-
-public class BaseActivity extends AppCompatActivity {
-
-    public static final int READ_WRITE_STORAGE = 52;
-    private ProgressDialog mProgressDialog;
-
-
-    public boolean requestPermission(String permission) {
-        boolean isGranted = ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
+open class BaseActivity : AppCompatActivity() {
+    private var mProgressDialog: ProgressDialog? = null
+    fun requestPermission(permission: String): Boolean {
+        val isGranted =
+            ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
         if (!isGranted) {
             ActivityCompat.requestPermissions(
-                    this,
-                    new String[]{permission},
-                    READ_WRITE_STORAGE);
+                this, arrayOf(permission),
+                READ_WRITE_STORAGE
+            )
         }
-        return isGranted;
+        return isGranted
     }
 
-    public void isPermissionGranted(boolean isGranted, String permission) {
-
+    open fun isPermissionGranted(isGranted: Boolean, permission: String?) {}
+    fun makeFullScreen() {
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
     }
 
-    public void makeFullScreen() {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case READ_WRITE_STORAGE:
-                isPermissionGranted(grantResults[0] == PackageManager.PERMISSION_GRANTED, permissions[0]);
-                break;
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            READ_WRITE_STORAGE -> isPermissionGranted(
+                grantResults[0] == PackageManager.PERMISSION_GRANTED, permissions[0]
+            )
         }
     }
 
-    protected void showLoading(@NonNull String message) {
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setMessage(message);
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.show();
+    protected fun showLoading(message: String) {
+        mProgressDialog = ProgressDialog(this)
+        mProgressDialog!!.setMessage(message)
+        mProgressDialog!!.setProgressStyle(ProgressDialog.STYLE_SPINNER)
+        mProgressDialog!!.setCancelable(false)
+        mProgressDialog!!.show()
     }
 
-    protected void hideLoading() {
+    protected fun hideLoading() {
         if (mProgressDialog != null) {
-            mProgressDialog.dismiss();
+            mProgressDialog!!.dismiss()
         }
     }
 
-    protected void showSnackbar(@NonNull String message) {
-        View view = findViewById(android.R.id.content);
+    protected fun showSnackbar(message: String) {
+        val view = findViewById<View>(R.id.content)
         if (view != null) {
-            Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    companion object {
+        const val READ_WRITE_STORAGE = 52
     }
 }

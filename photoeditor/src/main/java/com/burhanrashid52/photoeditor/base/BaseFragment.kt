@@ -1,28 +1,24 @@
-package com.burhanrashid52.photoeditor.base;
+package com.burhanrashid52.photoeditor.base
 
-import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 
 /**
- * @author <a href="https://github.com/burhanrashid52">Burhanuddin Rashid</a>
+ * @author [Burhanuddin Rashid](https://github.com/burhanrashid52)
  * @version 0.1.2
  * @since 5/25/2018
  */
-public abstract class BaseFragment extends Fragment {
-
-    protected abstract int getLayoutId();
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (getLayoutId() == 0) {
-            throw new IllegalArgumentException("Invalid layout id");
-        }
-        return inflater.inflate(getLayoutId(), container, false);
+abstract class BaseFragment : Fragment() {
+    protected abstract val layoutId: Int
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        require(layoutId != 0) { "Invalid layout id" }
+        return inflater.inflate(layoutId, container, false)
     }
 }
