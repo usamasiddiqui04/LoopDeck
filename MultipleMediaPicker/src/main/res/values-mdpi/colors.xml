@@ -14,12 +14,12 @@
     <!--<color name="dialog_bg">#f0f0f0</color>-->
 
     <color name="primary">#592c06</color>
-    <color name="primaryDark">#472304</color>
+    <color name="primaryDark">#000000</color>
     <color name="accent">#ba8e95</color>
 
     <color name="transparent">#00ffffff</color>
     <!--<color name="Blue">#005baa</color>-->
-    <color name="blue_avail">#005baa</color>
+    <color name="blue_avail">#000000</color>
 
     <drawable name="light_black_">#33000000</drawable>
 
