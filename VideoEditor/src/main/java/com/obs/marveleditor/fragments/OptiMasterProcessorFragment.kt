@@ -465,7 +465,11 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
                     Log.v(tagName, "data: " + data.data)
 
                     if (resultCode == RESULT_OK) {
-                        masterVideoFile = OptiCommonMethods.writeIntoFile(activity, data, videoFile)
+                        masterVideoFile = activity?.let { it1 -> videoFile?.let { it2 ->
+                            OptiCommonMethods.writeIntoFile(it1, data,
+                                it2
+                            )
+                        } }
 
                         val timeInMillis = OptiUtils.getVideoDuration(context!!, masterVideoFile!!)
                         Log.v(tagName, "timeInMillis: $timeInMillis")
