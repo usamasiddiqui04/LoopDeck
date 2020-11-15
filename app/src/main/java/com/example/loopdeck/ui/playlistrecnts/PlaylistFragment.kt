@@ -84,7 +84,7 @@ class PlaylistFragment : Fragment() {
         viewModel.playlistName.value = playListPath.toString()
         recyclerview?.adapter = recentsPlaylistViewAdaptor
         recyclerview?.layoutManager = GridLayoutManager(requireContext(), 3)
-//        itemTouchHelper.attachToRecyclerView(recyclerview)
+        itemTouchHelper.attachToRecyclerView(recyclerview)
     }
 
     private fun initObservers() {
@@ -94,24 +94,23 @@ class PlaylistFragment : Fragment() {
         })
     }
 
-//    var itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
-//        ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
-//        0
-//    ) {
-//        override fun onMove(
-//            recyclerView: RecyclerView,
-//            viewHolder: RecyclerView.ViewHolder,
-//            target: RecyclerView.ViewHolder
-//        ): Boolean {
-//            val position_dragged = viewHolder.adapterPosition
-//            val position_target = target.adapterPosition
-//            Collections.swap(listOf(viewModel.recentsMediaList.observe(viewLifecycleOwner, { recentsList ->
-//            })), position_dragged, position_target)
-//            recentsPlaylistViewAdaptor.notifyItemMoved(position_dragged, position_target)
-//            return false
-//        }
-//
-//        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
-//    })
+    var itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+        ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
+        0
+    ) {
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
+            val position_dragged = viewHolder.adapterPosition
+            val position_target = target.adapterPosition
+            Collections.swap(listOf(viewModel.loadRecentList(requireContext())), position_dragged, position_target)
+            recentsPlaylistViewAdaptor.notifyItemMoved(position_dragged, position_target)
+            return false
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
+    })
 
 }

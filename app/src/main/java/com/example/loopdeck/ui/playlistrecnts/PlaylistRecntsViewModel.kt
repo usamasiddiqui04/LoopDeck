@@ -13,7 +13,7 @@ class PlaylistRecntsViewModel : ViewModel() {
 
     fun loadRecentList(context: Context) {
         val rootDir = FileUtils.getPlaylistDirectory(context , playlistName.value)
-        recentsMediaList.value = rootDir.listFiles().toList().sortedBy { it.lastModified() }
+        recentsMediaList.value = rootDir.listFiles().toList()
     }
 
 
