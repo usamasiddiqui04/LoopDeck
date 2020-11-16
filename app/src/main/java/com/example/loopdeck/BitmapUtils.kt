@@ -6,6 +6,8 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.FileProvider
+import com.example.loopdeck.data.MediaData
+import com.example.loopdeck.data.MediaRepository
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -69,9 +71,10 @@ internal object BitmapUtils {
     }
 
     @JvmStatic
-    fun SaveVideo(context: Context, selectedImageURI: Uri?) {
+    fun SaveVideo(context: Context, selectedImageURI: Uri?) : File?{
+        var newfile: File? = null
         try {
-            val newfile: File
+
             val videoAsset =
                 context.contentResolver.openAssetFileDescriptor(selectedImageURI!!, "r")
             val `in` = videoAsset!!.createInputStream()
@@ -95,12 +98,16 @@ internal object BitmapUtils {
             }
             `in`.close()
             out.close()
+            return newfile
         } catch (e: Exception) {
             e.printStackTrace()
         }
+
+        return newfile
+
     }
 
-    fun createPlatlist(context: Context , playlistName: String?){
+    fun createPlatlist(context: Context, playlistName: String?) {
         val storageDir = File(context.getExternalFilesDir(null)!!.absolutePath, ROOT_DIRECTORY_NAME)
         if (!storageDir.exists()) {
             storageDir.mkdirs()
@@ -117,7 +124,7 @@ internal object BitmapUtils {
     }
 
     @JvmStatic
-    fun saveImage(context: Context, image: Bitmap, playlistName: String? = null): String? {
+    fun saveImage(context: Context, image: Bitmap, playlistName: String? = null): File? {
 
 
         val storageDir = File(context.getExternalFilesDir(null)!!.absolutePath, ROOT_DIRECTORY_NAME)
@@ -158,11 +165,13 @@ internal object BitmapUtils {
 
             val imageFile = File(destination, imageFileName)
 
+
+
             try {
                 val fOut: OutputStream = FileOutputStream(imageFile)
                 image.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
                 fOut.close()
-                return imageFile.absolutePath
+                return imageFile
 
             } catch (e: Exception) {
                 e.printStackTrace()

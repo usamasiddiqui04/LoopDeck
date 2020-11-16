@@ -22,7 +22,7 @@ buildscript {
     ext.fresco = '1.9.0'
     ext.sdpSize = '1.0.6'
     dependencies {
-        classpath "com.android.tools.build:gradle:3.4.2"
+        classpath 'com.android.tools.build:gradle:4.0.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         //classpath 'com.android.tools.build.jetifier:jetifier-processor:1.0.0-beta02'

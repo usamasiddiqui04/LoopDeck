@@ -5,10 +5,8 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,19 +14,18 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.loopdeck.R
 import com.example.loopdeck.ui.ItemMoveCallbackRecents
 import com.example.loopdeck.ui.adapters.RecentsViewAdaptor
 import com.example.loopdeck.ui.playlistrecnts.PlaylistFragment
-import com.example.loopdeck.utils.isImage
-import com.example.loopdeck.utils.isVideo
 import com.loopdeck.photoeditor.EditImageActivity
 import com.xorbix.loopdeck.cameraapp.BitmapUtils
 import kotlinx.android.synthetic.main.dailogbox.view.*
 import kotlinx.android.synthetic.main.fragment_recents.*
-import java.io.File
 
 class RecentsFragment : Fragment() {
 
@@ -41,11 +38,11 @@ class RecentsFragment : Fragment() {
         RecentsViewAdaptor(mutableListOf(), onItemClickListener)
     }
 
-    private val onItemClickListener: (File) -> Unit = { item ->
-        Toast.makeText(requireContext(), "Item clicked ${item.name}", Toast.LENGTH_SHORT).show()
+    private val onItemClickListener: (String) -> Unit = { item ->
+        Toast.makeText(requireContext(), "Item clicked ${item}", Toast.LENGTH_SHORT).show()
 
         when {
-            item.isImage() -> {
+            item.contains(".jpg") -> {
                 startActivity(
                     Intent(
                         requireContext(),
@@ -53,7 +50,7 @@ class RecentsFragment : Fragment() {
                     )
                 )
             }
-            item.isVideo() -> {
+            item.contains(".mp4") -> {
                 startActivity(
                     Intent(
                         requireContext(),
@@ -63,14 +60,12 @@ class RecentsFragment : Fragment() {
             }
             else -> {
                 requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, PlaylistFragment.newInstance(item.name))
+                    .replace(R.id.container, PlaylistFragment.newInstance(item))
                     .addToBackStack(null)
                     .commit()
             }
         }
     }
-
-
     private lateinit var viewModel: RecentsViewModel
 
     override fun onCreateView(
@@ -92,7 +87,6 @@ class RecentsFragment : Fragment() {
                 viewModel.loadRecentList(requireContext())
             }
         }
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -106,16 +100,19 @@ class RecentsFragment : Fragment() {
 
     private fun initViews() {
 
+
         var touchHelper: ItemTouchHelper? = null
         recyclerview?.adapter = recentsViewAdaptor
         recyclerview?.layoutManager = GridLayoutManager(requireContext(), 3)
         val callback: ItemTouchHelper.Callback = ItemMoveCallbackRecents(recentsViewAdaptor)
         touchHelper = ItemTouchHelper(callback)
-        touchHelper!!.attachToRecyclerView(recyclerview)
+        touchHelper.attachToRecyclerView(recyclerview)
 
         btnpalylist.setOnClickListener {
             SavePlaylistNameDialog(requireContext())
         }
+
+
 
         btnGallery.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
@@ -167,6 +164,7 @@ class RecentsFragment : Fragment() {
         }
     }
 
+
     fun SavePlaylistNameDialog(context: Context) {
 
         val mDialogView = LayoutInflater.from(context).inflate(R.layout.dailogbox, null)
@@ -193,15 +191,22 @@ class RecentsFragment : Fragment() {
 
     private fun initObservers() {
 
-        viewModel.recentsMediaList.observe(viewLifecycleOwner, { recentsList ->
+
+//        viewModel.recentsMediaList.observe(viewLifecycleOwner, { recentsList ->
+//            recentsViewAdaptor.submitList(recentsList)
+//        })
+
+        viewModel.readAllData.observe(viewLifecycleOwner, { recentsList ->
             recentsViewAdaptor.submitList(recentsList)
         })
 
-//        myimageFile = viewModel.findImage(
-//            (File(requireContext().getExternalFilesDir(null)!!.absolutePath)),
-//            "/Loopdeck Media Files'",
-//            requireContext()
-//        );
+
+//        viewModel.readAllData.observe(viewLifecycleOwner , {list ->
+//            for (i in 0 until list.size)
+//            {
+//                Toast.makeText(requireContext(), list.get(i).file_path + "\n${list.get(i).playListId}", Toast.LENGTH_SHORT).show()
+//            }
+//        })
     }
 
 }

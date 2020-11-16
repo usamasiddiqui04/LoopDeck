@@ -16,7 +16,6 @@
             android:id="@+id/imageViewRecentPlaylist"
             android:layout_width="match_parent"
             android:layout_height="125dp"
-            android:contentDescription="@string/app_name"
             android:adjustViewBounds="true"
             android:src="@drawable/ic_baseline_folder_24" />
 

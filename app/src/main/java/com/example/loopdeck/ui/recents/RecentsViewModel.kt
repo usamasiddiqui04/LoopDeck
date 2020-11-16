@@ -1,41 +1,49 @@
 package com.example.loopdeck.ui.recents
 
-import android.app.AlertDialog
-import android.app.Dialog
+import android.app.Application
 import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.Window
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.net.toFile
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.loopdeck.R
+import com.example.loopdeck.data.MediaData
+import com.example.loopdeck.data.MediaDatabase
+import com.example.loopdeck.data.MediaRepository
 import com.example.loopdeck.utils.FileUtils
 import com.example.loopdeck.utils.isImage
 import com.example.loopdeck.utils.isVideo
 import com.xorbix.loopdeck.cameraapp.BitmapUtils.SaveVideo
 import com.xorbix.loopdeck.cameraapp.BitmapUtils.saveImage
-import kotlinx.android.synthetic.main.dailogbox.*
-import kotlinx.android.synthetic.main.dailogbox.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.io.File
-import java.net.URI
-import java.util.ArrayList
 
-class RecentsViewModel : ViewModel() {
+class RecentsViewModel(application: Application) : AndroidViewModel(application) {
     val playlistName = MutableLiveData<String?>()
     val recentsMediaList = MutableLiveData<List<File>>()
     private var mResultsBitmap: Bitmap? = null
+    val file : File? = null
+
+    val readAllData : LiveData<List<MediaData>>
+    private val repository: MediaRepository
+
+    init {
+        val mediaDao = MediaDatabase.getDatabase(application).mediaDao()
+        repository = MediaRepository(mediaDao)
+        readAllData = repository.readAllData
+    }
+
+    fun addMedia (mediaData: MediaData){
+        viewModelScope.launch(Dispatchers.IO){
+            repository.addMediaFile(mediaData)
+        }
+    }
 
     var importedFilesIntent: Intent? = null
 
@@ -62,7 +70,13 @@ class RecentsViewModel : ViewModel() {
                 }
 
                 viewModelScope.async(Dispatchers.IO) {
-                    saveImage(context, mResultsBitmap!!, playlistName.value)
+                    val file = saveImage(context, mResultsBitmap!!, playlistName.value)
+
+                    if (file != null)
+                    {
+                        addMedia(MediaData(0 , file.absolutePath , file.name ,playlistName.value ))
+                    }
+
                 }
             }
         }
@@ -74,7 +88,11 @@ class RecentsViewModel : ViewModel() {
 
                 if (file.isVideo()) {
                     viewModelScope.launch(Dispatchers.IO) {
-                        SaveVideo(context, it)
+                        val file = SaveVideo(context, it)
+                        if (file != null)
+                        {
+                            addMedia(MediaData(0 , file.absolutePath , file.name ,playlistName.value ))
+                        }
                     }
                     Toast.makeText(context, "Video Saved", Toast.LENGTH_SHORT).show()
                     return
@@ -85,7 +103,11 @@ class RecentsViewModel : ViewModel() {
                             MediaStore.Images.Media.getBitmap(context.contentResolver, it)
 
                         viewModelScope.launch(Dispatchers.IO) {
-                            saveImage(context, mResultsBitmap!!)
+                            val file = saveImage(context, mResultsBitmap!!)
+                            if (file != null)
+                            {
+                                addMedia(MediaData(0 , file.absolutePath , file.name ,playlistName.value ))
+                            }
                         }
                     } catch (e: Exception) {
                         //handle exception
@@ -100,10 +122,8 @@ class RecentsViewModel : ViewModel() {
     }
 
 
-
     private fun uriToMediaFile(context: Context, uri: Uri): File? {
-        try
-        {
+        try {
             val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
             val cursor = context.contentResolver.query(uri, filePathColumn, null, null, null)
             if (cursor != null) {
@@ -115,9 +135,7 @@ class RecentsViewModel : ViewModel() {
                 }
                 cursor.close()
             }
-        }
-        catch (e: Exception)
-        {
+        } catch (e: Exception) {
             Toast.makeText(context, "Please select multiples images", Toast.LENGTH_LONG).show()
         }
 

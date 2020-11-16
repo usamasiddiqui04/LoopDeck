@@ -1,54 +1,43 @@
 package com.example.loopdeck.ui.adapters
 
-import android.content.ClipData
-import android.content.Context
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
 import android.media.ThumbnailUtils
 import android.net.Uri
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.loopdeck.R
-import com.example.loopdeck.utils.isImage
-import com.example.loopdeck.utils.isVideo
-import com.loopdeck.photoeditor.EditImageActivity
-import com.obs.marveleditor.MainActivity
+import com.example.loopdeck.data.MediaData
+import com.example.loopdeck.ui.recents.RecentsViewModel
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
 import kotlinx.android.synthetic.main.item_recent_list_images.view.*
 import kotlinx.android.synthetic.main.item_recent_video_lists.view.*
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.*
-import kotlin.coroutines.coroutineContext
 
-class RecentsViewAdaptor(var mList: MutableList<File> , private val itemClickListener: (File) -> Unit) : Adapter<ViewHolder>() {
+class RecentsViewAdaptor(var mList: MutableList<MediaData> , private val itemClickListener: (String) -> Unit) : Adapter<ViewHolder>() {
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is ImageViewHolder -> {
-                holder.bind(mList[position])
+                holder.bind(mList.get(position).file_path)
                 holder.itemView.setOnClickListener{
-                    itemClickListener(mList[position])
+                    itemClickListener(mList.get(position).file_path)
                 }
             }
             is VideoViewHolder -> {
-                holder.bind(mList[position])
+                holder.bind(mList.get(position).file_path)
                 holder.itemView.setOnClickListener{
-                    itemClickListener(mList[position])
+                    itemClickListener(mList.get(position).file_path)
                 }
             }
             is PlaylistViewHolder -> {
-                holder.bind(mList[position])
+                holder.bind(mList.get(position).file_path)
                 holder.itemView.setOnClickListener{
-                    itemClickListener(mList[position])
+                    itemClickListener(mList.get(position).file_path)
                 }
             }
         }
@@ -57,7 +46,7 @@ class RecentsViewAdaptor(var mList: MutableList<File> , private val itemClickLis
 
 
 
-    fun submitList(list: List<File>) {
+    fun submitList(list: List<MediaData>) {
         mList.clear()
         mList.addAll(list)
         notifyDataSetChanged()
@@ -94,24 +83,24 @@ class RecentsViewAdaptor(var mList: MutableList<File> , private val itemClickLis
     override fun getItemViewType(position: Int): Int {
         val file = mList[position]
         return when {
-            file.isImage() -> VIEW_TYPE_IMAGE
-            file.isVideo() -> VIEW_TYPE_VIDEO
+            file.file_path.contains(".jpg") -> VIEW_TYPE_IMAGE
+            file.file_path.contains(".mp4") -> VIEW_TYPE_VIDEO
             else -> VIEW_TYPE_PLAYLIST
         }
     }
 
 
     inner class ImageViewHolder(itemView: View) : ViewHolder(itemView) {
-        fun bind(file: File) {
-            val uri = Uri.parse(file.toString())
+        fun bind(list: String) {
+            val uri = Uri.parse(list)
             itemView.imageViewRecentImage.setImageURI(uri)
 
         }
     }
 
     inner class VideoViewHolder(itemView: View) : ViewHolder(itemView) {
-        fun bind(file: File) {
-            val uri = Uri.parse(file.toString())
+        fun bind(list: String) {
+            val uri = Uri.parse(list.toString())
             val bitmap = ThumbnailUtils.createVideoThumbnail(
                 uri.toString(),
                 MediaStore.Video.Thumbnails.MINI_KIND
@@ -135,9 +124,8 @@ class RecentsViewAdaptor(var mList: MutableList<File> , private val itemClickLis
     }
 
     inner class PlaylistViewHolder(itemView: View) : ViewHolder(itemView) {
-        fun bind(file: File) {
-            val uri = Uri.parse(file.toString())
-            itemView.playlistName.setText(file.name)
+        fun bind(file: String) {
+            itemView.playlistName.setText(file)
         }
     }
     companion object {

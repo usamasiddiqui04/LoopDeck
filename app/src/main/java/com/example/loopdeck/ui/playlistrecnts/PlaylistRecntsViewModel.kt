@@ -28,11 +28,9 @@ class PlaylistRecntsViewModel : ViewModel() {
     var importedFilesIntent: Intent? = null
 
     fun loadRecentList(context: Context) {
-        val rootDir = FileUtils.getPlaylistDirectory(context , playlistName.value)
+        val rootDir = FileUtils.getPlaylistDirectory(context, playlistName.value)
         recentsMediaList.value = rootDir.listFiles().toList()
     }
-
-
     fun importMediaFiles(context: Context) {
 
         importedFilesIntent?.clipData?.let {
@@ -58,8 +56,6 @@ class PlaylistRecntsViewModel : ViewModel() {
         importedFilesIntent?.data?.let {
 
             uriToMediaFile(context, it)?.let { file ->
-
-
                 if (file.isVideo()) {
                     viewModelScope.launch(Dispatchers.IO) {
                         BitmapUtils.SaveVideo(context, it)
@@ -68,12 +64,11 @@ class PlaylistRecntsViewModel : ViewModel() {
                     return
                 } else if (file.isImage()) {
                     try {
-
                         mResultsBitmap =
                             MediaStore.Images.Media.getBitmap(context.contentResolver, it)
 
                         viewModelScope.launch(Dispatchers.IO) {
-                            BitmapUtils.saveImage(context, mResultsBitmap!! , playlistName.value)
+                            BitmapUtils.saveImage(context, mResultsBitmap!!, playlistName.value)
                         }
                     } catch (e: Exception) {
                         //handle exception
@@ -88,10 +83,8 @@ class PlaylistRecntsViewModel : ViewModel() {
     }
 
 
-
     private fun uriToMediaFile(context: Context, uri: Uri): File? {
-        try
-        {
+        try {
             val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
             val cursor = context.contentResolver.query(uri, filePathColumn, null, null, null)
             if (cursor != null) {
@@ -103,14 +96,10 @@ class PlaylistRecntsViewModel : ViewModel() {
                 }
                 cursor.close()
             }
-        }
-        catch (e: Exception)
-        {
+        } catch (e: Exception) {
             Toast.makeText(context, "Please select multiples images", Toast.LENGTH_LONG).show()
         }
 
         return null
     }
-
-
 }
