@@ -17,7 +17,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.loopdeck.R
+import com.example.loopdeck.ui.ItemMoveCallbackRecents
 import com.example.loopdeck.ui.adapters.RecentsViewAdaptor
 import com.example.loopdeck.ui.playlistrecnts.PlaylistFragment
 import com.example.loopdeck.utils.isImage
@@ -89,7 +91,6 @@ class RecentsFragment : Fragment() {
                 viewModel.importMediaFiles(requireContext())
                 viewModel.loadRecentList(requireContext())
             }
-
         }
 
     }
@@ -105,9 +106,12 @@ class RecentsFragment : Fragment() {
 
     private fun initViews() {
 
-
+        var touchHelper: ItemTouchHelper? = null
         recyclerview?.adapter = recentsViewAdaptor
         recyclerview?.layoutManager = GridLayoutManager(requireContext(), 3)
+        val callback: ItemTouchHelper.Callback = ItemMoveCallbackRecents(recentsViewAdaptor)
+        touchHelper = ItemTouchHelper(callback)
+        touchHelper!!.attachToRecyclerView(recyclerview)
 
         btnpalylist.setOnClickListener {
             SavePlaylistNameDialog(requireContext())

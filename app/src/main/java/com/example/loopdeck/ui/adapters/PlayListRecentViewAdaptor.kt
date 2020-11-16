@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.item_recent_list_images.view.*
 import kotlinx.android.synthetic.main.item_recent_video_lists.view.*
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.util.*
 import kotlin.coroutines.coroutineContext
 
 class PlayListRecentViewAdaptor(var mList: MutableList<File>, private val itemClickListener: (File) -> Unit) : Adapter<ViewHolder>() {
@@ -94,6 +95,20 @@ class PlayListRecentViewAdaptor(var mList: MutableList<File>, private val itemCl
             file.isVideo() -> VIEW_TYPE_VIDEO
             else -> VIEW_TYPE_PLAYLIST
         }
+    }
+
+    fun onRowMoved(fromPosition: Int, toPosition: Int) {
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(mList, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(mList, i, i - 1)
+            }
+        }
+
+        notifyItemMoved(fromPosition, toPosition)
     }
 
 
