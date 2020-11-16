@@ -73,7 +73,7 @@ class PlaylistRecntsViewModel : ViewModel() {
                             MediaStore.Images.Media.getBitmap(context.contentResolver, it)
 
                         viewModelScope.launch(Dispatchers.IO) {
-                            BitmapUtils.saveImage(context, mResultsBitmap!!)
+                            BitmapUtils.saveImage(context, mResultsBitmap!! , playlistName.value)
                         }
                     } catch (e: Exception) {
                         //handle exception
