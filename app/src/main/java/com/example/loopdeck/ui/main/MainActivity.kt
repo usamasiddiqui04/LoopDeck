@@ -1,11 +1,10 @@
-package com.example.loopdeck
+package com.example.loopdeck.ui.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.example.loopdeck.ui.recents.RecentsActivity
+import com.example.loopdeck.R
+import com.example.loopdeck.ui.collection.CollectionActivity
 import com.loopdeck.photoeditor.EditImageActivity
 import com.luminous.pick.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -46,7 +45,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(
                 Intent(
                     this@MainActivity,
-                    RecentsActivity::class.java
+                    CollectionActivity::class.java
                 )
             )
         }

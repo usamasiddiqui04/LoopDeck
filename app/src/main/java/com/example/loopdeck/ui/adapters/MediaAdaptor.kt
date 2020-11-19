@@ -1,46 +1,41 @@
 package com.example.loopdeck.ui.adapters
 
-import android.media.ThumbnailUtils
-import android.net.Uri
-import android.provider.MediaStore
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
-import com.example.loopdeck.ui.recents.RecentsViewModel
-import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
-import kotlinx.android.synthetic.main.item_recent_list_images.view.*
-import kotlinx.android.synthetic.main.item_recent_video_lists.view.*
-import java.io.File
+import com.example.loopdeck.ui.viewholders.ImageViewHolder
+import com.example.loopdeck.ui.viewholders.PlaylistViewHolder
+import com.example.loopdeck.ui.viewholders.VideoViewHolder
+import com.example.loopdeck.utils.callbacks.ItemMoveCallback
 import java.util.*
 
-class RecentsViewAdaptor(
+class MediaAdaptor(
     var mList: MutableList<MediaData>,
-    private val itemClickListener: (String) -> Unit
-) : Adapter<ViewHolder>() {
+    private val itemClickListener: (MediaData) -> Unit
+) : Adapter<ViewHolder>(), ItemMoveCallback.DragAndDropListener {
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is ImageViewHolder -> {
-                holder.bind(mList.get(position).file_path)
+                holder.bind(mList[position], itemClickListener)
                 holder.itemView.setOnClickListener {
-                    itemClickListener(mList.get(position).file_path)
+                    itemClickListener(mList[position])
                 }
             }
             is VideoViewHolder -> {
-                holder.bind(mList.get(position).file_path)
+                holder.bind(mList[position], itemClickListener)
                 holder.itemView.setOnClickListener {
-                    itemClickListener(mList.get(position).file_path)
+                    itemClickListener(mList[position])
                 }
             }
             is PlaylistViewHolder -> {
-                holder.bind(mList.get(position).file_path)
+                holder.bind(mList.get(position), itemClickListener)
                 holder.itemView.setOnClickListener {
-                    itemClickListener(mList.get(position).file_path)
+                    itemClickListener(mList.get(position))
                 }
             }
         }
@@ -84,33 +79,14 @@ class RecentsViewAdaptor(
     override fun getItemViewType(position: Int): Int {
         val file = mList[position]
         return when {
-            file.file_path.contains(".jpg") -> VIEW_TYPE_IMAGE
-            file.file_path.contains(".mp4") -> VIEW_TYPE_VIDEO
+            file.filePath.contains(".jpg") -> VIEW_TYPE_IMAGE
+            file.filePath.contains(".mp4") -> VIEW_TYPE_VIDEO
             else -> VIEW_TYPE_PLAYLIST
         }
     }
 
 
-    inner class ImageViewHolder(itemView: View) : ViewHolder(itemView) {
-        fun bind(list: String) {
-            val uri = Uri.parse(list)
-            itemView.imageViewRecentImage.setImageURI(uri)
-
-        }
-    }
-
-    inner class VideoViewHolder(itemView: View) : ViewHolder(itemView) {
-        fun bind(list: String) {
-            val uri = Uri.parse(list.toString())
-            val bitmap = ThumbnailUtils.createVideoThumbnail(
-                uri.toString(),
-                MediaStore.Video.Thumbnails.MINI_KIND
-            )
-            itemView.imageViewRecentVideo.setImageBitmap(bitmap)
-        }
-    }
-
-    fun onRowMoved(fromPosition: Int, toPosition: Int) {
+    override fun onRowMoved(fromPosition: Int, toPosition: Int) {
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
                 Collections.swap(mList, i, i + 1)
@@ -124,11 +100,6 @@ class RecentsViewAdaptor(
         notifyItemMoved(fromPosition, toPosition)
     }
 
-    inner class PlaylistViewHolder(itemView: View) : ViewHolder(itemView) {
-        fun bind(file: String) {
-            itemView.playlistName.setText(file)
-        }
-    }
 
     companion object {
         const val VIEW_TYPE_IMAGE = 1

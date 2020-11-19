@@ -1,4 +1,4 @@
-package com.example.loopdeck.ui.recents
+package com.example.loopdeck.ui.collection.recents
 
 import android.Manifest
 import android.app.AlertDialog
@@ -15,18 +15,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.loopdeck.R
-import com.example.loopdeck.ui.ItemMoveCallbackRecents
-import com.example.loopdeck.ui.adapters.RecentsViewAdaptor
-import com.example.loopdeck.ui.playlistrecnts.PlaylistFragment
+import com.example.loopdeck.data.MediaData
+import com.example.loopdeck.data.MediaType
+import com.example.loopdeck.ui.adapters.MediaAdaptor
+import com.example.loopdeck.ui.collection.CollectionViewModel
+import com.example.loopdeck.ui.collection.playlist.PlaylistFragment
+import com.example.loopdeck.utils.callbacks.ItemMoveCallback
+import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.loopdeck.photoeditor.EditImageActivity
 import com.obs.marveleditor.MainActivity
 import com.xorbix.loopdeck.cameraapp.BitmapUtils
 import kotlinx.android.synthetic.main.dailogbox.view.*
 import kotlinx.android.synthetic.main.fragment_recents.*
+import java.io.File
 
 class RecentsFragment : Fragment() {
 
@@ -35,34 +39,36 @@ class RecentsFragment : Fragment() {
         private const val REQUEST_STORAGE_PERMISSION = 1
     }
 
-    val recentsViewAdaptor by lazy {
-        RecentsViewAdaptor(mutableListOf(), onItemClickListener)
+    private lateinit var viewModel: CollectionViewModel
+
+    private val mediaAdapter by lazy {
+        MediaAdaptor(mutableListOf(), onItemClickListener)
     }
 
-    private val onItemClickListener: (String) -> Unit = { item ->
-        Toast.makeText(requireContext(), "Item clicked ${item}", Toast.LENGTH_SHORT).show()
+    private val onItemClickListener: (MediaData) -> Unit = { mediaData ->
+        Toast.makeText(requireContext(), "Item clicked $mediaData", Toast.LENGTH_SHORT).show()
 
-        when {
-            item.contains(".jpg") -> {
+        when (mediaData.mediaType) {
+            MediaType.IMAGE -> {
 
-                val intent = Intent(requireContext() , EditImageActivity::class.java)
-                intent.putExtra("imagePath" , item)
+                val intent = Intent(requireContext(), EditImageActivity::class.java)
+                intent.putExtra("imagePath", mediaData.filePath)
                 startActivity(intent)
             }
-            item.contains(".mp4") -> {
-                val intent = Intent(requireContext() , MainActivity::class.java)
-                intent.putExtra("videoPath" , item)
+            MediaType.VIDEO -> {
+                val intent = Intent(requireContext(), MainActivity::class.java)
+                intent.putExtra("videoPath", mediaData.filePath)
                 startActivity(intent)
             }
             else -> {
                 requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, PlaylistFragment.newInstance(item))
+                    .replace(R.id.container, PlaylistFragment.newInstance(mediaData.filePath))
                     .addToBackStack(null)
                     .commit()
             }
         }
     }
-    private lateinit var viewModel: RecentsViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,17 +86,17 @@ class RecentsFragment : Fragment() {
                 showPlaylistNameDialog(requireContext())
             } else {
                 viewModel.importMediaFiles(requireContext())
-                viewModel.loadRecentList(requireContext())
+
             }
         }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(RecentsViewModel::class.java)
+        viewModel = activityViewModelProvider()
         initViews()
         initObservers()
-        viewModel.loadRecentList(requireContext())
+
     }
 
 
@@ -98,16 +104,17 @@ class RecentsFragment : Fragment() {
 
 
         var touchHelper: ItemTouchHelper? = null
-        recyclerview?.adapter = recentsViewAdaptor
+        recyclerview?.adapter = mediaAdapter
         recyclerview?.layoutManager = GridLayoutManager(requireContext(), 3)
-        val callback: ItemTouchHelper.Callback = ItemMoveCallbackRecents(recentsViewAdaptor)
+        val callback: ItemTouchHelper.Callback = ItemMoveCallback(mediaAdapter)
         touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(recyclerview)
 
         btnpalylist.setOnClickListener {
-            SavePlaylistNameDialog(requireContext())
+            savePlaylistNameDialog(requireContext()) {
+                viewModel.createPlaylist(it)
+            }
         }
-
 
 
         btnGallery.setOnClickListener {
@@ -135,7 +142,7 @@ class RecentsFragment : Fragment() {
         }
     }
 
-    fun showPlaylistNameDialog(context: Context) {
+    private fun showPlaylistNameDialog(context: Context) {
 
         val mDialogView = LayoutInflater.from(context).inflate(R.layout.dailogbox, null)
         //AlertDialogBuilder
@@ -147,9 +154,10 @@ class RecentsFragment : Fragment() {
         //login button click of custom layout
         mDialogView.btn_okay.setOnClickListener {
             //dismiss dialog
-            viewModel.playlistName.value = mDialogView.txt_input.text.toString()
-            viewModel.importMediaFiles(requireContext())
-            viewModel.loadRecentList(requireContext())
+
+            val playlistName = mDialogView.txt_input.text.toString()
+            viewModel.importMediaFiles(requireContext(), playlistName)
+
             mAlertDialog.dismiss()
 
         }
@@ -161,7 +169,7 @@ class RecentsFragment : Fragment() {
     }
 
 
-    fun SavePlaylistNameDialog(context: Context) {
+    private fun savePlaylistNameDialog(context: Context, onCreatePlaylist: (File) -> Unit) {
 
         val mDialogView = LayoutInflater.from(context).inflate(R.layout.dailogbox, null)
         //AlertDialogBuilder
@@ -173,8 +181,9 @@ class RecentsFragment : Fragment() {
         //login button click of custom layout
         mDialogView.btn_okay.setOnClickListener {
             //dismiss dialog
-            BitmapUtils.createPlatlist(requireContext(), mDialogView.txt_input.text.toString())
-            viewModel.loadRecentList(requireContext())
+            val name = mDialogView.txt_input.text.toString()
+            val file = BitmapUtils.createPlatlist(requireContext(), name)
+            onCreatePlaylist(file)
             mAlertDialog.dismiss()
 
         }
@@ -188,21 +197,10 @@ class RecentsFragment : Fragment() {
     private fun initObservers() {
 
 
-//        viewModel.recentsMediaList.observe(viewLifecycleOwner, { recentsList ->
-//            recentsViewAdaptor.submitList(recentsList)
-//        })
-
-        viewModel.readAllData.observe(viewLifecycleOwner, { recentsList ->
-            recentsViewAdaptor.submitList(recentsList)
+        viewModel.recentsMediaLiveData.observe(viewLifecycleOwner, { recentsList ->
+            mediaAdapter.submitList(recentsList)
         })
 
-
-//        viewModel.readAllData.observe(viewLifecycleOwner , {list ->
-//            for (i in 0 until list.size)
-//            {
-//                Toast.makeText(requireContext(), list.get(i).file_path + "\n${list.get(i).playListId}", Toast.LENGTH_SHORT).show()
-//            }
-//        })
     }
 
 }

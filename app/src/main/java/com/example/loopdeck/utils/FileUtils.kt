@@ -1,9 +1,9 @@
 package com.example.loopdeck.utils
 
 import android.content.Context
-import android.system.Os.accept
+import com.example.loopdeck.utils.filters.ImageFileFilter
+import com.example.loopdeck.utils.filters.VideoFileFilter
 import java.io.File
-import java.io.FileFilter
 
 object FileUtils {
     fun getRootDirectory(context: Context): File {
@@ -26,5 +26,5 @@ object FileUtils {
 
 
 fun File.isImage() = ImageFileFilter().accept(this)
-fun File.isVideo() =VideoFileFilter().accept(this)
+fun File.isVideo() = VideoFileFilter().accept(this)
 

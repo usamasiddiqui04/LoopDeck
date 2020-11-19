@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">LoopDeck</string>
+    <string name="add_media">Add Media</string>
+    <string name="create_playlist">Create playlist</string>
 </resources>

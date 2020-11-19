@@ -11,9 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon,android:allowBackup,android:roundIcon">
-        <activity android:name=".ui.playlistrecnts.PlaylistActivity"></activity>
-        <activity android:name=".ui.recents.RecentsActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name="com.example.loopdeck.ui.collection.playlist.PlaylistActivity"></activity>
+        <activity android:name="com.example.loopdeck.ui.collection.CollectionActivity" />
+        <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

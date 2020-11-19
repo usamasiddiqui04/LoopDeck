@@ -6,8 +6,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.FileProvider
-import com.example.loopdeck.data.MediaData
-import com.example.loopdeck.data.MediaRepository
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -71,7 +69,7 @@ internal object BitmapUtils {
     }
 
     @JvmStatic
-    fun SaveVideo(context: Context, selectedImageURI: Uri?) : File?{
+    fun SaveVideo(context: Context, selectedImageURI: Uri?): File? {
         var newfile: File? = null
         try {
 
@@ -107,19 +105,21 @@ internal object BitmapUtils {
 
     }
 
-    fun createPlatlist(context: Context, playlistName: String?) {
+    fun createPlatlist(context: Context, playlistName: String): File {
         val storageDir = File(context.getExternalFilesDir(null)!!.absolutePath, ROOT_DIRECTORY_NAME)
         if (!storageDir.exists()) {
             storageDir.mkdirs()
         }
 
-        if (playlistName != null) {
-            val playlistDir = File(storageDir.absolutePath, playlistName)
 
-            if (!playlistDir.exists()) {
-                playlistDir.mkdirs()
-            }
+        val playlistDir = File(storageDir.absolutePath, playlistName)
+
+        if (!playlistDir.exists()) {
+            playlistDir.mkdirs()
         }
+
+
+        return playlistDir
 
     }
 

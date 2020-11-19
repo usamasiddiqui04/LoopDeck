@@ -1,11 +1,10 @@
-package com.example.loopdeck.ui
+package com.example.loopdeck.utils.callbacks
 
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.loopdeck.ui.adapters.PlayListRecentViewAdaptor
 
-class ItemMoveCallbackPlaylist(private val mAdapter: PlayListRecentViewAdaptor) :
+class ItemMoveCallback(private val listener: DragAndDropListener) :
     ItemTouchHelper.Callback() {
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
@@ -14,7 +13,8 @@ class ItemMoveCallbackPlaylist(private val mAdapter: PlayListRecentViewAdaptor) 
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
     ): Int {
-        val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        val dragFlags =
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
         return makeMovementFlags(dragFlags, 0)
     }
 
@@ -23,11 +23,11 @@ class ItemMoveCallbackPlaylist(private val mAdapter: PlayListRecentViewAdaptor) 
         viewHolder: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
     ): Boolean {
-        mAdapter.onRowMoved(viewHolder.adapterPosition, target.adapterPosition)
+        listener.onRowMoved(viewHolder.adapterPosition, target.adapterPosition)
         return true
     }
 
-    interface ItemTouchHelperContract {
+    interface DragAndDropListener {
         fun onRowMoved(fromPosition: Int, toPosition: Int)
     }
 }

@@ -1,4 +1,4 @@
-package com.example.loopdeck.ui.recents
+package com.example.loopdeck.ui.collection
 
 import android.app.Application
 import android.content.Context
@@ -9,12 +9,10 @@ import android.provider.MediaStore
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.data.MediaDatabase
 import com.example.loopdeck.data.MediaRepository
-import com.example.loopdeck.utils.FileUtils
 import com.example.loopdeck.utils.isImage
 import com.example.loopdeck.utils.isVideo
 import com.xorbix.loopdeck.cameraapp.BitmapUtils.SaveVideo
@@ -24,40 +22,42 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.io.File
 
-class RecentsViewModel(application: Application) : AndroidViewModel(application) {
-    val playlistName = MutableLiveData<String?>()
-    val recentsMediaList = MutableLiveData<List<File>>()
-    private var mResultsBitmap: Bitmap? = null
-    val file: File? = null
+class CollectionViewModel(application: Application) : AndroidViewModel(application) {
 
-    val readAllData: LiveData<List<MediaData>>
+    var importedFilesIntent: Intent? = null
+
+
+    lateinit var recentsMediaLiveData: LiveData<List<MediaData>>
+    lateinit var playListMediaLiveData: LiveData<List<MediaData>>
+
     private val repository: MediaRepository
 
     init {
         val mediaDao = MediaDatabase.getDatabase(application).mediaDao()
         repository = MediaRepository(mediaDao)
-        readAllData = repository.readAllData
+
+        getRecents()
     }
 
-    fun addMedia(mediaData: MediaData) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.addMediaFile(mediaData)
+    private fun getRecents() {
+
+        viewModelScope.launch {
+            recentsMediaLiveData = repository.getAllRecentsMediaLiveData()
         }
     }
 
-    var importedFilesIntent: Intent? = null
 
-    fun loadRecentList(context: Context) {
-        val rootDir = FileUtils.getRootDirectory(context)
-        recentsMediaList.value = rootDir.listFiles().toList().sortedBy { it.lastModified() }
-    }
+    fun getPlaylistMedia(playlistName: String) =
+        repository.getPlaylistMediaLiveData(playlistName)
 
 
-    fun importMediaFiles(context: Context) {
-
+    fun importMediaFiles(context: Context, playlistName: String? = null) {
         importedFilesIntent?.clipData?.let {
 
             for (i in 0 until it.itemCount) {
+
+                var mResultsBitmap: Bitmap? = null
+
                 val imageuri = it.getItemAt(i).uri
                 try {
                     if (imageuri != null) {
@@ -70,10 +70,10 @@ class RecentsViewModel(application: Application) : AndroidViewModel(application)
                 }
 
                 viewModelScope.async(Dispatchers.IO) {
-                    val file = saveImage(context, mResultsBitmap!!, playlistName.value)
+                    val file = saveImage(context, mResultsBitmap!!, playlistName)
 
                     if (file != null) {
-                        addMedia(MediaData(0, file.absolutePath, file.name, playlistName.value))
+                        repository.addMediaOrPlaylist(file, playlistName)
                     }
 
                 }
@@ -83,13 +83,13 @@ class RecentsViewModel(application: Application) : AndroidViewModel(application)
         importedFilesIntent?.data?.let {
 
             uriToMediaFile(context, it)?.let { file ->
-
+                var mResultsBitmap: Bitmap? = null
 
                 if (file.isVideo()) {
                     viewModelScope.launch(Dispatchers.IO) {
                         val file = SaveVideo(context, it)
                         if (file != null) {
-                            addMedia(MediaData(0, file.absolutePath, file.name, playlistName.value))
+                            repository.addMediaOrPlaylist(file, playlistName)
                         }
                     }
                     Toast.makeText(context, "Video Saved", Toast.LENGTH_SHORT).show()
@@ -103,14 +103,7 @@ class RecentsViewModel(application: Application) : AndroidViewModel(application)
                         viewModelScope.launch(Dispatchers.IO) {
                             val file = saveImage(context, mResultsBitmap!!)
                             if (file != null) {
-                                addMedia(
-                                    MediaData(
-                                        0,
-                                        file.absolutePath,
-                                        file.name,
-                                        playlistName.value
-                                    )
-                                )
+                                repository.addMediaOrPlaylist(file, playlistName)
                             }
                         }
                     } catch (e: Exception) {
@@ -124,6 +117,7 @@ class RecentsViewModel(application: Application) : AndroidViewModel(application)
 
 
     }
+
     private fun uriToMediaFile(context: Context, uri: Uri): File? {
         try {
             val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
@@ -142,5 +136,11 @@ class RecentsViewModel(application: Application) : AndroidViewModel(application)
         }
 
         return null
+    }
+
+    fun createPlaylist(file: File) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addMediaOrPlaylist(file)
+        }
     }
 }

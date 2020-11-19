@@ -1,4 +1,4 @@
-package com.example.loopdeck.utils
+package com.example.loopdeck.utils.filters
 
 import java.io.File
 import java.io.FileFilter
