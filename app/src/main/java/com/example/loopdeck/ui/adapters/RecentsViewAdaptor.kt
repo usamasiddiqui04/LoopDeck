@@ -17,33 +17,34 @@ import kotlinx.android.synthetic.main.item_recent_video_lists.view.*
 import java.io.File
 import java.util.*
 
-class RecentsViewAdaptor(var mList: MutableList<MediaData> , private val itemClickListener: (String) -> Unit) : Adapter<ViewHolder>() {
+class RecentsViewAdaptor(
+    var mList: MutableList<MediaData>,
+    private val itemClickListener: (String) -> Unit
+) : Adapter<ViewHolder>() {
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is ImageViewHolder -> {
                 holder.bind(mList.get(position).file_path)
-                holder.itemView.setOnClickListener{
+                holder.itemView.setOnClickListener {
                     itemClickListener(mList.get(position).file_path)
                 }
             }
             is VideoViewHolder -> {
                 holder.bind(mList.get(position).file_path)
-                holder.itemView.setOnClickListener{
+                holder.itemView.setOnClickListener {
                     itemClickListener(mList.get(position).file_path)
                 }
             }
             is PlaylistViewHolder -> {
                 holder.bind(mList.get(position).file_path)
-                holder.itemView.setOnClickListener{
+                holder.itemView.setOnClickListener {
                     itemClickListener(mList.get(position).file_path)
                 }
             }
         }
     }
-
-
 
 
     fun submitList(list: List<MediaData>) {
@@ -128,6 +129,7 @@ class RecentsViewAdaptor(var mList: MutableList<MediaData> , private val itemCli
             itemView.playlistName.setText(file)
         }
     }
+
     companion object {
         const val VIEW_TYPE_IMAGE = 1
         const val VIEW_TYPE_VIDEO = 2

@@ -90,10 +90,14 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
     private var isLargeVideo: Boolean? = false
     private var mContext: Context? = null
     private var tvInfo: TextView? = null
-
+    private val sharedPrefFile = "videoPath"
+    var videoPath : String? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.opti_video_processor_fragment, container, false)
+        val sharedPreferences: SharedPreferences = requireActivity().getSharedPreferences(sharedPrefFile,Context.MODE_PRIVATE)
+        videoPath = sharedPreferences.getString("videoPath","defaultname")
         initView(rootView)
+        initializePlayer()
         return rootView
     }
 
@@ -623,7 +627,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
 
             exoPlayer?.addListener(playerListener)
 
-            exoPlayer?.prepare(VideoUtils.buildMediaSource(Uri.fromFile(masterVideoFile), VideoFrom.LOCAL))
+            exoPlayer?.prepare(VideoUtils.buildMediaSource(Uri.parse(videoPath), VideoFrom.LOCAL))
 
             exoPlayer?.seekTo(0)
 

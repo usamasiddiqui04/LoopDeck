@@ -23,6 +23,7 @@ import com.example.loopdeck.ui.ItemMoveCallbackRecents
 import com.example.loopdeck.ui.adapters.RecentsViewAdaptor
 import com.example.loopdeck.ui.playlistrecnts.PlaylistFragment
 import com.loopdeck.photoeditor.EditImageActivity
+import com.obs.marveleditor.MainActivity
 import com.xorbix.loopdeck.cameraapp.BitmapUtils
 import kotlinx.android.synthetic.main.dailogbox.view.*
 import kotlinx.android.synthetic.main.fragment_recents.*
@@ -43,20 +44,15 @@ class RecentsFragment : Fragment() {
 
         when {
             item.contains(".jpg") -> {
-                startActivity(
-                    Intent(
-                        requireContext(),
-                        EditImageActivity::class.java
-                    )
-                )
+
+                val intent = Intent(requireContext() , EditImageActivity::class.java)
+                intent.putExtra("imagePath" , item)
+                startActivity(intent)
             }
             item.contains(".mp4") -> {
-                startActivity(
-                    Intent(
-                        requireContext(),
-                        com.obs.marveleditor.MainActivity::class.java
-                    )
-                )
+                val intent = Intent(requireContext() , MainActivity::class.java)
+                intent.putExtra("videoPath" , item)
+                startActivity(intent)
             }
             else -> {
                 requireActivity().supportFragmentManager.beginTransaction()

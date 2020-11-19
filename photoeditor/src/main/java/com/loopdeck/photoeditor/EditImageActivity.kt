@@ -60,7 +60,10 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
         super.onCreate(savedInstanceState)
         makeFullScreen()
         setContentView(R.layout.activity_edit_image)
+        var imagPath: String = intent.getStringExtra("imagePath")
         initViews()
+
+        mPhotoEditorView!!.source?.setImageURI(Uri.parse(imagPath))
         handleIntentImage(mPhotoEditorView!!.source)
         mWonderFont = Typeface.createFromAsset(assets, "beyond_wonderland.ttf")
         mPropertiesBSFragment = PropertiesBSFragment()

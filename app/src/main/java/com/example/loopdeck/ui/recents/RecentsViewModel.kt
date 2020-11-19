@@ -28,9 +28,9 @@ class RecentsViewModel(application: Application) : AndroidViewModel(application)
     val playlistName = MutableLiveData<String?>()
     val recentsMediaList = MutableLiveData<List<File>>()
     private var mResultsBitmap: Bitmap? = null
-    val file : File? = null
+    val file: File? = null
 
-    val readAllData : LiveData<List<MediaData>>
+    val readAllData: LiveData<List<MediaData>>
     private val repository: MediaRepository
 
     init {
@@ -39,8 +39,8 @@ class RecentsViewModel(application: Application) : AndroidViewModel(application)
         readAllData = repository.readAllData
     }
 
-    fun addMedia (mediaData: MediaData){
-        viewModelScope.launch(Dispatchers.IO){
+    fun addMedia(mediaData: MediaData) {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.addMediaFile(mediaData)
         }
     }
@@ -72,9 +72,8 @@ class RecentsViewModel(application: Application) : AndroidViewModel(application)
                 viewModelScope.async(Dispatchers.IO) {
                     val file = saveImage(context, mResultsBitmap!!, playlistName.value)
 
-                    if (file != null)
-                    {
-                        addMedia(MediaData(0 , file.absolutePath , file.name ,playlistName.value ))
+                    if (file != null) {
+                        addMedia(MediaData(0, file.absolutePath, file.name, playlistName.value))
                     }
 
                 }
@@ -89,9 +88,8 @@ class RecentsViewModel(application: Application) : AndroidViewModel(application)
                 if (file.isVideo()) {
                     viewModelScope.launch(Dispatchers.IO) {
                         val file = SaveVideo(context, it)
-                        if (file != null)
-                        {
-                            addMedia(MediaData(0 , file.absolutePath , file.name ,playlistName.value ))
+                        if (file != null) {
+                            addMedia(MediaData(0, file.absolutePath, file.name, playlistName.value))
                         }
                     }
                     Toast.makeText(context, "Video Saved", Toast.LENGTH_SHORT).show()
@@ -104,9 +102,15 @@ class RecentsViewModel(application: Application) : AndroidViewModel(application)
 
                         viewModelScope.launch(Dispatchers.IO) {
                             val file = saveImage(context, mResultsBitmap!!)
-                            if (file != null)
-                            {
-                                addMedia(MediaData(0 , file.absolutePath , file.name ,playlistName.value ))
+                            if (file != null) {
+                                addMedia(
+                                    MediaData(
+                                        0,
+                                        file.absolutePath,
+                                        file.name,
+                                        playlistName.value
+                                    )
+                                )
                             }
                         }
                     } catch (e: Exception) {
@@ -120,8 +124,6 @@ class RecentsViewModel(application: Application) : AndroidViewModel(application)
 
 
     }
-
-
     private fun uriToMediaFile(context: Context, uri: Uri): File? {
         try {
             val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
