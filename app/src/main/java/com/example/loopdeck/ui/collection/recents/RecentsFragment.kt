@@ -10,7 +10,6 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -46,7 +45,6 @@ class RecentsFragment : Fragment() {
     }
 
     private val onItemClickListener: (MediaData) -> Unit = { mediaData ->
-        Toast.makeText(requireContext(), "Item clicked $mediaData", Toast.LENGTH_SHORT).show()
 
         when (mediaData.mediaType) {
             MediaType.IMAGE -> {
@@ -62,7 +60,7 @@ class RecentsFragment : Fragment() {
             }
             else -> {
                 requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, PlaylistFragment.newInstance(mediaData.filePath))
+                    .replace(R.id.container, PlaylistFragment.newInstance(mediaData.name))
                     .addToBackStack(null)
                     .commit()
             }
@@ -110,7 +108,7 @@ class RecentsFragment : Fragment() {
         touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(recyclerview)
 
-        btnpalylist.setOnClickListener {
+        btnDelete.setOnClickListener {
             savePlaylistNameDialog(requireContext()) {
                 viewModel.createPlaylist(it)
             }
@@ -143,28 +141,9 @@ class RecentsFragment : Fragment() {
     }
 
     private fun showPlaylistNameDialog(context: Context) {
-
-        val mDialogView = LayoutInflater.from(context).inflate(R.layout.dailogbox, null)
-        //AlertDialogBuilder
-        val mBuilder = AlertDialog.Builder(context)
-            .setView(mDialogView)
-            .setTitle("Enter Playlist Name")
-        //show dialog
-        val mAlertDialog = mBuilder.show()
-        //login button click of custom layout
-        mDialogView.btn_okay.setOnClickListener {
-            //dismiss dialog
-
-            val playlistName = mDialogView.txt_input.text.toString()
-            viewModel.importMediaFiles(requireContext(), playlistName)
-
-            mAlertDialog.dismiss()
-
-        }
-        //cancel button click of custom layout
-        mDialogView.btn_cancel.setOnClickListener {
-            //dismiss dialog
-            mAlertDialog.dismiss()
+        savePlaylistNameDialog(context) {
+            viewModel.createPlaylist(it)
+            viewModel.importMediaFiles(requireContext(), it.name)
         }
     }
 
@@ -172,24 +151,21 @@ class RecentsFragment : Fragment() {
     private fun savePlaylistNameDialog(context: Context, onCreatePlaylist: (File) -> Unit) {
 
         val mDialogView = LayoutInflater.from(context).inflate(R.layout.dailogbox, null)
-        //AlertDialogBuilder
+
         val mBuilder = AlertDialog.Builder(context)
             .setView(mDialogView)
             .setTitle("Enter Playlist Name")
-        //show dialog
+
         val mAlertDialog = mBuilder.show()
-        //login button click of custom layout
+
         mDialogView.btn_okay.setOnClickListener {
-            //dismiss dialog
             val name = mDialogView.txt_input.text.toString()
             val file = BitmapUtils.createPlatlist(requireContext(), name)
             onCreatePlaylist(file)
             mAlertDialog.dismiss()
-
         }
-        //cancel button click of custom layout
+
         mDialogView.btn_cancel.setOnClickListener {
-            //dismiss dialog
             mAlertDialog.dismiss()
         }
     }

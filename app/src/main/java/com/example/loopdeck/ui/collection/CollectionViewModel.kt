@@ -78,41 +78,43 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
 
                 }
             }
-        }
+        } ?: run {
 
-        importedFilesIntent?.data?.let {
 
-            uriToMediaFile(context, it)?.let { file ->
-                var mResultsBitmap: Bitmap? = null
+            importedFilesIntent?.data?.let {
 
-                if (file.isVideo()) {
-                    viewModelScope.launch(Dispatchers.IO) {
-                        val file = SaveVideo(context, it)
-                        if (file != null) {
-                            repository.addMediaOrPlaylist(file, playlistName)
-                        }
-                    }
-                    Toast.makeText(context, "Video Saved", Toast.LENGTH_SHORT).show()
-                    return
-                } else if (file.isImage()) {
-                    try {
+                uriToMediaFile(context, it)?.let { file ->
+                    var mResultsBitmap: Bitmap? = null
 
-                        mResultsBitmap =
-                            MediaStore.Images.Media.getBitmap(context.contentResolver, it)
-
+                    if (file.isVideo()) {
                         viewModelScope.launch(Dispatchers.IO) {
-                            val file = saveImage(context, mResultsBitmap!!)
+                            val file = SaveVideo(context, it)
                             if (file != null) {
                                 repository.addMediaOrPlaylist(file, playlistName)
                             }
                         }
-                    } catch (e: Exception) {
-                        //handle exception
-                    }
-                    Toast.makeText(context, "Image Save", Toast.LENGTH_LONG).show()
-                }
-            }
+                        Toast.makeText(context, "Video Saved", Toast.LENGTH_SHORT).show()
+                        return
+                    } else if (file.isImage()) {
+                        try {
 
+                            mResultsBitmap =
+                                MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+
+                            viewModelScope.launch(Dispatchers.IO) {
+                                val file = saveImage(context, mResultsBitmap!!)
+                                if (file != null) {
+                                    repository.addMediaOrPlaylist(file, playlistName)
+                                }
+                            }
+                        } catch (e: Exception) {
+                            //handle exception
+                        }
+                        Toast.makeText(context, "Image Save", Toast.LENGTH_LONG).show()
+                    }
+                }
+
+            }
         }
 
 

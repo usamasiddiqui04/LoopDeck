@@ -89,7 +89,7 @@ class PlaylistFragment : Fragment() {
             }
             else -> {
                 requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, PlaylistFragment.newInstance(mediaData.filePath))
+                    .replace(R.id.container, PlaylistFragment.newInstance(mediaData.name))
                     .addToBackStack(null)
                     .commit()
             }
