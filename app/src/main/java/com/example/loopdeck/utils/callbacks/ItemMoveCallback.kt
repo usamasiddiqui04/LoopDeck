@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 class ItemMoveCallback(private val listener: DragAndDropListener) :
     ItemTouchHelper.Callback() {
 
+
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
 
     override fun getMovementFlags(

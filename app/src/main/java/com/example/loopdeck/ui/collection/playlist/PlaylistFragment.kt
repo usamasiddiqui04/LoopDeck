@@ -3,8 +3,10 @@ package com.example.loopdeck.ui.collection.playlist
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +14,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.example.loopdeck.DragData
 import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.data.MediaType
@@ -44,11 +48,6 @@ class PlaylistFragment : Fragment() {
         private const val REQUEST_STORAGE_PERMISSION = 1
     }
 
-    private val mediaAdaptor by lazy {
-        MediaAdaptor(mutableListOf(), onItemClickListener)
-    }
-
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -69,8 +68,16 @@ class PlaylistFragment : Fragment() {
     private lateinit var viewModel: CollectionViewModel
 
     private val mediaAdapter by lazy {
-        MediaAdaptor(mutableListOf(), onItemClickListener)
+        MediaAdaptor(mutableListOf(), onItemClickListener, onItemLongClickListener)
     }
+
+
+    private val onItemLongClickListener: (View, MediaData) -> Boolean = { itemView, mediaData ->
+        val state = DragData(mediaData, itemView.width, itemView.height)
+        val shadow: View.DragShadowBuilder = View.DragShadowBuilder(itemView)
+        ViewCompat.startDragAndDrop(itemView, null, shadow, state, 0)
+    }
+
 
     private val onItemClickListener: (MediaData) -> Unit = { mediaData ->
         Toast.makeText(requireContext(), "Item clicked $mediaData", Toast.LENGTH_SHORT).show()
@@ -118,7 +125,7 @@ class PlaylistFragment : Fragment() {
         var touchHelper: ItemTouchHelper? = null
         recyclerview?.adapter = mediaAdapter
         recyclerview?.layoutManager = GridLayoutManager(requireContext(), 3)
-        val callback: ItemTouchHelper.Callback = ItemMoveCallback(mediaAdapter)
+        val callback = ItemMoveCallback(mediaAdapter)
         touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(recyclerview)
 
@@ -146,7 +153,10 @@ class PlaylistFragment : Fragment() {
                 startActivityForResult(pickPhoto, 1)
             }
         }
+
+        initContainer()
     }
+
 
     private fun initObservers() {
         playlistName?.let {
@@ -154,6 +164,38 @@ class PlaylistFragment : Fragment() {
                 mediaAdapter.submitList(it)
             })
         }
+    }
+
+
+    private fun initContainer() {
+        frameDelete.setOnDragListener { view, dragEvent ->
+            when (dragEvent.action) {
+                DragEvent.ACTION_DRAG_ENTERED -> frameDelete.setBackgroundColor(Color.GREEN)
+                DragEvent.ACTION_DRAG_EXITED -> frameDelete.setBackgroundColor(Color.RED)
+                DragEvent.ACTION_DRAG_ENDED -> frameDelete.setBackgroundColor(Color.WHITE)
+                DragEvent.ACTION_DROP -> {
+                    //  final float dropX = dragEvent.getX();
+                    //  final float dropY = dragEvent.getY();
+                    val state = dragEvent.localState as DragData
+                    deleteFile(state.item)
+                }
+                else -> {
+                }
+            }
+            true
+        }
+    }
+
+    private fun deleteFile(mediaData: MediaData) {
+
+        viewModel.delete(mediaData)
+        Toast.makeText(
+            requireContext(),
+            " Deleted successfully ${mediaData.name}",
+            Toast.LENGTH_SHORT
+        ).show()
+
+
     }
 
 }

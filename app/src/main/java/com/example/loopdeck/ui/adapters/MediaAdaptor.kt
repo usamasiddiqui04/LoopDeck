@@ -1,20 +1,30 @@
 package com.example.loopdeck.ui.adapters
 
+import android.R.attr.shape
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.example.loopdeck.DragData
 import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.ui.viewholders.ImageViewHolder
 import com.example.loopdeck.ui.viewholders.PlaylistViewHolder
 import com.example.loopdeck.ui.viewholders.VideoViewHolder
 import com.example.loopdeck.utils.callbacks.ItemMoveCallback
+import com.loopdeck.photoeditor.TextEditorDialogFragment.Companion.TAG
 import java.util.*
+
 
 class MediaAdaptor(
     var mList: MutableList<MediaData>,
-    private val itemClickListener: (MediaData) -> Unit
+    private val itemClickListener: (MediaData) -> Unit,
+    private val itemLongClickListener: ((View, MediaData) -> Boolean)? = null
+
 ) : Adapter<ViewHolder>(), ItemMoveCallback.DragAndDropListener {
 
 
@@ -22,22 +32,27 @@ class MediaAdaptor(
         when (holder) {
             is ImageViewHolder -> {
                 holder.bind(mList[position], itemClickListener)
-                holder.itemView.setOnClickListener {
-                    itemClickListener(mList[position])
+                holder.itemView.setOnLongClickListener {
+                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
                 }
+
             }
             is VideoViewHolder -> {
                 holder.bind(mList[position], itemClickListener)
-                holder.itemView.setOnClickListener {
-                    itemClickListener(mList[position])
+                holder.itemView.setOnLongClickListener {
+                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
                 }
+
             }
             is PlaylistViewHolder -> {
                 holder.bind(mList.get(position), itemClickListener)
-                holder.itemView.setOnClickListener {
-                    itemClickListener(mList.get(position))
+                holder.itemView.setOnLongClickListener {
+                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
                 }
+
             }
+
+
         }
     }
 

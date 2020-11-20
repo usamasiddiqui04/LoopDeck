@@ -46,6 +46,7 @@ class RecentsFragment : Fragment() {
 
     private val onItemClickListener: (MediaData) -> Unit = { mediaData ->
 
+
         when (mediaData.mediaType) {
             MediaType.IMAGE -> {
 
@@ -108,7 +109,7 @@ class RecentsFragment : Fragment() {
         touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(recyclerview)
 
-        btnDelete.setOnClickListener {
+        frameDelete.setOnClickListener {
             savePlaylistNameDialog(requireContext()) {
                 viewModel.createPlaylist(it)
             }

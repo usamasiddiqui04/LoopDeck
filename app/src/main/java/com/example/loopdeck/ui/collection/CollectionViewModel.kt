@@ -15,6 +15,7 @@ import com.example.loopdeck.data.MediaDatabase
 import com.example.loopdeck.data.MediaRepository
 import com.example.loopdeck.utils.isImage
 import com.example.loopdeck.utils.isVideo
+import com.xorbix.loopdeck.cameraapp.BitmapUtils
 import com.xorbix.loopdeck.cameraapp.BitmapUtils.SaveVideo
 import com.xorbix.loopdeck.cameraapp.BitmapUtils.saveImage
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +29,6 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
 
 
     lateinit var recentsMediaLiveData: LiveData<List<MediaData>>
-    lateinit var playListMediaLiveData: LiveData<List<MediaData>>
 
     private val repository: MediaRepository
 
@@ -46,10 +46,18 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
+    fun delete(mediaData: MediaData) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            BitmapUtils.deleteImageFile(getApplication(), mediaData.filePath)
+            repository.deleteMedia(mediaData)
+        }
+
+    }
+
 
     fun getPlaylistMedia(playlistName: String) =
         repository.getPlaylistMediaLiveData(playlistName)
-
 
     fun importMediaFiles(context: Context, playlistName: String? = null) {
         importedFilesIntent?.clipData?.let {
