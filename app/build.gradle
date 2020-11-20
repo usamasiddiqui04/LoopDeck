@@ -34,7 +34,6 @@ android {
 }
 
 dependencies {
-    implementation project(":MultipleMediaPicker")
     implementation project(":photoeditor")
     implementation project(":VideoEditor")
     implementation project(":gallerypicker")

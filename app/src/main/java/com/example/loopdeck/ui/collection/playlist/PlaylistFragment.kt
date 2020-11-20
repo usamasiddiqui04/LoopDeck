@@ -65,7 +65,7 @@ class PlaylistFragment : Fragment() {
 
 
     private val onItemClickListener: (MediaData) -> Unit = { mediaData ->
-        Toast.makeText(requireContext(), "Item clicked $mediaData", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(requireContext(), "Item clicked $mediaData", Toast.LENGTH_SHORT).show()
 
         when (mediaData.mediaType) {
             MediaType.IMAGE -> {

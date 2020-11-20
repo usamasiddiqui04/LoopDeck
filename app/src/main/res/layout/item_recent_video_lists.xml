@@ -7,10 +7,10 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="5dp"
         app:cardUseCompatPadding="true"
-        app:cardCornerRadius="5dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -18,24 +18,24 @@
 
             <ImageView
                 android:id="@+id/imageViewRecentVideo"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="@string/app_name"
                 android:adjustViewBounds="true"
+                android:contentDescription="@string/app_name"
                 android:scaleType="centerCrop"
-                android:src="@drawable/no_media" />
+                android:src="@drawable/ic_baseline_movie"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/imageViewRecentVideoIcon"
-                app:layout_constraintTop_toTopOf="@id/imageViewRecentVideo"
-                app:layout_constraintStart_toStartOf="@id/imageViewRecentVideo"
-                app:layout_constraintEnd_toEndOf="@id/imageViewRecentVideo"
-                app:layout_constraintBottom_toBottomOf="@id/imageViewRecentVideo"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:src="@drawable/ic_baseline_play_arrow_24" />
+                android:src="@drawable/ic_baseline_play_arrow_24"
+                app:layout_constraintBottom_toBottomOf="@id/imageViewRecentVideo"
+                app:layout_constraintEnd_toEndOf="@id/imageViewRecentVideo"
+                app:layout_constraintStart_toStartOf="@id/imageViewRecentVideo"
+                app:layout_constraintTop_toTopOf="@id/imageViewRecentVideo" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

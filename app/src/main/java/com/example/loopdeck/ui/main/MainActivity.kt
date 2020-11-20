@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.loopdeck.R
 import com.example.loopdeck.ui.collection.CollectionActivity
 import com.loopdeck.photoeditor.EditImageActivity
-import com.luminous.pick.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -21,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     private fun initViews() {
 
         btn_gallery.setOnClickListener {
-            startActivity(Intent(this@MainActivity, MainActivity::class.java))
+//            startActivity(Intent(this@MainActivity, MainActivity::class.java))
         }
 
         btn_image.setOnClickListener {

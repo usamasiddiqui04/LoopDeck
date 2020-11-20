@@ -12,7 +12,7 @@ import android.Manifest
 class OptiConstant {
     companion object {
 
-        const val APP_NAME = "MarvelEditor"
+        const val APP_NAME = "Loopdeck Editor"
 
         const val VIDEO_FLIRT = 1
         const val VIDEO_TRIM = 2

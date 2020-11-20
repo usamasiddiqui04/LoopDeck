@@ -19,7 +19,7 @@
                 android:contentDescription="@string/app_name"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/no_media" />
+                android:src="@drawable/ic_baseline_image" />
 
     </androidx.cardview.widget.CardView>
 
