@@ -54,10 +54,10 @@ class PlaylistFragment : Fragment() {
         if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
             viewModel.importedFilesIntent = data
             if (data?.clipData?.itemCount ?: 0 > 1) {
-                viewModel.importMediaFiles(requireContext(), playlistName)
+                viewModel.addMediaFiles(playlistName)
 
             } else {
-                viewModel.importMediaFiles(requireContext(), playlistName)
+                viewModel.addMediaFiles(playlistName)
 
             }
 
@@ -68,7 +68,12 @@ class PlaylistFragment : Fragment() {
     private lateinit var viewModel: CollectionViewModel
 
     private val mediaAdapter by lazy {
-        MediaAdaptor(mutableListOf(), onItemClickListener, onItemLongClickListener, viewModel::onSequenceChanged)
+        MediaAdaptor(
+            mutableListOf(),
+            onItemClickListener,
+            onItemLongClickListener,
+            viewModel::onSequenceChanged
+        )
     }
 
 
@@ -77,9 +82,6 @@ class PlaylistFragment : Fragment() {
         val shadow: View.DragShadowBuilder = View.DragShadowBuilder(itemView)
         ViewCompat.startDragAndDrop(itemView, null, shadow, state, 0)
     }
-
-
-
 
 
     private val onItemClickListener: (MediaData) -> Unit = { mediaData ->

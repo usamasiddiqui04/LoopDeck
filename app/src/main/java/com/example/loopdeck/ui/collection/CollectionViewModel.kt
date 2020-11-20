@@ -15,12 +15,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.data.MediaDatabase
 import com.example.loopdeck.data.MediaRepository
+import com.example.loopdeck.utils.FileUtils.uriToMediaFile
 import com.example.loopdeck.utils.isImage
 import com.example.loopdeck.utils.isVideo
 import com.xorbix.loopdeck.cameraapp.BitmapUtils.SaveVideo
 import com.xorbix.loopdeck.cameraapp.BitmapUtils.saveImage
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -57,94 +57,27 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
     fun getPlaylistMedia(playlistName: String) =
         repository.getPlaylistMediaLiveData(playlistName)
 
-    fun importMediaFiles(context: Context, playlistName: String? = null) {
-        importedFilesIntent?.clipData?.let {
 
-            for (i in 0 until it.itemCount) {
-
-                var mResultsBitmap: Bitmap? = null
-
-                val imageuri = it.getItemAt(i).uri
-                try {
-                    if (imageuri != null) {
-                        mResultsBitmap =
-                            MediaStore.Images.Media.getBitmap(context.contentResolver, imageuri)
-                    }
-
-                } catch (e: Exception) {
-                    //handle exception
-                }
-
-                viewModelScope.async(Dispatchers.IO) {
-                    val file = saveImage(context, mResultsBitmap!!, playlistName)
-
-                    if (file != null) {
-                        repository.addMediaOrPlaylist(file, playlistName)
-                    }
-
+    fun addMediaFiles(playlistName: String? = null) {
+        val data = importedFilesIntent?.clipData
+        if (data != null) {
+            viewModelScope.launch {
+                for (i in 0 until data.itemCount) {
+                    repository.addMedia(data.getItemAt(i).uri, playlistName)
                 }
             }
-        } ?: run {
 
-
-            importedFilesIntent?.data?.let {
-
-                uriToMediaFile(context, it)?.let { file ->
-                    var mResultsBitmap: Bitmap? = null
-
-                    if (file.isVideo()) {
-                        viewModelScope.launch(Dispatchers.IO) {
-                            val file = SaveVideo(context, it)
-                            if (file != null) {
-                                repository.addMediaOrPlaylist(file, playlistName)
-                            }
-                        }
-                        Toast.makeText(context, "Video Saved", Toast.LENGTH_SHORT).show()
-                        return
-                    } else if (file.isImage()) {
-                        try {
-
-                            mResultsBitmap =
-                                MediaStore.Images.Media.getBitmap(context.contentResolver, it)
-
-                            viewModelScope.launch(Dispatchers.IO) {
-                                val file = saveImage(context, mResultsBitmap!!)
-                                if (file != null) {
-                                    repository.addMediaOrPlaylist(file, playlistName)
-                                }
-                            }
-                        } catch (e: Exception) {
-                            //handle exception
-                        }
-                        Toast.makeText(context, "Image Save", Toast.LENGTH_LONG).show()
-                    }
+        } else {
+            viewModelScope.launch {
+                importedFilesIntent?.data?.let {
+                    repository.addMedia(it, playlistName)
                 }
-
             }
         }
 
 
     }
 
-    private fun uriToMediaFile(context: Context, uri: Uri): File? {
-        try {
-            val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
-            val cursor = context.contentResolver.query(uri, filePathColumn, null, null, null)
-            if (cursor != null) {
-                if (cursor.moveToFirst()) {
-                    val columnIndex = cursor.getColumnIndex(filePathColumn[0])
-                    val filePath = cursor.getString(columnIndex)
-                    cursor.close()
-                    return File(filePath)
-                }
-                cursor.close()
-            }
-        } catch (e: Exception) {
-            Toast.makeText(context, "Please select multiples images", Toast.LENGTH_LONG).show()
-        }
-
-        return null
-    }
 
     fun createPlaylist(file: File) {
         viewModelScope.launch(Dispatchers.IO) {

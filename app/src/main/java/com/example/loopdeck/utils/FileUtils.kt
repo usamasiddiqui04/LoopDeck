@@ -1,6 +1,9 @@
 package com.example.loopdeck.utils
 
 import android.content.Context
+import android.net.Uri
+import android.provider.MediaStore
+import android.widget.Toast
 import com.example.loopdeck.utils.filters.ImageFileFilter
 import com.example.loopdeck.utils.filters.VideoFileFilter
 import java.io.File
@@ -21,6 +24,27 @@ object FileUtils {
             dir.mkdirs()
         }
         return dir
+    }
+
+
+     fun uriToMediaFile(context: Context, uri: Uri): File? {
+        try {
+            val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
+            val cursor = context.contentResolver.query(uri, filePathColumn, null, null, null)
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    val columnIndex = cursor.getColumnIndex(filePathColumn[0])
+                    val filePath = cursor.getString(columnIndex)
+                    cursor.close()
+                    return File(filePath)
+                }
+                cursor.close()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(context, "Please select multiples images", Toast.LENGTH_LONG).show()
+        }
+
+        return null
     }
 }
 

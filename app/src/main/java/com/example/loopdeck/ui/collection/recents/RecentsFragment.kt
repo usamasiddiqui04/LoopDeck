@@ -84,7 +84,7 @@ class RecentsFragment : Fragment() {
             if (data?.clipData?.itemCount ?: 0 > 1) {
                 showPlaylistNameDialog(requireContext())
             } else {
-                viewModel.importMediaFiles(requireContext())
+                viewModel.addMediaFiles()
 
             }
         }
@@ -144,7 +144,7 @@ class RecentsFragment : Fragment() {
     private fun showPlaylistNameDialog(context: Context) {
         savePlaylistNameDialog(context) {
             viewModel.createPlaylist(it)
-            viewModel.importMediaFiles(requireContext(), it.name)
+            viewModel.addMediaFiles(it.name)
         }
     }
 

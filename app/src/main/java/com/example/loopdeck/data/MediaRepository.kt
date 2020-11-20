@@ -1,7 +1,11 @@
 package com.example.loopdeck.data
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
+import android.provider.MediaStore
 import androidx.lifecycle.LiveData
+import com.example.loopdeck.utils.FileUtils.uriToMediaFile
 import com.example.loopdeck.utils.isImage
 import com.example.loopdeck.utils.isVideo
 import com.xorbix.loopdeck.cameraapp.BitmapUtils
@@ -39,6 +43,31 @@ class MediaRepository(private val mediaDao: MediaDao, private val context: Conte
                 mediaType = mediaType
             )
         )
+    }
+
+    suspend fun addMedia(uri: Uri, playlistName: String? = null) {
+
+        uriToMediaFile(context, uri)?.let { file ->
+            var mResultsBitmap: Bitmap? = null
+
+            when {
+                file.isVideo() -> {
+                    BitmapUtils.SaveVideo(context, uri)?.let {
+                        addMediaOrPlaylist(it, playlistName)
+                    }
+                }
+
+                file.isImage() -> {
+                    mResultsBitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+
+                    BitmapUtils.saveImage(context, mResultsBitmap)?.let {
+                        addMediaOrPlaylist(it, playlistName)
+                    }
+                }
+                else -> {
+                }
+            }
+        }
     }
 
     suspend fun insertAndUpdateMediaToPlaylist(mediaDataList: List<MediaData>) {
