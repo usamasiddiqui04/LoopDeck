@@ -19,6 +19,7 @@ class ItemMoveCallback(private val listener: DragAndDropListener) :
         return makeMovementFlags(dragFlags, 0)
     }
 
+
     override fun onMove(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,

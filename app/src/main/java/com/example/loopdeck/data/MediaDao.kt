@@ -20,7 +20,7 @@ interface MediaDao : BaseDAO<MediaData> {
     @Query("SELECT * FROM MediaFileTable WHERE playListName is :playlistName ORDER BY modifiedAt ASC ")
     fun findByPlaylist(playlistName: String): List<MediaData>
 
-    @Query("SELECT * FROM MediaFileTable WHERE playListName is :playlistName ORDER BY modifiedAt ASC ")
+    @Query("SELECT * FROM MediaFileTable WHERE playListName is :playlistName ORDER BY sequence ASC ")
     fun findByPlaylistLiveData(playlistName: String): LiveData<List<MediaData>>
 
     @Query("DELETE  FROM MediaFileTable WHERE id is :mediaDataId")

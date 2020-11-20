@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Handler
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -15,7 +17,6 @@ import com.example.loopdeck.data.MediaDatabase
 import com.example.loopdeck.data.MediaRepository
 import com.example.loopdeck.utils.isImage
 import com.example.loopdeck.utils.isVideo
-import com.xorbix.loopdeck.cameraapp.BitmapUtils
 import com.xorbix.loopdeck.cameraapp.BitmapUtils.SaveVideo
 import com.xorbix.loopdeck.cameraapp.BitmapUtils.saveImage
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +35,7 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
 
     init {
         val mediaDao = MediaDatabase.getDatabase(application).mediaDao()
-        repository = MediaRepository(mediaDao)
+        repository = MediaRepository(mediaDao, application.applicationContext)
 
         getRecents()
     }
@@ -47,12 +48,9 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun delete(mediaData: MediaData) {
-
         viewModelScope.launch(Dispatchers.IO) {
-            BitmapUtils.deleteImageFile(getApplication(), mediaData.filePath)
             repository.deleteMedia(mediaData)
         }
-
     }
 
 
@@ -152,5 +150,19 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
         viewModelScope.launch(Dispatchers.IO) {
             repository.addMediaOrPlaylist(file)
         }
+    }
+
+    fun onSequenceChanged(mList: List<MediaData>) {
+        Handler().postDelayed({
+            viewModelScope.launch(Dispatchers.IO) {
+
+                mList.forEachIndexed { index, mediaData ->
+                    mediaData.sequence = index + 1
+                }
+                repository.updatePlaylist(mList)
+                Log.d("MediaAdapter", mList.joinToString { "\n[${it.sequence}] ${it.name}" })
+            }
+        }, 1500)
+
     }
 }

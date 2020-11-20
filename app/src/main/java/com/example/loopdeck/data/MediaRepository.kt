@@ -1,12 +1,14 @@
 package com.example.loopdeck.data
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import com.example.loopdeck.utils.isImage
 import com.example.loopdeck.utils.isVideo
+import com.xorbix.loopdeck.cameraapp.BitmapUtils
 import java.io.File
 import java.util.*
 
-class MediaRepository(private val mediaDao: MediaDao) {
+class MediaRepository(private val mediaDao: MediaDao, private val context: Context) {
 
 
     fun getAllRecentsMediaLiveData(): LiveData<List<MediaData>> = mediaDao.findRecents()
@@ -39,11 +41,16 @@ class MediaRepository(private val mediaDao: MediaDao) {
         )
     }
 
-    suspend fun insertAndUpdateMediaToPlaylist(mediaData: List<MediaData>) {
-        mediaDao.insert(mediaData)
+    suspend fun insertAndUpdateMediaToPlaylist(mediaDataList: List<MediaData>) {
+        mediaDao.insert(mediaDataList)
+    }
+
+    suspend fun updatePlaylist(mediaDataList: List<MediaData>) {
+        mediaDao.insert(mediaDataList)
     }
 
     suspend fun deleteMedia(mediaData: MediaData) {
+        BitmapUtils.deleteImageFile(context, mediaData.filePath)
         mediaDao.delete(mediaData)
     }
 

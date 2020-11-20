@@ -1,5 +1,6 @@
 package com.example.loopdeck.ui.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +15,10 @@ import com.example.loopdeck.utils.callbacks.ItemMoveCallback
 import java.util.*
 
 class MediaAdaptor(
-    var mList: MutableList<MediaData>,
+    private var mList: MutableList<MediaData>,
     private val itemClickListener: (MediaData) -> Unit,
-    private val itemLongClickListener: ((View, MediaData) -> Boolean)? = null
+    private val itemLongClickListener: ((View, MediaData) -> Boolean)? = null,
+    private val onSequenceChanged: ((List<MediaData>) -> Unit)? = null
 
 ) : Adapter<ViewHolder>(), ItemMoveCallback.DragAndDropListener {
 
@@ -25,23 +27,23 @@ class MediaAdaptor(
         when (holder) {
             is ImageViewHolder -> {
                 holder.bind(mList[position], itemClickListener)
-                holder.itemView.setOnLongClickListener {
-                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
-                }
+//                holder.itemView.setOnLongClickListener {
+//                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
+//                }
 
             }
             is VideoViewHolder -> {
                 holder.bind(mList[position], itemClickListener)
-                holder.itemView.setOnLongClickListener {
-                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
-                }
+//                holder.itemView.setOnLongClickListener {
+//                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
+//                }
 
             }
             is PlaylistViewHolder -> {
                 holder.bind(mList.get(position), itemClickListener)
-                holder.itemView.setOnLongClickListener {
-                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
-                }
+//                holder.itemView.setOnLongClickListener {
+//                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
+//                }
 
             }
 
@@ -54,6 +56,7 @@ class MediaAdaptor(
         mList.clear()
         mList.addAll(list)
         notifyDataSetChanged()
+        Log.d("MediaAdapter", mList.joinToString { "\n[${it.sequence}] ${it.name}" })
     }
 
     override fun getItemCount(): Int {
@@ -106,6 +109,8 @@ class MediaAdaptor(
         }
 
         notifyItemMoved(fromPosition, toPosition)
+
+        onSequenceChanged?.invoke(mList)
     }
 
 

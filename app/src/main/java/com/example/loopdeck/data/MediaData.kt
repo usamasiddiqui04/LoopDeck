@@ -11,7 +11,7 @@ data class MediaData(
     val filePath: String,
     val name: String,
     val extension: String? = null,
-    val sequence: Int,
+    var sequence: Int,
     val mediaType: String,
     val createdAt: Date?,
     val modifiedAt: Date?,

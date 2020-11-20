@@ -68,7 +68,7 @@ class PlaylistFragment : Fragment() {
     private lateinit var viewModel: CollectionViewModel
 
     private val mediaAdapter by lazy {
-        MediaAdaptor(mutableListOf(), onItemClickListener, onItemLongClickListener)
+        MediaAdaptor(mutableListOf(), onItemClickListener, onItemLongClickListener, viewModel::onSequenceChanged)
     }
 
 
@@ -77,6 +77,9 @@ class PlaylistFragment : Fragment() {
         val shadow: View.DragShadowBuilder = View.DragShadowBuilder(itemView)
         ViewCompat.startDragAndDrop(itemView, null, shadow, state, 0)
     }
+
+
+
 
 
     private val onItemClickListener: (MediaData) -> Unit = { mediaData ->
