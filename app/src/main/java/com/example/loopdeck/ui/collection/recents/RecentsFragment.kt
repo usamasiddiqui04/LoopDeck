@@ -1,49 +1,55 @@
 package com.example.loopdeck.ui.collection.recents
 
-import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
-import android.provider.MediaStore
+import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import android.widget.Toast
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.ItemTouchHelper
+import com.example.loopdeck.DragData
 import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.data.MediaType
 import com.example.loopdeck.ui.adapters.MediaAdaptor
 import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.ui.collection.playlist.PlaylistFragment
-import com.example.loopdeck.utils.callbacks.ItemMoveCallback
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.loopdeck.photoeditor.EditImageActivity
 import com.obs.marveleditor.MainActivity
+import com.picker.gallery.model.GalleryData
+import com.picker.gallery.view.PickerActivity
 import com.xorbix.loopdeck.cameraapp.BitmapUtils
 import kotlinx.android.synthetic.main.dailogbox.view.*
 import kotlinx.android.synthetic.main.fragment_recents.*
 import java.io.File
+import java.util.*
 
 class RecentsFragment : Fragment() {
 
     companion object {
         fun newInstance() = RecentsFragment()
-        private const val REQUEST_STORAGE_PERMISSION = 1
+        private const val REQUEST_RESULT_CODE = 100
     }
+
 
     private lateinit var viewModel: CollectionViewModel
 
     private val mediaAdapter by lazy {
-        MediaAdaptor(mutableListOf(), onItemClickListener)
+        MediaAdaptor(mList = mutableListOf(), onItemClickListener, onItemLongClickListener)
     }
 
+    private val onItemLongClickListener: (View, MediaData) -> Boolean = { itemView, mediaData ->
+        val state = DragData(mediaData, itemView.width, itemView.height)
+        val shadow: View.DragShadowBuilder = View.DragShadowBuilder(itemView)
+        ViewCompat.startDragAndDrop(itemView, null, shadow, state, 0)
+    }
     private val onItemClickListener: (MediaData) -> Unit = { mediaData ->
 
 
@@ -76,19 +82,6 @@ class RecentsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_recents, container, false)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
-            viewModel.importedFilesIntent = data
-            if (data?.clipData?.itemCount ?: 0 > 1) {
-                showPlaylistNameDialog(requireContext())
-            } else {
-                viewModel.addMediaFiles()
-
-            }
-        }
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -102,49 +95,42 @@ class RecentsFragment : Fragment() {
     private fun initViews() {
 
 
-        var touchHelper: ItemTouchHelper? = null
         recyclerview?.adapter = mediaAdapter
         recyclerview?.layoutManager = GridLayoutManager(requireContext(), 3)
-        val callback: ItemTouchHelper.Callback = ItemMoveCallback(mediaAdapter)
-        touchHelper = ItemTouchHelper(callback)
-        touchHelper.attachToRecyclerView(recyclerview)
 
-        frameDelete.setOnClickListener {
+        btnCreate.setOnClickListener {
             savePlaylistNameDialog(requireContext()) {
                 viewModel.createPlaylist(it)
             }
         }
 
-
         btnGallery.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )
-                != PackageManager.PERMISSION_GRANTED
-            ) {
 
-                // If you do not have permission, request it
-                ActivityCompat.requestPermissions(
-                    requireActivity(), arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    Companion.REQUEST_STORAGE_PERMISSION
-                )
+            val i = Intent(activity, PickerActivity::class.java)
+            i.putExtra("IMAGES_LIMIT", 100)
+            i.putExtra("VIDEOS_LIMIT", 100)
+            i.putExtra("REQUEST_RESULT_CODE", REQUEST_RESULT_CODE)
+            startActivityForResult(i, REQUEST_RESULT_CODE)
+        }
+        initContainer()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == REQUEST_RESULT_CODE && data != null) {
+            val mediaList = data.getParcelableArrayListExtra<GalleryData>("MEDIA")
+            if (mediaList.size > 1) {
+                showPlaylistNameDialog(requireContext(), mediaList)
             } else {
-                val pickPhoto = Intent(
-                    Intent.ACTION_GET_CONTENT,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                )
-                pickPhoto.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                pickPhoto.type = "image/* video/*"
-                startActivityForResult(pickPhoto, 1)
+                viewModel.addMediaFiles(mediaList)
             }
         }
     }
 
-    private fun showPlaylistNameDialog(context: Context) {
+    private fun showPlaylistNameDialog(context: Context, mediaList: ArrayList<GalleryData>) {
         savePlaylistNameDialog(context) {
             viewModel.createPlaylist(it)
-            viewModel.addMediaFiles(it.name)
+            viewModel.addMediaFiles(mediaList, it.name)
         }
     }
 
@@ -172,12 +158,40 @@ class RecentsFragment : Fragment() {
     }
 
     private fun initObservers() {
-
-
         viewModel.recentsMediaLiveData.observe(viewLifecycleOwner, { recentsList ->
-            mediaAdapter.submitList(recentsList)
+            mediaAdapter.submitList(recentsList.distinctBy { it.name })
         })
 
+    }
+
+
+    private fun initContainer() {
+        btnDelete.setOnDragListener { view, dragEvent ->
+            when (dragEvent.action) {
+                DragEvent.ACTION_DRAG_ENTERED -> btnDelete.setBackgroundColor(Color.GREEN)
+                DragEvent.ACTION_DRAG_EXITED -> btnDelete.setBackgroundColor(Color.RED)
+                DragEvent.ACTION_DRAG_ENDED -> btnDelete.setBackgroundColor(Color.WHITE)
+                DragEvent.ACTION_DROP -> {
+                    //  final float dropX = dragEvent.getX();
+                    //  final float dropY = dragEvent.getY();
+                    val state = dragEvent.localState as DragData
+                    deleteFile(state.item)
+                }
+                else -> {
+                }
+            }
+            true
+        }
+    }
+
+    private fun deleteFile(mediaData: MediaData) {
+
+        viewModel.delete(mediaData)
+        Toast.makeText(
+            requireContext(),
+            " Deleted successfully ${mediaData.name}",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
 }

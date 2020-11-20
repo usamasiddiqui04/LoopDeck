@@ -23,12 +23,18 @@ class MainActivity : AppCompatActivity() {
         Fresco.initialize(this)
         setContentView(R.layout.activity_main_video_editor)
 
-        val VideoPath: String = intent.getStringExtra("videoPath")
-        val sharedPreferences: SharedPreferences = this.getSharedPreferences(sharedPrefFile,
-            Context.MODE_PRIVATE)
+        val videoPath =
+            if (intent.hasExtra("videoPath")) intent.getStringExtra("videoPath")
+            else null
 
-        val editor:SharedPreferences.Editor =  sharedPreferences.edit()
-        editor.putString("videoPath",VideoPath)
+
+        val sharedPreferences: SharedPreferences = this.getSharedPreferences(
+            sharedPrefFile,
+            Context.MODE_PRIVATE
+        )
+
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+        editor.putString("videoPath", videoPath)
         editor.apply()
         editor.commit()
 

@@ -288,7 +288,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
             Log.v(tagName, "videoPath1: " + videoFile!!.absolutePath)
             videoUri = FileProvider.getUriForFile(
                 context!!,
-                "com.obs.marveleditor.fileprovider", videoFile!!
+                "com.example.loopdeck.fileprovider", videoFile!!
             )
             cameraIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 240) //4 minutes
             cameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1)

@@ -27,23 +27,23 @@ class MediaAdaptor(
         when (holder) {
             is ImageViewHolder -> {
                 holder.bind(mList[position], itemClickListener)
-//                holder.itemView.setOnLongClickListener {
-//                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
-//                }
+                holder.itemView.setOnLongClickListener {
+                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
+                }
 
             }
             is VideoViewHolder -> {
                 holder.bind(mList[position], itemClickListener)
-//                holder.itemView.setOnLongClickListener {
-//                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
-//                }
+                holder.itemView.setOnLongClickListener {
+                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
+                }
 
             }
             is PlaylistViewHolder -> {
                 holder.bind(mList.get(position), itemClickListener)
-//                holder.itemView.setOnLongClickListener {
-//                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
-//                }
+                holder.itemView.setOnLongClickListener {
+                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
+                }
 
             }
 

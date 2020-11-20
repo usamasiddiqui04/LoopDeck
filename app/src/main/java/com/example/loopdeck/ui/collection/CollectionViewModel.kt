@@ -1,25 +1,16 @@
 package com.example.loopdeck.ui.collection
 
 import android.app.Application
-import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Handler
-import android.provider.MediaStore
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.data.MediaDatabase
 import com.example.loopdeck.data.MediaRepository
-import com.example.loopdeck.utils.FileUtils.uriToMediaFile
-import com.example.loopdeck.utils.isImage
-import com.example.loopdeck.utils.isVideo
-import com.xorbix.loopdeck.cameraapp.BitmapUtils.SaveVideo
-import com.xorbix.loopdeck.cameraapp.BitmapUtils.saveImage
+import com.picker.gallery.model.GalleryData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -58,24 +49,12 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
         repository.getPlaylistMediaLiveData(playlistName)
 
 
-    fun addMediaFiles(playlistName: String? = null) {
-        val data = importedFilesIntent?.clipData
-        if (data != null) {
-            viewModelScope.launch {
-                for (i in 0 until data.itemCount) {
-                    repository.addMedia(data.getItemAt(i).uri, playlistName)
-                }
-            }
-
-        } else {
-            viewModelScope.launch {
-                importedFilesIntent?.data?.let {
-                    repository.addMedia(it, playlistName)
-                }
+    fun addMediaFiles(mediaList: List<GalleryData>, playlistName: String? = null) {
+        viewModelScope.launch(Dispatchers.IO) {
+            mediaList.forEach {
+                repository.addMedia(it, playlistName)
             }
         }
-
-
     }
 
 

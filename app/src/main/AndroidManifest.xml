@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon,android:allowBackup,android:roundIcon">
-        <activity android:name="com.example.loopdeck.ui.collection.playlist.PlaylistActivity"></activity>
+
         <activity android:name="com.example.loopdeck.ui.collection.CollectionActivity" />
         <activity android:name=".ui.main.MainActivity">
             <intent-filter>
@@ -20,6 +20,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.loopdeck.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
     </application>
 
 </manifest>

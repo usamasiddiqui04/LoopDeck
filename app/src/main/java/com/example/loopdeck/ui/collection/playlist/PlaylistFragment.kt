@@ -1,19 +1,13 @@
 package com.example.loopdeck.ui.collection.playlist
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -28,6 +22,8 @@ import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.utils.callbacks.ItemMoveCallback
 import com.loopdeck.photoeditor.EditImageActivity
 import com.obs.marveleditor.MainActivity
+import com.picker.gallery.model.GalleryData
+import com.picker.gallery.view.PickerActivity
 import kotlinx.android.synthetic.main.fragment_playlist.*
 
 
@@ -45,25 +41,9 @@ class PlaylistFragment : Fragment() {
             arguments = args
         }
 
-        private const val REQUEST_STORAGE_PERMISSION = 1
+        private const val REQUEST_RESULT_CODE = 0
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
-            viewModel.importedFilesIntent = data
-            if (data?.clipData?.itemCount ?: 0 > 1) {
-                viewModel.addMediaFiles(playlistName)
-
-            } else {
-                viewModel.addMediaFiles(playlistName)
-
-            }
-
-        }
-
-    }
 
     private lateinit var viewModel: CollectionViewModel
 
@@ -136,48 +116,42 @@ class PlaylistFragment : Fragment() {
 
 
         btnGallery.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )
-                != PackageManager.PERMISSION_GRANTED
-            ) {
 
-                // If you do not have permission, request it
-                ActivityCompat.requestPermissions(
-                    requireActivity(), arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    Companion.REQUEST_STORAGE_PERMISSION
-                )
-            } else {
-                val pickPhoto = Intent(
-                    Intent.ACTION_GET_CONTENT,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                )
-                pickPhoto.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                pickPhoto.type = "image/* video/*"
-                startActivityForResult(pickPhoto, 1)
-            }
+            val i = Intent(activity, PickerActivity::class.java)
+            i.putExtra("IMAGES_LIMIT", 100)
+            i.putExtra("VIDEOS_LIMIT", 100)
+            i.putExtra("REQUEST_RESULT_CODE", REQUEST_RESULT_CODE)
+            startActivityForResult(i, REQUEST_RESULT_CODE)
         }
 
         initContainer()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == REQUEST_RESULT_CODE && data != null) {
+            val mediaList = data.getParcelableArrayListExtra<GalleryData>("MEDIA")
+            viewModel.addMediaFiles(mediaList, playlistName)
+
+        }
+    }
+
 
     private fun initObservers() {
         playlistName?.let {
-            viewModel.getPlaylistMedia(it).observe(viewLifecycleOwner, {
-                mediaAdapter.submitList(it)
+            viewModel.getPlaylistMedia(it).observe(viewLifecycleOwner, { list ->
+                mediaAdapter.submitList(list)
             })
         }
     }
 
 
     private fun initContainer() {
-        frameDelete.setOnDragListener { view, dragEvent ->
+        btnDelete.setOnDragListener { view, dragEvent ->
             when (dragEvent.action) {
-                DragEvent.ACTION_DRAG_ENTERED -> frameDelete.setBackgroundColor(Color.GREEN)
-                DragEvent.ACTION_DRAG_EXITED -> frameDelete.setBackgroundColor(Color.RED)
-                DragEvent.ACTION_DRAG_ENDED -> frameDelete.setBackgroundColor(Color.WHITE)
+                DragEvent.ACTION_DRAG_ENTERED -> btnDelete.setBackgroundColor(Color.GREEN)
+                DragEvent.ACTION_DRAG_EXITED -> btnDelete.setBackgroundColor(Color.RED)
+                DragEvent.ACTION_DRAG_ENDED -> btnDelete.setBackgroundColor(Color.WHITE)
                 DragEvent.ACTION_DROP -> {
                     //  final float dropX = dragEvent.getX();
                     //  final float dropY = dragEvent.getY();
@@ -199,8 +173,6 @@ class PlaylistFragment : Fragment() {
             " Deleted successfully ${mediaData.name}",
             Toast.LENGTH_SHORT
         ).show()
-
-
     }
 
 }

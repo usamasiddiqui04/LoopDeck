@@ -6,8 +6,10 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.lifecycle.LiveData
 import com.example.loopdeck.utils.FileUtils.uriToMediaFile
+import com.example.loopdeck.utils.extensions.getMediaType
 import com.example.loopdeck.utils.isImage
 import com.example.loopdeck.utils.isVideo
+import com.picker.gallery.model.GalleryData
 import com.xorbix.loopdeck.cameraapp.BitmapUtils
 import java.io.File
 import java.util.*
@@ -70,6 +72,35 @@ class MediaRepository(private val mediaDao: MediaDao, private val context: Conte
         }
     }
 
+
+    suspend fun addMedia(data: GalleryData, playlistName: String? = null) {
+
+
+        var mResultsBitmap: Bitmap? = null
+
+        when {
+            data.isVideo() -> {
+                BitmapUtils.SaveVideo(context, Uri.fromFile(data.file))?.let {
+                    addMediaOrPlaylist(it, playlistName)
+                }
+            }
+
+            data.isImage() -> {
+                mResultsBitmap = MediaStore.Images.Media.getBitmap(
+                    context.contentResolver,
+                    Uri.fromFile(data.file)
+                )
+
+                BitmapUtils.saveImage(context, mResultsBitmap)?.let {
+                    addMediaOrPlaylist(it, playlistName)
+                }
+            }
+            else -> {
+            }
+        }
+
+    }
+
     suspend fun insertAndUpdateMediaToPlaylist(mediaDataList: List<MediaData>) {
         mediaDao.insert(mediaDataList)
     }
@@ -88,6 +119,4 @@ class MediaRepository(private val mediaDao: MediaDao, private val context: Conte
     }
 }
 
-private fun File.getMediaType(): String {
-    return if (isImage()) MediaType.IMAGE else if (isVideo()) MediaType.VIDEO else MediaType.PLAYLIST
-}
+
