@@ -12,6 +12,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/VideoEditor" />
+            <option value="$PROJECT_DIR$/VideoEditorStcikers" />
             <option value="$PROJECT_DIR$/VideoEditorText" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/gallerypicker" />
