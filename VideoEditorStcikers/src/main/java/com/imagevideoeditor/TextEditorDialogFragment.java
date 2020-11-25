@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Burhanuddin Rashid on 1/16/2018.
@@ -44,6 +45,7 @@ public class TextEditorDialogFragment extends DialogFragment {
     private int mColorCode;
     private static int position = 0;
     private TextEditor mTextEditor;
+    View view;
 
     public interface TextEditor {
         void onDone(String inputText, int colorCode, int position);
@@ -86,26 +88,21 @@ public class TextEditorDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.add_text_dialog, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        view = inflater.inflate(R.layout.add_text_dialog, container, false);
         mAddTextEditText = view.findViewById(R.id.add_text_edit_text);
-        mInputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        mInputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         mAddTextDoneTextView = view.findViewById(R.id.add_text_done_tv);
 
         //Setup the color picker for text color
-        RecyclerView addTextColorPickerRecyclerView = view.findViewById(R.id.add_text_color_picker_recycler_view);
+        RecyclerView addTextColorPickerRecyclerView = view.findViewById(R.id.add_text_color_picker_recyclerview);
         RecyclerView reyFonts = view.findViewById(R.id.reyFonts);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        LinearLayoutManager layoutManagerFonts = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManagerFonts = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         addTextColorPickerRecyclerView.setLayoutManager(layoutManager);
         reyFonts.setLayoutManager(layoutManagerFonts);
         addTextColorPickerRecyclerView.setHasFixedSize(true);
         reyFonts.setHasFixedSize(true);
-        ColorPickerAdapter colorPickerAdapter = new ColorPickerAdapter(getActivity());
+        ColorPickerAdapter colorPickerAdapter = new ColorPickerAdapter(getContext());
         //This listener will change the text color when clicked on any color from picker
         colorPickerAdapter.setOnColorPickerClickListener(new ColorPickerAdapter.OnColorPickerClickListener() {
             @Override
@@ -116,12 +113,12 @@ public class TextEditorDialogFragment extends DialogFragment {
         });
         addTextColorPickerRecyclerView.setAdapter(colorPickerAdapter);
         position = getArguments().getInt(SELECTED_POSITION);
-        final FontPickerAdapter fontPickerAdapter = new FontPickerAdapter(getActivity(), position, getDefaultFonts(getActivity()), getDefaultFontIds(getActivity()));
+        final FontPickerAdapter fontPickerAdapter = new FontPickerAdapter(getContext(), position, getDefaultFonts(getActivity()), getDefaultFontIds(getActivity()));
         fontPickerAdapter.setOnFontSelectListener(new FontPickerAdapter.OnFontSelectListner() {
             @Override
             public void onFontSelcetion(int position) {
-                TextEditorDialogFragment.this.position = position;
-                Typeface typeface = ResourcesCompat.getFont(getActivity(), fontIds.get(position));
+                TextEditorDialogFragment.position = position;
+                Typeface typeface = ResourcesCompat.getFont(Objects.requireNonNull(getContext()), fontIds.get(position));
                 mAddTextEditText.setTypeface(typeface);
             }
         });
@@ -132,7 +129,7 @@ public class TextEditorDialogFragment extends DialogFragment {
         mColorCode = getArguments().getInt(EXTRA_COLOR_CODE);
 
         mAddTextEditText.setTextColor(mColorCode);
-        Typeface typeface = ResourcesCompat.getFont(getActivity(), fontIds.get(position));
+        Typeface typeface = ResourcesCompat.getFont(getContext(), fontIds.get(position));
         mAddTextEditText.setTypeface(typeface);
 
         mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
@@ -149,7 +146,12 @@ public class TextEditorDialogFragment extends DialogFragment {
                 }
             }
         });
+        return view;
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     public static List<Integer> getDefaultFontIds(Context context) {

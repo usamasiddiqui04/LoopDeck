@@ -21,6 +21,7 @@ import com.example.loopdeck.ui.adapters.MediaAdaptor
 import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.ui.collection.playlist.PlaylistFragment
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
+import com.imagevideoeditor.PreviewVideoActivity
 import com.loopdeck.photoeditor.EditImageActivity
 import com.obs.marveleditor.MainActivity
 import com.picker.gallery.model.GalleryData
@@ -61,7 +62,7 @@ class RecentsFragment : Fragment() {
                 startActivity(intent)
             }
             MediaType.VIDEO -> {
-                val intent = Intent(requireContext(), MainActivity::class.java)
+                val intent = Intent(requireContext(), PreviewVideoActivity::class.java)
                 intent.putExtra("videoPath", mediaData.filePath)
                 startActivity(intent)
             }

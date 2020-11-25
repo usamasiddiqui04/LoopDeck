@@ -67,14 +67,24 @@ class VideoGridAdapter() : RecyclerView.Adapter<VideoGridAdapter.MyViewHolder>()
                             return false
                         }
 
-                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
                             return false
                         }
-
                     }
-                    Glide.with(ctx).load(mimageList[holder.adapterPosition].photoUri).apply(RequestOptions().centerCrop().override(150, 150)).transition(DrawableTransitionOptions.withCrossFade()).listener(requestListener).into(holder.image)
+                    Glide.with(ctx).load(mimageList[holder.adapterPosition].photoUri)
+                        .apply(RequestOptions().centerCrop().override(150, 150))
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .listener(requestListener).into(holder.image)
+
                 } catch (e: Exception) {
                 }
+
             }
         }
 
