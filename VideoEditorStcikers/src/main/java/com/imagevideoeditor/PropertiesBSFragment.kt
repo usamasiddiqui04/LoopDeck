@@ -1,84 +1,72 @@
-package com.imagevideoeditor;
+package com.imagevideoeditor
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.SeekBar;
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.SeekBar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChangeListener {
+    private var mProperties: Properties? = null
 
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
-public class PropertiesBSFragment extends BottomSheetDialogFragment implements SeekBar.OnSeekBarChangeListener {
-
-    public PropertiesBSFragment() {
-        // Required empty public constructor
+    interface Properties {
+        fun onColorChanged(colorCode: Int)
+        fun onOpacityChanged(opacity: Int)
+        fun onBrushSizeChanged(brushSize: Int)
     }
 
-    private Properties mProperties;
-
-    public interface Properties {
-        void onColorChanged(int colorCode);
-
-        void onOpacityChanged(int opacity);
-
-        void onBrushSizeChanged(int brushSize);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_bottom_properties_dialog, container, false)
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_bottom_properties_dialog, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        RecyclerView rvColor = view.findViewById(R.id.rvColors);
-        SeekBar sbOpacity = view.findViewById(R.id.sbOpacity);
-        SeekBar sbBrushSize = view.findViewById(R.id.sbSize);
-
-        sbOpacity.setOnSeekBarChangeListener(this);
-        sbBrushSize.setOnSeekBarChangeListener(this);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        rvColor.setLayoutManager(layoutManager);
-        rvColor.setHasFixedSize(true);
-        ColorPickerAdapter colorPickerAdapter = new ColorPickerAdapter(getActivity());
-        colorPickerAdapter.setOnColorPickerClickListener(new ColorPickerAdapter.OnColorPickerClickListener() {
-            @Override
-            public void onColorPickerClickListener(int colorCode) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val rvColor: RecyclerView = view.findViewById(R.id.rvColors)
+        val sbOpacity = view.findViewById<SeekBar>(R.id.sbOpacity)
+        val sbBrushSize = view.findViewById<SeekBar>(R.id.sbSize)
+        sbOpacity.setOnSeekBarChangeListener(this)
+        sbBrushSize.setOnSeekBarChangeListener(this)
+        val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        rvColor.layoutManager = layoutManager
+        rvColor.setHasFixedSize(true)
+        val colorPickerAdapter = ColorPickerAdapter(
+            activity!!
+        )
+        colorPickerAdapter.setOnColorPickerClickListener(object :
+            ColorPickerAdapter.OnColorPickerClickListener {
+            override fun onColorPickerClickListener(colorCode: Int) {
                 if (mProperties != null) {
-                    dismiss();
-                    mProperties.onColorChanged(colorCode);
+                    dismiss()
+                    mProperties!!.onColorChanged(colorCode)
                 }
             }
-        });
-        rvColor.setAdapter(colorPickerAdapter);
+        })
+        rvColor.adapter = colorPickerAdapter
     }
 
-    public void setPropertiesChangeListener(Properties properties) {
-        mProperties = properties;
+    fun setPropertiesChangeListener(properties: Properties?) {
+        mProperties = properties
     }
 
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-
-        if (seekBar.getId() == R.id.sbOpacity) {
+    override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
+        if (seekBar.id == R.id.sbOpacity) {
             if (mProperties != null) {
-                mProperties.onOpacityChanged(i);
+                mProperties!!.onOpacityChanged(i)
             }
-        } else if (R.id.sbSize == seekBar.getId()) {
+        } else if (R.id.sbSize == seekBar.id) {
             if (mProperties != null) {
-                mProperties.onBrushSizeChanged(i);
+                mProperties!!.onBrushSizeChanged(i)
             }
         }
 
@@ -96,13 +84,6 @@ public class PropertiesBSFragment extends BottomSheetDialogFragment implements S
 //        }
     }
 
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-
-    }
+    override fun onStartTrackingTouch(seekBar: SeekBar) {}
+    override fun onStopTrackingTouch(seekBar: SeekBar) {}
 }

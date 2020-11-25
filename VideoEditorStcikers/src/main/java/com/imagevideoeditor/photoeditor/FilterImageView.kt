@@ -1,133 +1,114 @@
-package com.imagevideoeditor.photoeditor;
+package com.imagevideoeditor.photoeditor
 
-import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.Icon;
-import android.net.Uri;
-import android.util.AttributeSet;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageView;
+import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Bitmap
+import android.graphics.Matrix
+import android.graphics.PorterDuff
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.Icon
+import android.net.Uri
+import android.util.AttributeSet
+import androidx.appcompat.widget.AppCompatImageView
 
 /**
- * @author <a href="https://github.com/burhanrashid52">Burhanuddin Rashid</a>
+ * @author [Burhanuddin Rashid](https://github.com/burhanrashid52)
  * @version 0.1.2
  * @since 5/21/2018
  */
-class FilterImageView extends AppCompatImageView {
+internal class FilterImageView : AppCompatImageView {
+    private var mOnImageChangedListener: OnImageChangedListener? = null
 
-    private OnImageChangedListener mOnImageChangedListener;
-
-    public FilterImageView(Context context) {
-        super(context);
+    constructor(context: Context?) : super(context) {}
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {}
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
     }
 
-    public FilterImageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    fun setOnImageChangedListener(onImageChangedListener: OnImageChangedListener?) {
+        mOnImageChangedListener = onImageChangedListener
     }
 
-    public FilterImageView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    internal interface OnImageChangedListener {
+        fun onBitmapLoaded(sourceBitmap: Bitmap?)
     }
 
-    public void setOnImageChangedListener(OnImageChangedListener onImageChangedListener) {
-        mOnImageChangedListener = onImageChangedListener;
-    }
-
-    interface OnImageChangedListener {
-        void onBitmapLoaded(@Nullable Bitmap sourceBitmap);
-    }
-
-    @Override
-    public void setImageBitmap(Bitmap bm) {
-        super.setImageBitmap(bm);
+    override fun setImageBitmap(bm: Bitmap) {
+        super.setImageBitmap(bm)
         if (mOnImageChangedListener != null) {
-            mOnImageChangedListener.onBitmapLoaded(getBitmap());
+            mOnImageChangedListener!!.onBitmapLoaded(bitmap)
         }
     }
 
-    @Override
-    public void setImageIcon(@Nullable Icon icon) {
-        super.setImageIcon(icon);
+    override fun setImageIcon(icon: Icon?) {
+        super.setImageIcon(icon)
         if (mOnImageChangedListener != null) {
-            mOnImageChangedListener.onBitmapLoaded(getBitmap());
+            mOnImageChangedListener!!.onBitmapLoaded(bitmap)
         }
     }
 
-    @Override
-    public void setImageMatrix(Matrix matrix) {
-        super.setImageMatrix(matrix);
+    override fun setImageMatrix(matrix: Matrix) {
+        super.setImageMatrix(matrix)
         if (mOnImageChangedListener != null) {
-            mOnImageChangedListener.onBitmapLoaded(getBitmap());
+            mOnImageChangedListener!!.onBitmapLoaded(bitmap)
         }
     }
 
-    @Override
-    public void setImageState(int[] state, boolean merge) {
-        super.setImageState(state, merge);
+    override fun setImageState(state: IntArray, merge: Boolean) {
+        super.setImageState(state, merge)
         if (mOnImageChangedListener != null) {
-            mOnImageChangedListener.onBitmapLoaded(getBitmap());
+            mOnImageChangedListener!!.onBitmapLoaded(bitmap)
         }
     }
 
-    @Override
-    public void setImageTintList(@Nullable ColorStateList tint) {
-        super.setImageTintList(tint);
+    override fun setImageTintList(tint: ColorStateList?) {
+        super.setImageTintList(tint)
         if (mOnImageChangedListener != null) {
-            mOnImageChangedListener.onBitmapLoaded(getBitmap());
+            mOnImageChangedListener!!.onBitmapLoaded(bitmap)
         }
     }
 
-    @Override
-    public void setImageTintMode(@Nullable PorterDuff.Mode tintMode) {
-        super.setImageTintMode(tintMode);
+    override fun setImageTintMode(tintMode: PorterDuff.Mode?) {
+        super.setImageTintMode(tintMode)
         if (mOnImageChangedListener != null) {
-            mOnImageChangedListener.onBitmapLoaded(getBitmap());
+            mOnImageChangedListener!!.onBitmapLoaded(bitmap)
         }
     }
 
-    @Override
-    public void setImageDrawable(@Nullable Drawable drawable) {
-        super.setImageDrawable(drawable);
+    override fun setImageDrawable(drawable: Drawable?) {
+        super.setImageDrawable(drawable)
         if (mOnImageChangedListener != null) {
-            mOnImageChangedListener.onBitmapLoaded(getBitmap());
+            mOnImageChangedListener!!.onBitmapLoaded(bitmap)
         }
     }
 
-    @Override
-    public void setImageResource(int resId) {
-        super.setImageResource(resId);
+    override fun setImageResource(resId: Int) {
+        super.setImageResource(resId)
         if (mOnImageChangedListener != null) {
-            mOnImageChangedListener.onBitmapLoaded(getBitmap());
+            mOnImageChangedListener!!.onBitmapLoaded(bitmap)
         }
     }
 
-    @Override
-    public void setImageURI(@Nullable Uri uri) {
-        super.setImageURI(uri);
+    override fun setImageURI(uri: Uri?) {
+        super.setImageURI(uri)
         if (mOnImageChangedListener != null) {
-            mOnImageChangedListener.onBitmapLoaded(getBitmap());
+            mOnImageChangedListener!!.onBitmapLoaded(bitmap)
         }
     }
 
-    @Override
-    public void setImageLevel(int level) {
-        super.setImageLevel(level);
+    override fun setImageLevel(level: Int) {
+        super.setImageLevel(level)
         if (mOnImageChangedListener != null) {
-            mOnImageChangedListener.onBitmapLoaded(getBitmap());
+            mOnImageChangedListener!!.onBitmapLoaded(bitmap)
         }
     }
 
-    @Nullable
-    Bitmap getBitmap() {
-        if (getDrawable() != null) {
-            return ((BitmapDrawable) getDrawable()).getBitmap();
-        }
-        return null;
-    }
+    val bitmap: Bitmap?
+        get() = if (drawable != null) {
+            (drawable as BitmapDrawable).bitmap
+        } else null
 }

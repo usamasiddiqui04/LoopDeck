@@ -1,23 +1,15 @@
-package com.imagevideoeditor.photoeditor;
+package com.imagevideoeditor.photoeditor
 
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.view.View;
-import android.widget.TextView;
+import android.graphics.Typeface
+import android.graphics.drawable.Drawable
+import android.os.Build
+import android.widget.TextView
+import java.util.*
 
-import androidx.annotation.NonNull;
-
-import java.util.HashMap;
-import java.util.Map;
-
-
-public class TextStyleBuilder {
-
-    private Map<TextStyle, Object> values = new HashMap<>();
-
-    protected Map<TextStyle, Object> getValues() {
-        return values;
+class TextStyleBuilder {
+    private val values: MutableMap<TextStyle, Any> = HashMap()
+    protected fun getValues(): Map<TextStyle, Any> {
+        return values
     }
 
     /**
@@ -25,8 +17,8 @@ public class TextStyleBuilder {
      *
      * @param size Size to apply on text
      */
-    public void withTextSize(@NonNull float size) {
-        values.put(TextStyle.SIZE, size);
+    fun withTextSize(size: Float) {
+        values[TextStyle.SIZE] = size
     }
 
     /**
@@ -34,17 +26,17 @@ public class TextStyleBuilder {
      *
      * @param color Color to apply on text
      */
-    public void withTextColor(@NonNull int color) {
-        values.put(TextStyle.COLOR, color);
+    fun withTextColor(color: Int) {
+        values[TextStyle.COLOR] = color
     }
 
     /**
-     * Set this {@link Typeface} style
+     * Set this [Typeface] style
      *
      * @param textTypeface TypeFace to apply on text
      */
-    public void withTextFont(@NonNull Typeface textTypeface) {
-        values.put(TextStyle.FONT_FAMILY, textTypeface);
+    fun withTextFont(textTypeface: Typeface) {
+        values[TextStyle.FONT_FAMILY] = textTypeface
     }
 
     /**
@@ -52,17 +44,16 @@ public class TextStyleBuilder {
      *
      * @param gravity Gravity style to apply on text
      */
-    public void withGravity(@NonNull int gravity) {
-        values.put(TextStyle.GRAVITY, gravity);
+    fun withGravity(gravity: Int) {
+        values[TextStyle.GRAVITY] = gravity
     }
 
-    public void withBackgroundColor(@NonNull int background) {
-        values.put(TextStyle.BACKGROUND, background);
+    fun withBackgroundColor(background: Int) {
+        values[TextStyle.BACKGROUND] = background
     }
 
-
-    public void withBackgroundDrawable(@NonNull Drawable bgDrawable) {
-        values.put(TextStyle.BACKGROUND, bgDrawable);
+    fun withBackgroundDrawable(bgDrawable: Drawable) {
+        values[TextStyle.BACKGROUND] = bgDrawable
     }
 
     /**
@@ -70,8 +61,9 @@ public class TextStyleBuilder {
      *
      * @param textAppearance Text style to apply on text
      */
-    public void withTextAppearance(@NonNull int textAppearance) {
-        values.put(TextStyle.TEXT_APPEARANCE, textAppearance);
+    fun withTextAppearance(textAppearance: Int) {
+        values[TextStyle.TEXT_APPEARANCE] =
+            textAppearance
     }
 
     /**
@@ -79,109 +71,82 @@ public class TextStyleBuilder {
      *
      * @param textView TextView to apply the style
      */
-    void applyStyle(@NonNull TextView textView) {
-        for (Map.Entry<TextStyle, Object> entry : values.entrySet()) {
-            switch (entry.getKey()) {
-                case SIZE: {
-                    final float size = (float) entry.getValue();
-                    applyTextSize(textView, size);
+    fun applyStyle(textView: TextView) {
+        for ((key, value) in values) {
+            when (key) {
+                TextStyle.SIZE -> {
+                    val size = value as Float
+                    applyTextSize(textView, size)
                 }
-                break;
-
-                case COLOR: {
-                    final int color = (int) entry.getValue();
-                    applyTextColor(textView, color);
+                TextStyle.COLOR -> {
+                    val color = value as Int
+                    applyTextColor(textView, color)
                 }
-                break;
-
-                case FONT_FAMILY: {
-                    final Typeface typeface = (Typeface) entry.getValue();
-                    applyFontFamily(textView, typeface);
+                TextStyle.FONT_FAMILY -> {
+                    val typeface = value as Typeface
+                    applyFontFamily(textView, typeface)
                 }
-                break;
-
-                case GRAVITY: {
-                    final int gravity = (int) entry.getValue();
-                    applyGravity(textView, gravity);
+                TextStyle.GRAVITY -> {
+                    val gravity = value as Int
+                    applyGravity(textView, gravity)
                 }
-                break;
-
-                case BACKGROUND: {
-                    if (entry.getValue() instanceof Drawable) {
-                        final Drawable bg = (Drawable) entry.getValue();
-                        applyBackgroundDrawable(textView, bg);
-
-                    } else if (entry.getValue() instanceof Integer) {
-                        final int color = (Integer) entry.getValue();
-                        applyBackgroundColor(textView, color);
+                TextStyle.BACKGROUND -> {
+                    if (value is Drawable) {
+                        applyBackgroundDrawable(textView, value)
+                    } else if (value is Int) {
+                        applyBackgroundColor(textView, value)
                     }
                 }
-                break;
-
-                case TEXT_APPEARANCE: {
-                    if (entry.getValue() instanceof Integer) {
-                        final int styleAppearance = (Integer) entry.getValue();
-                        applyTextAppearance(textView, styleAppearance);
+                TextStyle.TEXT_APPEARANCE -> {
+                    if (value is Int) {
+                        applyTextAppearance(textView, value)
                     }
                 }
-                break;
             }
         }
     }
 
-    protected void applyTextSize(TextView textView, float size) {
-        textView.setTextSize(size);
+    protected fun applyTextSize(textView: TextView, size: Float) {
+        textView.textSize = size
     }
 
-    protected void applyTextColor(TextView textView, int color) {
-        textView.setTextColor(color);
+    protected fun applyTextColor(textView: TextView, color: Int) {
+        textView.setTextColor(color)
     }
 
-    protected void applyFontFamily(TextView textView, Typeface typeface) {
-        textView.setTypeface(typeface);
+    protected fun applyFontFamily(textView: TextView, typeface: Typeface?) {
+        textView.typeface = typeface
     }
 
-    protected void applyGravity(TextView textView, int gravity) {
-        textView.setGravity(gravity);
+    protected fun applyGravity(textView: TextView, gravity: Int) {
+        textView.gravity = gravity
     }
 
-    protected void applyBackgroundColor(TextView textView, int color) {
-        textView.setBackgroundColor(color);
+    protected fun applyBackgroundColor(textView: TextView, color: Int) {
+        textView.setBackgroundColor(color)
     }
 
-    protected void applyBackgroundDrawable(TextView textView, Drawable bg) {
+    protected fun applyBackgroundDrawable(textView: TextView, bg: Drawable?) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            textView.setBackground(bg);
+            textView.background = bg
         } else {
-            textView.setBackgroundDrawable(bg);
+            textView.setBackgroundDrawable(bg)
         }
     }
 
-    protected void applyTextAppearance(TextView textView, int styleAppearance) {
+    protected fun applyTextAppearance(textView: TextView, styleAppearance: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            textView.setTextAppearance(styleAppearance);
+            textView.setTextAppearance(styleAppearance)
         } else {
-            textView.setTextAppearance(textView.getContext(), styleAppearance);
+            textView.setTextAppearance(textView.context, styleAppearance)
         }
     }
 
-
-    protected enum TextStyle {
-        SIZE("TextSize"),
-        COLOR("TextColor"),
-        GRAVITY("Gravity"),
-        FONT_FAMILY("FontFamily"),
-        BACKGROUND("Background"),
+    protected enum class TextStyle(val property: String) {
+        SIZE("TextSize"), COLOR("TextColor"), GRAVITY("Gravity"), FONT_FAMILY("FontFamily"), BACKGROUND(
+            "Background"
+        ),
         TEXT_APPEARANCE("TextAppearance");
 
-        TextStyle(String property) {
-            this.property = property;
-        }
-
-        private String property;
-
-        public String getProperty() {
-            return property;
-        }
     }
 }

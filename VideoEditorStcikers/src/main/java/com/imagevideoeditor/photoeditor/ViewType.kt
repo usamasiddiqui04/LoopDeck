@@ -1,18 +1,15 @@
-package com.imagevideoeditor.photoeditor;
-
+package com.imagevideoeditor.photoeditor
 
 /**
- * <p>
- * Enum define for various operation happening on the {@link PhotoEditorView} while editing
- * </p>
  *
- * @author <a href="https://github.com/burhanrashid52">Burhanuddin Rashid</a>
+ *
+ * Enum define for various operation happening on the [PhotoEditorView] while editing
+ *
+ *
+ * @author [Burhanuddin Rashid](https://github.com/burhanrashid52)
  * @version 0.1.1
  * @since 18/01/2017.
  */
-public enum ViewType {
-    BRUSH_DRAWING,
-    TEXT,
-    IMAGE,
-    EMOJI
+enum class ViewType {
+    BRUSH_DRAWING, TEXT, IMAGE, EMOJI
 }

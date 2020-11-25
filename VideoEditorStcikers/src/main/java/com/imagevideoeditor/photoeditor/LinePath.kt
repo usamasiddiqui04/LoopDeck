@@ -1,22 +1,14 @@
-package com.imagevideoeditor.photoeditor;
+package com.imagevideoeditor.photoeditor
 
-import android.graphics.Paint;
-import android.graphics.Path;
+import android.graphics.Paint
+import android.graphics.Path
 
-class LinePath {
-    private final Paint mDrawPaint;
-    private final Path mDrawPath;
+class LinePath internal constructor(drawPath: Path?, drawPaints: Paint?) {
+    val drawPaint: Paint
+    val drawPath: Path
 
-    LinePath(final Path drawPath, final Paint drawPaints) {
-        mDrawPaint = new Paint(drawPaints);
-        mDrawPath = new Path(drawPath);
-    }
-
-    Paint getDrawPaint() {
-        return mDrawPaint;
-    }
-
-    Path getDrawPath() {
-        return mDrawPath;
+    init {
+        drawPaint = Paint(drawPaints)
+        this.drawPath = Path(drawPath)
     }
 }

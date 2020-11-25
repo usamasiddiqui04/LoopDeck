@@ -1,94 +1,65 @@
-package com.imagevideoeditor;
+package com.imagevideoeditor
 
-import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.View;
+import android.content.Intent
+import android.os.Build
+import android.os.Bundle
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import com.imagevideoeditor.PreviewPhotoActivity
+import com.imagevideoeditor.PreviewVideoActivity
+import com.imagevideoeditor.Utils.CameraUtils
+import com.imagevideoeditor.Utils.CameraUtils.OnCameraResult
+import com.imagevideoeditor.databinding.ActivityMainBinding
+import com.kbeanie.multipicker.api.CameraVideoPicker
+import com.kbeanie.multipicker.api.entity.ChosenImage
+import com.kbeanie.multipicker.api.entity.ChosenVideo
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-
-import com.imagevideoeditor.Utils.CameraUtils;
-import com.imagevideoeditor.databinding.ActivityMainBinding;
-import com.kbeanie.multipicker.api.CameraVideoPicker;
-import com.kbeanie.multipicker.api.entity.ChosenImage;
-import com.kbeanie.multipicker.api.entity.ChosenVideo;
-
-import java.util.List;
-
-public class MainActivity extends AppCompatActivity implements CameraUtils.OnCameraResult {
-
-    private CameraUtils cameraUtils;
-    private ActivityMainBinding activityMainBinding;
-    private CameraVideoPicker cameraVideoPicker;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        cameraUtils = new CameraUtils(this, this);
-
-        activityMainBinding.btnPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                cameraUtils.openCameraGallery();
-            }
-        });
-        activityMainBinding.btnVideo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                cameraUtils.alertVideoSelcetion();
-
-
-            }
-        });
+class MainActivity : AppCompatActivity(), OnCameraResult {
+    private var cameraUtils: CameraUtils? = null
+    private var activityMainBinding: ActivityMainBinding? = null
+    private val cameraVideoPicker: CameraVideoPicker? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        cameraUtils = CameraUtils(this, this)
+        activityMainBinding?.btnPhoto!!.setOnClickListener {
+            //                cameraUtils.openCameraGallery();
+        }
+        activityMainBinding?.btnVideo!!.setOnClickListener { cameraUtils!!.alertVideoSelcetion() }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        cameraUtils.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        cameraUtils!!.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    @Override
-    public void onSuccess(List<ChosenImage> images) {
-        if (images != null && images.size() > 0) {
-            Intent i = new Intent(MainActivity.this, PreviewPhotoActivity.class);
-            i.putExtra("DATA", images.get(0).getOriginalPath());
+    override fun onSuccess(images: List<ChosenImage>) {
+        if (images != null && images.size > 0) {
+            val i = Intent(this@MainActivity, PreviewPhotoActivity::class.java)
+            i.putExtra("DATA", images[0].originalPath)
             //binding.ivProfilePic.setImageURI(Uri.fromFile(selectedImageFile));
-            startActivity(i);
-
+            startActivity(i)
         }
     }
 
-    @Override
-    public void onError(String error) {
-
+    override fun onError(error: String) {}
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        cameraUtils!!.onActivityResult(requestCode, resultCode, data)
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        cameraUtils.onActivityResult(requestCode, resultCode, data);
-
-    }
-
-
-    @Override
-    public void onVideoSuccess(List<ChosenVideo> list) {
-        if (list != null && list.size() > 0) {
-            Intent i = new Intent(MainActivity.this, PreviewVideoActivity.class);
-            i.putExtra("DATA", list.get(0).getOriginalPath());
+    override fun onVideoSuccess(list: List<ChosenVideo>) {
+        if (list != null && list.size > 0) {
+            val i = Intent(this@MainActivity, PreviewVideoActivity::class.java)
+            i.putExtra("DATA", list[0].originalPath)
             //binding.ivProfilePic.setImageURI(Uri.fromFile(selectedImageFile));
-            startActivity(i);
-
+            startActivity(i)
         }
     }
 }
-

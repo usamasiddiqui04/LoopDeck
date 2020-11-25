@@ -1,182 +1,142 @@
-package com.imagevideoeditor.photoeditor;
+package com.imagevideoeditor.photoeditor
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.util.AttributeSet;
-import android.util.Pair;
-import android.view.MotionEvent;
-import android.view.View;
-
-import androidx.annotation.ColorInt;
-import androidx.annotation.IntRange;
-import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
-
-import java.util.Stack;
+import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.*
+import android.util.AttributeSet
+import android.util.Pair
+import android.view.MotionEvent
+import android.view.View
+import androidx.annotation.ColorInt
+import androidx.annotation.VisibleForTesting
+import java.util.*
 
 /**
- * <p>
+ *
+ *
  * This is custom drawing view used to do painting on user touch events it it will paint on canvas
  * as per attributes provided to the paint
- * </p>
  *
- * @author <a href="https://github.com/burhanrashid52">Burhanuddin Rashid</a>
+ *
+ * @author [Burhanuddin Rashid](https://github.com/burhanrashid52)
  * @version 0.1.1
  * @since 12/1/18
  */
-public class BrushDrawingView extends View {
+class BrushDrawingView @JvmOverloads constructor(
+    context: Context?,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) : View(context, attrs, defStyle) {
+    private var mBrushSize = DEFAULT_BRUSH_SIZE
+    var eraserSize = DEFAULT_ERASER_SIZE
+        private set
+    private var mOpacity = DEFAULT_OPACITY
+    private val mDrawnPaths = Stack<LinePath>()
+    private val mRedoPaths = Stack<LinePath>()
 
-    static final float DEFAULT_BRUSH_SIZE = 25.0f;
-    static final float DEFAULT_ERASER_SIZE = 50.0f;
-    static final int DEFAULT_OPACITY = 255;
-
-    private float mBrushSize = DEFAULT_BRUSH_SIZE;
-    private float mBrushEraserSize = DEFAULT_ERASER_SIZE;
-    private int mOpacity = DEFAULT_OPACITY;
-
-    private final Stack<LinePath> mDrawnPaths = new Stack<>();
-    private final Stack<LinePath> mRedoPaths = new Stack<>();
-    private final Paint mDrawPaint = new Paint();
-
-    private Canvas mDrawCanvas;
-    private boolean mBrushDrawMode;
-
-    private Path mPath;
-    private float mTouchX, mTouchY;
-    private static final float TOUCH_TOLERANCE = 4;
-
-    private BrushViewChangeListener mBrushViewChangeListener;
-
-    public BrushDrawingView(Context context) {
-        this(context, null);
-    }
-
-    public BrushDrawingView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public BrushDrawingView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        setupBrushDrawing();
-    }
-
-    private void setupBrushDrawing() {
+    @get:VisibleForTesting
+    val drawingPaint = Paint()
+    private var mDrawCanvas: Canvas? = null
+    private var mBrushDrawMode = false
+    private var mPath: Path? = null
+    private var mTouchX = 0f
+    private var mTouchY = 0f
+    private var mBrushViewChangeListener: BrushViewChangeListener? = null
+    private fun setupBrushDrawing() {
         //Caution: This line is to disable hardware acceleration to make eraser feature work properly
-        setLayerType(LAYER_TYPE_HARDWARE, null);
-        mDrawPaint.setColor(Color.BLACK);
-        setupPathAndPaint();
-        setVisibility(View.GONE);
+        setLayerType(LAYER_TYPE_HARDWARE, null)
+        drawingPaint.color = Color.BLACK
+        setupPathAndPaint()
+        visibility = GONE
     }
 
-    private void setupPathAndPaint() {
-        mPath = new Path();
-        mDrawPaint.setAntiAlias(true);
-        mDrawPaint.setDither(true);
-        mDrawPaint.setStyle(Paint.Style.STROKE);
-        mDrawPaint.setStrokeJoin(Paint.Join.ROUND);
-        mDrawPaint.setStrokeCap(Paint.Cap.ROUND);
-        mDrawPaint.setStrokeWidth(mBrushSize);
-        mDrawPaint.setAlpha(mOpacity);
-        mDrawPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER));
+    private fun setupPathAndPaint() {
+        mPath = Path()
+        drawingPaint.isAntiAlias = true
+        drawingPaint.isDither = true
+        drawingPaint.style = Paint.Style.STROKE
+        drawingPaint.strokeJoin = Paint.Join.ROUND
+        drawingPaint.strokeCap = Paint.Cap.ROUND
+        drawingPaint.strokeWidth = mBrushSize
+        drawingPaint.alpha = mOpacity
+        drawingPaint.xfermode =
+            PorterDuffXfermode(PorterDuff.Mode.SRC_OVER)
     }
 
-    private void refreshBrushDrawing() {
-        mBrushDrawMode = true;
-        setupPathAndPaint();
+    private fun refreshBrushDrawing() {
+        mBrushDrawMode = true
+        setupPathAndPaint()
     }
 
-    void brushEraser() {
-        mBrushDrawMode = true;
-        mDrawPaint.setStrokeWidth(mBrushEraserSize);
-        mDrawPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+    fun brushEraser() {
+        mBrushDrawMode = true
+        drawingPaint.strokeWidth = eraserSize
+        drawingPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
     }
 
-    void setBrushDrawingMode(boolean brushDrawMode) {
-        this.mBrushDrawMode = brushDrawMode;
-        if (brushDrawMode) {
-            this.setVisibility(View.VISIBLE);
-            refreshBrushDrawing();
+    var opacity: Int
+        get() = mOpacity
+        set(opacity) {
+            mOpacity = opacity
+            brushDrawingMode = true
         }
+    var brushDrawingMode: Boolean
+        get() = mBrushDrawMode
+        set(brushDrawMode) {
+            mBrushDrawMode = brushDrawMode
+            if (brushDrawMode) {
+                this.visibility = VISIBLE
+                refreshBrushDrawing()
+            }
+        }
+
+    fun setBrushEraserSize(brushEraserSize: Float) {
+        eraserSize = brushEraserSize
+        brushDrawingMode = true
     }
 
-    void setOpacity(@IntRange(from = 0, to = 255) int opacity) {
-        this.mOpacity = opacity;
-        setBrushDrawingMode(true);
+    fun setBrushEraserColor(@ColorInt color: Int) {
+        drawingPaint.color = color
+        brushDrawingMode = true
     }
 
-    int getOpacity() {
-        return mOpacity;
-    }
+    var brushSize: Float
+        get() = mBrushSize
+        set(size) {
+            mBrushSize = size
+            brushDrawingMode = true
+        }
+    var brushColor: Int
+        get() = drawingPaint.color
+        set(color) {
+            drawingPaint.color = color
+            brushDrawingMode = true
+        }
 
-    boolean getBrushDrawingMode() {
-        return mBrushDrawMode;
-    }
-
-    void setBrushSize(float size) {
-        mBrushSize = size;
-        setBrushDrawingMode(true);
-    }
-
-    void setBrushColor(@ColorInt int color) {
-        mDrawPaint.setColor(color);
-        setBrushDrawingMode(true);
-    }
-
-    void setBrushEraserSize(float brushEraserSize) {
-        this.mBrushEraserSize = brushEraserSize;
-        setBrushDrawingMode(true);
-    }
-
-    void setBrushEraserColor(@ColorInt int color) {
-        mDrawPaint.setColor(color);
-        setBrushDrawingMode(true);
-    }
-
-    float getEraserSize() {
-        return mBrushEraserSize;
-    }
-
-    float getBrushSize() {
-        return mBrushSize;
-    }
-
-    int getBrushColor() {
-        return mDrawPaint.getColor();
-    }
-
-    void clearAll() {
-        mDrawnPaths.clear();
-        mRedoPaths.clear();
+    fun clearAll() {
+        mDrawnPaths.clear()
+        mRedoPaths.clear()
         if (mDrawCanvas != null) {
-            mDrawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
+            mDrawCanvas!!.drawColor(0, PorterDuff.Mode.CLEAR)
         }
-        invalidate();
+        invalidate()
     }
 
-    void setBrushViewChangeListener(BrushViewChangeListener brushViewChangeListener) {
-        mBrushViewChangeListener = brushViewChangeListener;
+    fun setBrushViewChangeListener(brushViewChangeListener: BrushViewChangeListener?) {
+        mBrushViewChangeListener = brushViewChangeListener
     }
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        Bitmap canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        mDrawCanvas = new Canvas(canvasBitmap);
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        val canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        mDrawCanvas = Canvas(canvasBitmap)
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        for (LinePath linePath : mDrawnPaths) {
-            canvas.drawPath(linePath.getDrawPath(), linePath.getDrawPaint());
+    override fun onDraw(canvas: Canvas) {
+        for (linePath in mDrawnPaths) {
+            canvas.drawPath(linePath.drawPath, linePath.drawPaint)
         }
-        canvas.drawPath(mPath, mDrawPaint);
+        canvas.drawPath(mPath!!, drawingPaint)
     }
 
     /**
@@ -186,94 +146,90 @@ public class BrushDrawingView extends View {
      * @return true if handling touch events
      */
     @SuppressLint("ClickableViewAccessibility")
-    @Override
-    public boolean onTouchEvent(@NonNull MotionEvent event) {
-        if (mBrushDrawMode) {
-            float touchX = event.getX();
-            float touchY = event.getY();
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    touchStart(touchX, touchY);
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    touchMove(touchX, touchY);
-                    break;
-                case MotionEvent.ACTION_UP:
-                    touchUp();
-                    break;
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return if (mBrushDrawMode) {
+            val touchX = event.x
+            val touchY = event.y
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> touchStart(touchX, touchY)
+                MotionEvent.ACTION_MOVE -> touchMove(touchX, touchY)
+                MotionEvent.ACTION_UP -> touchUp()
             }
-            invalidate();
-            return true;
+            invalidate()
+            true
         } else {
-            return false;
+            false
         }
     }
 
-    boolean undo() {
+    fun undo(): Boolean {
         if (!mDrawnPaths.empty()) {
-            mRedoPaths.push(mDrawnPaths.pop());
-            invalidate();
+            mRedoPaths.push(mDrawnPaths.pop())
+            invalidate()
         }
         if (mBrushViewChangeListener != null) {
-            mBrushViewChangeListener.onViewRemoved(this);
+            mBrushViewChangeListener!!.onViewRemoved(this)
         }
-        return !mDrawnPaths.empty();
+        return !mDrawnPaths.empty()
     }
 
-    boolean redo() {
+    fun redo(): Boolean {
         if (!mRedoPaths.empty()) {
-            mDrawnPaths.push(mRedoPaths.pop());
-            invalidate();
+            mDrawnPaths.push(mRedoPaths.pop())
+            invalidate()
         }
-
         if (mBrushViewChangeListener != null) {
-            mBrushViewChangeListener.onViewAdd(this);
+            mBrushViewChangeListener!!.onViewAdd(this)
         }
-        return !mRedoPaths.empty();
+        return !mRedoPaths.empty()
     }
 
-
-    private void touchStart(float x, float y) {
-        mRedoPaths.clear();
-        mPath.reset();
-        mPath.moveTo(x, y);
-        mTouchX = x;
-        mTouchY = y;
+    private fun touchStart(x: Float, y: Float) {
+        mRedoPaths.clear()
+        mPath!!.reset()
+        mPath!!.moveTo(x, y)
+        mTouchX = x
+        mTouchY = y
         if (mBrushViewChangeListener != null) {
-            mBrushViewChangeListener.onStartDrawing();
+            mBrushViewChangeListener!!.onStartDrawing()
         }
     }
 
-    private void touchMove(float x, float y) {
-        float dx = Math.abs(x - mTouchX);
-        float dy = Math.abs(y - mTouchY);
+    private fun touchMove(x: Float, y: Float) {
+        val dx = Math.abs(x - mTouchX)
+        val dy = Math.abs(y - mTouchY)
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
-            mPath.quadTo(mTouchX, mTouchY, (x + mTouchX) / 2, (y + mTouchY) / 2);
-            mTouchX = x;
-            mTouchY = y;
+            mPath!!.quadTo(mTouchX, mTouchY, (x + mTouchX) / 2, (y + mTouchY) / 2)
+            mTouchX = x
+            mTouchY = y
         }
     }
 
-    private void touchUp() {
-        mPath.lineTo(mTouchX, mTouchY);
+    private fun touchUp() {
+        mPath!!.lineTo(mTouchX, mTouchY)
         // Commit the path to our offscreen
-        mDrawCanvas.drawPath(mPath, mDrawPaint);
+        mDrawCanvas!!.drawPath(mPath!!, drawingPaint)
         // kill this so we don't double draw
-        mDrawnPaths.push(new LinePath(mPath, mDrawPaint));
-        mPath = new Path();
+        mDrawnPaths.push(LinePath(mPath, drawingPaint))
+        mPath = Path()
         if (mBrushViewChangeListener != null) {
-            mBrushViewChangeListener.onStopDrawing();
-            mBrushViewChangeListener.onViewAdd(this);
+            mBrushViewChangeListener!!.onStopDrawing()
+            mBrushViewChangeListener!!.onViewAdd(this)
         }
     }
 
-    @VisibleForTesting
-    Paint getDrawingPaint() {
-        return mDrawPaint;
+    @get:VisibleForTesting
+    val drawingPath: Pair<Stack<LinePath>, Stack<LinePath>>
+        get() = Pair(mDrawnPaths, mRedoPaths)
+
+    companion object {
+        const val DEFAULT_BRUSH_SIZE = 25.0f
+        const val DEFAULT_ERASER_SIZE = 50.0f
+        const val DEFAULT_OPACITY = 255
+        private const val TOUCH_TOLERANCE = 4f
     }
 
-    @VisibleForTesting
-    Pair<Stack<LinePath>, Stack<LinePath>> getDrawingPath() {
-        return new Pair<>(mDrawnPaths, mRedoPaths);
+    init {
+        setupBrushDrawing()
     }
 }

@@ -1,137 +1,121 @@
-package com.imagevideoeditor;
+package com.imagevideoeditor
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.annotation.SuppressLint
+import android.app.Dialog
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
-public class StickerBSFragment extends BottomSheetDialogFragment {
-
-    public StickerBSFragment() {
-        // Required empty public constructor
+class StickerBSFragment() : BottomSheetDialogFragment() {
+    private var mStickerListener: StickerListener? = null
+    fun setStickerListener(stickerListener: StickerListener?) {
+        mStickerListener = stickerListener
     }
 
-    private StickerListener mStickerListener;
-
-    public void setStickerListener(StickerListener stickerListener) {
-        mStickerListener = stickerListener;
+    interface StickerListener {
+        fun onStickerClick(bitmap: Bitmap?)
     }
 
-    public interface StickerListener {
-        void onStickerClick(Bitmap bitmap);
-    }
-
-    private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback = new BottomSheetBehavior.BottomSheetCallback() {
-
-        @Override
-        public void onStateChanged(@NonNull View bottomSheet, int newState) {
-            if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-                dismiss();
+    private val mBottomSheetBehaviorCallback: BottomSheetBehavior.BottomSheetCallback =
+        object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    dismiss()
+                }
             }
 
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         }
-
-        @Override
-        public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-        }
-    };
-
 
     @SuppressLint("RestrictedApi")
-    @Override
-    public void setupDialog(Dialog dialog, int style) {
-        super.setupDialog(dialog, style);
-        View contentView = View.inflate(getContext(), R.layout.fragment_bottom_sticker_emoji_dialog, null);
-        dialog.setContentView(contentView);
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) contentView.getParent()).getLayoutParams();
-        CoordinatorLayout.Behavior behavior = params.getBehavior();
-
-        if (behavior != null && behavior instanceof BottomSheetBehavior) {
-            ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
+    override fun setupDialog(dialog: Dialog, style: Int) {
+        super.setupDialog(dialog, style)
+        val contentView = View.inflate(context, R.layout.fragment_bottom_sticker_emoji_dialog, null)
+        dialog.setContentView(contentView)
+        val params = (contentView.parent as View).layoutParams as CoordinatorLayout.LayoutParams
+        val behavior = params.behavior
+        if (behavior != null && behavior is BottomSheetBehavior<*>) {
+            behavior.setBottomSheetCallback(mBottomSheetBehaviorCallback)
         }
-        ((View) contentView.getParent()).setBackgroundColor(getResources().getColor(android.R.color.transparent));
-        RecyclerView rvEmoji = contentView.findViewById(R.id.rvEmoji);
-
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
-        rvEmoji.setLayoutManager(gridLayoutManager);
-        StickerAdapter stickerAdapter = new StickerAdapter();
-        rvEmoji.setAdapter(stickerAdapter);
+        (contentView.parent as View).setBackgroundColor(resources.getColor(android.R.color.transparent))
+        val rvEmoji: RecyclerView = contentView.findViewById(R.id.rvEmoji)
+        val gridLayoutManager = GridLayoutManager(activity, 3)
+        rvEmoji.layoutManager = gridLayoutManager
+        val stickerAdapter: StickerAdapter = StickerAdapter()
+        rvEmoji.adapter = stickerAdapter
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 
-    public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.ViewHolder> {
+    inner class StickerAdapter() : RecyclerView.Adapter<StickerAdapter.ViewHolder>() {
+        var stickerList = intArrayOf(
+            R.drawable.aa,
+            R.drawable.bb,
+            R.drawable.cc,
+            R.drawable.dd,
+            R.drawable.ee,
+            R.drawable.ff,
+            R.drawable.birthday_one,
+            R.drawable.birthday_two
+        )
 
-        int[] stickerList = new int[]{R.drawable.aa, R.drawable.bb, R.drawable.cc, R.drawable.dd, R.drawable.ee, R.drawable.ff, R.drawable.birthday_one, R.drawable.birthday_two};
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_sticker, parent, false);
-            return new ViewHolder(view);
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view =
+                LayoutInflater.from(parent.context).inflate(R.layout.row_sticker, parent, false)
+            return ViewHolder(view)
         }
 
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.imgSticker.setImageResource(stickerList[position]);
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.imgSticker.setImageResource(stickerList[position])
         }
 
-        @Override
-        public int getItemCount() {
-            return stickerList.length;
+        override fun getItemCount(): Int {
+            return stickerList.size
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
-            ImageView imgSticker;
+        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            var imgSticker: ImageView
 
-            ViewHolder(View itemView) {
-                super(itemView);
-                imgSticker = itemView.findViewById(R.id.imgSticker);
-
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (mStickerListener != null) {
-                            mStickerListener.onStickerClick(
-                                    BitmapFactory.decodeResource(getResources(),
-                                            stickerList[getLayoutPosition()]));
-                        }
-                        dismiss();
+            init {
+                imgSticker = itemView.findViewById(R.id.imgSticker)
+                itemView.setOnClickListener(View.OnClickListener {
+                    if (mStickerListener != null) {
+                        mStickerListener!!.onStickerClick(
+                            BitmapFactory.decodeResource(
+                                resources,
+                                stickerList[layoutPosition]
+                            )
+                        )
                     }
-                });
+                    dismiss()
+                })
             }
         }
     }
 
-    private String convertEmoji(String emoji) {
-        String returnedEmoji = "";
+    private fun convertEmoji(emoji: String): String {
+        var returnedEmoji = ""
         try {
-            int convertEmojiToInt = Integer.parseInt(emoji.substring(2), 16);
-            returnedEmoji = getEmojiByUnicode(convertEmojiToInt);
-        } catch (NumberFormatException e) {
-            returnedEmoji = "";
+            val convertEmojiToInt = emoji.substring(2).toInt(16)
+            returnedEmoji = getEmojiByUnicode(convertEmojiToInt)
+        } catch (e: NumberFormatException) {
+            returnedEmoji = ""
         }
-        return returnedEmoji;
+        return returnedEmoji
     }
 
-    private String getEmojiByUnicode(int unicode) {
-        return new String(Character.toChars(unicode));
+    private fun getEmojiByUnicode(unicode: Int): String {
+        return String(Character.toChars(unicode))
     }
 }

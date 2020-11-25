@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="com.imagevideoeditor.VideoPreviewActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.imagevideoeditor.PreviewVideoActivity"
             android:screenOrientation="portrait"
@@ -24,7 +24,7 @@
             android:name="com.imagevideoeditor.PreviewPhotoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.imagevideoeditor.MainActivity"></activity>
+        <activity android:name="com.imagevideoeditor.MainActivity" />
     </application>
 
 </manifest>

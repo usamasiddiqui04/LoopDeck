@@ -1,8 +1,5 @@
-package com.imagevideoeditor;
+package com.imagevideoeditor
 
-
-public enum ToolType {
-    BRUSH,
-    TEXT,
-    STICKER
+enum class ToolType {
+    BRUSH, TEXT, STICKER
 }

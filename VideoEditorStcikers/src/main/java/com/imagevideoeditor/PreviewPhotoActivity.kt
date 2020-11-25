@@ -1,118 +1,116 @@
-package com.imagevideoeditor;
+package com.imagevideoeditor
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Typeface;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.util.Log;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Toast;
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
+import android.util.Log
+import android.view.TextureView
+import android.view.View
+import android.view.Window
+import android.view.WindowManager
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.databinding.DataBindingUtil
+import com.bumptech.glide.Glide
+import com.imagevideoeditor.TextEditorDialogFragment.TextEditor
+import com.imagevideoeditor.databinding.ActivityPreviewBinding
+import com.imagevideoeditor.photoeditor.*
+import java.io.File
+import java.io.IOException
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.databinding.DataBindingUtil;
+@Suppress("UNREACHABLE_CODE")
+abstract class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
+    PropertiesBSFragment.Properties, View.OnClickListener, StickerBSFragment.StickerListener {
 
-import com.bumptech.glide.Glide;
-import com.imagevideoeditor.databinding.ActivityPreviewBinding;
-import com.imagevideoeditor.photoeditor.OnPhotoEditorListener;
-import com.imagevideoeditor.photoeditor.PhotoEditor;
-import com.imagevideoeditor.photoeditor.PhotoEditorView;
-import com.imagevideoeditor.photoeditor.SaveSettings;
-import com.imagevideoeditor.photoeditor.TextStyleBuilder;
-import com.imagevideoeditor.photoeditor.ViewType;
-
-import java.io.File;
-import java.io.IOException;
-
-
-public class PreviewPhotoActivity extends AppCompatActivity implements OnPhotoEditorListener, PropertiesBSFragment.Properties,
-        View.OnClickListener,
-        StickerBSFragment.StickerListener {
-
-    private ActivityPreviewBinding binding;
-    private static final String TAG = PreviewPhotoActivity.class.getSimpleName();
-    private static final int CAMERA_REQUEST = 52;
-    private static final int PICK_REQUEST = 53;
-    private PhotoEditor mPhotoEditor;
-    private PhotoEditorView mPhotoEditorView;
-    private PropertiesBSFragment propertiesBSFragment;
-    private StickerBSFragment mStickerBSFragment;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_preview);
-        initViews();
-//        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-        Glide.with(this).load(getIntent().getStringExtra("DATA")).into(binding.ivImage.getSource());
-//        Glide.with(this).load(R.drawable.trans).into(binding.ivImage.getSource());
+    var videoSurface: TextureView? = null
+    var ivImage: PhotoEditorView? = null
+    var imgClose: ImageView? = null
+    var imgDone: ImageView? = null
+    var imgDelete: ImageView? = null
+    var imgDraw: ImageView? = null
+    var imgText: ImageView? = null
+    var imgUndo: ImageView? = null
+    var imgSticker: ImageView? = null
+    private var binding: ActivityPreviewBinding? = null
+    private var mPhotoEditor: PhotoEditor? = null
+    private val mPhotoEditorView: PhotoEditorView? = null
+    private var propertiesBSFragment: PropertiesBSFragment? = null
+    private var mStickerBSFragment: StickerBSFragment? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_preview)
+        initViews()
+        //        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+        ivImage!!.source?.let { Glide.with(this).load(intent.getStringExtra("DATA")).into(it) }
+        //        Glide.with(this).load(R.drawable.trans).into(binding.ivImage.getSource());
     }
 
-    private void initViews() {
-        mStickerBSFragment = new StickerBSFragment();
-        mStickerBSFragment.setStickerListener(this);
-        propertiesBSFragment = new PropertiesBSFragment();
-        propertiesBSFragment.setPropertiesChangeListener(this);
-        mPhotoEditor = new PhotoEditor.Builder(this, binding.ivImage)
-                .setPinchTextScalable(true) // set flag to make text scalable when pinch
-                .setDeleteView(binding.imgDelete)
-                //.setDefaultTextTypeface(mTextRobotoTf)
-                //.setDefaultEmojiTypeface(mEmojiTypeFace)
-                .build(); // build photo editor sdk
-
-        mPhotoEditor.setOnPhotoEditorListener(this);
-
-        binding.imgClose.setOnClickListener(this);
-        binding.imgDone.setOnClickListener(this);
-        binding.imgDraw.setOnClickListener(this);
-        binding.imgText.setOnClickListener(this);
-        binding.imgUndo.setOnClickListener(this);
-        binding.imgSticker.setOnClickListener(this);
-
-        if (mPhotoEditor.undoCanvas()) {
-
+    private fun initViews() {
+        videoSurface = findViewById(R.id.videoSurface)
+        ivImage = findViewById(R.id.ivImage)
+        imgClose = findViewById(R.id.imgClose)
+        imgDone = findViewById(R.id.imgDone)
+        imgDelete = findViewById(R.id.imgDelete)
+        imgDraw = findViewById(R.id.imgDraw)
+        imgText = findViewById(R.id.imgText)
+        imgUndo = findViewById(R.id.imgUndo)
+        imgSticker = findViewById(R.id.imgSticker)
+        mStickerBSFragment = StickerBSFragment()
+        mStickerBSFragment!!.setStickerListener(this)
+        propertiesBSFragment = PropertiesBSFragment()
+        propertiesBSFragment!!.setPropertiesChangeListener(this)
+        mPhotoEditor = PhotoEditor.Builder(this, ivImage!!)
+            .setPinchTextScalable(true) // set flag to make text scalable when pinch
+            .setDeleteView(imgDelete) //.setDefaultTextTypeface(mTextRobotoTf)
+            //.setDefaultEmojiTypeface(mEmojiTypeFace)
+            .build() // build photo editor sdk
+        mPhotoEditor!!.setOnPhotoEditorListener(this)
+        imgClose!!.setOnClickListener(this)
+        imgDone!!.setOnClickListener(this)
+        imgDraw!!.setOnClickListener(this)
+        imgText!!.setOnClickListener(this)
+        imgUndo!!.setOnClickListener(this)
+        imgSticker!!.setOnClickListener(this)
+        if (mPhotoEditor!!.undoCanvas()) {
         }
-
     }
 
-    @Override
-    public void onClick(View v) {
-
-        if (R.id.imgClose == v.getId())
-            onBackPressed();
-        else if (R.id.imgDone == v.getId())
-            saveImage();
-        else if (R.id.imgDraw == v.getId())
-            setDrawingMode();
-        else if (R.id.imgText == v.getId()) {
-            TextEditorDialogFragment textEditorDialogFragment = TextEditorDialogFragment.show(this, 0);
-            textEditorDialogFragment.setOnTextEditorListener(new TextEditorDialogFragment.TextEditor() {
-
-                @Override
-                public void onDone(String inputText, int colorCode, int position) {
-                    final TextStyleBuilder styleBuilder = new TextStyleBuilder();
-                    styleBuilder.withTextColor(colorCode);
-                    Typeface typeface = ResourcesCompat.getFont(PreviewPhotoActivity.this, TextEditorDialogFragment.getDefaultFontIds(PreviewPhotoActivity.this).get(position));
-                    styleBuilder.withTextFont(typeface);
-                    mPhotoEditor.addText(inputText, styleBuilder, position);
+    override fun onClick(v: View) {
+        if (R.id.imgClose == v.id) onBackPressed() else if (R.id.imgDone == v.id) saveImage() else if (R.id.imgDraw == v.id) setDrawingMode() else if (R.id.imgText == v.id) {
+            val textEditorDialogFragment = TextEditorDialogFragment.show(this, 0)
+            textEditorDialogFragment.setOnTextEditorListener(object : TextEditor {
+                override fun onDone(inputText: String?, colorCode: Int, position: Int) {
+                    val styleBuilder = TextStyleBuilder()
+                    styleBuilder.withTextColor(colorCode)
+                    val typeface =
+                        TextEditorDialogFragment.getDefaultFontIds(this@PreviewPhotoActivity)
+                            ?.get(position)?.let {
+                                ResourcesCompat.getFont(
+                                    this@PreviewPhotoActivity,
+                                    it
+                                )
+                            }
+                    styleBuilder.withTextFont((typeface)!!)
+                    mPhotoEditor!!.addText(inputText!!, styleBuilder, position)
                 }
-            });
-        } else if (R.id.imgUndo == v.getId())
-            mPhotoEditor.clearBrushAllViews();
-        else if (R.id.imgSticker == v.getId())
-            mStickerBSFragment.show(getSupportFragmentManager(), mStickerBSFragment.getTag());
-//        switch (v.getId()) {
+            })
+        } else if (R.id.imgUndo == v.id) mPhotoEditor!!.clearBrushAllViews() else if (R.id.imgSticker == v.id) mStickerBSFragment!!.show(
+            supportFragmentManager, mStickerBSFragment!!.tag
+        )
+        //        switch (v.getId()) {
 //            case R.id.imgClose:
 //                onBackPressed();
 //                break;
@@ -147,131 +145,145 @@ public class PreviewPhotoActivity extends AppCompatActivity implements OnPhotoEd
 //        }
     }
 
-    private void setDrawingMode() {
-        if (mPhotoEditor.getBrushDrawableMode()) {
-            mPhotoEditor.setBrushDrawingMode(false);
-            binding.imgDraw.setBackgroundColor(ContextCompat.getColor(this, R.color.black_trasp));
+    private fun setDrawingMode() {
+        if (mPhotoEditor!!.brushDrawableMode) {
+            mPhotoEditor!!.setBrushDrawingMode(false)
+            imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.black_trasp))
         } else {
-            mPhotoEditor.setBrushDrawingMode(true);
-            binding.imgDraw.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
-            propertiesBSFragment.show(getSupportFragmentManager(), propertiesBSFragment.getTag());
+            mPhotoEditor!!.setBrushDrawingMode(true)
+            imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
+            propertiesBSFragment!!.show(supportFragmentManager, propertiesBSFragment!!.tag)
         }
     }
 
     @SuppressLint("MissingPermission")
-    private void saveImage() {
-
-        File file = new File(Environment.getExternalStorageDirectory()
-                + File.separator + ""
-                + System.currentTimeMillis() + ".png");
+    private fun saveImage() {
+        val file = File(
+            (Environment.getExternalStorageDirectory()
+                .toString() + File.separator + ""
+                    + System.currentTimeMillis() + ".png")
+        )
         try {
-            file.createNewFile();
-
-            SaveSettings saveSettings = new SaveSettings.Builder()
-                    .setClearViewsEnabled(true)
-                    .setTransparencyEnabled(false)
-                    .build();
-
-            mPhotoEditor.saveAsFile(file.getAbsolutePath(), saveSettings, new PhotoEditor.OnSaveListener() {
-                @Override
-                public void onSuccess(@NonNull String imagePath) {
-                    binding.ivImage.getSource().setImageURI(Uri.fromFile(new File(imagePath)));
-                    Toast.makeText(PreviewPhotoActivity.this, "Saved successfully...", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    Toast.makeText(PreviewPhotoActivity.this, "Saving Failed...", Toast.LENGTH_SHORT).show();
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
-
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case CAMERA_REQUEST:
-                    mPhotoEditor.clearAllViews();
-                    Bitmap photo = (Bitmap) data.getExtras().get("data");
-                    mPhotoEditorView.getSource().setImageBitmap(photo);
-                    break;
-                case PICK_REQUEST:
-                    try {
-                        mPhotoEditor.clearAllViews();
-                        Uri uri = data.getData();
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                        mPhotoEditorView.getSource().setImageBitmap(bitmap);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+            file.createNewFile()
+            val saveSettings = SaveSettings.Builder()
+                .setClearViewsEnabled(true)
+                .setTransparencyEnabled(false)
+                .build()
+            mPhotoEditor!!.saveAsFile(
+                file.absolutePath,
+                saveSettings,
+                object : PhotoEditor.OnSaveListener {
+                    override fun onSuccess(imagePath: String) {
+                        ivImage!!.source?.setImageURI(Uri.fromFile(File(imagePath)))
+                        Toast.makeText(
+                            this@PreviewPhotoActivity,
+                            "Saved successfully...",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-                    break;
+
+                    override fun onFailure(exception: Exception) {
+                        Toast.makeText(
+                            this@PreviewPhotoActivity,
+                            "Saving Failed...",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                CAMERA_REQUEST -> {
+                    mPhotoEditor!!.clearAllViews()
+                    val photo = data!!.extras!!["data"] as Bitmap?
+                    mPhotoEditorView!!.source?.setImageBitmap(photo)
+                }
+                PICK_REQUEST -> try {
+                    mPhotoEditor!!.clearAllViews()
+                    val uri = data!!.data
+                    val bitmap = MediaStore.Images.Media.getBitmap(
+                        contentResolver, uri
+                    )
+                    mPhotoEditorView!!.source?.setImageBitmap(bitmap)
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
             }
         }
     }
 
-
-    @Override
-    public void onStickerClick(Bitmap bitmap) {
-        mPhotoEditor.setBrushDrawingMode(false);
-        binding.imgDraw.setBackgroundColor(ContextCompat.getColor(this, R.color.black_trasp));
-        mPhotoEditor.addImage(bitmap);
+    override fun onStickerClick(bitmap: Bitmap?) {
+        mPhotoEditor!!.setBrushDrawingMode(false)
+        binding!!.imgDraw.setBackgroundColor(ContextCompat.getColor(this, R.color.black_trasp))
+        mPhotoEditor!!.addImage(bitmap)
     }
 
-    @Override
-    public void onEditTextChangeListener(final View rootView, String text, int colorCode, final int position) {
-        TextEditorDialogFragment textEditorDialogFragment =
-                TextEditorDialogFragment.show(this, text, colorCode, position);
-        textEditorDialogFragment.setOnTextEditorListener(new TextEditorDialogFragment.TextEditor() {
-            @Override
-            public void onDone(String inputText, int colorCode, int position) {
-                final TextStyleBuilder styleBuilder = new TextStyleBuilder();
-                styleBuilder.withTextColor(colorCode);
-                Typeface typeface = ResourcesCompat.getFont(PreviewPhotoActivity.this, TextEditorDialogFragment.getDefaultFontIds(PreviewPhotoActivity.this).get(position));
-                styleBuilder.withTextFont(typeface);
-                mPhotoEditor.editText(rootView, inputText, styleBuilder, position);
+    override fun onEditTextChangeListener(
+        rootView: View?,
+        text: String?,
+        colorCode: Int,
+        position: Int
+    ) {
+        val textEditorDialogFragment =
+            TextEditorDialogFragment.show(this, (text)!!, colorCode, position)
+        textEditorDialogFragment.setOnTextEditorListener(object :
+            TextEditor {
+
+            override fun onDone(inputText: String?, colorCode: Int, position: Int) {
+                TODO("Not yet implemented")
+                val styleBuilder = TextStyleBuilder()
+                styleBuilder.withTextColor(colorCode)
+                val typeface =
+                    TextEditorDialogFragment.getDefaultFontIds(this@PreviewPhotoActivity)
+                        ?.get(position)?.let {
+                            ResourcesCompat.getFont(
+                                this@PreviewPhotoActivity,
+                                it
+                            )
+                        }
+                styleBuilder.withTextFont((typeface)!!)
+                mPhotoEditor!!.editText((rootView)!!, inputText!!, styleBuilder, position)
             }
-        });
+        })
     }
 
-    @Override
-    public void onAddViewListener(ViewType viewType, int numberOfAddedViews) {
-        Log.d(TAG, "onAddViewListener() called with: viewType = [" + viewType + "], numberOfAddedViews = [" + numberOfAddedViews + "]");
+    override fun onAddViewListener(viewType: ViewType?, numberOfAddedViews: Int) {
+        Log.d(
+            TAG,
+            "onAddViewListener() called with: viewType = [$viewType], numberOfAddedViews = [$numberOfAddedViews]"
+        )
     }
 
-    @Override
-    public void onRemoveViewListener(ViewType viewType, int numberOfAddedViews) {
-        Log.d(TAG, "onRemoveViewListener() called with: viewType = [" + viewType + "], numberOfAddedViews = [" + numberOfAddedViews + "]");
+    override fun onRemoveViewListener(viewType: ViewType?, numberOfAddedViews: Int) {
+        Log.d(
+            TAG,
+            "onRemoveViewListener() called with: viewType = [$viewType], numberOfAddedViews = [$numberOfAddedViews]"
+        )
     }
 
-    @Override
-    public void onStartViewChangeListener(ViewType viewType) {
-        Log.d(TAG, "onStartViewChangeListener() called with: viewType = [" + viewType + "]");
+    override fun onStartViewChangeListener(viewType: ViewType?) {
+        Log.d(TAG, "onStartViewChangeListener() called with: viewType = [$viewType]")
     }
 
-    @Override
-    public void onStopViewChangeListener(ViewType viewType) {
-        Log.d(TAG, "onStopViewChangeListener() called with: viewType = [" + viewType + "]");
+    override fun onStopViewChangeListener(viewType: ViewType?) {
+        Log.d(TAG, "onStopViewChangeListener() called with: viewType = [$viewType]")
     }
 
-    @Override
-    public void onColorChanged(int colorCode) {
-        mPhotoEditor.setBrushColor(colorCode);
+    override fun onColorChanged(colorCode: Int) {
+        mPhotoEditor!!.brushColor = colorCode
     }
 
-    @Override
-    public void onOpacityChanged(int opacity) {
+    override fun onOpacityChanged(opacity: Int) {}
+    override fun onBrushSizeChanged(brushSize: Int) {}
 
+    companion object {
+        private val TAG = PreviewPhotoActivity::class.java.simpleName
+        private val CAMERA_REQUEST = 52
+        private val PICK_REQUEST = 53
     }
-
-    @Override
-    public void onBrushSizeChanged(int brushSize) {
-
-    }
-
 }

@@ -1,27 +1,26 @@
-package com.imagevideoeditor.photoeditor;
+package com.imagevideoeditor.photoeditor
 
-import android.graphics.PointF;
+import android.graphics.PointF
 
-class Vector2D extends PointF {
+internal class Vector2D : PointF {
+    constructor() : super() {}
+    constructor(x: Float, y: Float) : super(x, y) {}
 
-    Vector2D() {
-        super();
+    private fun normalize() {
+        val length = Math.sqrt((x * x + y * y).toDouble()).toFloat()
+        x /= length
+        y /= length
     }
 
-    public Vector2D(float x, float y) {
-        super(x, y);
-    }
-
-    static float getAngle(Vector2D vector1, Vector2D vector2) {
-        vector1.normalize();
-        vector2.normalize();
-        double degrees = (180.0 / Math.PI) * (Math.atan2(vector2.y, vector2.x) - Math.atan2(vector1.y, vector1.x));
-        return (float) degrees;
-    }
-
-    private void normalize() {
-        float length = (float) Math.sqrt(x * x + y * y);
-        x /= length;
-        y /= length;
+    companion object {
+        fun getAngle(vector1: Vector2D, vector2: Vector2D): Float {
+            vector1.normalize()
+            vector2.normalize()
+            val degrees = 180.0 / Math.PI * (Math.atan2(
+                vector2.y.toDouble(),
+                vector2.x.toDouble()
+            ) - Math.atan2(vector1.y.toDouble(), vector1.x.toDouble()))
+            return degrees.toFloat()
+        }
     }
 }

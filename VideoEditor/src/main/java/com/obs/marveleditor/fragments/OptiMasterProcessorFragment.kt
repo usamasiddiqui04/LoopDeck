@@ -978,7 +978,6 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
                         setDuration(timeInMillis)
                     }.show(fragmentManager, "OptiAddMusicFragment")
                 }
-
                 if (masterVideoFile == null) {
                     OptiUtils.showGlideToast(
                         activity!!,

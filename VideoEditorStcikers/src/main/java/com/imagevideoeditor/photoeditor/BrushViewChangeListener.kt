@@ -1,19 +1,15 @@
-package com.imagevideoeditor.photoeditor;
-
+package com.imagevideoeditor.photoeditor
 
 /**
  * Created on 1/17/2018.
  *
- * @author <a href="https://github.com/burhanrashid52">Burhanuddin Rashid</a>
- * <p></p>
+ * @author [Burhanuddin Rashid](https://github.com/burhanrashid52)
+ *
+ *
  */
-
 interface BrushViewChangeListener {
-    void onViewAdd(BrushDrawingView brushDrawingView);
-
-    void onViewRemoved(BrushDrawingView brushDrawingView);
-
-    void onStartDrawing();
-
-    void onStopDrawing();
+    fun onViewAdd(brushDrawingView: BrushDrawingView?)
+    fun onViewRemoved(brushDrawingView: BrushDrawingView?)
+    fun onStartDrawing()
+    fun onStopDrawing()
 }

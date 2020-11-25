@@ -1,14 +1,13 @@
-package com.imagevideoeditor.photoeditor;
+package com.imagevideoeditor.photoeditor
 
-import android.graphics.Bitmap;
+import android.graphics.Bitmap
 
 /**
- * @author <a href="https://github.com/burhanrashid52">Burhanuddin Rashid</a>
+ * @author [Burhanuddin Rashid](https://github.com/burhanrashid52)
  * @version 0.1.2
  * @since 5/21/2018
  */
-public interface OnSaveBitmap {
-    void onBitmapReady(Bitmap saveBitmap);
-
-    void onFailure(Exception e);
+interface OnSaveBitmap {
+    fun onBitmapReady(saveBitmap: Bitmap?)
+    fun onFailure(e: Exception?)
 }

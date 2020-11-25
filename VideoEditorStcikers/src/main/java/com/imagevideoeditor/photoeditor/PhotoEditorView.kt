@@ -1,258 +1,235 @@
-package com.imagevideoeditor.photoeditor;
+package com.imagevideoeditor.photoeditor
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.viewpager.widget.PagerAdapter;
-
-import com.imagevideoeditor.R;
-import com.imagevideoeditor.Utils.InfinitePagerAdapter;
-import com.imagevideoeditor.Utils.InfiniteViewPager;
-
+import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.os.Build
+import android.util.AttributeSet
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import androidx.annotation.RequiresApi
+import androidx.viewpager.widget.PagerAdapter
+import com.imagevideoeditor.R
+import com.imagevideoeditor.Utils.InfinitePagerAdapter
+import com.imagevideoeditor.Utils.InfiniteViewPager
 
 /**
- * <p>
- * This ViewGroup will have the {@link BrushDrawingView} to draw paint on it with {@link ImageView}
- * which our source image
- * </p>
  *
- * @author <a href="https://github.com/burhanrashid52">Burhanuddin Rashid</a>
+ *
+ * This ViewGroup will have the [BrushDrawingView] to draw paint on it with [ImageView]
+ * which our source image
+ *
+ *
+ * @author [Burhanuddin Rashid](https://github.com/burhanrashid52)
  * @version 0.1.1
  * @since 1/18/2018
  */
+class PhotoEditorView : RelativeLayout {
+    private var mImgSource: FilterImageView? = null
+    var brushDrawingView: BrushDrawingView? = null
+        private set
+    private var mImageFilterView: ImageFilterView? = null
+    private var viewPager: InfiniteViewPager? = null
 
-public class PhotoEditorView extends RelativeLayout {
-
-    private static final String TAG = "PhotoEditorView";
-
-    private FilterImageView mImgSource;
-    private BrushDrawingView mBrushDrawingView;
-    private ImageFilterView mImageFilterView;
-    private InfiniteViewPager viewPager;
-    private static final int imgSrcId = 1, brushSrcId = 2, glFilterId = 3, viewPagerId = 4;
-
-    public PhotoEditorView(Context context) {
-        super(context);
-        init(null);
+    constructor(context: Context?) : super(context) {
+        init(null)
     }
 
-    public PhotoEditorView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(attrs);
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+        init(attrs)
     }
 
-    public PhotoEditorView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init(attrs);
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
+        init(attrs)
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public PhotoEditorView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init(attrs);
+    constructor(
+        context: Context?,
+        attrs: AttributeSet?,
+        defStyleAttr: Int,
+        defStyleRes: Int
+    ) : super(context, attrs, defStyleAttr, defStyleRes) {
+        init(attrs)
     }
 
     @SuppressLint("Recycle")
-    private void init(@Nullable AttributeSet attrs) {
+    private fun init(attrs: AttributeSet?) {
         //Setup image attributes
-        mImgSource = new FilterImageView(getContext());
-        mImgSource.setId(imgSrcId);
-        mImgSource.setAdjustViewBounds(true);
-        LayoutParams imgSrcParam = new LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        imgSrcParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        mImgSource = FilterImageView(context)
+        mImgSource!!.id = imgSrcId
+        mImgSource!!.adjustViewBounds = true
+        val imgSrcParam = LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        imgSrcParam.addRule(CENTER_IN_PARENT, TRUE)
         if (attrs != null) {
-            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.PhotoEditorView);
-            Drawable imgSrcDrawable = a.getDrawable(R.styleable.PhotoEditorView_photo_src);
+            val a = context.obtainStyledAttributes(attrs, R.styleable.PhotoEditorView)
+            val imgSrcDrawable = a.getDrawable(R.styleable.PhotoEditorView_photo_src)
             if (imgSrcDrawable != null) {
-                mImgSource.setImageDrawable(imgSrcDrawable);
+                mImgSource!!.setImageDrawable(imgSrcDrawable)
             }
         }
 
         //Setup brush view
-        mBrushDrawingView = new BrushDrawingView(getContext());
-        mBrushDrawingView.setVisibility(GONE);
-        mBrushDrawingView.setId(brushSrcId);
+        brushDrawingView = BrushDrawingView(context)
+        brushDrawingView!!.visibility = GONE
+        brushDrawingView!!.id = brushSrcId
         //Align brush to the size of image view
-        LayoutParams brushParam = new LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        brushParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        brushParam.addRule(RelativeLayout.ALIGN_TOP, imgSrcId);
-        brushParam.addRule(RelativeLayout.ALIGN_BOTTOM, imgSrcId);
+        val brushParam = LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        brushParam.addRule(CENTER_IN_PARENT, TRUE)
+        brushParam.addRule(ALIGN_TOP, imgSrcId)
+        brushParam.addRule(ALIGN_BOTTOM, imgSrcId)
 
         //Setup GLSurface attributes
-        mImageFilterView = new ImageFilterView(getContext());
-        mImageFilterView.setId(glFilterId);
-        mImageFilterView.setVisibility(GONE);
+        mImageFilterView = ImageFilterView(context)
+        mImageFilterView!!.id = glFilterId
+        mImageFilterView!!.visibility = GONE
 
         //Align brush to the size of image view
-        LayoutParams imgFilterParam = new LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        imgFilterParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        imgFilterParam.addRule(RelativeLayout.ALIGN_TOP, imgSrcId);
-        imgFilterParam.addRule(RelativeLayout.ALIGN_BOTTOM, imgSrcId);
-
-        mImgSource.setOnImageChangedListener(new FilterImageView.OnImageChangedListener() {
-            @Override
-            public void onBitmapLoaded(@Nullable Bitmap sourceBitmap) {
-                mImageFilterView.setFilterEffect(PhotoFilter.NONE);
-                mImageFilterView.setSourceBitmap(sourceBitmap);
-                Log.d(TAG, "onBitmapLoaded() called with: sourceBitmap = [" + sourceBitmap + "]");
+        val imgFilterParam = LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        imgFilterParam.addRule(CENTER_IN_PARENT, TRUE)
+        imgFilterParam.addRule(ALIGN_TOP, imgSrcId)
+        imgFilterParam.addRule(ALIGN_BOTTOM, imgSrcId)
+        mImgSource!!.setOnImageChangedListener(object : FilterImageView.OnImageChangedListener {
+            override fun onBitmapLoaded(sourceBitmap: Bitmap?) {
+                mImageFilterView!!.setFilterEffect(PhotoFilter.NONE)
+                mImageFilterView!!.setSourceBitmap(sourceBitmap)
+                Log.d(TAG, "onBitmapLoaded() called with: sourceBitmap = [$sourceBitmap]")
             }
-        });
+        })
 
 
         //setUp View Pager
-
-        viewPager = new InfiniteViewPager(getContext());
-        viewPager.setId(viewPagerId);
-        viewPager.setVisibility(View.VISIBLE);
-        InfinitePagerAdapter infinitePagerAdapter = new InfinitePagerAdapter(new MyViewPagerAdapter(getContext()));
-        viewPager.setAdapter(infinitePagerAdapter);
-        LayoutParams viewPagerParam = new LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        viewPagerParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        viewPagerParam.addRule(RelativeLayout.ALIGN_TOP, viewPagerId);
-        viewPagerParam.addRule(RelativeLayout.ALIGN_BOTTOM, viewPagerId);
+        viewPager = InfiniteViewPager(context)
+        viewPager!!.id = viewPagerId
+        viewPager!!.visibility = VISIBLE
+        val infinitePagerAdapter = InfinitePagerAdapter(MyViewPagerAdapter(context))
+        viewPager!!.adapter = infinitePagerAdapter
+        val viewPagerParam = LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        viewPagerParam.addRule(CENTER_IN_PARENT, TRUE)
+        viewPagerParam.addRule(ALIGN_TOP, viewPagerId)
+        viewPagerParam.addRule(ALIGN_BOTTOM, viewPagerId)
 
 
         //Add image source
-        addView(mImgSource, imgSrcParam);
+        addView(mImgSource, imgSrcParam)
 
         // Add Viewpager
-        addView(viewPager, viewPagerParam);
+        addView(viewPager, viewPagerParam)
 
         //Add Gl FilterView
-        addView(mImageFilterView, imgFilterParam);
+        addView(mImageFilterView, imgFilterParam)
 
         //Add brush view
-        addView(mBrushDrawingView, brushParam);
-
-
+        addView(brushDrawingView, brushParam)
     }
-
 
     /**
      * Source image which you want to edit
      *
      * @return source ImageView
      */
-    public ImageView getSource() {
-        return mImgSource;
-    }
+    val source: ImageView?
+        get() = mImgSource
 
-    BrushDrawingView getBrushDrawingView() {
-        return mBrushDrawingView;
-    }
-
-
-    void saveFilter(@NonNull final OnSaveBitmap onSaveBitmap) {
-        if (mImageFilterView.getVisibility() == VISIBLE) {
-            mImageFilterView.saveBitmap(new OnSaveBitmap() {
-                @Override
-                public void onBitmapReady(final Bitmap saveBitmap) {
-                    Log.e(TAG, "saveFilter: " + saveBitmap);
-                    mImgSource.setImageBitmap(saveBitmap);
-                    mImageFilterView.setVisibility(GONE);
-                    onSaveBitmap.onBitmapReady(saveBitmap);
+    fun saveFilter(onSaveBitmap: OnSaveBitmap) {
+        if (mImageFilterView!!.visibility == VISIBLE) {
+            mImageFilterView!!.saveBitmap(object : OnSaveBitmap {
+                override fun onBitmapReady(saveBitmap: Bitmap?) {
+                    Log.e(TAG, "saveFilter: $saveBitmap")
+                    mImgSource!!.setImageBitmap(saveBitmap!!)
+                    mImageFilterView!!.visibility = GONE
+                    onSaveBitmap.onBitmapReady(saveBitmap)
                 }
 
-                @Override
-                public void onFailure(Exception e) {
-                    onSaveBitmap.onFailure(e);
+                override fun onFailure(e: Exception?) {
+                    onSaveBitmap.onFailure(e)
                 }
-            });
+            })
         } else {
-            onSaveBitmap.onBitmapReady(mImgSource.getBitmap());
+            onSaveBitmap.onBitmapReady(mImgSource!!.bitmap)
         }
-
-
     }
 
-    public class MyViewPagerAdapter extends PagerAdapter {
-
-
-        public MyViewPagerAdapter(Context context) {
-
-        }
-
-        @Override
-        public Object instantiateItem(@NonNull ViewGroup collection, int position) {
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.item_slider_filter, collection, false);
-            ImageView viewBG = layout.findViewById(R.id.viewBG);
-            ImageView ivBottom = layout.findViewById(R.id.ivBottom);
-            ivBottom.setVisibility(GONE);
-
+    inner class MyViewPagerAdapter(context: Context?) : PagerAdapter() {
+        override fun instantiateItem(collection: ViewGroup, position: Int): Any {
+            val inflater = LayoutInflater.from(context)
+            val layout =
+                inflater.inflate(R.layout.item_slider_filter, collection, false) as ViewGroup
+            val viewBG = layout.findViewById<ImageView>(R.id.viewBG)
+            val ivBottom = layout.findViewById<ImageView>(R.id.ivBottom)
+            ivBottom.visibility = GONE
             if (position == 0) {
-                viewBG.setBackgroundColor(Color.parseColor("#10000000"));
-                viewBG.setVisibility(VISIBLE);
-                ivBottom.setVisibility(GONE);
+                viewBG.setBackgroundColor(Color.parseColor("#10000000"))
+                viewBG.visibility = VISIBLE
+                ivBottom.visibility = GONE
             } else if (position == 1) {
-                viewBG.setBackgroundColor(Color.parseColor("#15FF5733"));
-                viewBG.setVisibility(VISIBLE);
-                ivBottom.setVisibility(GONE);
+                viewBG.setBackgroundColor(Color.parseColor("#15FF5733"))
+                viewBG.visibility = VISIBLE
+                ivBottom.visibility = GONE
             } else if (position == 2) {
-                viewBG.setVisibility(GONE);
-                ivBottom.setVisibility(VISIBLE);
-                ivBottom.setImageDrawable(getResources().getDrawable(R.drawable.gg));
-
+                viewBG.visibility = GONE
+                ivBottom.visibility = VISIBLE
+                ivBottom.setImageDrawable(resources.getDrawable(R.drawable.gg))
             } else if (position == 3) {
-                viewBG.setVisibility(VISIBLE);
-                ivBottom.setImageDrawable(getResources().getDrawable(R.drawable.hh));
-                ivBottom.setVisibility(VISIBLE);
-
+                viewBG.visibility = VISIBLE
+                ivBottom.setImageDrawable(resources.getDrawable(R.drawable.hh))
+                ivBottom.visibility = VISIBLE
             } else if (position == 4) {
-                viewBG.setVisibility(VISIBLE);
-                ivBottom.setImageDrawable(getResources().getDrawable(R.drawable.ee));
-                ivBottom.setVisibility(VISIBLE);
-
+                viewBG.visibility = VISIBLE
+                ivBottom.setImageDrawable(resources.getDrawable(R.drawable.ee))
+                ivBottom.visibility = VISIBLE
             }
-            collection.addView(layout);
-
-            return layout;
+            collection.addView(layout)
+            return layout
         }
 
-        @Override
-        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object view) {
-            container.removeView((View) view);
+        override fun destroyItem(container: ViewGroup, position: Int, view: Any) {
+            container.removeView(view as View)
         }
 
-        @Override
-        public int getCount() {
-            return 5;
+        override fun getCount(): Int {
+            return 5
         }
 
-        @Override
-        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-            return view == object;
+        override fun isViewFromObject(view: View, `object`: Any): Boolean {
+            return view === `object`
         }
     }
 
-    void setFilterEffect(PhotoFilter filterType) {
-        mImageFilterView.setVisibility(VISIBLE);
-        mImageFilterView.setSourceBitmap(mImgSource.getBitmap());
-        mImageFilterView.setFilterEffect(filterType);
+    fun setFilterEffect(filterType: PhotoFilter?) {
+        mImageFilterView!!.visibility = VISIBLE
+        mImageFilterView!!.setSourceBitmap(mImgSource!!.bitmap)
+        mImageFilterView!!.setFilterEffect(filterType)
     }
 
-    void setFilterEffect(CustomEffect customEffect) {
-        mImageFilterView.setVisibility(VISIBLE);
-        mImageFilterView.setSourceBitmap(mImgSource.getBitmap());
-        mImageFilterView.setFilterEffect(customEffect);
+    fun setFilterEffect(customEffect: CustomEffect?) {
+        mImageFilterView!!.visibility = VISIBLE
+        mImageFilterView!!.setSourceBitmap(mImgSource!!.bitmap)
+        mImageFilterView!!.setFilterEffect(customEffect)
+    }
+
+    companion object {
+        private const val TAG = "PhotoEditorView"
+        private const val imgSrcId = 1
+        private const val brushSrcId = 2
+        private const val glFilterId = 3
+        private const val viewPagerId = 4
     }
 }

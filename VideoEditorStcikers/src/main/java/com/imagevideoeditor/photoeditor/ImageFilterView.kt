@@ -1,297 +1,248 @@
-package com.imagevideoeditor.photoeditor;
+package com.imagevideoeditor.photoeditor
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.media.effect.Effect;
-import android.media.effect.EffectContext;
-import android.media.effect.EffectFactory;
-import android.opengl.GLES20;
-import android.opengl.GLSurfaceView;
-import android.opengl.GLUtils;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.AttributeSet;
-import android.util.Log;
-
-import java.util.Map;
-
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
-
-
-import static android.media.effect.EffectFactory.EFFECT_AUTOFIX;
-import static android.media.effect.EffectFactory.EFFECT_BLACKWHITE;
-import static android.media.effect.EffectFactory.EFFECT_BRIGHTNESS;
-import static android.media.effect.EffectFactory.EFFECT_CONTRAST;
-import static android.media.effect.EffectFactory.EFFECT_CROSSPROCESS;
-import static android.media.effect.EffectFactory.EFFECT_DOCUMENTARY;
-import static android.media.effect.EffectFactory.EFFECT_DUOTONE;
-import static android.media.effect.EffectFactory.EFFECT_FILLLIGHT;
-import static android.media.effect.EffectFactory.EFFECT_FISHEYE;
-import static android.media.effect.EffectFactory.EFFECT_FLIP;
-import static android.media.effect.EffectFactory.EFFECT_GRAIN;
-import static android.media.effect.EffectFactory.EFFECT_GRAYSCALE;
-import static android.media.effect.EffectFactory.EFFECT_LOMOISH;
-import static android.media.effect.EffectFactory.EFFECT_NEGATIVE;
-import static android.media.effect.EffectFactory.EFFECT_POSTERIZE;
-import static android.media.effect.EffectFactory.EFFECT_ROTATE;
-import static android.media.effect.EffectFactory.EFFECT_SATURATE;
-import static android.media.effect.EffectFactory.EFFECT_SEPIA;
-import static android.media.effect.EffectFactory.EFFECT_SHARPEN;
-import static android.media.effect.EffectFactory.EFFECT_TEMPERATURE;
-import static android.media.effect.EffectFactory.EFFECT_TINT;
-import static android.media.effect.EffectFactory.EFFECT_VIGNETTE;
-import static com.imagevideoeditor.photoeditor.PhotoFilter.NONE;
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.media.effect.Effect
+import android.media.effect.EffectContext
+import android.media.effect.EffectFactory
+import android.opengl.GLES20
+import android.opengl.GLSurfaceView
+import android.opengl.GLUtils
+import android.os.Handler
+import android.os.Looper
+import android.util.AttributeSet
+import android.util.Log
+import com.imagevideoeditor.photoeditor.BitmapUtil.createBitmapFromGLSurface
+import com.imagevideoeditor.photoeditor.GLToolbox.initTexParams
+import javax.microedition.khronos.egl.EGLConfig
+import javax.microedition.khronos.opengles.GL10
 
 /**
- * <p>
- * Filter Images using ImageFilterView
- * </p>
  *
- * @author <a href="https://github.com/burhanrashid52">Burhanuddin Rashid</a>
+ *
+ * Filter Images using ImageFilterView
+ *
+ *
+ * @author [Burhanuddin Rashid](https://github.com/burhanrashid52)
  * @version 0.1.2
  * @since 2/14/2018
  */
-class ImageFilterView extends GLSurfaceView implements GLSurfaceView.Renderer {
+internal class ImageFilterView : GLSurfaceView, GLSurfaceView.Renderer {
+    private val mTextures = IntArray(2)
+    private var mEffectContext: EffectContext? = null
+    private var mEffect: Effect? = null
+    private val mTexRenderer: TextureRenderer? = TextureRenderer()
+    private var mImageWidth = 0
+    private var mImageHeight = 0
+    private var mInitialized = false
+    private var mCurrentEffect: PhotoFilter? = null
+    private var mSourceBitmap: Bitmap? = null
+    private var mCustomEffect: CustomEffect? = null
+    private var mOnSaveBitmap: OnSaveBitmap? = null
+    private var isSaveImage = false
 
-    private static final String TAG = "ImageFilterView";
-    private int[] mTextures = new int[2];
-    private EffectContext mEffectContext;
-    private Effect mEffect;
-    private TextureRenderer mTexRenderer = new TextureRenderer();
-    private int mImageWidth;
-    private int mImageHeight;
-    private boolean mInitialized = false;
-    private PhotoFilter mCurrentEffect;
-    private Bitmap mSourceBitmap;
-    private CustomEffect mCustomEffect;
-    private OnSaveBitmap mOnSaveBitmap;
-    private boolean isSaveImage = false;
-
-    public ImageFilterView(Context context) {
-        super(context);
-        init();
+    constructor(context: Context?) : super(context) {
+        init()
     }
 
-    public ImageFilterView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+        init()
     }
 
-    private void init() {
-        setEGLContextClientVersion(2);
-        setRenderer(this);
-        setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-        setFilterEffect(NONE);
+    private fun init() {
+        setEGLContextClientVersion(2)
+        setRenderer(this)
+        renderMode = RENDERMODE_WHEN_DIRTY
+        setFilterEffect(PhotoFilter.NONE)
     }
 
-    void setSourceBitmap(Bitmap sourceBitmap) {
-       /* if (mSourceBitmap != null && mSourceBitmap.sameAs(sourceBitmap)) {
+    fun setSourceBitmap(sourceBitmap: Bitmap?) {
+        /* if (mSourceBitmap != null && mSourceBitmap.sameAs(sourceBitmap)) {
             //mCurrentEffect = NONE;
         }*/
-        mSourceBitmap = sourceBitmap;
-        mInitialized = false;
+        mSourceBitmap = sourceBitmap
+        mInitialized = false
     }
 
-    @Override
-    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-
+    override fun onSurfaceCreated(gl: GL10, config: EGLConfig) {}
+    override fun onSurfaceChanged(gl: GL10, width: Int, height: Int) {
+        mTexRenderer?.updateViewSize(width, height)
     }
 
-    @Override
-    public void onSurfaceChanged(GL10 gl, int width, int height) {
-        if (mTexRenderer != null) {
-            mTexRenderer.updateViewSize(width, height);
-        }
-    }
-
-    @Override
-    public void onDrawFrame(GL10 gl) {
-
+    override fun onDrawFrame(gl: GL10) {
         if (!mInitialized) {
             //Only need to do this once
-            mEffectContext = EffectContext.createWithCurrentGlContext();
-            mTexRenderer.init();
-            loadTextures();
-            mInitialized = true;
+            mEffectContext = EffectContext.createWithCurrentGlContext()
+            mTexRenderer!!.init()
+            loadTextures()
+            mInitialized = true
         }
-        if (mCurrentEffect != NONE || mCustomEffect != null) {
+        if (mCurrentEffect != PhotoFilter.NONE || mCustomEffect != null) {
             //if an effect is chosen initialize it and apply it to the texture
-            initEffect();
-            applyEffect();
+            initEffect()
+            applyEffect()
         }
-        renderResult();
+        renderResult()
         if (isSaveImage) {
-            final Bitmap mFilterBitmap = BitmapUtil.createBitmapFromGLSurface(this, gl);
-            Log.e(TAG, "onDrawFrame: " + mFilterBitmap);
-            isSaveImage = false;
+            val mFilterBitmap = createBitmapFromGLSurface(this, gl)
+            Log.e(TAG, "onDrawFrame: $mFilterBitmap")
+            isSaveImage = false
             if (mOnSaveBitmap != null) {
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mOnSaveBitmap.onBitmapReady(mFilterBitmap);
-                    }
-                });
+                Handler(Looper.getMainLooper()).post { mOnSaveBitmap!!.onBitmapReady(mFilterBitmap) }
             }
         }
     }
 
-    void setFilterEffect(PhotoFilter effect) {
-        mCurrentEffect = effect;
-        mCustomEffect = null;
-        requestRender();
+    fun setFilterEffect(effect: PhotoFilter?) {
+        mCurrentEffect = effect
+        mCustomEffect = null
+        requestRender()
     }
 
-    void setFilterEffect(CustomEffect customEffect) {
-        mCustomEffect = customEffect;
-        requestRender();
+    fun setFilterEffect(customEffect: CustomEffect?) {
+        mCustomEffect = customEffect
+        requestRender()
     }
 
-
-    void saveBitmap(OnSaveBitmap onSaveBitmap) {
-        mOnSaveBitmap = onSaveBitmap;
-        isSaveImage = true;
-        requestRender();
+    fun saveBitmap(onSaveBitmap: OnSaveBitmap?) {
+        mOnSaveBitmap = onSaveBitmap
+        isSaveImage = true
+        requestRender()
     }
 
-    private void loadTextures() {
+    private fun loadTextures() {
         // Generate textures
-        GLES20.glGenTextures(2, mTextures, 0);
+        GLES20.glGenTextures(2, mTextures, 0)
 
         // Load input bitmap
         if (mSourceBitmap != null) {
-            mImageWidth = mSourceBitmap.getWidth();
-            mImageHeight = mSourceBitmap.getHeight();
-            mTexRenderer.updateTextureSize(mImageWidth, mImageHeight);
+            mImageWidth = mSourceBitmap!!.width
+            mImageHeight = mSourceBitmap!!.height
+            mTexRenderer!!.updateTextureSize(mImageWidth, mImageHeight)
 
             // Upload to texture
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextures[0]);
-            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, mSourceBitmap, 0);
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextures[0])
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, mSourceBitmap, 0)
 
             // Set texture parameters
-            GLToolbox.initTexParams();
+            initTexParams()
         }
     }
 
-    private void initEffect() {
-        EffectFactory effectFactory = mEffectContext.getFactory();
+    private fun initEffect() {
+        val effectFactory = mEffectContext!!.factory
         if (mEffect != null) {
-            mEffect.release();
+            mEffect!!.release()
         }
         if (mCustomEffect != null) {
-            mEffect = effectFactory.createEffect(mCustomEffect.getEffectName());
-            Map<String, Object> parameters = mCustomEffect.getParameters();
-            for (Map.Entry<String, Object> param : parameters.entrySet()) {
-                mEffect.setParameter(param.getKey(), param.getValue());
+            mEffect = effectFactory.createEffect(mCustomEffect!!.effectName)
+            val parameters = mCustomEffect!!.parameters
+            for ((key, value) in parameters) {
+                mEffect?.setParameter(key, value)
             }
         } else {
             // Initialize the correct effect based on the selected menu/action item
-            switch (mCurrentEffect) {
-
-                case AUTO_FIX:
-                    mEffect = effectFactory.createEffect(EFFECT_AUTOFIX);
-                    mEffect.setParameter("scale", 0.5f);
-                    break;
-                case BLACK_WHITE:
-                    mEffect = effectFactory.createEffect(EFFECT_BLACKWHITE);
-                    mEffect.setParameter("black", .1f);
-                    mEffect.setParameter("white", .7f);
-                    break;
-                case BRIGHTNESS:
-                    mEffect = effectFactory.createEffect(EFFECT_BRIGHTNESS);
-                    mEffect.setParameter("brightness", 2.0f);
-                    break;
-                case CONTRAST:
-                    mEffect = effectFactory.createEffect(EFFECT_CONTRAST);
-                    mEffect.setParameter("contrast", 1.4f);
-                    break;
-                case CROSS_PROCESS:
-                    mEffect = effectFactory.createEffect(EFFECT_CROSSPROCESS);
-                    break;
-                case DOCUMENTARY:
-                    mEffect = effectFactory.createEffect(EFFECT_DOCUMENTARY);
-                    break;
-                case DUE_TONE:
-                    mEffect = effectFactory.createEffect(EFFECT_DUOTONE);
-                    mEffect.setParameter("first_color", Color.YELLOW);
-                    mEffect.setParameter("second_color", Color.DKGRAY);
-                    break;
-                case FILL_LIGHT:
-                    mEffect = effectFactory.createEffect(EFFECT_FILLLIGHT);
-                    mEffect.setParameter("strength", .8f);
-                    break;
-                case FISH_EYE:
-                    mEffect = effectFactory.createEffect(EFFECT_FISHEYE);
-                    mEffect.setParameter("scale", .5f);
-                    break;
-                case FLIP_HORIZONTAL:
-                    mEffect = effectFactory.createEffect(EFFECT_FLIP);
-                    mEffect.setParameter("horizontal", true);
-                    break;
-                case FLIP_VERTICAL:
-                    mEffect = effectFactory.createEffect(EFFECT_FLIP);
-                    mEffect.setParameter("vertical", true);
-                    break;
-                case GRAIN:
-                    mEffect = effectFactory.createEffect(EFFECT_GRAIN);
-                    mEffect.setParameter("strength", 1.0f);
-                    break;
-                case GRAY_SCALE:
-                    mEffect = effectFactory.createEffect(EFFECT_GRAYSCALE);
-                    break;
-                case LOMISH:
-                    mEffect = effectFactory.createEffect(EFFECT_LOMOISH);
-                    break;
-                case NEGATIVE:
-                    mEffect = effectFactory.createEffect(EFFECT_NEGATIVE);
-                    break;
-                case NONE:
-                    break;
-                case POSTERIZE:
-                    mEffect = effectFactory.createEffect(EFFECT_POSTERIZE);
-                    break;
-                case ROTATE:
-                    mEffect = effectFactory.createEffect(EFFECT_ROTATE);
-                    mEffect.setParameter("angle", 180);
-                    break;
-                case SATURATE:
-                    mEffect = effectFactory.createEffect(EFFECT_SATURATE);
-                    mEffect.setParameter("scale", .5f);
-                    break;
-                case SEPIA:
-                    mEffect = effectFactory.createEffect(EFFECT_SEPIA);
-                    break;
-                case SHARPEN:
-                    mEffect = effectFactory.createEffect(EFFECT_SHARPEN);
-                    break;
-                case TEMPERATURE:
-                    mEffect = effectFactory.createEffect(EFFECT_TEMPERATURE);
-                    mEffect.setParameter("scale", .9f);
-                    break;
-                case TINT:
-                    mEffect = effectFactory.createEffect(EFFECT_TINT);
-                    mEffect.setParameter("tint", Color.MAGENTA);
-                    break;
-                case VIGNETTE:
-                    mEffect = effectFactory.createEffect(EFFECT_VIGNETTE);
-                    mEffect.setParameter("scale", .5f);
-                    break;
+            when (mCurrentEffect) {
+                PhotoFilter.AUTO_FIX -> {
+                    mEffect = effectFactory.createEffect(EffectFactory.EFFECT_AUTOFIX)
+                    mEffect?.setParameter("scale", 0.5f)
+                }
+                PhotoFilter.BLACK_WHITE -> {
+                    mEffect = effectFactory.createEffect(EffectFactory.EFFECT_BLACKWHITE)
+                    mEffect?.setParameter("black", .1f)
+                    mEffect?.setParameter("white", .7f)
+                }
+                PhotoFilter.BRIGHTNESS -> {
+                    mEffect = effectFactory.createEffect(EffectFactory.EFFECT_BRIGHTNESS)
+                    mEffect?.setParameter("brightness", 2.0f)
+                }
+                PhotoFilter.CONTRAST -> {
+                    mEffect = effectFactory.createEffect(EffectFactory.EFFECT_CONTRAST)
+                    mEffect?.setParameter("contrast", 1.4f)
+                }
+                PhotoFilter.CROSS_PROCESS -> mEffect =
+                    effectFactory.createEffect(EffectFactory.EFFECT_CROSSPROCESS)
+                PhotoFilter.DOCUMENTARY -> mEffect =
+                    effectFactory.createEffect(EffectFactory.EFFECT_DOCUMENTARY)
+                PhotoFilter.DUE_TONE -> {
+                    mEffect = effectFactory.createEffect(EffectFactory.EFFECT_DUOTONE)
+                    mEffect?.setParameter("first_color", Color.YELLOW)
+                    mEffect?.setParameter("second_color", Color.DKGRAY)
+                }
+                PhotoFilter.FILL_LIGHT -> {
+                    mEffect = effectFactory.createEffect(EffectFactory.EFFECT_FILLLIGHT)
+                    mEffect?.setParameter("strength", .8f)
+                }
+                PhotoFilter.FISH_EYE -> {
+                    mEffect = effectFactory.createEffect(EffectFactory.EFFECT_FISHEYE)
+                    mEffect?.setParameter("scale", .5f)
+                }
+                PhotoFilter.FLIP_HORIZONTAL -> {
+                    mEffect = effectFactory.createEffect(EffectFactory.EFFECT_FLIP)
+                    mEffect?.setParameter("horizontal", true)
+                }
+                PhotoFilter.FLIP_VERTICAL -> {
+                    mEffect = effectFactory.createEffect(EffectFactory.EFFECT_FLIP)
+                    mEffect?.setParameter("vertical", true)
+                }
+                PhotoFilter.GRAIN -> {
+                    mEffect = effectFactory.createEffect(EffectFactory.EFFECT_GRAIN)
+                    mEffect?.setParameter("strength", 1.0f)
+                }
+                PhotoFilter.GRAY_SCALE -> mEffect =
+                    effectFactory.createEffect(EffectFactory.EFFECT_GRAYSCALE)
+                PhotoFilter.LOMISH -> mEffect =
+                    effectFactory.createEffect(EffectFactory.EFFECT_LOMOISH)
+                PhotoFilter.NEGATIVE -> mEffect =
+                    effectFactory.createEffect(EffectFactory.EFFECT_NEGATIVE)
+                PhotoFilter.NONE -> {
+                }
+                PhotoFilter.POSTERIZE -> mEffect =
+                    effectFactory.createEffect(EffectFactory.EFFECT_POSTERIZE)
+                PhotoFilter.ROTATE -> {
+                    mEffect = effectFactory.createEffect(EffectFactory.EFFECT_ROTATE)
+                    mEffect?.setParameter("angle", 180)
+                }
+                PhotoFilter.SATURATE -> {
+                    mEffect = effectFactory.createEffect(EffectFactory.EFFECT_SATURATE)
+                    mEffect?.setParameter("scale", .5f)
+                }
+                PhotoFilter.SEPIA -> mEffect =
+                    effectFactory.createEffect(EffectFactory.EFFECT_SEPIA)
+                PhotoFilter.SHARPEN -> mEffect =
+                    effectFactory.createEffect(EffectFactory.EFFECT_SHARPEN)
+                PhotoFilter.TEMPERATURE -> {
+                    mEffect = effectFactory.createEffect(EffectFactory.EFFECT_TEMPERATURE)
+                    mEffect?.setParameter("scale", .9f)
+                }
+                PhotoFilter.TINT -> {
+                    mEffect = effectFactory.createEffect(EffectFactory.EFFECT_TINT)
+                    mEffect?.setParameter("tint", Color.MAGENTA)
+                }
+                PhotoFilter.VIGNETTE -> {
+                    mEffect = effectFactory.createEffect(EffectFactory.EFFECT_VIGNETTE)
+                    mEffect?.setParameter("scale", .5f)
+                }
             }
         }
     }
 
-    private void applyEffect() {
-        mEffect.apply(mTextures[0], mImageWidth, mImageHeight, mTextures[1]);
+    private fun applyEffect() {
+        mEffect!!.apply(mTextures[0], mImageWidth, mImageHeight, mTextures[1])
     }
 
-    private void renderResult() {
-        if (mCurrentEffect != NONE || mCustomEffect != null) {
+    private fun renderResult() {
+        if (mCurrentEffect != PhotoFilter.NONE || mCustomEffect != null) {
             // if no effect is chosen, just render the original bitmap
-            mTexRenderer.renderTexture(mTextures[1]);
+            mTexRenderer!!.renderTexture(mTextures[1])
         } else {
             // render the result of applyEffect()
-            mTexRenderer.renderTexture(mTextures[0]);
+            mTexRenderer!!.renderTexture(mTextures[0])
         }
+    }
+
+    companion object {
+        private const val TAG = "ImageFilterView"
     }
 }
