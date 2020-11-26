@@ -2,11 +2,13 @@ package com.imagevideoeditor
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.SurfaceTexture
+import android.graphics.Typeface
 import android.media.AudioManager
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
@@ -30,6 +32,7 @@ import com.github.hiteshsondhi88.libffmpeg.FFmpegExecuteResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.FFmpegLoadBinaryResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.imagevideoeditor.Utils.DimensionData
 import com.imagevideoeditor.Utils.Utils
 import com.imagevideoeditor.photoeditor.*
@@ -37,17 +40,20 @@ import java.io.File
 import java.io.IOException
 import java.util.*
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
     PropertiesBSFragment.Properties, View.OnClickListener, StickerBSFragment.StickerListener {
     var videoSurface: TextureView? = null
     var ivImage: PhotoEditorView? = null
     var imgClose: ImageView? = null
     var imgDone: ImageView? = null
+    private var masterVideoFile: File? = null
     var imgDelete: ImageView? = null
     var imgDraw: ImageView? = null
     var imgText: ImageView? = null
     var imgUndo: ImageView? = null
     var imgSticker: ImageView? = null
+    var imgTrim: ImageView? = null
     private var mPhotoEditor: PhotoEditor? = null
     private val globalVideoUrl = ""
     private var propertiesBSFragment: PropertiesBSFragment? = null
@@ -56,7 +62,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
     private var videoPath: String? = null
     private var imagePath: String? = null
     private var exeCmd: ArrayList<String>? = null
-    var fFmpeg: FFmpeg? = null
+    private var fFmpeg: FFmpeg? = null
     private lateinit var newCommand: Array<String?>
     private var progressDialog: ProgressDialog? = null
     private var originalDisplayWidth = 0
@@ -76,8 +82,10 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
+
         //        binding = DataBindingUtil.setContentView(this, R.layout.activity_preview_video);
         videoPath = intent!!.getStringExtra("videoPath")
+        masterVideoFile = File(videoPath)
         initViews()
         //        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
 //        Glide.with(this).load(getIntent().getStringExtra("DATA")).into(binding.ivImage.getSource());
@@ -118,6 +126,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
         imgDraw = findViewById(R.id.imgDraw)
         imgText = findViewById(R.id.imgText)
         imgUndo = findViewById(R.id.imgUndo)
+        imgTrim = findViewById(R.id.imgTrim);
         imgSticker = findViewById(R.id.imgSticker)
         fFmpeg = FFmpeg.getInstance(this)
         progressDialog = ProgressDialog(this)
@@ -137,14 +146,13 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
         imgText?.setOnClickListener(this)
         imgUndo?.setOnClickListener(this)
         imgSticker?.setOnClickListener(this)
-        videoSurface?.setSurfaceTextureListener(object : TextureView.SurfaceTextureListener {
+        imgTrim?.setOnClickListener(this)
+        videoSurface?.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
             override fun onSurfaceTextureAvailable(
                 surfaceTexture: SurfaceTexture,
                 i: Int,
                 i1: Int
             ) {
-//                activityHomeBinding.videoSurface.getLayoutParams().height=640;
-//                activityHomeBinding.videoSurface.getLayoutParams().width=720;
                 val surface = Surface(surfaceTexture)
                 try {
                     mediaPlayer = MediaPlayer()
@@ -156,6 +164,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
                     mediaPlayer!!.setOnCompletionListener(onCompletionListener)
                     mediaPlayer!!.setAudioStreamType(AudioManager.STREAM_MUSIC)
                     mediaPlayer!!.start()
+
                 } catch (e: IllegalArgumentException) {
                     // TODO Auto-generated catch block
                     e.printStackTrace()
@@ -183,7 +192,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
             }
 
             override fun onSurfaceTextureUpdated(surfaceTexture: SurfaceTexture) {}
-        })
+        }
         exeCmd = ArrayList()
         try {
             fFmpeg?.loadBinary(object : FFmpegLoadBinaryResponseHandler {
@@ -208,7 +217,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
         }
     }
 
-    fun executeCommand(command: Array<String?>?, absolutePath: String?) {
+    private fun executeCommand(command: Array<String?>?, absolutePath: String?) {
         try {
             fFmpeg!!.execute(command, object : FFmpegExecuteResponseHandler {
                 override fun onSuccess(s: String) {
@@ -245,28 +254,35 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
     }
 
     override fun onClick(v: View) {
-        if (R.id.imgClose == v.id) onBackPressed() else if (R.id.imgDone == v.id) saveImage() else if (R.id.imgDraw == v.id) setDrawingMode() else if (R.id.imgText == v.id) {
-            val textEditorDialogFragment = TextEditorDialogFragment.show(this, 0)
-            textEditorDialogFragment.setOnTextEditorListener(object :
-                TextEditorDialogFragment.TextEditor {
-                override fun onDone(inputText: String?, colorCode: Int, position: Int) {
-                    val styleBuilder = TextStyleBuilder()
-                    styleBuilder.withTextColor(colorCode)
-                    val typeface =
-                        TextEditorDialogFragment.getDefaultFontIds(applicationContext)
-                            ?.get(position)?.let {
-                                ResourcesCompat.getFont(
-                                    applicationContext,
-                                    it
-                                )
-                            }
-                    styleBuilder.withTextFont((typeface)!!)
-                    mPhotoEditor!!.addText(inputText!!, styleBuilder, position)
-                }
-            })
-        } else if (R.id.imgUndo == v.id) mPhotoEditor!!.clearBrushAllViews() else if (R.id.imgSticker == v.id) mStickerBSFragment!!.show(
-            supportFragmentManager, mStickerBSFragment!!.tag
-        )
+        when {
+            R.id.imgClose == v.id -> onBackPressed()
+            R.id.imgDone == v.id -> saveImage()
+            R.id.imgDraw == v.id -> setDrawingMode()
+            R.id.imgText == v.id -> {
+                val textEditorDialogFragment = TextEditorDialogFragment.show(this, 0)
+                textEditorDialogFragment.setOnTextEditorListener(object :
+                    TextEditorDialogFragment.TextEditor {
+                    override fun onDone(inputText: String?, colorCode: Int, position: Int) {
+                        val styleBuilder = TextStyleBuilder()
+                        styleBuilder.withTextColor(colorCode)
+                        val typeface =
+                            TextEditorDialogFragment.getDefaultFontIds(applicationContext)
+                                ?.get(position)?.let {
+                                    ResourcesCompat.getFont(
+                                        applicationContext,
+                                        it
+                                    )
+                                }
+                        styleBuilder.withTextFont((typeface)!!)
+                        mPhotoEditor!!.addText(inputText!!, styleBuilder, position)
+                    }
+                })
+            }
+            R.id.imgUndo == v.id -> mPhotoEditor!!.clearBrushAllViews()
+            R.id.imgSticker == v.id -> mStickerBSFragment!!.show(
+                supportFragmentManager, mStickerBSFragment!!.tag
+            )
+        }
 
 //        switch (v.getId()) {
 //            case R.id.imgClose:
@@ -303,6 +319,12 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
 //            default:
 //                throw new IllegalStateException("Unexpected value: " + v.getId());
 //        }
+    }
+
+    private fun showBottomSheetDialogFragment(bottomSheetDialogFragment: BottomSheetDialogFragment) {
+        val bundle = Bundle()
+        bottomSheetDialogFragment.arguments = bundle
+        bottomSheetDialogFragment.show(supportFragmentManager, bottomSheetDialogFragment.tag)
     }
 
     private fun setCanvasAspectRatio() {
@@ -438,7 +460,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
         rootView: View?,
         text: String?,
         colorCode: Int,
-        position: Int
+        pos: Int
     ) {
 
         val textEditorDialogFragment = TextEditorDialogFragment.show(this, 0)
@@ -447,7 +469,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
             override fun onDone(inputText: String?, colorCode: Int, position: Int) {
                 val styleBuilder = TextStyleBuilder()
                 styleBuilder.withTextColor(colorCode)
-                val typeface =
+                val typeface: Typeface? =
                     TextEditorDialogFragment.getDefaultFontIds(applicationContext)
                         ?.get(position)?.let {
                             ResourcesCompat.getFont(
@@ -514,13 +536,13 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
     }
 
     private val displayWidth: Int
-        private get() {
+        get() {
             val displayMetrics = DisplayMetrics()
             windowManager.defaultDisplay.getMetrics(displayMetrics)
             return displayMetrics.widthPixels
         }
     private val displayHeight: Int
-        private get() {
+        get() {
             val displayMetrics = DisplayMetrics()
             windowManager.defaultDisplay.getMetrics(displayMetrics)
             return displayMetrics.heightPixels
@@ -560,4 +582,5 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
         private const val CAMERA_REQUEST = 52
         private const val PICK_REQUEST = 53
     }
+
 }

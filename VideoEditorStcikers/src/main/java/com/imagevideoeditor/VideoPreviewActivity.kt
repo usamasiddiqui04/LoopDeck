@@ -31,7 +31,7 @@ class VideoPreviewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_video_preview)
+        setContentView(R.layout.activity_video_preview)
         videoPath = intent.getStringExtra("DATA")
         val retriever = MediaMetadataRetriever()
         retriever.setDataSource(videoPath)
@@ -117,13 +117,13 @@ class VideoPreviewActivity : AppCompatActivity() {
     }
 
     private val displayWidth: Int
-        private get() {
+        get() {
             val displayMetrics = DisplayMetrics()
             windowManager.defaultDisplay.getMetrics(displayMetrics)
             return displayMetrics.widthPixels
         }
     private val displayHeight: Int
-        private get() {
+        get() {
             val displayMetrics = DisplayMetrics()
             windowManager.defaultDisplay.getMetrics(displayMetrics)
             return displayMetrics.heightPixels

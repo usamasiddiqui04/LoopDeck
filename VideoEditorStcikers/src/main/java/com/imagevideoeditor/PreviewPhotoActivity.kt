@@ -89,17 +89,20 @@ abstract class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListen
     }
 
     override fun onClick(v: View) {
-        if (R.id.imgClose == v.id) onBackPressed() else if (R.id.imgDone == v.id) saveImage() else if (R.id.imgDraw == v.id) setDrawingMode() else if (R.id.imgText == v.id) {
+        if (R.id.imgClose == v.id) onBackPressed()
+        else if (R.id.imgDone == v.id) saveImage()
+        else if (R.id.imgDraw == v.id) setDrawingMode()
+        else if (R.id.imgText == v.id) {
             val textEditorDialogFragment = TextEditorDialogFragment.show(this, 0)
             textEditorDialogFragment.setOnTextEditorListener(object : TextEditor {
                 override fun onDone(inputText: String?, colorCode: Int, position: Int) {
                     val styleBuilder = TextStyleBuilder()
                     styleBuilder.withTextColor(colorCode)
                     val typeface =
-                        TextEditorDialogFragment.getDefaultFontIds(this@PreviewPhotoActivity)
+                        TextEditorDialogFragment.getDefaultFontIds(applicationContext)
                             ?.get(position)?.let {
                                 ResourcesCompat.getFont(
-                                    this@PreviewPhotoActivity,
+                                    applicationContext,
                                     it
                                 )
                             }
@@ -107,7 +110,9 @@ abstract class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListen
                     mPhotoEditor!!.addText(inputText!!, styleBuilder, position)
                 }
             })
-        } else if (R.id.imgUndo == v.id) mPhotoEditor!!.clearBrushAllViews() else if (R.id.imgSticker == v.id) mStickerBSFragment!!.show(
+        } else if (R.id.imgUndo == v.id)
+            mPhotoEditor!!.clearBrushAllViews()
+        else if (R.id.imgSticker == v.id) mStickerBSFragment!!.show(
             supportFragmentManager, mStickerBSFragment!!.tag
         )
         //        switch (v.getId()) {

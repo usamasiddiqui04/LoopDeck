@@ -44,17 +44,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:background="@android:color/black"
             tools:listitem="@layout/color_picker_item_list" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/add_text_color_picker_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_below="@id/reyFonts"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:background="@android:color/black"
             tools:listitem="@layout/color_picker_item_list" />
 

@@ -45,7 +45,7 @@ class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChang
         )
         colorPickerAdapter.setOnColorPickerClickListener(object :
             ColorPickerAdapter.OnColorPickerClickListener {
-            override fun onColorPickerClickListener(colorCode: Int) {
+            override fun onColorPickerClicked(colorCode: Int) {
                 if (mProperties != null) {
                     dismiss()
                     mProperties!!.onColorChanged(colorCode)

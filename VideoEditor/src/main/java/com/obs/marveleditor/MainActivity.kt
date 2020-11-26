@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
             if (intent.hasExtra("videoPath")) intent.getStringExtra("videoPath")
             else null
 
-
         val sharedPreferences: SharedPreferences = this.getSharedPreferences(
             sharedPrefFile,
             Context.MODE_PRIVATE
@@ -37,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         editor.putString("videoPath", videoPath)
         editor.apply()
         editor.commit()
+
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frame_container1, OptiMasterProcessorFragment()).commit()

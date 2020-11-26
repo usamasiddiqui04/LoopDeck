@@ -32,7 +32,6 @@ class StickerBSFragment() : BottomSheetDialogFragment() {
                     dismiss()
                 }
             }
-
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         }
 

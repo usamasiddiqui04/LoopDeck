@@ -19,7 +19,7 @@ class FontPickerAdapter internal constructor(
     private val fontPickerFonts: List<String>
     private val fontId: List<Int>
     var selecetedPosition = 0
-    private var onFontSelectListner: OnFontSelectListner? = null
+    private var onFontSelectListener: OnFontSelectListner? = null
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = inflater.inflate(R.layout.item_font_select, viewGroup, false)
         return ViewHolder(view)
@@ -48,31 +48,28 @@ class FontPickerAdapter internal constructor(
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var name: TextView
+        var name: TextView = itemView.findViewById(R.id.tvFontName)
 
         init {
-            name = itemView.findViewById(R.id.tvFontName)
-            name.setOnClickListener(object : View.OnClickListener {
-                override fun onClick(v: View) {
-                    if (adapterPosition != selecetedPosition) {
-                        if (onFontSelectListner != null) {
-                            selecetedPosition = adapterPosition
-                            name.setBackgroundColor(
-                                ContextCompat.getColor(
-                                    context, R.color.colorPrimary
-                                )
+            name.setOnClickListener {
+                if (adapterPosition != selecetedPosition) {
+                    if (onFontSelectListener != null) {
+                        selecetedPosition = adapterPosition
+                        name.setBackgroundColor(
+                            ContextCompat.getColor(
+                                context, R.color.colorPrimary
                             )
-                            onFontSelectListner!!.onFontSelcetion(adapterPosition)
-                            notifyDataSetChanged()
-                        }
+                        )
+                        onFontSelectListener!!.onFontSelcetion(adapterPosition)
+                        notifyDataSetChanged()
                     }
                 }
-            })
+            }
         }
     }
 
-    fun setOnFontSelectListener(onFontSelectListner: OnFontSelectListner?) {
-        this.onFontSelectListner = onFontSelectListner
+    fun setOnFontSelectListener(onFontSelectListener: OnFontSelectListner?) {
+        this.onFontSelectListener = onFontSelectListener
     }
 
     interface OnFontSelectListner {

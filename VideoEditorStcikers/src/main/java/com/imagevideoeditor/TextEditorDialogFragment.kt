@@ -18,7 +18,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.imagevideoeditor.FontPickerAdapter.OnFontSelectListner
+import com.imagevideoeditor.ColorPickerAdapter.OnColorPickerClickListener
+import com.imagevideoeditor.TextEditorDialogFragment
+import kotlinx.android.synthetic.main.add_text_dialog.*
 import java.util.*
 
 /**
@@ -30,6 +32,7 @@ class TextEditorDialogFragment : DialogFragment() {
     private var mInputMethodManager: InputMethodManager? = null
     private var mColorCode = 0
     private var mTextEditor: TextEditor? = null
+    private var position: Int = 0
 
     interface TextEditor {
         fun onDone(inputText: String?, colorCode: Int, position: Int)
@@ -42,8 +45,8 @@ class TextEditorDialogFragment : DialogFragment() {
         if (dialog != null) {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.MATCH_PARENT
-            dialog.window!!.setLayout(width, height)
-            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.window?.setLayout(width, height)
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
     }
 
@@ -62,54 +65,53 @@ class TextEditorDialogFragment : DialogFragment() {
             activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         mAddTextDoneTextView = view.findViewById(R.id.add_text_done_tv)
 
+
         //Setup the color picker for text color
-        val addTextColorPickerRecyclerView =
-            view.findViewById<View>(R.id.add_text_color_picker_recyclerview) as RecyclerView
-        val reyFonts = view.findViewById<View>(R.id.reyFonts) as RecyclerView
-        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        val layoutManagerFonts = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        addTextColorPickerRecyclerView.layoutManager = layoutManager
-        reyFonts.layoutManager = layoutManagerFonts
-        addTextColorPickerRecyclerView.setHasFixedSize(true)
-        reyFonts.setHasFixedSize(true)
-        val colorPickerAdapter = ColorPickerAdapter(
-            activity!!
-        )
+        val addTextColorPickerRecyclerView = add_text_color_picker_recyclerview
+
+        val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        val layoutManagerFonts =
+            LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+
+        addTextColorPickerRecyclerView?.layoutManager = layoutManager
+        reyFonts?.layoutManager = layoutManagerFonts
+        addTextColorPickerRecyclerView?.setHasFixedSize(true)
+        reyFonts?.setHasFixedSize(true)
+        val colorPickerAdapter = ColorPickerAdapter(activity!!)
         //This listener will change the text color when clicked on any color from picker
-        colorPickerAdapter.setOnColorPickerClickListener(object :
-            ColorPickerAdapter.OnColorPickerClickListener {
-            override fun onColorPickerClickListener(colorCode: Int) {
+
+
+        colorPickerAdapter.setOnColorPickerClickListener(object : OnColorPickerClickListener {
+            override fun onColorPickerClicked(colorCode: Int) {
                 mColorCode = colorCode
                 mAddTextEditText?.setTextColor(colorCode)
             }
         })
-        addTextColorPickerRecyclerView.adapter = colorPickerAdapter
+
+
+        addTextColorPickerRecyclerView?.adapter = colorPickerAdapter
         position = arguments!!.getInt(SELECTED_POSITION)
-        val fontPickerAdapter = FontPickerAdapter(
-            activity!!, position, getDefaultFonts(
-                activity
-            )!!, getDefaultFontIds(activity)!!
-        )
-        fontPickerAdapter.setOnFontSelectListener(object : OnFontSelectListner {
+        val fontPickerAdapter = getDefaultFontIds(activity)?.let {
+            FontPickerAdapter(
+                activity!!, position, getDefaultFonts(activity)!!,
+                it
+            )
+        }
+        fontPickerAdapter?.setOnFontSelectListener(object : FontPickerAdapter.OnFontSelectListner {
             override fun onFontSelcetion(position: Int) {
-                Companion.position = position
-                val typeface = Objects.requireNonNull(
-                    context
-                )?.let {
-                    ResourcesCompat.getFont(
-                        it, fontIds!![position]
-                    )
-                }
+                this@TextEditorDialogFragment.position = position
+                val typeface = ResourcesCompat.getFont(activity!!, fontIds!![position])
                 mAddTextEditText?.setTypeface(typeface)
             }
+
         })
-        reyFonts.adapter = fontPickerAdapter
+
+
+        reyFonts?.adapter = fontPickerAdapter
         mAddTextEditText?.setText(arguments!!.getString(EXTRA_INPUT_TEXT))
         mColorCode = arguments!!.getInt(EXTRA_COLOR_CODE)
         mAddTextEditText?.setTextColor(mColorCode)
-        val typeface = ResourcesCompat.getFont(
-            activity!!, fontIds!![position]
-        )
+        val typeface = ResourcesCompat.getFont(activity!!, fontIds!![position])
         mAddTextEditText?.setTypeface(typeface)
         mInputMethodManager!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 
@@ -118,14 +120,14 @@ class TextEditorDialogFragment : DialogFragment() {
             mInputMethodManager!!.hideSoftInputFromWindow(view.windowToken, 0)
             dismiss()
             val inputText = mAddTextEditText?.getText().toString()
-            if (!TextUtils.isEmpty(inputText) && mTextEditor != null) {
+            if (!TextUtils.isEmpty(inputText) && mTextEditor != null && fontPickerAdapter != null) {
                 mTextEditor!!.onDone(inputText, mColorCode, fontPickerAdapter.selecetedPosition)
             }
         })
     }
 
     //Callback to listener if user is done with text editing
-    fun setOnTextEditorListener(textEditor: TextEditor) {
+    fun setOnTextEditorListener(textEditor: TextEditor?) {
         mTextEditor = textEditor
     }
 
@@ -155,6 +157,7 @@ class TextEditorDialogFragment : DialogFragment() {
         }
 
         //Show dialog with default text input as empty and text color white
+        @JvmStatic
         fun show(appCompatActivity: AppCompatActivity, position: Int): TextEditorDialogFragment {
             return show(
                 appCompatActivity,
@@ -162,6 +165,7 @@ class TextEditorDialogFragment : DialogFragment() {
             )
         }
 
+        @JvmStatic
         fun getDefaultFontIds(context: Context?): List<Int>? {
             fontIds = ArrayList()
             fontIds?.add(R.font.wonderland)
