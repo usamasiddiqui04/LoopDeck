@@ -39,7 +39,6 @@ import com.imagevideoeditor.fragments.playbackspeedFragment
 import com.imagevideoeditor.photoeditor.*
 import com.obs.marveleditor.fragments.OptiAddMusicFragment
 import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
-import com.obs.marveleditor.fragments.OptiPlaybackSpeedDialogFragment
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.OptiUtils
 import kotlinx.android.synthetic.main.activity_preview_video.*
@@ -164,31 +163,9 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
                 i: Int,
                 i1: Int
             ) {
-                val surface = Surface(surfaceTexture)
-                try {
-                    mediaPlayer = MediaPlayer()
-                    //                    mediaPlayer.setDataSource("http://daily3gp.com/vids/747.3gp");
-                    Log.d("VideoPath>>", videoPath!!)
-                    mediaPlayer!!.setDataSource(masterVideoFile!!.absolutePath)
-                    mediaPlayer!!.setSurface(surface)
-                    mediaPlayer!!.prepare()
-                    mediaPlayer!!.setOnCompletionListener(onCompletionListener)
-                    mediaPlayer!!.setAudioStreamType(AudioManager.STREAM_MUSIC)
-                    mediaPlayer!!.start()
 
-                } catch (e: IllegalArgumentException) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace()
-                } catch (e: SecurityException) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace()
-                } catch (e: IllegalStateException) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace()
-                } catch (e: IOException) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace()
-                }
+                surface = Surface(surfaceTexture)
+                initializePlayer()
             }
 
             override fun onSurfaceTextureSizeChanged(
@@ -202,8 +179,12 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
                 return false
             }
 
-            override fun onSurfaceTextureUpdated(surfaceTexture: SurfaceTexture) {}
+            override fun onSurfaceTextureUpdated(surfaceTexture: SurfaceTexture) {
+
+            }
         }
+
+
         exeCmd = ArrayList()
         try {
             fFmpeg?.loadBinary(object : FFmpegLoadBinaryResponseHandler {
@@ -228,63 +209,50 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         }
     }
 
-    fun intilizeplayer() {
-        videoSurface?.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
-            override fun onSurfaceTextureAvailable(
-                surfaceTexture: SurfaceTexture,
-                i: Int,
-                i1: Int
-            ) {
-                val surface = Surface(surfaceTexture)
-                try {
-                    mediaPlayer = MediaPlayer()
-                    //                    mediaPlayer.setDataSource("http://daily3gp.com/vids/747.3gp");
-                    Log.d("VideoPath>>", videoPath!!)
-                    mediaPlayer!!.setDataSource(masterVideoFile!!.absolutePath)
-                    mediaPlayer!!.setSurface(surface)
-                    mediaPlayer!!.prepare()
-                    mediaPlayer!!.setOnCompletionListener(onCompletionListener)
-                    mediaPlayer!!.setAudioStreamType(AudioManager.STREAM_MUSIC)
-                    mediaPlayer!!.start()
 
-                } catch (e: IllegalArgumentException) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace()
-                } catch (e: SecurityException) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace()
-                } catch (e: IllegalStateException) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace()
-                } catch (e: IOException) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace()
-                }
+    lateinit var surface: Surface
+    fun initializePlayer() {
+
+        try {
+            mediaPlayer = MediaPlayer()
+            //                    mediaPlayer.setDataSource("http://daily3gp.com/vids/747.3gp");
+            Log.d("VideoPath>>", videoPath!!)
+
+            mediaPlayer?.apply {
+                setDataSource(masterVideoFile!!.absolutePath)
+                setSurface(surface)
+                prepare()
+                setOnCompletionListener(onCompletionListener)
+                setAudioStreamType(AudioManager.STREAM_MUSIC)
+                start()
             }
 
-            override fun onSurfaceTextureSizeChanged(
-                surfaceTexture: SurfaceTexture,
-                i: Int,
-                i1: Int
-            ) {
-            }
-
-            override fun onSurfaceTextureDestroyed(surfaceTexture: SurfaceTexture): Boolean {
-                return false
-            }
-
-            override fun onSurfaceTextureUpdated(surfaceTexture: SurfaceTexture) {}
+        } catch (e: IllegalArgumentException) {
+            // TODO Auto-generated catch block
+            e.printStackTrace()
+        } catch (e: SecurityException) {
+            // TODO Auto-generated catch block
+            e.printStackTrace()
+        } catch (e: IllegalStateException) {
+            // TODO Auto-generated catch block
+            e.printStackTrace()
+        } catch (e: IOException) {
+            // TODO Auto-generated catch block
+            e.printStackTrace()
         }
+
+
     }
 
     override fun onDidNothing() {
-        intilizeplayer()
 
     }
 
     override fun onFileProcessed(file: File) {
         masterVideoFile = file
-        intilizeplayer()
+        mediaPlayer?.release()
+        initializePlayer()
+
     }
 
     override fun getFile(): File? {
@@ -292,7 +260,6 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     }
 
     override fun reInitPlayer() {
-        intilizeplayer()
     }
 
     override fun onAudioFileProcessed(convertedAudioFile: File) {
@@ -618,6 +585,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     override fun onBackPressed() {
         super.onBackPressed()
         mediaPlayer!!.stop()
+        mediaPlayer?.release()
     }
 
     fun generatePath(uri: Uri, context: Context): String? {

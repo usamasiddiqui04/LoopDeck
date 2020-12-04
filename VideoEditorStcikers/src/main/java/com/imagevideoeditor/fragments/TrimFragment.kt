@@ -99,7 +99,6 @@ class TrimFragment : BottomSheetDialogFragment(), OptiFFMpegCallback {
     }
 
     override fun onFailure(error: Exception) {
-        Toast.makeText(requireContext(), "Video processing failed", Toast.LENGTH_LONG).show()
         helper?.showLoading(false)
     }
 
