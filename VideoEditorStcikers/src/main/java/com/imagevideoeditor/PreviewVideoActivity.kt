@@ -383,11 +383,11 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
                     val timeInMillis = OptiUtils.getVideoDuration(applicationContext, file)
                     /*val duration = OptiCommonMethods.convertDurationInSec(timeInMillis)
                 Log.v(tagName, "videoDuration: $duration")*/
-                    OptiAddMusicFragment.newInstance().apply {
-                        setHelper(this@PreviewVideoActivity)
-                        setFilePathFromSource(file)
-                        setDuration(timeInMillis)
-                    }.show(supportFragmentManager, "OptiAddMusicFragment")
+                  com.imagevideoeditor.fragments.OptiAddMusicFragment.newInstance().apply {
+                      setHelper(this@PreviewVideoActivity)
+                      setFilePathFromSource(file)
+                      setDuration(timeInMillis)
+                  }.show(supportFragmentManager, "OptiAddMusicFragment")
                 }
             }
         }
