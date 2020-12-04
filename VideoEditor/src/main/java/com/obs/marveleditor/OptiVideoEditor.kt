@@ -234,6 +234,16 @@ class OptiVideoEditor private constructor(private val context: Context) {
                 cmd = arrayOf("-y", "-i", videoFile!!.path, "-i", audioFile!!.path, "-c", "copy","-map", "0:v:0", "-map", "1:a:0",  outputFile.path)
             }
 
+            OptiConstant.VIDEO_AUDIO_OVERRIDE->{
+                //TODO: Change into formatted commond
+//                ffmpeg -i audio.mp3 -i video.mp4 -filter_complex \
+//                "[0:a][1:a]amerge,pan=stereo|c0<c0+c2|c1<c1+c3[a]" \
+//                -map 1:v -map "[a]" -c:v copy -c:a aac -shortest output.mp4
+
+
+                cmd = arrayOf("-y", "-i" ,"audio.mp3", "-i", "video.mp4", "-filter_complex", "[0:a][1:a]amerge,pan=stereo|c0<c0+c2|c1<c1+c3[a]\" -map 1:v -map \"[a]\" -c:v copy -c:a aac -shortest output.mp4")
+            }
+
             OptiConstant.VIDEO_TRIM -> {
                 //Video trim - Need video file, start time, end time & output file
                 cmd = arrayOf("-y", "-i", videoFile!!.path, "-ss", startTime, "-t", endTime, "-c", "copy", outputFile.path)
@@ -248,6 +258,8 @@ class OptiVideoEditor private constructor(private val context: Context) {
                 //Convert .avi to .mp4 - Need avi video file, command, mp4 output file
                 cmd = arrayOf("-y", "-i", videoFile!!.path, "-c:v", "libx264", "-crf", "19", "-preset", "slow", "-c:a", "aac", "-b:a", "192k", "-ac", "2", outputFile.path)
             }
+
+
         }
 
         try {
