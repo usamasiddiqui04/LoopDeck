@@ -30,9 +30,7 @@ import androidx.core.app.ActivityCompat
 import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.R
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
-import com.obs.marveleditor.utils.VideoUtils.buildMediaSource
 import com.obs.marveleditor.utils.VideoUtils.secToTime
-import com.obs.marveleditor.utils.VideoFrom
 import com.obs.marveleditor.interfaces.OptiDialogueHelper
 import com.github.guilhe.views.SeekBarRangedView
 import com.obs.marveleditor.OptiVideoEditor
@@ -42,10 +40,10 @@ import com.obs.marveleditor.utils.OptiUtils
 import java.io.File
 import kotlin.math.roundToLong
 
-class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
+class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
     OptiFFMpegCallback {
 
-    private var tagName: String = OptiAddMusicFragment::class.java.simpleName
+    private var tagName: String = AddMusicFragment::class.java.simpleName
     private var audioFile: File? = null
     private var videoFile: File? = null
     private var playWhenReady: Boolean? = false
@@ -204,7 +202,7 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
     }
 
     companion object {
-        fun newInstance() = OptiAddMusicFragment()
+        fun newInstance() = AddMusicFragment()
     }
 
     fun checkPermission(requestCode: Int, permission: String) {

@@ -34,8 +34,8 @@ import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedExceptio
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.imagevideoeditor.Utils.DimensionData
 import com.imagevideoeditor.Utils.Utils
+import com.imagevideoeditor.fragments.SpeedFragment
 import com.imagevideoeditor.fragments.TrimFragment
-import com.imagevideoeditor.fragments.playbackspeedFragment
 import com.imagevideoeditor.photoeditor.*
 import com.obs.marveleditor.fragments.OptiAddMusicFragment
 import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
@@ -271,8 +271,8 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 
         if (isShow && progressDialog?.isShowing == false) {
             progressDialog?.apply {
-                setTitle("Proccessing")
-                setMessage("Changing Playback Speed: Please Wait")
+                setTitle("Processing Your Video")
+                setMessage("Please Wait")
                 setCanceledOnTouchOutside(false)
                 show()
             }
@@ -370,7 +370,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
             R.id.imgPlayback == v.id -> {
                 masterVideoFile?.let { file ->
 
-                    playbackspeedFragment.newInstance().apply {
+                    SpeedFragment.newInstance().apply {
                         setHelper(this@PreviewVideoActivity)
                         setFilePathFromSource(file)
                     }.show(supportFragmentManager, "OptiPlaybackSpeedDialogFragment")
@@ -383,11 +383,11 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
                     val timeInMillis = OptiUtils.getVideoDuration(applicationContext, file)
                     /*val duration = OptiCommonMethods.convertDurationInSec(timeInMillis)
                 Log.v(tagName, "videoDuration: $duration")*/
-                  com.imagevideoeditor.fragments.OptiAddMusicFragment.newInstance().apply {
-                      setHelper(this@PreviewVideoActivity)
-                      setFilePathFromSource(file)
-                      setDuration(timeInMillis)
-                  }.show(supportFragmentManager, "OptiAddMusicFragment")
+                    OptiAddMusicFragment.newInstance().apply {
+                        setHelper(this@PreviewVideoActivity)
+                        setFilePathFromSource(file)
+                        setDuration(timeInMillis)
+                    }.show(supportFragmentManager, "OptiAddMusicFragment")
                 }
             }
         }

@@ -453,15 +453,19 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
 
             nextAction = 2
 
-            OptiVideoEditor.with(context!!)
-                .setType(OptiConstant.VIDEO_AUDIO_MERGE)
-                .setFile(videoFile!!)
-                .setAudioFile(audioFile!!)
-                .setOutputPath(outputFile.path)
-                .setCallback(this)
-                .main()
 
-            helper?.showLoading(true)
+            if(audioFile != null && videoFile != null){
+                OptiVideoEditor.with(context!!)
+                    .setType(OptiConstant.VIDEO_AUDIO_MERGE)
+                    .setFile(videoFile!!)
+                    .setAudioFile(audioFile!!)
+                    .setOutputPath(outputFile.path)
+                    .setCallback(this)
+                    .main()
+
+                helper?.showLoading(true)
+            }
+
         } else {
             showInProgressToast()
         }

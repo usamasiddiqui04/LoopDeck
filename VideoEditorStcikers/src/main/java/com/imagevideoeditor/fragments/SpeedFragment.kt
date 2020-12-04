@@ -10,26 +10,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.imagevideoeditor.R
 import com.obs.marveleditor.OptiVideoEditor
-import com.obs.marveleditor.adapter.OptiPlaybackSpeedAdapter
 import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
-import com.obs.marveleditor.fragments.OptiPlaybackSpeedDialogFragment
 import com.obs.marveleditor.interfaces.OptiDialogueHelper
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.interfaces.OptiPlaybackSpeedListener
 import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.utils.OptiUtils
 import kotlinx.android.synthetic.main.fragment_playbackspeed.*
-import kotlinx.android.synthetic.main.fragment_trim.*
 import kotlinx.android.synthetic.main.fragment_trim.iv_done
 import java.io.File
 
 
-class playbackspeedFragment : BottomSheetDialogFragment(), OptiDialogueHelper, OptiFFMpegCallback,
+class SpeedFragment : BottomSheetDialogFragment(), OptiDialogueHelper, OptiFFMpegCallback,
     OptiPlaybackSpeedListener {
 
     private var masterFile: File? = null
     private var isHavingAudio = true
-    private var tagName: String = playbackspeedFragment::class.java.simpleName
+    private var tagName: String = SpeedFragment::class.java.simpleName
     private var helper: OptiBaseCreatorDialogFragment.CallBacks? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var playbackSpeed: ArrayList<String> = ArrayList()
@@ -72,7 +69,7 @@ class playbackspeedFragment : BottomSheetDialogFragment(), OptiDialogueHelper, O
 
 
     companion object {
-        fun newInstance() = playbackspeedFragment()
+        fun newInstance() = SpeedFragment()
     }
 
     override fun setHelper(helper: OptiBaseCreatorDialogFragment.CallBacks) {
