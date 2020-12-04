@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide
 import com.imagevideoeditor.TextEditorDialogFragment.TextEditor
 import com.imagevideoeditor.databinding.ActivityPreviewBinding
 import com.imagevideoeditor.photoeditor.*
+import kotlinx.android.synthetic.main.activity_preview_video.*
 import java.io.File
 import java.io.IOException
 

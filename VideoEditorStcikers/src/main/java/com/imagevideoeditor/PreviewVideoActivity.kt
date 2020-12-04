@@ -37,9 +37,11 @@ import com.imagevideoeditor.Utils.Utils
 import com.imagevideoeditor.fragments.TrimFragment
 import com.imagevideoeditor.fragments.playbackspeedFragment
 import com.imagevideoeditor.photoeditor.*
+import com.obs.marveleditor.fragments.OptiAddMusicFragment
 import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
 import com.obs.marveleditor.fragments.OptiPlaybackSpeedDialogFragment
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
+import com.obs.marveleditor.utils.OptiUtils
 import kotlinx.android.synthetic.main.activity_preview_video.*
 import java.io.File
 import java.io.IOException
@@ -155,6 +157,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         imgSticker?.setOnClickListener(this)
         imgTrim?.setOnClickListener(this)
         imgPlayback?.setOnClickListener(this)
+        imgAddmusic?.setOnClickListener(this)
         videoSurface?.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
             override fun onSurfaceTextureAvailable(
                 surfaceTexture: SurfaceTexture,
@@ -394,6 +397,20 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
                         setHelper(this@PreviewVideoActivity)
                         setFilePathFromSource(file)
                     }.show(supportFragmentManager, "OptiPlaybackSpeedDialogFragment")
+                }
+            }
+
+            R.id.imgAddmusic == v.id -> {
+                masterVideoFile?.let { file ->
+
+                    val timeInMillis = OptiUtils.getVideoDuration(applicationContext, file)
+                    /*val duration = OptiCommonMethods.convertDurationInSec(timeInMillis)
+                Log.v(tagName, "videoDuration: $duration")*/
+                    OptiAddMusicFragment.newInstance().apply {
+                        setHelper(this@PreviewVideoActivity)
+                        setFilePathFromSource(file)
+                        setDuration(timeInMillis)
+                    }.show(supportFragmentManager, "OptiAddMusicFragment")
                 }
             }
         }
