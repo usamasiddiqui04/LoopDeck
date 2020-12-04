@@ -267,14 +267,24 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     }
 
     override fun showLoading(isShow: Boolean) {
-        if (isShow) {
-            progressbar.visibility = View.VISIBLE
-            progressbar.show()
+
+
+        if (isShow && progressDialog?.isShowing == false) {
+            progressDialog?.apply {
+                setTitle("Proccessing")
+                setMessage("Changing Playback Speed: Please Wait")
+                setCanceledOnTouchOutside(false)
+                show()
+            }
+//            progressbar.visibility = View.VISIBLE
+//            progressbar.show()
         } else {
-            progressbar.visibility = View.INVISIBLE
-            progressbar.hide()
+            progressDialog?.dismiss()
+//            progressbar.visibility = View.INVISIBLE
+//            progressbar.hide()
         }
     }
+
 
     override fun openGallery() {
         TODO("Not yet implemented")
@@ -685,6 +695,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 
     override fun onProgress(progress: String) {
         Log.v(tagName, "onProgress()")
+        showLoading(true)
     }
 
     override fun onSuccess(convertedFile: File, type: String) {

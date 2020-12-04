@@ -105,6 +105,7 @@ class OptiPlaybackSpeedDialogFragment : BottomSheetDialogFragment(), OptiDialogu
 
     override fun onProgress(progress: String) {
         Log.d(tagName, "onProgress() $progress")
+        helper?.showLoading(true)
     }
 
     override fun onSuccess(convertedFile: File, type: String) {

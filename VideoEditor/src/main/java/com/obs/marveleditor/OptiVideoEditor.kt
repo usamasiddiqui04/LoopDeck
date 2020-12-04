@@ -257,6 +257,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
                 }
 
                 override fun onProgress(message: String?) {
+                    Log.v(tagName, "FFmpeg command in Progress")
                     callback!!.onProgress(message!!)
                 }
 
