@@ -1,4 +1,4 @@
-package com.imagevideoeditor
+package com.imagevideoeditor.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -7,12 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.widget.AppCompatTextView
 import com.github.guilhe.views.SeekBarRangedView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.imagevideoeditor.R
 import com.obs.marveleditor.OptiVideoEditor
 import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
-import com.obs.marveleditor.fragments.OptiTrimFragment
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.utils.OptiUtils

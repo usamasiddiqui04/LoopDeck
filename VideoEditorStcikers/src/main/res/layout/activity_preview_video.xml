@@ -114,6 +114,17 @@
         app:layout_constraintStart_toStartOf="@id/imgSticker"
         app:layout_constraintTop_toBottomOf="@id/imgSticker" />
 
+    <ImageView
+        android:id="@+id/imgPlayback"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/black_trasp"
+        android:padding="8dp"
+        android:src="@drawable/speed_skating_24"
+        app:layout_constraintStart_toStartOf="@id/imgTrim"
+        app:layout_constraintTop_toBottomOf="@id/imgTrim" />
+
 
     <ImageView
         android:id="@+id/imgDone"

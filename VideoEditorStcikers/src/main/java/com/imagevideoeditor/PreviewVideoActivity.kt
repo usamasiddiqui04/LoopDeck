@@ -25,7 +25,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.net.toFile
 import com.bumptech.glide.Glide
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.FFmpegExecuteResponseHandler
@@ -35,13 +34,12 @@ import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedExceptio
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.imagevideoeditor.Utils.DimensionData
 import com.imagevideoeditor.Utils.Utils
+import com.imagevideoeditor.fragments.TrimFragment
+import com.imagevideoeditor.fragments.playbackspeedFragment
 import com.imagevideoeditor.photoeditor.*
 import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
-import com.obs.marveleditor.fragments.OptiMasterProcessorFragment
-import com.obs.marveleditor.fragments.OptiTrimFragment
+import com.obs.marveleditor.fragments.OptiPlaybackSpeedDialogFragment
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
-import com.obs.marveleditor.utils.OptiCommonMethods
-import com.obs.marveleditor.utils.OptiConstant
 import kotlinx.android.synthetic.main.activity_preview_video.*
 import java.io.File
 import java.io.IOException
@@ -156,6 +154,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         imgUndo?.setOnClickListener(this)
         imgSticker?.setOnClickListener(this)
         imgTrim?.setOnClickListener(this)
+        imgPlayback?.setOnClickListener(this)
         videoSurface?.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
             override fun onSurfaceTextureAvailable(
                 surfaceTexture: SurfaceTexture,
@@ -386,6 +385,15 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
                     trimFragment.setHelper(this)
                     trimFragment.setFilePathFromSource(file, mediaPlayer?.duration!!.toLong())
                     showBottomSheetDialogFragment(trimFragment)
+                }
+            }
+            R.id.imgPlayback == v.id -> {
+                masterVideoFile?.let { file ->
+
+                    playbackspeedFragment.newInstance().apply {
+                        setHelper(this@PreviewVideoActivity)
+                        setFilePathFromSource(file)
+                    }.show(supportFragmentManager, "OptiPlaybackSpeedDialogFragment")
                 }
             }
         }
