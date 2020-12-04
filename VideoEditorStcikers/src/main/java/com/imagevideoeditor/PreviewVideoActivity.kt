@@ -2,7 +2,6 @@ package com.imagevideoeditor
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
@@ -26,6 +25,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.net.toFile
 import com.bumptech.glide.Glide
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.FFmpegExecuteResponseHandler
@@ -36,18 +36,27 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.imagevideoeditor.Utils.DimensionData
 import com.imagevideoeditor.Utils.Utils
 import com.imagevideoeditor.photoeditor.*
+import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
+import com.obs.marveleditor.fragments.OptiMasterProcessorFragment
+import com.obs.marveleditor.fragments.OptiTrimFragment
+import com.obs.marveleditor.interfaces.OptiFFMpegCallback
+import com.obs.marveleditor.utils.OptiCommonMethods
+import com.obs.marveleditor.utils.OptiConstant
+import kotlinx.android.synthetic.main.activity_preview_video.*
 import java.io.File
 import java.io.IOException
 import java.util.*
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
-    PropertiesBSFragment.Properties, View.OnClickListener, StickerBSFragment.StickerListener {
+class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFMpegCallback,
+    PropertiesBSFragment.Properties, View.OnClickListener, StickerBSFragment.StickerListener,
+    OptiBaseCreatorDialogFragment.CallBacks {
     var videoSurface: TextureView? = null
     var ivImage: PhotoEditorView? = null
     var imgClose: ImageView? = null
     var imgDone: ImageView? = null
     private var masterVideoFile: File? = null
+    private var tagName: String = PreviewVideoActivity::class.java.simpleName
     var imgDelete: ImageView? = null
     var imgDraw: ImageView? = null
     var imgText: ImageView? = null
@@ -158,7 +167,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
                     mediaPlayer = MediaPlayer()
                     //                    mediaPlayer.setDataSource("http://daily3gp.com/vids/747.3gp");
                     Log.d("VideoPath>>", videoPath!!)
-                    mediaPlayer!!.setDataSource(videoPath)
+                    mediaPlayer!!.setDataSource(masterVideoFile!!.absolutePath)
                     mediaPlayer!!.setSurface(surface)
                     mediaPlayer!!.prepare()
                     mediaPlayer!!.setOnCompletionListener(onCompletionListener)
@@ -215,6 +224,95 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
         } catch (e: FFmpegNotSupportedException) {
             e.printStackTrace()
         }
+    }
+
+    fun intilizeplayer() {
+        videoSurface?.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
+            override fun onSurfaceTextureAvailable(
+                surfaceTexture: SurfaceTexture,
+                i: Int,
+                i1: Int
+            ) {
+                val surface = Surface(surfaceTexture)
+                try {
+                    mediaPlayer = MediaPlayer()
+                    //                    mediaPlayer.setDataSource("http://daily3gp.com/vids/747.3gp");
+                    Log.d("VideoPath>>", videoPath!!)
+                    mediaPlayer!!.setDataSource(masterVideoFile!!.absolutePath)
+                    mediaPlayer!!.setSurface(surface)
+                    mediaPlayer!!.prepare()
+                    mediaPlayer!!.setOnCompletionListener(onCompletionListener)
+                    mediaPlayer!!.setAudioStreamType(AudioManager.STREAM_MUSIC)
+                    mediaPlayer!!.start()
+
+                } catch (e: IllegalArgumentException) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace()
+                } catch (e: SecurityException) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace()
+                } catch (e: IllegalStateException) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace()
+                } catch (e: IOException) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onSurfaceTextureSizeChanged(
+                surfaceTexture: SurfaceTexture,
+                i: Int,
+                i1: Int
+            ) {
+            }
+
+            override fun onSurfaceTextureDestroyed(surfaceTexture: SurfaceTexture): Boolean {
+                return false
+            }
+
+            override fun onSurfaceTextureUpdated(surfaceTexture: SurfaceTexture) {}
+        }
+    }
+
+    override fun onDidNothing() {
+        intilizeplayer()
+
+    }
+
+    override fun onFileProcessed(file: File) {
+        masterVideoFile = file
+        intilizeplayer()
+    }
+
+    override fun getFile(): File? {
+        return masterVideoFile
+    }
+
+    override fun reInitPlayer() {
+        intilizeplayer()
+    }
+
+    override fun onAudioFileProcessed(convertedAudioFile: File) {
+        TODO("Not yet implemented")
+    }
+
+    override fun showLoading(isShow: Boolean) {
+        if (isShow) {
+            progressbar.visibility = View.VISIBLE
+            progressbar.show()
+        } else {
+            progressbar.visibility = View.INVISIBLE
+            progressbar.hide()
+        }
+    }
+
+    override fun openGallery() {
+        TODO("Not yet implemented")
+    }
+
+    override fun openCamera() {
+        TODO("Not yet implemented")
     }
 
     private fun executeCommand(command: Array<String?>?, absolutePath: String?) {
@@ -282,6 +380,14 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
             R.id.imgSticker == v.id -> mStickerBSFragment!!.show(
                 supportFragmentManager, mStickerBSFragment!!.tag
             )
+            R.id.imgTrim == v.id -> {
+                masterVideoFile?.let { file ->
+                    val trimFragment = TrimFragment()
+                    trimFragment.setHelper(this)
+                    trimFragment.setFilePathFromSource(file, mediaPlayer?.duration!!.toLong())
+                    showBottomSheetDialogFragment(trimFragment)
+                }
+            }
         }
 
 //        switch (v.getId()) {
@@ -320,6 +426,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
 //                throw new IllegalStateException("Unexpected value: " + v.getId());
 //        }
     }
+
 
     private fun showBottomSheetDialogFragment(bottomSheetDialogFragment: BottomSheetDialogFragment) {
         val bundle = Bundle()
@@ -581,6 +688,32 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener,
         private val TAG = PreviewVideoActivity::class.java.simpleName
         private const val CAMERA_REQUEST = 52
         private const val PICK_REQUEST = 53
+    }
+
+    override fun onProgress(progress: String) {
+        Log.v(tagName, "onProgress()")
+    }
+
+    override fun onSuccess(convertedFile: File, type: String) {
+        showLoading(false)
+        Log.v(tagName, "onSuccess()")
+        Toast.makeText(applicationContext, "Video processing Success", Toast.LENGTH_LONG).show()
+        onFileProcessed(convertedFile)
+    }
+
+    override fun onFailure(error: Exception) {
+        Toast.makeText(applicationContext, "Video processing failed", Toast.LENGTH_LONG).show()
+        Log.v(tagName, "onFailure ${error.localizedMessage}")
+        showLoading(false)
+    }
+
+    override fun onNotAvailable(error: Exception) {
+        Log.v(tagName, "onNotAvailable() ${error.localizedMessage}")
+    }
+
+    override fun onFinish() {
+        Log.v(tagName, "onFinish()")
+        showLoading(false)
     }
 
 }

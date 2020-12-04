@@ -40,10 +40,12 @@ class OptiTrimFragment : BottomSheetDialogFragment(), OptiFFMpegCallback {
     private var duration: Long? = null
     private var mContext: Context? = null
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.opti_fragment_trim, container, false)
         return rootView
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -73,7 +75,6 @@ class OptiTrimFragment : BottomSheetDialogFragment(), OptiFFMpegCallback {
                 .setEndTime(actvEndTime?.text.toString())
                 .setCallback(this)
                 .main()
-
             helper?.showLoading(true)
             dismiss()
         }

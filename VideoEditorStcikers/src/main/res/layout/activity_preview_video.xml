@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />-->
 
+
     <TextureView
         android:id="@+id/videoSurface"
         android:layout_width="wrap_content"
@@ -124,6 +125,17 @@
         android:src="@drawable/ic_save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:visibility="invisible"
+        android:id="@+id/progressbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:backgroundTint="@color/colorPrimaryDark" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
