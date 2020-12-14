@@ -3,4 +3,7 @@
     <string name="add_media">Add Media</string>
     <string name="create_playlist">Create playlist</string>
     <string name="delete">Delete</string>
+    <string name="error_title">Error!</string>
+    <string name="close">Close</string>
+    <string name="wifi_unavailable_error_message">Unable to access the internet, please visit connection settings</string>
 </resources>

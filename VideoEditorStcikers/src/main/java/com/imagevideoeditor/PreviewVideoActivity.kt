@@ -42,6 +42,7 @@ import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.OptiUtils
 import kotlinx.android.synthetic.main.activity_preview_video.*
+import kotlinx.android.synthetic.main.view_photo_editor_text.*
 import java.io.File
 import java.io.IOException
 import java.util.*

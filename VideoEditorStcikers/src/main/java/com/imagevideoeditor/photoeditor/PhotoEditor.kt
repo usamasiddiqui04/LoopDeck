@@ -112,7 +112,7 @@ class PhotoEditor private constructor(builder: Builder) : BrushViewChangeListene
         val multiTouchListener = multiTouchListener
         multiTouchListener.setOnGestureControl(object : MultiTouchListener.OnGestureControl {
             override fun onClick() {
-                val textInput = textInputTv.text.toString()
+                val textInput = textInputTv.toString()
                 val currentTextColor = textInputTv.currentTextColor
                 val position = textInputTv.tag as Int
                 if (mOnPhotoEditorListener != null) {
@@ -181,11 +181,11 @@ class PhotoEditor private constructor(builder: Builder) : BrushViewChangeListene
      * @param inputText    text to update [TextView]
      * @param styleBuilder style to apply on [TextView]
      */
-    fun editText(view: View, inputText: Any, styleBuilder: TextStyleBuilder?, position: Int) {
+    fun editText(view: View, inputText: String, styleBuilder: TextStyleBuilder?, position: Int) {
         val inputTextView = view.findViewById<TextView>(R.id.tvPhotoEditorText)
         inputTextView!!.tag = position
         if (inputTextView != null && addedViews.contains(view) && !TextUtils.isEmpty(inputText.toString())) {
-            inputTextView.text = inputText as CharSequence?
+            inputTextView.text = inputText
             styleBuilder?.applyStyle(inputTextView)
             parentView!!.updateViewLayout(view, view.layoutParams)
             val i = addedViews.indexOf(view)
@@ -493,7 +493,10 @@ class PhotoEditor private constructor(builder: Builder) : BrushViewChangeListene
         parentView!!.setFilterEffect(filterType)
     }
 
-    override fun onEditTextClickListener(text: String?, colorCode: Int) {}
+    override fun onEditTextClickListener(text: String?, colorCode: Int) {
+
+    }
+
     override fun onRemoveViewListener(removedView: View?) {
         viewUndo(removedView, removedView!!.tag as ViewType)
     }

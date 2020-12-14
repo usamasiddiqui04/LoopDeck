@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.imagevideoeditor.ColorPickerAdapter.OnColorPickerClickListener
 import com.imagevideoeditor.TextEditorDialogFragment
+import com.imagevideoeditor.photoeditor.PhotoEditor
+import com.imagevideoeditor.photoeditor.TextStyleBuilder
 import kotlinx.android.synthetic.main.add_text_dialog.*
 import java.util.*
 
@@ -33,6 +35,7 @@ class TextEditorDialogFragment : DialogFragment() {
     private var mColorCode = 0
     private var mTextEditor: TextEditor? = null
     private var position: Int = 0
+    private var mPhotoEditor: PhotoEditor? = null
 
     interface TextEditor {
         fun onDone(inputText: String?, colorCode: Int, position: Int)

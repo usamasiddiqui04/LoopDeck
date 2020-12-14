@@ -23,10 +23,12 @@ import com.example.loopdeck.ui.collection.playlist.PlaylistFragment
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.imagevideoeditor.PreviewVideoActivity
 import com.loopdeck.photoeditor.EditImageActivity
-import com.obs.marveleditor.MainActivity
+import com.microsoft.onedrive.apiexplorer.BaseApplication
+import com.microsoft.onedrive.apiexplorer.DefaultCallback
 import com.picker.gallery.model.GalleryData
 import com.picker.gallery.view.PickerActivity
 import com.xorbix.loopdeck.cameraapp.BitmapUtils
+import kotlinx.android.synthetic.main.custom_layout.view.*
 import kotlinx.android.synthetic.main.dailogbox.view.*
 import kotlinx.android.synthetic.main.fragment_recents.*
 import java.io.File
@@ -92,6 +94,40 @@ class RecentsFragment : Fragment() {
 
     }
 
+    private fun showDialog() {
+        val mDialogView = LayoutInflater.from(context).inflate(R.layout.custom_layout, null)
+
+        val mBuilder = AlertDialog.Builder(context)
+            .setView(mDialogView)
+            .setTitle("Please select media picker")
+        val mAlertDialog = mBuilder.show()
+        mDialogView.gallery.setOnClickListener {
+            val i = Intent(activity, PickerActivity::class.java)
+            i.putExtra("IMAGES_LIMIT", 100)
+            i.putExtra("VIDEOS_LIMIT", 100)
+            i.putExtra("REQUEST_RESULT_CODE", REQUEST_RESULT_CODE)
+            startActivityForResult(i, REQUEST_RESULT_CODE)
+            mAlertDialog.dismiss()
+        }
+
+        mDialogView.onedrive.setOnClickListener {
+            mDialogView.onedrive.setEnabled(false)
+            val app = activity?.application as BaseApplication
+            val serviceCreated: DefaultCallback<Void?> = object : DefaultCallback<Void?>(
+                activity
+            ) {
+                override fun success(result: Void?) {
+                    mDialogView.onedrive.setEnabled(true)
+                }
+            }
+            try {
+                app.getOneDriveClient()
+                mDialogView.onedrive.setEnabled(true)
+            } catch (ignored: UnsupportedOperationException) {
+                app.createOneDriveClient(activity, serviceCreated)
+            }
+        }
+    }
 
     private fun initViews() {
 
@@ -107,11 +143,12 @@ class RecentsFragment : Fragment() {
 
         btnGallery.setOnClickListener {
 
-            val i = Intent(activity, PickerActivity::class.java)
-            i.putExtra("IMAGES_LIMIT", 100)
-            i.putExtra("VIDEOS_LIMIT", 100)
-            i.putExtra("REQUEST_RESULT_CODE", REQUEST_RESULT_CODE)
-            startActivityForResult(i, REQUEST_RESULT_CODE)
+            showDialog()
+//            val i = Intent(activity, PickerActivity::class.java)
+//            i.putExtra("IMAGES_LIMIT", 100)
+//            i.putExtra("VIDEOS_LIMIT", 100)
+//            i.putExtra("REQUEST_RESULT_CODE", REQUEST_RESULT_CODE)
+//            startActivityForResult(i, REQUEST_RESULT_CODE)
         }
         initContainer()
     }
