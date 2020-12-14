@@ -56,7 +56,7 @@ android {
         implementation project(":VideoEditor")
         implementation project(":gallerypicker")
         implementation project(":VideoEditorStcikers")
-//        implementation project(":onedrive")
+        implementation project(":onedrive")
         implementation 'androidx.core:core-ktx:1.3.2'
         implementation fileTree(dir: "libs", include: ["*.jar"])
         implementation 'androidx.appcompat:appcompat:1.2.0'
