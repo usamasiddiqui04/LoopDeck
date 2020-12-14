@@ -26,10 +26,7 @@ class AlbumAdapter() : RecyclerView.Adapter<AlbumAdapter.MyViewHolder>() {
     var malbumList: ArrayList<GalleryAlbums> = ArrayList()
     lateinit var currentFragment: Fragment
 
-    constructor(
-        albumList: ArrayList<GalleryAlbums> = ArrayList(),
-        currentFragment: Fragment
-    ) : this() {
+    constructor(albumList: ArrayList<GalleryAlbums> = ArrayList(), currentFragment: Fragment) : this() {
         malbumList = albumList
         this.currentFragment = currentFragment
     }

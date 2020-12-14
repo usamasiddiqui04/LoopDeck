@@ -383,7 +383,7 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
             nextAction = 2
 
             OptiVideoEditor.with(context!!)
-                .setType(OptiConstant.VIDEO_AUDIO_MERGE)
+                .setType(OptiConstant.VIDEO_AUDIO_OVERRIDE)
                 .setFile(videoFile!!)
                 .setAudioFile(audioFile!!)
                 .setOutputPath(outputFile.path)

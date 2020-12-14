@@ -1,7 +1,6 @@
 include ':onedrive'
 include ':gallerypicker'
 include ':VideoEditorText'
-include ':PhotoEditor'
 include ':photoeditor'
 include ':VideoEditor'
 include ":VideoEditorStcikers"

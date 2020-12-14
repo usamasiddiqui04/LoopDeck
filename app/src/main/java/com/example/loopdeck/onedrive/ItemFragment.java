@@ -20,27 +20,12 @@
 // THE SOFTWARE.
 // ------------------------------------------------------------------------------
 
-package com.microsoft.onedrive.apiexplorer;
+package com.example.loopdeck.onedrive;
 
-import com.onedrive.sdk.concurrency.AsyncMonitor;
-import com.onedrive.sdk.concurrency.ICallback;
-import com.onedrive.sdk.concurrency.IProgressCallback;
-import com.onedrive.sdk.core.ClientException;
-import com.onedrive.sdk.core.OneDriveErrorCodes;
-import com.onedrive.sdk.extensions.Folder;
-import com.onedrive.sdk.extensions.IOneDriveClient;
-import com.onedrive.sdk.extensions.Item;
-import com.onedrive.sdk.extensions.ItemReference;
-import com.onedrive.sdk.extensions.Permission;
-import com.onedrive.sdk.options.Option;
-import com.onedrive.sdk.options.QueryOption;
-
-import org.json.JSONObject;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -69,6 +54,25 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+
+import com.example.loopdeck.BaseApplication;
+import com.example.loopdeck.R;
+import com.onedrive.sdk.concurrency.AsyncMonitor;
+import com.onedrive.sdk.concurrency.ICallback;
+import com.onedrive.sdk.concurrency.IProgressCallback;
+import com.onedrive.sdk.core.ClientException;
+import com.onedrive.sdk.core.OneDriveErrorCodes;
+import com.onedrive.sdk.extensions.Folder;
+import com.onedrive.sdk.extensions.IOneDriveClient;
+import com.onedrive.sdk.extensions.Item;
+import com.onedrive.sdk.extensions.ItemReference;
+import com.onedrive.sdk.extensions.Permission;
+import com.onedrive.sdk.options.Option;
+import com.onedrive.sdk.options.QueryOption;
+
+import org.json.JSONObject;
 
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -270,43 +274,42 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
             return false;
         }
 
-        switch (item.getItemId()) {
-            case R.id.action_copy:
-                copy(mItem);
-                return true;
-            case R.id.action_set_copy_destination:
-                setCopyDestination(mItem);
-                return true;
-            case R.id.action_upload_file:
-                upload(REQUEST_CODE_SIMPLE_UPLOAD);
-                return true;
-            case R.id.action_refresh:
-                refresh();
-                return true;
-            case R.id.action_create_folder:
-                createFolder(mItem);
-                return true;
-            case R.id.action_rename:
-                renameItem(mItem);
-                return true;
-            case R.id.action_delete:
-                deleteItem(mItem);
-                return true;
-            case R.id.action_download:
-                download(mItem);
-                return true;
-            case R.id.action_create_link:
-                createLink(mItem);
-                return true;
-            case R.id.action_view_delta:
-                viewDelta(mItem);
-                return true;
-            case R.id.action_navigate_by_path:
-                navigateByPath(mItem);
-                return true;
-            default:
-                return false;
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_copy) {
+            copy(mItem);
+            return true;
+        } else if (itemId == R.id.action_set_copy_destination) {
+            setCopyDestination(mItem);
+            return true;
+        } else if (itemId == R.id.action_upload_file) {
+            upload(REQUEST_CODE_SIMPLE_UPLOAD);
+            return true;
+        } else if (itemId == R.id.action_refresh) {
+            refresh();
+            return true;
+        } else if (itemId == R.id.action_create_folder) {
+            createFolder(mItem);
+            return true;
+        } else if (itemId == R.id.action_rename) {
+            renameItem(mItem);
+            return true;
+        } else if (itemId == R.id.action_delete) {
+            deleteItem(mItem);
+            return true;
+        } else if (itemId == R.id.action_download) {
+            download(mItem);
+            return true;
+        } else if (itemId == R.id.action_create_link) {
+            createLink(mItem);
+            return true;
+        } else if (itemId == R.id.action_view_delta) {
+            viewDelta(mItem);
+            return true;
+        } else if (itemId == R.id.action_navigate_by_path) {
+            navigateByPath(mItem);
+            return true;
         }
+        return false;
     }
 
     /**
@@ -779,7 +782,8 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
             dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             dialog.setProgressNumberFormat(getString(R.string.upload_in_progress_number_format));
             dialog.show();
-            final AsyncTask<Void, Void, Void> uploadFile = new AsyncTask<Void, Void, Void>() {
+            @SuppressLint("StaticFieldLeak") final AsyncTask<Void, Void, Void> uploadFile = new AsyncTask<Void, Void, Void>() {
+
                 @Override
                 protected Void doInBackground(final Void... params) {
                     try {
@@ -885,7 +889,7 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      */
     private void navigateToFragment(final Fragment fragment) {
         mAdapter.stopDownloadingThumbnails();
-        getFragmentManager()
+        getChildFragmentManager()
                 .beginTransaction()
                 .add(R.id.fragment, fragment)
                 .addToBackStack(null)

@@ -8,16 +8,16 @@ android {
 
     defaultConfig {
         applicationId "com.example.loopdeck"
-        minSdkVersion 26
-        targetSdkVersion 28
+        minSdkVersion minSdk
+        targetSdkVersion targetSdk
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-//    lintOptions {
-//        disable 'InvalidPackage', 'Overdraw', 'PluralsCandidate', 'OldTargetApi', 'AllowBackup'
-//    }
+    lintOptions {
+        disable 'InvalidPackage', 'Overdraw', 'PluralsCandidate', 'OldTargetApi', 'AllowBackup'
+    }
 
     buildTypes {
         release {
@@ -39,24 +39,25 @@ android {
 }
 
 
-//apply plugin: 'checkstyle'
-//
-//check.dependsOn 'checkstyle'
-//
-//task checkstyle(type: Checkstyle) {
-//    configFile file("../checkstyle.xml")
-//    source 'src'
-//    include '**/*.java'
-//    exclude '**/gen/**'
-//
-//    classpath = files()
+apply plugin: 'checkstyle'
+
+check.dependsOn 'checkstyle'
+
+task checkstyle(type: Checkstyle) {
+    configFile file("../checkstyle.xml")
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    classpath = files()
+}
 
     dependencies {
         implementation project(":photoeditor")
         implementation project(":VideoEditor")
         implementation project(":gallerypicker")
         implementation project(":VideoEditorStcikers")
-        implementation project(":onedrive")
+//        implementation project(":onedrive")
         implementation 'androidx.core:core-ktx:1.3.2'
         implementation fileTree(dir: "libs", include: ["*.jar"])
         implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -86,19 +87,15 @@ android {
         api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5"
 
 
-        // one drive
 
-//        // Include the sdk as a dependency
-//        implementation('com.onedrive.sdk:onedrive-sdk-android:1.3+') {
-//            transitive = false
-//        }
-//
-//        // Include the gson dependency
-//        apply plugin: 'eclipse-wtp'
-//        implementation 'com.google.code.gson:gson:2.8.5'
-//
-//        // Include supported authentication methods for your application
-//        implementation 'com.microsoft.services.msa:msa-auth:0.8.4'
+        implementation ('com.onedrive.sdk:onedrive-sdk-android:1.3.1')
+
+        // Include the gson dependency
+        implementation 'com.google.code.gson:gson:2.8.6'
+
+        // Include supported authentication methods for your application
+        implementation 'com.microsoft.services.msa:msa-auth:0.8.4'
+        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     }
     repositories {
         mavenCentral()

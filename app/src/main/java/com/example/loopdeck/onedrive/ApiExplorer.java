@@ -21,17 +21,22 @@
 // THE SOFTWARE.
 // ------------------------------------------------------------------------------
 
-package com.microsoft.onedrive.apiexplorer;
+package com.example.loopdeck.onedrive;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.loopdeck.BaseApplication;
+import com.example.loopdeck.R;
+
 /**
  * OneDrive Api Explorer
  */
-public class ApiExplorer extends Activity implements ItemFragment.OnFragmentInteractionListener {
+public class ApiExplorer extends AppCompatActivity implements ItemFragment.OnFragmentInteractionListener {
 
     /**
      * OnCreate
@@ -51,7 +56,7 @@ public class ApiExplorer extends Activity implements ItemFragment.OnFragmentInte
 
     @Override
     public void onFragmentInteraction(final DisplayItem item) {
-        getFragmentManager()
+        getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment, ItemFragment.newInstance(item.getId()))
                 .addToBackStack(null)

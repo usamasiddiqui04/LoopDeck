@@ -20,15 +20,16 @@
 // THE SOFTWARE.
 // ------------------------------------------------------------------------------
 
-package com.microsoft.onedrive.apiexplorer;
-
-import com.onedrive.sdk.extensions.Item;
+package com.example.loopdeck.onedrive;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.util.LruCache;
+
+import com.example.loopdeck.BaseApplication;
+import com.onedrive.sdk.extensions.Item;
 
 import java.io.IOException;
 import java.io.InputStream;

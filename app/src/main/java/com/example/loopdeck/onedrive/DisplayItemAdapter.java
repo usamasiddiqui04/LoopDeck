@@ -20,7 +20,7 @@
 // THE SOFTWARE.
 // ------------------------------------------------------------------------------
 
-package com.microsoft.onedrive.apiexplorer;
+package com.example.loopdeck.onedrive;
 
 import android.app.Activity;
 import android.content.Context;
@@ -31,6 +31,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.loopdeck.R;
 
 /**
  * Array adapter for display items

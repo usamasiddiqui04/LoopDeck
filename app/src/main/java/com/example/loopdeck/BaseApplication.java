@@ -20,7 +20,7 @@
 // THE SOFTWARE.
 // ------------------------------------------------------------------------------
 
-package com.microsoft.onedrive.apiexplorer;
+package com.example.loopdeck;
 
 import android.app.Activity;
 import android.app.Application;
@@ -33,6 +33,8 @@ import android.provider.Settings;
 import android.util.LruCache;
 import android.widget.Toast;
 
+import com.example.loopdeck.onedrive.ApiExplorer;
+import com.example.loopdeck.onedrive.DefaultCallback;
 import com.onedrive.sdk.authentication.MSAAuthenticator;
 import com.onedrive.sdk.concurrency.ICallback;
 import com.onedrive.sdk.core.ClientException;
@@ -106,7 +108,7 @@ public class BaseApplication extends Application {
      *
      * @return if the wifi activity was navigated to
      */
-    synchronized boolean goToWifiSettingsIfDisconnected() {
+    public synchronized boolean goToWifiSettingsIfDisconnected() {
         final NetworkInfo info = mConnectivityManager.getActiveNetworkInfo();
         if (info == null || !info.isConnected()) {
             Toast.makeText(this, getString(R.string.wifi_unavailable_error_message), Toast.LENGTH_LONG).show();
@@ -121,7 +123,7 @@ public class BaseApplication extends Application {
     /**
      * Clears out the auth token from the application store
      */
-    void signOut() {
+    public void signOut() {
         if (mClient.get() == null) {
             return;
         }

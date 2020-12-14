@@ -20,16 +20,19 @@
 // THE SOFTWARE.
 // ------------------------------------------------------------------------------
 
-package com.microsoft.onedrive.apiexplorer;
+package com.example.loopdeck.onedrive;
 
-import com.onedrive.sdk.concurrency.ICallback;
-
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import androidx.fragment.app.Fragment;
+
+import com.example.loopdeck.BaseApplication;
+import com.example.loopdeck.R;
+import com.onedrive.sdk.concurrency.ICallback;
 
 /**
  * A placeholder fragment containing a simple view.

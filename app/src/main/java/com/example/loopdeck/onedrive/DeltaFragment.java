@@ -20,19 +20,9 @@
 // THE SOFTWARE.
 // ------------------------------------------------------------------------------
 
-package com.microsoft.onedrive.apiexplorer;
-
-import com.google.gson.JsonElement;
-
-import com.onedrive.sdk.concurrency.ICallback;
-import com.onedrive.sdk.extensions.IDeltaCollectionPage;
-import com.onedrive.sdk.extensions.Item;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+package com.example.loopdeck.onedrive;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -46,6 +36,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+
+import com.example.loopdeck.BaseApplication;
+import com.google.gson.JsonElement;
+import com.onedrive.sdk.concurrency.ICallback;
+import com.onedrive.sdk.extensions.IDeltaCollectionPage;
+import com.onedrive.sdk.extensions.Item;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import com.example.loopdeck.R;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
