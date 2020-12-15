@@ -1,55 +1,55 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
   ~ * Created by Optisol on Aug 2019.
   ~ * Copyright © 2019 Optisol Business Solutions pvt ltd. All rights reserved.
   ~ * */
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
-          package="com.obs.marveleditor">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.obs.marveleditor">
 
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-                     tools:node="replace"/>
-    <uses-permission android:name="com.android.providers.media.MediaProvider"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:node="replace" />
+    <uses-permission android:name="com.android.providers.media.MediaProvider" />
 
     <application
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher"
-            android:supportsRtl="true"
-            android:theme="@style/AppTheme"
-            android:allowBackup="false">
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
         <!--OptiSplashScreen-->
-        <activity android:name=".OptiSplashScreen">
-
-        </activity>
+        <activity android:name=".OptiSplashScreen" />
 
         <!--MainActivity-->
-        <activity android:name=".MainActivity"
-                  android:screenOrientation="portrait"
-                  android:configChanges="orientation|keyboardHidden">
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait">
 
         </activity>
 
         <!--OptiTrimmerActivity-->
-        <activity android:name=".OptiTrimmerActivity"
-                  android:screenOrientation="portrait"
-                  android:configChanges="orientation|keyboardHidden">
-        </activity>
+        <activity
+            android:name=".OptiTrimmerActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
 
 
-<!--        <provider-->
-<!--                android:name="androidx.core.content.FileProvider"-->
-<!--                android:authorities="com.example.loopdeck.fileprovider"-->
-<!--                android:exported="false"-->
-<!--                android:grantUriPermissions="true">-->
-<!--            <meta-data-->
-<!--                    android:name="android.support.FILE_PROVIDER_PATHS"-->
-<!--                    android:resource="@xml/provider_paths"/>-->
-<!--        </provider>-->
+        <!--        <provider-->
+        <!--                android:name="androidx.core.content.FileProvider"-->
+        <!--                android:authorities="com.example.loopdeck.fileprovider"-->
+        <!--                android:exported="false"-->
+        <!--                android:grantUriPermissions="true">-->
+        <!--            <meta-data-->
+        <!--                    android:name="android.support.FILE_PROVIDER_PATHS"-->
+        <!--                    android:resource="@xml/provider_paths"/>-->
+        <!--        </provider>-->
 
     </application>
 </manifest>

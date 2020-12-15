@@ -13,12 +13,14 @@ import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.loopdeck.BaseApplication
 import com.example.loopdeck.DragData
-import com.example.loopdeck.LoopdeckApp
 import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.data.MediaType
 import com.example.loopdeck.onedrive.ApiExplorer
+import com.example.loopdeck.onedrive.DefaultCallback
+import com.example.loopdeck.onedrive.ItemFragment
 import com.example.loopdeck.ui.adapters.MediaAdaptor
 import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.ui.collection.playlist.PlaylistFragment
@@ -102,7 +104,7 @@ class RecentsFragment : Fragment() {
             .setTitle("Please select media picker")
         val mAlertDialog = mBuilder.show()
         mDialogView.gallery.setOnClickListener {
-            val i = Intent(activity, PickerActivity::class.java)
+            val i = Intent(requireActivity(), PickerActivity::class.java)
             i.putExtra("IMAGES_LIMIT", 100)
             i.putExtra("VIDEOS_LIMIT", 100)
             i.putExtra("REQUEST_RESULT_CODE", REQUEST_RESULT_CODE)
@@ -111,8 +113,22 @@ class RecentsFragment : Fragment() {
         }
 
         mDialogView.onedrive.setOnClickListener {
-            mDialogView.onedrive.setEnabled(false)
 
+
+//            val app = activity?.application as BaseApplication
+//            val serviceCreated: DefaultCallback<Void?> = object : DefaultCallback<Void?>(
+//                activity
+//            ) {
+//                override fun success(result: Void?) {
+//                    navigateToRoot()
+//                }
+//            }
+//            try {
+//                app.oneDriveClient
+//                navigateToRoot()
+//            } catch (ignored: UnsupportedOperationException) {
+//                app.createOneDriveClient(activity, serviceCreated)
+//            }
             startActivity(Intent(requireActivity(), ApiExplorer::class.java))
 
 //            val app = activity?.application as LoopdeckApp
@@ -130,6 +146,14 @@ class RecentsFragment : Fragment() {
 //                app.createOneDriveClient(activity, serviceCreated)
 //            }
         }
+    }
+
+    private fun navigateToRoot() {
+        requireFragmentManager()
+            .beginTransaction()
+            .replace(R.id.fragment, ItemFragment.newInstance("root"))
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun initViews() {

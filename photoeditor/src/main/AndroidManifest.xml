@@ -14,7 +14,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:node="replace"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name="com.loopdeck.photoeditor.EditImageActivity"

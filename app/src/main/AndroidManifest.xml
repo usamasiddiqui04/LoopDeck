@@ -16,6 +16,9 @@
         android:theme="@style/AppTheme"
         tools:node="replace"
         tools:replace="android:icon,android:allowBackup,android:roundIcon">
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
         <activity android:name="com.example.loopdeck.ui.collection.CollectionActivity" />
         <activity android:name=".ui.main.MainActivity">

@@ -32,6 +32,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.loopdeck.BaseApplication;
 import com.example.loopdeck.R;
+import com.example.loopdeck.ui.collection.CollectionViewModel;
 import com.onedrive.sdk.concurrency.ICallback;
 
 /**
@@ -39,8 +40,10 @@ import com.onedrive.sdk.concurrency.ICallback;
  */
 public class PlaceholderFragment extends Fragment {
 
+
     /**
      * Default constructor
+     *
      */
     public PlaceholderFragment() {
     }
@@ -71,7 +74,9 @@ public class PlaceholderFragment extends Fragment {
                     public void success(final Void result) {
                         navigateToRoot();
                         button.setEnabled(true);
+                        button.setVisibility(View.GONE);
                     }
+
                 };
                 try {
                     app.getOneDriveClient();
@@ -86,11 +91,12 @@ public class PlaceholderFragment extends Fragment {
         return view;
     }
 
+
     /**
      * Navigate to the root object in the onedrive
      */
     private void navigateToRoot() {
-        getFragmentManager()
+        requireFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment, ItemFragment.newInstance("root"))
                 .addToBackStack(null)

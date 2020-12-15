@@ -39,7 +39,7 @@ import java.util.List;
 /**
  * A item representing a piece of content from OneDrive.
  */
-class DisplayItem {
+public class DisplayItem {
 
     /**
      * The item factory that created this item

@@ -8,6 +8,8 @@ import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.Parcel
+import android.os.Parcelable
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
@@ -33,9 +35,9 @@ import ja.burhanrashid52.photoeditor.*
 import java.io.File
 import java.io.IOException
 
-class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickListener,
+class EditImageActivity() : BaseActivity(), OnPhotoEditorListener, View.OnClickListener,
     PropertiesBSFragment.Properties, EmojiListener, StickerBSFragment.StickerListener,
-    EditingToolsAdapter.OnItemSelected, FilterListener {
+    EditingToolsAdapter.OnItemSelected, FilterListener, Parcelable {
     @JvmField
     var mPhotoEditor: PhotoEditor? = null
 
@@ -415,4 +417,23 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
         private const val CAMERA_REQUEST = 52
         private const val PICK_REQUEST = 53
     }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeByte(if (mIsFilterVisible) 1 else 0)
+        parcel.writeParcelable(mSaveImageUri, flags)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+//    companion object CREATOR : Parcelable.Creator<EditImageActivity> {
+//        override fun createFromParcel(parcel: Parcel): EditImageActivity {
+//            return EditImageActivity(parcel)
+//        }
+//
+//        override fun newArray(size: Int): Array<EditImageActivity?> {
+//            return arrayOfNulls(size)
+//        }
+//    }
 }

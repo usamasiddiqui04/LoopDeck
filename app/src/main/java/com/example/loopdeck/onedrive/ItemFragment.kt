@@ -19,297 +19,198 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // ------------------------------------------------------------------------------
+package com.example.loopdeck.onedrive
 
-package com.example.loopdeck.onedrive;
-
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.DownloadManager;
-import android.app.ProgressDialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.ContentProviderClient;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.text.InputType;
-import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.fragment.app.Fragment;
-
-import com.example.loopdeck.BaseApplication;
-import com.example.loopdeck.R;
-import com.onedrive.sdk.concurrency.AsyncMonitor;
-import com.onedrive.sdk.concurrency.ICallback;
-import com.onedrive.sdk.concurrency.IProgressCallback;
-import com.onedrive.sdk.core.ClientException;
-import com.onedrive.sdk.core.OneDriveErrorCodes;
-import com.onedrive.sdk.extensions.Folder;
-import com.onedrive.sdk.extensions.IOneDriveClient;
-import com.onedrive.sdk.extensions.Item;
-import com.onedrive.sdk.extensions.ItemReference;
-import com.onedrive.sdk.extensions.Permission;
-import com.onedrive.sdk.options.Option;
-import com.onedrive.sdk.options.QueryOption;
-
-import org.json.JSONObject;
-
-import java.util.Collections;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.AlertDialog
+import android.app.DownloadManager
+import android.app.ProgressDialog
+import android.content.*
+import android.net.Uri
+import android.os.AsyncTask
+import android.os.Bundle
+import android.text.InputType
+import android.text.method.ScrollingMovementMethod
+import android.util.Log
+import android.view.*
+import android.widget.*
+import androidx.fragment.app.Fragment
+import com.example.loopdeck.BaseApplication
+import com.example.loopdeck.R
+import com.example.loopdeck.data.MediaRepository
+import com.example.loopdeck.ui.collection.CollectionViewModel
+import com.example.loopdeck.utils.extensions.activityViewModelProvider
+import com.example.loopdeck.utils.extensions.toast
+import com.onedrive.sdk.authentication.AccountType
+import com.onedrive.sdk.concurrency.AsyncMonitor
+import com.onedrive.sdk.concurrency.ICallback
+import com.onedrive.sdk.concurrency.IProgressCallback
+import com.onedrive.sdk.core.ClientException
+import com.onedrive.sdk.core.OneDriveErrorCodes
+import com.onedrive.sdk.extensions.*
+import com.onedrive.sdk.options.Option
+import com.onedrive.sdk.options.QueryOption
+import com.xorbix.loopdeck.cameraapp.BitmapUtils.ROOT_DIRECTORY_NAME
+import org.json.JSONObject
+import java.io.File
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Handles interacting with Items on OneDrive
  */
-@SuppressWarnings("ConstantConditions")
-public class ItemFragment extends Fragment implements AbsListView.OnItemClickListener {
-
-    /**
-     * The item id argument string
-     */
-    private static final String ARG_ITEM_ID = "itemId";
-
-    /**
-     * The request code for simple upload
-     */
-    private static final int REQUEST_CODE_SIMPLE_UPLOAD = 6767;
-
-    /**
-     * The scheme to get content from a content resolver
-     */
-    private static final String SCHEME_CONTENT = "content";
-
-    /**
-     * The prefix for the item breadcrumb when the parent reference is unavailable
-     */
-    private static final String DRIVE_PREFIX = "/drive/";
-
-    /**
-     * Expansion options to get all children, thumbnails of children, and thumbnails
-     */
-    private static final String EXPAND_OPTIONS_FOR_CHILDREN_AND_THUMBNAILS = "children(expand=thumbnails),thumbnails";
-
-    /**
-     * Expansion options to get all children, thumbnails of children, and thumbnails when limited
-     */
-    private static final String EXPAND_OPTIONS_FOR_CHILDREN_AND_THUMBNAILS_LIMITED = "children,thumbnails";
-
-    /**
-     * The accepted file mime types for uploading to OneDrive
-     */
-    private static final String ACCEPTED_UPLOAD_MIME_TYPES = "*/*";
-
-    /**
-     * The copy destination preference key
-     */
-    private static final String COPY_DESTINATION_PREF_KEY = "copy_destination";
+class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
+    private var viewModel: CollectionViewModel? = null
 
     /**
      * The item id for this item
      */
-    private String mItemId;
+    private var mItemId: String? = null
 
     /**
      * The backing item representation
      */
-    private Item mItem;
+    private var mItem: Item? = null
 
     /**
      * The listener for interacting with this fragment
      */
-    private OnFragmentInteractionListener mListener;
+    private var mListener: OnFragmentInteractionListener? = null
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private DisplayItemAdapter mAdapter;
+    private var mAdapter: DisplayItemAdapter? = null
 
     /**
      * If the current fragment should prioritize the empty view over the visualization
      */
-    private final AtomicBoolean mEmpty = new AtomicBoolean(false);
-
-    /**
-     * Create a new instance of ItemFragment
-     *
-     * @param itemId The item id to create it for
-     * @return The fragment
-     */
-    static ItemFragment newInstance(final String itemId) {
-        ItemFragment fragment = new ItemFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_ITEM_ID, itemId);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        mAdapter = new DisplayItemAdapter(getActivity());
-
-        final BaseApplication app = (BaseApplication) getActivity().getApplication();
+    private val mEmpty = AtomicBoolean(false)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = activityViewModelProvider()
+        mAdapter = DisplayItemAdapter(activity)
+        val app = activity?.application as BaseApplication
         if (app.goToWifiSettingsIfDisconnected()) {
-            return;
+            return
         }
-
-        if (getArguments() != null) {
-            mItemId = getArguments().getString(ARG_ITEM_ID);
+        if (arguments != null) {
+            mItemId = arguments?.getString(ARG_ITEM_ID)
         }
-
         if (mItem != null) {
-            ((TextView) getActivity().findViewById(R.id.fragment_label)).setText(mItem.parentReference.path);
+            (activity?.findViewById<View>(R.id.fragment_label) as TextView).text =
+                mItem!!.parentReference.path
         } else {
-            ((TextView) getActivity().findViewById(R.id.fragment_label)).setText(null);
+            (activity?.findViewById<View>(R.id.fragment_label) as TextView).text = null
         }
-
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true)
     }
 
-    @Override
-    public View onCreateView(final LayoutInflater inflater,
-                             final ViewGroup container,
-                             final Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_folder, container, false);
-        final AbsListView mListView = (AbsListView) view.findViewById(android.R.id.list);
-        mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(this);
-
-        ((RadioButton) view.findViewById(android.R.id.button1)).setOnCheckedChangeListener(
-                new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
-                        if (isChecked) {
-                            setFocus(ItemFocus.Visualization, getView());
-                        }
-                    }
-                });
-
-        ((RadioButton) view.findViewById(android.R.id.button2)).setOnCheckedChangeListener(
-                new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
-                        if (isChecked) {
-                            setFocus(ItemFocus.Json, getView());
-                        }
-                    }
-                });
-
-        ((TextView) view.findViewById(R.id.json)).setMovementMethod(new ScrollingMovementMethod());
-
-        refresh();
-
-        return view;
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_folder, container, false)
+        val mListView = view.findViewById<View>(android.R.id.list) as AbsListView
+        mListView.adapter = mAdapter
+        mListView.onItemClickListener = this
+        (view.findViewById<View>(android.R.id.button1) as RadioButton).setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                setFocus(ItemFocus.Visualization, getView())
+            }
+        }
+        (view.findViewById<View>(android.R.id.button2) as RadioButton).setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                setFocus(ItemFocus.Json, getView())
+            }
+        }
+        (view.findViewById<View>(R.id.json) as TextView).movementMethod = ScrollingMovementMethod()
+        refresh()
+        return view
     }
 
     // onAttach(Context) never gets called on API22 and earlier devices
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onAttach(final Activity context) {
-        super.onAttach(context);
-        mListener = (OnFragmentInteractionListener) context;
+    override fun onAttach(context: Activity) {
+        super.onAttach(context)
+        mListener = context as OnFragmentInteractionListener
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    override fun onDetach() {
+        super.onDetach()
+        mListener = null
     }
 
-    @Override
-    public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
         if (mItem != null) {
             // Add menu options
-            inflater.inflate(R.menu.menu_item_fragment, menu);
+            inflater.inflate(R.menu.menu_item_fragment, menu)
 
             // Assume we are a folder first
-            menu.findItem(R.id.action_download).setVisible(false);
-            menu.findItem(R.id.action_copy).setVisible(false);
-            configureSetCopyDestinationMenuItem(menu.findItem(R.id.action_set_copy_destination));
+            menu.findItem(R.id.action_download).isVisible = false
+            menu.findItem(R.id.action_copy).isVisible = false
+            configureSetCopyDestinationMenuItem(menu.findItem(R.id.action_set_copy_destination))
 
 
             // Make sure that the root folder has certain options unavailable
-            if ("root".equalsIgnoreCase(mItemId)) {
-                menu.findItem(R.id.action_rename).setVisible(false);
-                menu.findItem(R.id.action_delete).setVisible(false);
+            if ("root".equals(mItemId, ignoreCase = true)) {
+                menu.findItem(R.id.action_rename).isVisible = false
+                menu.findItem(R.id.action_delete).isVisible = false
             }
 
             // Make sure that if it is a file, we don't let you perform actions that don't make sense for files
-            if (mItem.file != null) {
-                menu.findItem(R.id.action_create_folder).setVisible(false);
-                menu.findItem(R.id.action_upload_file).setVisible(false);
-                menu.findItem(R.id.action_download).setVisible(true);
-                menu.findItem(R.id.action_copy).setVisible(true);
+            if (mItem!!.file != null) {
+                menu.findItem(R.id.action_create_folder).isVisible = false
+                menu.findItem(R.id.action_upload_file).isVisible = false
+                menu.findItem(R.id.action_download).isVisible = true
+                menu.findItem(R.id.action_copy).isVisible = true
             }
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (mItem == null) {
-            return false;
+            return false
         }
-
-        int itemId = item.getItemId();
+        val itemId = item.itemId
         if (itemId == R.id.action_copy) {
-            copy(mItem);
-            return true;
+            copy(mItem!!)
+            return true
         } else if (itemId == R.id.action_set_copy_destination) {
-            setCopyDestination(mItem);
-            return true;
+            setCopyDestination(mItem!!)
+            return true
         } else if (itemId == R.id.action_upload_file) {
-            upload(REQUEST_CODE_SIMPLE_UPLOAD);
-            return true;
+            upload(REQUEST_CODE_SIMPLE_UPLOAD)
+            return true
         } else if (itemId == R.id.action_refresh) {
-            refresh();
-            return true;
+            refresh()
+            return true
         } else if (itemId == R.id.action_create_folder) {
-            createFolder(mItem);
-            return true;
+            createFolder(mItem!!)
+            return true
         } else if (itemId == R.id.action_rename) {
-            renameItem(mItem);
-            return true;
+            renameItem(mItem!!)
+            return true
         } else if (itemId == R.id.action_delete) {
-            deleteItem(mItem);
-            return true;
+            deleteItem(mItem!!)
+            return true
         } else if (itemId == R.id.action_download) {
-            download(mItem);
-            return true;
+            download(mItem!!)
+            return true
         } else if (itemId == R.id.action_create_link) {
-            createLink(mItem);
-            return true;
+            createLink(mItem!!)
+            return true
         } else if (itemId == R.id.action_view_delta) {
-            viewDelta(mItem);
-            return true;
+            viewDelta(mItem!!)
+            return true
         } else if (itemId == R.id.action_navigate_by_path) {
-            navigateByPath(mItem);
-            return true;
+            navigateByPath(mItem!!)
+            return true
         }
-        return false;
+        return false
     }
 
     /**
@@ -317,9 +218,9 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      *
      * @param item The item to mark as the destination
      */
-    private void setCopyDestination(final Item item) {
-        getCopyPrefs().edit().putString(COPY_DESTINATION_PREF_KEY, item.id).commit();
-        getActivity().invalidateOptionsMenu();
+    private fun setCopyDestination(item: Item) {
+        copyPrefs.edit().putString(COPY_DESTINATION_PREF_KEY, item.id).commit()
+        activity?.invalidateOptionsMenu()
     }
 
     /**
@@ -327,80 +228,72 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      *
      * @param item The item to copy
      */
-    private void copy(final Item item) {
-        final BaseApplication app = (BaseApplication) getActivity().getApplication();
-        final IOneDriveClient oneDriveClient = app.getOneDriveClient();
-        final ItemReference parentReference = new ItemReference();
-        parentReference.id = getCopyPrefs().getString(COPY_DESTINATION_PREF_KEY, null);
-
-        final ProgressDialog dialog = new ProgressDialog(getActivity(), ProgressDialog.STYLE_HORIZONTAL);
-        dialog.setTitle("Copying item");
-        dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        dialog.setMessage("Waiting for copy to complete");
-
-        final IProgressCallback<Item> progressCallback = new IProgressCallback<Item>() {
-            @Override
-            public void progress(final long current, final long max) {
-                dialog.setMax((int) current);
-                dialog.setMax((int) max);
+    private fun copy(item: Item) {
+        val app = activity?.application as BaseApplication
+        val oneDriveClient = app.oneDriveClient
+        val parentReference = ItemReference()
+        parentReference.id = copyPrefs.getString(COPY_DESTINATION_PREF_KEY, null)
+        val dialog = ProgressDialog(activity, ProgressDialog.STYLE_HORIZONTAL)
+        dialog.setTitle("Copying item")
+        dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
+        dialog.setMessage("Waiting for copy to complete")
+        val progressCallback: IProgressCallback<Item?> = object : IProgressCallback<Item?> {
+            override fun progress(current: Long, max: Long) {
+                dialog.max = current.toInt()
+                dialog.max = max.toInt()
             }
 
-            @Override
-            public void success(final Item item) {
-                dialog.dismiss();
-                final String string = getString(R.string.copy_success_message,
-                        item.name,
-                        item.parentReference.path);
-                Toast.makeText(getActivity(), string, Toast.LENGTH_LONG).show();
+            override fun success(result: Item?) {
+                dialog.dismiss()
+                val string = getString(
+                    R.string.copy_success_message,
+                    item.name,
+                    item.parentReference.path
+                )
+                Toast.makeText(activity, string, Toast.LENGTH_LONG).show()
             }
 
-            @Override
-            public void failure(final ClientException error) {
-                dialog.dismiss();
-                new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.error_title)
-                        .setMessage(error.getMessage())
-                        .setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(final DialogInterface dialog, final int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .create()
-                        .show();
+            override fun failure(error: ClientException) {
+                dialog.dismiss()
+                AlertDialog.Builder(activity)
+                    .setTitle(R.string.error_title)
+                    .setMessage(error.message)
+                    .setNegativeButton(R.string.close) { dialog, which -> dialog.dismiss() }
+                    .create()
+                    .show()
             }
-        };
-
-        final DefaultCallback<AsyncMonitor<Item>> callback
-                = new DefaultCallback<AsyncMonitor<Item>>(getActivity()) {
-            @Override
-            public void success(final AsyncMonitor<Item> itemAsyncMonitor) {
-                final int millisBetweenPoll = 1000;
-                itemAsyncMonitor.pollForResult(millisBetweenPoll, progressCallback);
+        }
+        val callback: DefaultCallback<AsyncMonitor<Item?>?> =
+            object : DefaultCallback<AsyncMonitor<Item?>?>(
+                activity
+            ) {
+                override fun success(result: AsyncMonitor<Item?>?) {
+                    val millisBetweenPoll = 1000
+                    result!!.pollForResult(millisBetweenPoll.toLong(), progressCallback)
+                }
             }
-        };
         oneDriveClient
-                .getDrive()
-                .getItems(item.id)
-                .getCopy(item.name, parentReference)
-                .buildRequest()
-                .create(callback);
-        dialog.show();
+            .drive
+            .getItems(item.id)
+            .getCopy(item.name, parentReference)
+            .buildRequest()
+            .create(callback)
+        dialog.show()
     }
 
-    @Override
-    public void onItemClick(final AdapterView<?> parent,
-                            final View view, final int position,
-                            final long id) {
+    override fun onItemClick(
+        parent: AdapterView<*>?,
+        view: View, position: Int,
+        id: Long
+    ) {
         if (null != mListener) {
-            mListener.onFragmentInteraction((DisplayItem) mAdapter.getItem(position));
+            mListener!!.onFragmentInteraction(mAdapter!!.getItem(position) as DisplayItem)
         }
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        mAdapter.stopDownloadingThumbnails();
+    override fun onPause() {
+        super.onPause()
+        mAdapter!!.stopDownloadingThumbnails()
     }
 
     /**
@@ -409,101 +302,94 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      * @param context The application context to display messages
      * @return The callback to refresh this item with
      */
-    private ICallback<Item> getItemCallback(final BaseApplication context) {
-        return new DefaultCallback<Item>(context) {
-            @Override
-            public void success(final Item item) {
-                mItem = item;
-                if (getView() != null) {
-                    final AbsListView mListView = (AbsListView) getView().findViewById(android.R.id.list);
-                    final DisplayItemAdapter adapter = (DisplayItemAdapter) mListView.getAdapter();
-                    adapter.clear();
-
-                    String text = null;
+    private fun getItemCallback(context: BaseApplication): DefaultCallback<Item?> {
+        return object : DefaultCallback<Item?>(context) {
+            override fun success(result: Item?) {
+                mItem = result
+                if (view != null) {
+                    val mListView = view!!.findViewById<View>(android.R.id.list) as AbsListView
+                    val adapter = mListView.adapter as DisplayItemAdapter
+                    adapter.clear()
+                    var text: String? = null
                     try {
-                        String rawString = item.getRawObject().toString();
-                        final JSONObject object = new JSONObject(rawString);
-                        final int intentSize = 3;
-                        text = object.toString(intentSize);
-                    } catch (final Exception e) {
-                        Log.e(getClass().getName(), "Unable to parse the response body to json");
+                        val rawString = result!!.rawObject.toString()
+                        val `object` = JSONObject(rawString)
+                        val intentSize = 3
+                        text = `object`.toString(intentSize)
+                    } catch (e: Exception) {
+                        Log.e(javaClass.name, "Unable to parse the response body to json")
                     }
-
                     if (text != null) {
-                        ((TextView) getView().findViewById(R.id.json)).setText(text);
+                        (view!!.findViewById<View>(R.id.json) as TextView).text = text
                     }
-
-                    final String fragmentLabel;
-                    if (mItem.parentReference != null) {
-                        fragmentLabel = mItem.parentReference.path
+                    val fragmentLabel: String
+                    fragmentLabel = if (mItem!!.parentReference != null) {
+                        (mItem!!.parentReference.path
                                 + context.getString(R.string.item_path_separator)
-                                + mItem.name;
+                                + mItem!!.name)
                     } else {
-                        fragmentLabel = DRIVE_PREFIX + mItem.name;
+                        DRIVE_PREFIX + mItem!!.name
                     }
-                    ((TextView) getActivity().findViewById(R.id.fragment_label)).setText(fragmentLabel);
-
-                    mEmpty.set(item.children == null || item.children.getCurrentPage().isEmpty());
-
-                    if (item.children == null || item.children.getCurrentPage().isEmpty()) {
-                        final TextView emptyText = (TextView) getView().findViewById(android.R.id.empty);
-                        if (item.folder != null) {
-                            emptyText.setText(R.string.empty_list);
+                    (activity!!.findViewById<View>(R.id.fragment_label) as TextView).text =
+                        fragmentLabel
+                    mEmpty.set(result!!.children == null || result.children.currentPage.isEmpty())
+                    if (result.children == null || result.children.currentPage.isEmpty()) {
+                        val emptyText = view!!.findViewById<View>(android.R.id.empty) as TextView
+                        if (result.folder != null) {
+                            emptyText.setText(R.string.empty_list)
                         } else {
-                            emptyText.setText(R.string.empty_file);
+                            emptyText.setText(R.string.empty_file)
                         }
-                        setFocus(ItemFocus.Empty, getView());
-
+                        setFocus(ItemFocus.Empty, view)
                     } else {
-                        for (final Item childItem : item.children.getCurrentPage()) {
-                            adapter.add(new DisplayItem(adapter,
+                        for (childItem in result.children.currentPage) {
+                            adapter.add(
+                                DisplayItem(
+                                    adapter,
                                     childItem,
                                     childItem.id,
-                                    context.getImageCache()));
+                                    context.imageCache
+                                )
+                            )
                         }
-                        setFocus(ItemFocus.Visualization, getView());
+                        setFocus(ItemFocus.Visualization, view)
                     }
-                    getActivity().invalidateOptionsMenu();
+                    activity!!.invalidateOptionsMenu()
                 }
             }
 
-            @Override
-            public void failure(final ClientException error) {
-                if (getView() != null) {
-                    final TextView view = (TextView) getView().findViewById(android.R.id.empty);
-                    view.setText(context.getString(R.string.item_fragment_item_lookup_error, mItemId));
-                    setFocus(ItemFocus.Empty, getView());
+            override fun failure(error: ClientException) {
+                if (view != null) {
+                    val view = view!!.findViewById<View>(android.R.id.empty) as TextView
+                    view.text = context.getString(R.string.item_fragment_item_lookup_error, mItemId)
+                    setFocus(ItemFocus.Empty, getView())
                 }
             }
-        };
+        }
     }
 
     /**
      * Refreshes the data for this fragment
      */
-    private void refresh() {
-        if (getView() != null) {
-            setFocus(ItemFocus.Progress, getView());
+    private fun refresh() {
+        if (view != null) {
+            setFocus(ItemFocus.Progress, view)
         }
-        mItem = null;
-
-        final BaseApplication app = (BaseApplication) getActivity().getApplication();
-        final IOneDriveClient oneDriveClient = app.getOneDriveClient();
-        final ICallback<Item> itemCallback = getItemCallback(app);
-
-        final String itemId;
-        if (mItemId.equals("root")) {
-            itemId = "root";
+        mItem = null
+        val app = activity?.application as BaseApplication
+        val oneDriveClient = app.oneDriveClient
+        val itemCallback = getItemCallback(app)
+        val itemId: String?
+        itemId = if (mItemId == "root") {
+            "root"
         } else {
-            itemId = mItemId;
+            mItemId
         }
-
         oneDriveClient
-                .getDrive()
-                .getItems(itemId)
-                .buildRequest()
-                .expand(getExpansionOptions(oneDriveClient))
-                .get(itemCallback);
+            .drive
+            .getItems(itemId)
+            .buildRequest()
+            .expand(getExpansionOptions(oneDriveClient))[itemCallback]
     }
 
     /**
@@ -513,18 +399,13 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      * @return The string for expand options
      * @see {https://github.com/OneDrive/onedrive-api-docs/issues/203}
      */
-    private String getExpansionOptions(final IOneDriveClient oneDriveClient) {
-        final String expansionOption;
-        switch (oneDriveClient.getAuthenticator().getAccountInfo().getAccountType()) {
-            case MicrosoftAccount:
-                expansionOption = EXPAND_OPTIONS_FOR_CHILDREN_AND_THUMBNAILS;
-                break;
-
-            default:
-                expansionOption = EXPAND_OPTIONS_FOR_CHILDREN_AND_THUMBNAILS_LIMITED;
-                break;
+    private fun getExpansionOptions(oneDriveClient: IOneDriveClient): String {
+        val expansionOption: String
+        expansionOption = when (oneDriveClient.authenticator.accountInfo.accountType) {
+            AccountType.MicrosoftAccount -> EXPAND_OPTIONS_FOR_CHILDREN_AND_THUMBNAILS
+            else -> EXPAND_OPTIONS_FOR_CHILDREN_AND_THUMBNAILS_LIMITED
         }
-        return expansionOption;
+        return expansionOption
     }
 
     /**
@@ -532,40 +413,35 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      *
      * @param item The item to delete
      */
-    private void deleteItem(final Item item) {
-        final AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.delete)
-                .setIcon(android.R.drawable.ic_delete)
-                .setMessage(getActivity().getString(R.string.confirm_delete_action, mItem.name))
-                .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        final BaseApplication application = (BaseApplication) getActivity()
-                                .getApplication();
-                        application.getOneDriveClient()
-                                .getDrive()
-                                .getItems(item.id)
-                                .buildRequest()
-                                .delete(new DefaultCallback<Void>(application) {
-                                    @Override
-                                    public void success(final Void response) {
-                                        Toast.makeText(getActivity(),
-                                                application.getString(R.string.deleted_this_item,
-                                                        item.name),
-                                                Toast.LENGTH_LONG).show();
-                                        getActivity().onBackPressed();
-                                    }
-                                });
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        dialog.cancel();
-                    }
-                })
-                .create();
-        alertDialog.show();
+    private fun deleteItem(item: Item) {
+        val alertDialog = AlertDialog.Builder(activity)
+            .setTitle(R.string.delete)
+            .setIcon(android.R.drawable.ic_delete)
+            .setMessage(requireContext().getString(R.string.confirm_delete_action, mItem!!.name))
+            .setPositiveButton(R.string.delete) { dialog, which ->
+                val application = requireActivity()
+                    .getApplication() as BaseApplication
+                application.oneDriveClient
+                    .drive
+                    .getItems(item.id)
+                    .buildRequest()
+                    .delete(object : DefaultCallback<Void?>(application) {
+                        override fun success(result: Void?) {
+                            Toast.makeText(
+                                activity,
+                                application.getString(
+                                    R.string.deleted_this_item,
+                                    item.name
+                                ),
+                                Toast.LENGTH_LONG
+                            ).show()
+                            activity!!.onBackPressed()
+                        }
+                    })
+            }
+            .setNegativeButton(R.string.cancel) { dialog, which -> dialog.cancel() }
+            .create()
+        alertDialog.show()
     }
 
     /**
@@ -573,58 +449,45 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      *
      * @param item The item to delete
      */
-    private void createLink(final Item item) {
-        final CharSequence[] items = {"view", "edit"};
-        final int nothingSelected = -1;
-        final AtomicInteger selection = new AtomicInteger(nothingSelected);
-        final AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.create_link)
-                .setIcon(android.R.drawable.ic_menu_share)
-                .setPositiveButton(R.string.create_link, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        if (selection.get() == nothingSelected) {
-                            return;
-                        }
-
-                        final BaseApplication application = (BaseApplication) getActivity()
-                                .getApplication();
-                        application.getOneDriveClient()
-                                .getDrive()
-                                .getItems(item.id)
-                                .getCreateLink(items[selection.get()].toString())
-                                .buildRequest()
-                                .create(new DefaultCallback<Permission>(getActivity()) {
-                                    @Override
-                                    public void success(final Permission permission) {
-                                        final ClipboardManager cm = (ClipboardManager)
-                                                getActivity()
-                                                        .getSystemService(Context.CLIPBOARD_SERVICE);
-                                        final ClipData data =
-                                                ClipData.newPlainText("Link Url", permission.link.webUrl);
-                                        cm.setPrimaryClip(data);
-                                        Toast.makeText(getActivity(),
-                                                application.getString(R.string.created_link),
-                                                Toast.LENGTH_LONG).show();
-                                        getActivity().onBackPressed();
-                                    }
-                                });
+    private fun createLink(item: Item) {
+        val items = arrayOf<CharSequence>("view", "edit")
+        val nothingSelected = -1
+        val selection = AtomicInteger(nothingSelected)
+        val alertDialog = AlertDialog.Builder(activity)
+            .setTitle(R.string.create_link)
+            .setIcon(android.R.drawable.ic_menu_share)
+            .setPositiveButton(
+                R.string.create_link,
+                DialogInterface.OnClickListener { dialog, which ->
+                    if (selection.get() == nothingSelected) {
+                        return@OnClickListener
                     }
+                    val application = requireActivity()
+                        .getApplication() as BaseApplication
+                    application.oneDriveClient
+                        .drive
+                        .getItems(item.id)
+                        .getCreateLink(items[selection.get()].toString())
+                        .buildRequest()
+                        .create(object : DefaultCallback<Permission?>(activity) {
+                            override fun success(result: Permission?) {
+                                val cm = activity!!
+                                    .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                val data = ClipData.newPlainText("Link Url", result!!.link.webUrl)
+                                cm.primaryClip = data
+                                Toast.makeText(
+                                    activity,
+                                    application.getString(R.string.created_link),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                activity!!.onBackPressed()
+                            }
+                        })
                 })
-                .setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        selection.set(which);
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        dialog.cancel();
-                    }
-                })
-                .create();
-        alertDialog.show();
+            .setSingleChoiceItems(items, 0) { dialog, which -> selection.set(which) }
+            .setNegativeButton(R.string.cancel) { dialog, which -> dialog.cancel() }
+            .create()
+        alertDialog.show()
     }
 
     /**
@@ -632,58 +495,57 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      *
      * @param sourceItem The sourceItem to rename
      */
-    private void renameItem(final Item sourceItem) {
-        final Activity activity = getActivity();
-        final EditText newName = new EditText(activity);
-        newName.setInputType(InputType.TYPE_CLASS_TEXT);
-        newName.setHint(sourceItem.name);
-        final AlertDialog alertDialog = new AlertDialog.Builder(activity)
-                .setTitle(R.string.rename)
-                .setIcon(android.R.drawable.ic_menu_edit)
-                .setView(newName)
-                .setPositiveButton(R.string.rename, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        final ICallback<Item> callback = new DefaultCallback<Item>(getActivity()) {
-                            @Override
-                            public void success(final Item item) {
-                                Toast.makeText(activity,
-                                        activity
-                                                .getString(R.string.renamed_item, sourceItem.name,
-                                                        item.name),
-                                        Toast.LENGTH_LONG).show();
-                                refresh();
-                                dialog.dismiss();
-                            }
+    private fun renameItem(sourceItem: Item) {
+        val activity: Activity? = activity
+        val newName = EditText(activity)
+        newName.inputType = InputType.TYPE_CLASS_TEXT
+        newName.hint = sourceItem.name
+        val alertDialog = AlertDialog.Builder(activity)
+            .setTitle(R.string.rename)
+            .setIcon(android.R.drawable.ic_menu_edit)
+            .setView(newName)
+            .setPositiveButton(R.string.rename) { dialog, which ->
+                val callback: DefaultCallback<Item?> =
+                    object : DefaultCallback<Item?>(getActivity()) {
+                        override fun success(result: Item?) {
+                            Toast.makeText(
+                                activity,
+                                activity!!
+                                    .getString(
+                                        R.string.renamed_item, sourceItem.name,
+                                        result!!.name
+                                    ),
+                                Toast.LENGTH_LONG
+                            ).show()
+                            refresh()
+                            dialog.dismiss()
+                        }
 
-                            @Override
-                            public void failure(final ClientException error) {
-                                Toast.makeText(activity,
-                                        activity.getString(R.string.rename_error,
-                                                sourceItem.name),
-                                        Toast.LENGTH_LONG).show();
-                                dialog.dismiss();
-                            }
-                        };
-                        Item updatedItem = new Item();
-                        updatedItem.id = sourceItem.id;
-                        updatedItem.name = newName.getText().toString();
-                        ((BaseApplication) activity.getApplication())
-                                .getOneDriveClient()
-                                .getDrive()
-                                .getItems(updatedItem.id)
-                                .buildRequest()
-                                .update(updatedItem, callback);
+                        override fun failure(error: ClientException) {
+                            Toast.makeText(
+                                activity,
+                                activity!!.getString(
+                                    R.string.rename_error,
+                                    sourceItem.name
+                                ),
+                                Toast.LENGTH_LONG
+                            ).show()
+                            dialog.dismiss()
+                        }
                     }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        dialog.cancel();
-                    }
-                })
-                .create();
-        alertDialog.show();
+                val updatedItem = Item()
+                updatedItem.id = sourceItem.id
+                updatedItem.name = newName.text.toString()
+                (activity!!.application as BaseApplication)
+                    .oneDriveClient
+                    .drive
+                    .getItems(updatedItem.id)
+                    .buildRequest()
+                    .update(updatedItem, callback)
+            }
+            .setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
+            .create()
+        alertDialog.show()
     }
 
     /**
@@ -691,65 +553,60 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      *
      * @param item The parent of the folder to create
      */
-    private void createFolder(final Item item) {
-        final Activity activity = getActivity();
-        final EditText newName = new EditText(activity);
-        newName.setInputType(InputType.TYPE_CLASS_TEXT);
-        newName.setHint(activity.getString(R.string.new_folder_hint));
-
-        final AlertDialog alertDialog = new AlertDialog.Builder(activity)
-                .setTitle(R.string.create_folder)
-                .setView(newName)
-                .setIcon(android.R.drawable.ic_menu_add)
-                .setPositiveButton(R.string.create_folder, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        final ICallback<Item> callback = new DefaultCallback<Item>(activity) {
-                            @Override
-                            public void success(final Item createdItem) {
-                                Toast.makeText(activity,
-                                        activity.getString(R.string.created_folder,
-                                                createdItem.name,
-                                                item.name),
-                                        Toast.LENGTH_LONG)
-                                        .show();
-                                refresh();
-                                dialog.dismiss();
-                            }
-
-                            @Override
-                            public void failure(final ClientException error) {
-                                super.failure(error);
-                                Toast.makeText(activity,
-                                        activity.getString(R.string.new_folder_error,
-                                                item.name),
-                                        Toast.LENGTH_LONG)
-                                        .show();
-                                dialog.dismiss();
-                            }
-                        };
-
-                        final Item newItem = new Item();
-                        newItem.name = newName.getText().toString();
-                        newItem.folder = new Folder();
-
-                        ((BaseApplication) activity.getApplication())
-                                .getOneDriveClient()
-                                .getDrive()
-                                .getItems(mItemId)
-                                .getChildren()
-                                .buildRequest()
-                                .create(newItem, callback);
+    private fun createFolder(item: Item) {
+        val activity: Activity? = activity
+        val newName = EditText(activity)
+        newName.inputType = InputType.TYPE_CLASS_TEXT
+        newName.hint = activity!!.getString(R.string.new_folder_hint)
+        val alertDialog = AlertDialog.Builder(activity)
+            .setTitle(R.string.create_folder)
+            .setView(newName)
+            .setIcon(android.R.drawable.ic_menu_add)
+            .setPositiveButton(R.string.create_folder) { dialog, which ->
+                val callback: DefaultCallback<Item?> = object : DefaultCallback<Item?>(activity) {
+                    override fun success(result: Item?) {
+                        Toast.makeText(
+                            activity,
+                            activity.getString(
+                                R.string.created_folder,
+                                result!!.name,
+                                item.name
+                            ),
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+                        refresh()
+                        dialog.dismiss()
                     }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        dialog.cancel();
+
+                    override fun failure(error: ClientException) {
+                        super.failure(error)
+                        Toast.makeText(
+                            activity,
+                            activity.getString(
+                                R.string.new_folder_error,
+                                item.name
+                            ),
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+                        dialog.dismiss()
                     }
-                })
-                .create();
-        alertDialog.show();
+                }
+                val newItem = Item()
+                newItem.name = newName.text.toString()
+                newItem.folder = Folder()
+                (activity.application as BaseApplication)
+                    .oneDriveClient
+                    .drive
+                    .getItems(mItemId)
+                    .children
+                    .buildRequest()
+                    .create(newItem, callback)
+            }
+            .setNegativeButton(R.string.cancel) { dialog, which -> dialog.cancel() }
+            .create()
+        alertDialog.show()
     }
 
     /**
@@ -757,95 +614,98 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      *
      * @param requestCode The request code that will be used to choose simple/chunked uploading
      */
-    private void upload(final int requestCode) {
-        final Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.addCategory(Intent.CATEGORY_DEFAULT);
-        intent.setType(ACCEPTED_UPLOAD_MIME_TYPES);
-        startActivityForResult(intent, requestCode);
+    private fun upload(requestCode: Int) {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.addCategory(Intent.CATEGORY_DEFAULT)
+        intent.type = ACCEPTED_UPLOAD_MIME_TYPES
+        startActivityForResult(intent, requestCode)
     }
 
-    @Override
-    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        final BaseApplication application = (BaseApplication) getActivity().getApplication();
-        final IOneDriveClient oneDriveClient = application.getOneDriveClient();
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val application = requireActivity().application as BaseApplication
+        val oneDriveClient = application.oneDriveClient
+        if (requestCode == REQUEST_CODE_SIMPLE_UPLOAD && data != null && data.data != null && data.data.scheme.equals(
+                SCHEME_CONTENT, ignoreCase = true
+            )
+        ) {
+            val dialog = ProgressDialog(activity)
+            dialog.setTitle(R.string.upload_in_progress_title)
+            dialog.setMessage(getString(R.string.upload_in_progress_message))
+            dialog.isIndeterminate = false
+            dialog.setCancelable(false)
+            dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
+            dialog.setProgressNumberFormat(getString(R.string.upload_in_progress_number_format))
+            dialog.show()
+            @SuppressLint("StaticFieldLeak") val uploadFile: AsyncTask<Void?, Void?, Void?> =
+                object : AsyncTask<Void?, Void?, Void?>() {
+                    override fun doInBackground(vararg p0: Void?): Void? {
+                        try {
+                            val contentResolver = activity!!.contentResolver
+                            val contentProvider: ContentProviderClient? = contentResolver
+                                .acquireContentProviderClient(data.data)
+                            val fileInMemory = FileContent.getFileBytes(contentProvider, data.data)
+                            contentProvider!!.release()
 
-        if (requestCode == REQUEST_CODE_SIMPLE_UPLOAD
-                && data != null
-                && data.getData() != null
-                && data.getData().getScheme().equalsIgnoreCase(SCHEME_CONTENT)) {
-
-            final ProgressDialog dialog = new ProgressDialog(getActivity());
-            dialog.setTitle(R.string.upload_in_progress_title);
-            dialog.setMessage(getString(R.string.upload_in_progress_message));
-            dialog.setIndeterminate(false);
-            dialog.setCancelable(false);
-            dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            dialog.setProgressNumberFormat(getString(R.string.upload_in_progress_number_format));
-            dialog.show();
-            @SuppressLint("StaticFieldLeak") final AsyncTask<Void, Void, Void> uploadFile = new AsyncTask<Void, Void, Void>() {
-
-                @Override
-                protected Void doInBackground(final Void... params) {
-                    try {
-                        final ContentResolver contentResolver = getActivity().getContentResolver();
-                        final ContentProviderClient contentProvider = contentResolver
-                                .acquireContentProviderClient(data.getData());
-                        final byte[] fileInMemory = FileContent.getFileBytes(contentProvider, data.getData());
-                        contentProvider.release();
-
-                        // Fix up the file name (needed for camera roll photos, etc)
-                        final String filename = FileContent.getValidFileName(contentResolver, data.getData());
-                        final Option option = new QueryOption("@name.conflictBehavior", "fail");
-                        oneDriveClient
-                                .getDrive()
+                            // Fix up the file name (needed for camera roll photos, etc)
+                            val filename = FileContent.getValidFileName(contentResolver, data.data)
+                            val option: Option = QueryOption("@name.conflictBehavior", "fail")
+                            oneDriveClient
+                                .drive
                                 .getItems(mItemId)
-                                .getChildren()
+                                .children
                                 .byId(filename)
-                                .getContent()
-                                .buildRequest(Collections.singletonList(option))
+                                .content
+                                .buildRequest(listOf(option))
                                 .put(fileInMemory,
-                                        new IProgressCallback<Item>() {
-                                            @Override
-                                            public void success(final Item item) {
-                                                dialog.dismiss();
-                                                Toast.makeText(getActivity(),
-                                                        application
-                                                                .getString(R.string.upload_complete,
-                                                                        item.name),
-                                                        Toast.LENGTH_LONG).show();
-                                                refresh();
-                                            }
+                                    object : IProgressCallback<Item?> {
+                                        override fun success(result: Item?) {
+                                            dialog.dismiss()
+                                            Toast.makeText(
+                                                activity,
+                                                application
+                                                    .getString(
+                                                        R.string.upload_complete,
+                                                        result!!.name
+                                                    ),
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                            refresh()
+                                        }
 
-                                            @Override
-                                            public void failure(final ClientException error) {
-                                                dialog.dismiss();
-                                                if (error.isError(OneDriveErrorCodes.NameAlreadyExists)) {
-                                                    Toast.makeText(getActivity(),
-                                                            R.string.upload_failed_name_conflict,
-                                                            Toast.LENGTH_LONG).show();
-                                                } else {
-                                                    Toast.makeText(getActivity(),
-                                                            application
-                                                                    .getString(R.string.upload_failed,
-                                                                            filename),
-                                                            Toast.LENGTH_LONG).show();
-                                                }
+                                        override fun failure(error: ClientException) {
+                                            dialog.dismiss()
+                                            if (error.isError(OneDriveErrorCodes.NameAlreadyExists)) {
+                                                Toast.makeText(
+                                                    activity,
+                                                    R.string.upload_failed_name_conflict,
+                                                    Toast.LENGTH_LONG
+                                                ).show()
+                                            } else {
+                                                Toast.makeText(
+                                                    activity,
+                                                    application
+                                                        .getString(
+                                                            R.string.upload_failed,
+                                                            filename
+                                                        ),
+                                                    Toast.LENGTH_LONG
+                                                ).show()
                                             }
+                                        }
 
-                                            @Override
-                                            public void progress(final long current, final long max) {
-                                                dialog.setProgress((int) current);
-                                                dialog.setMax((int) max);
-                                            }
-                                        });
-                    } catch (final Exception e) {
-                        Log.e(getClass().getSimpleName(), e.getMessage());
-                        Log.e(getClass().getSimpleName(), e.toString());
+                                        override fun progress(current: Long, max: Long) {
+                                            dialog.progress = current.toInt()
+                                            dialog.max = max.toInt()
+                                        }
+                                    })
+                        } catch (e: Exception) {
+                            Log.e(javaClass.simpleName, e.message)
+                            Log.e(javaClass.simpleName, e.toString())
+                        }
+                        return null
                     }
-                    return null;
                 }
-            };
-            uploadFile.execute();
+            uploadFile.execute()
         }
     }
 
@@ -854,22 +714,36 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      *
      * @param item The item to download
      */
-    private void download(final Item item) {
-        final Activity activity = getActivity();
-        final DownloadManager downloadManager = (DownloadManager) activity.getSystemService(Context
-                .DOWNLOAD_SERVICE);
-        final String downloadUrl = item.getRawObject().get("@content.downloadUrl").getAsString();
-        final DownloadManager.Request request = new DownloadManager.Request(Uri.parse(downloadUrl));
-        request.setTitle(item.name);
-        request.setDescription(activity.getString(R.string.file_from_onedrive));
-        request.allowScanningByMediaScanner();
+    private fun download(item: Item) {
+        val storageDir = File(
+            requireContext().getExternalFilesDir(null).absolutePath,
+            ROOT_DIRECTORY_NAME
+        )
+        val activity: Activity? = activity
+        val downloadManager =
+            activity!!.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val downloadUrl = item.rawObject["@content.downloadUrl"].asString
+        val request = DownloadManager.Request(Uri.parse(downloadUrl))
+        request.setTitle(item.name)
+        request.setDescription(activity.getString(R.string.file_from_onedrive))
+        request.allowScanningByMediaScanner()
+        request.setDestinationInExternalFilesDir(
+            requireContext(),
+            storageDir.absolutePath,
+            item.name
+        )
+        val file = File(storageDir.absolutePath, item.name)
+        toast(file.toString())
+        viewModel!!.createPlaylist(file)
         if (item.file != null) {
-            request.setMimeType(item.file.mimeType);
+            request.setMimeType(item.file.mimeType)
         }
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        downloadManager.enqueue(request);
-        Toast.makeText(activity, activity.getString(R.string.starting_download_message),
-                Toast.LENGTH_LONG).show();
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        downloadManager.enqueue(request)
+        Toast.makeText(
+            activity, activity.getString(R.string.starting_download_message),
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     /**
@@ -877,9 +751,9 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      *
      * @param item The item to delta over
      */
-    private void viewDelta(final Item item) {
-        final DeltaFragment fragment = DeltaFragment.newInstance(item);
-        navigateToFragment(fragment);
+    private fun viewDelta(item: Item) {
+        val fragment = DeltaFragment.newInstance(item)
+        navigateToFragment(fragment)
     }
 
     /**
@@ -887,13 +761,13 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      *
      * @param fragment the fragment to navigate into
      */
-    private void navigateToFragment(final Fragment fragment) {
-        mAdapter.stopDownloadingThumbnails();
-        getChildFragmentManager()
-                .beginTransaction()
-                .add(R.id.fragment, fragment)
-                .addToBackStack(null)
-                .commit();
+    private fun navigateToFragment(fragment: Fragment) {
+        mAdapter!!.stopDownloadingThumbnails()
+        childFragmentManager
+            .beginTransaction()
+            .add(R.id.fragment, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     /**
@@ -901,46 +775,33 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      *
      * @param item the source item
      */
-    private void navigateByPath(final Item item) {
-        final BaseApplication application = (BaseApplication) getActivity().getApplication();
-        final IOneDriveClient oneDriveClient = application.getOneDriveClient();
-        final Activity activity = getActivity();
-
-        final EditText itemPath = new EditText(activity);
-        itemPath.setInputType(InputType.TYPE_CLASS_TEXT);
-
-        final DefaultCallback<Item> itemCallback = new DefaultCallback<Item>(activity) {
-            @Override
-            public void success(final Item item) {
-                final ItemFragment fragment = ItemFragment.newInstance(item.id);
-                navigateToFragment(fragment);
+    private fun navigateByPath(item: Item) {
+        val application = requireActivity().application as BaseApplication
+        val oneDriveClient = application.oneDriveClient
+        val activity: Activity? = activity
+        val itemPath = EditText(activity)
+        itemPath.inputType = InputType.TYPE_CLASS_TEXT
+        val itemCallback: DefaultCallback<Item?> = object : DefaultCallback<Item?>(activity) {
+            override fun success(result: Item?) {
+                val fragment = newInstance(result!!.id)
+                navigateToFragment(fragment)
             }
-        };
-
-        new AlertDialog.Builder(activity)
-                .setIcon(android.R.drawable.ic_dialog_map)
-                .setTitle(R.string.navigate_by_path)
-                .setView(itemPath)
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .setPositiveButton(R.string.navigate, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        oneDriveClient
-                                .getDrive()
-                                .getItems(item.id)
-                                .getItemWithPath(itemPath.getText().toString())
-                                .buildRequest()
-                                .expand(getExpansionOptions(oneDriveClient))
-                                .get(itemCallback);
-                    }
-                })
-                .create()
-                .show();
+        }
+        AlertDialog.Builder(activity)
+            .setIcon(android.R.drawable.ic_dialog_map)
+            .setTitle(R.string.navigate_by_path)
+            .setView(itemPath)
+            .setNegativeButton(R.string.cancel) { dialog, which -> dialog.dismiss() }
+            .setPositiveButton(R.string.navigate) { dialog, which ->
+                oneDriveClient
+                    .drive
+                    .getItems(item.id)
+                    .getItemWithPath(itemPath.text.toString())
+                    .buildRequest()
+                    .expand(getExpansionOptions(oneDriveClient))[itemCallback]
+            }
+            .create()
+            .show()
     }
 
     /**
@@ -949,17 +810,16 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      * @param focus The focus to appear
      * @param view  the root of the fragment
      */
-    private void setFocus(final ItemFocus focus, final View view) {
-        ItemFocus actualFocus = focus;
+    private fun setFocus(focus: ItemFocus, view: View?) {
+        var actualFocus = focus
         if (focus == ItemFocus.Visualization && mEmpty.get()) {
-            actualFocus = ItemFocus.Empty;
+            actualFocus = ItemFocus.Empty
         }
-
-        for (final ItemFocus focusable : ItemFocus.values()) {
+        for (focusable in ItemFocus.values()) {
             if (focusable == actualFocus) {
-                view.findViewById(focusable.mId).setVisibility(View.VISIBLE);
+                requireView().findViewById<View>(focusable.mId).visibility = View.VISIBLE
             } else {
-                view.findViewById(focusable.mId).setVisibility(View.GONE);
+                requireView().findViewById<View>(focusable.mId).visibility = View.GONE
             }
         }
     }
@@ -969,14 +829,14 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      *
      * @param item The menu item for SetCopyDestination
      */
-    private void configureSetCopyDestinationMenuItem(final MenuItem item) {
-        if (mItem.file != null) {
-            item.setVisible(false);
+    private fun configureSetCopyDestinationMenuItem(item: MenuItem) {
+        if (mItem!!.file != null) {
+            item.isVisible = false
         } else {
-            item.setVisible(true);
-            item.setChecked(false);
-            if (getCopyPrefs().getString(COPY_DESTINATION_PREF_KEY, null) != null) {
-                item.setChecked(true);
+            item.isVisible = true
+            item.isChecked = false
+            if (copyPrefs.getString(COPY_DESTINATION_PREF_KEY, null) != null) {
+                item.isChecked = true
             }
         }
     }
@@ -986,14 +846,23 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      *
      * @return The copy preferences
      */
-    private SharedPreferences getCopyPrefs() {
-        return getActivity().getSharedPreferences("copy", Context.MODE_PRIVATE);
-    }
+    private val copyPrefs: SharedPreferences
+        private get() = requireActivity().getSharedPreferences("copy", Context.MODE_PRIVATE)
 
     /**
      * The available fixtures to get focus
      */
-    private enum ItemFocus {
+    private enum class ItemFocus
+    /**
+     * The default constructor
+     *
+     * @param id the resource id for this item
+     */(
+        /**
+         * The resource id for the item
+         */
+        val mId: Int
+    ) {
         /**
          * The visualization pane
          */
@@ -1013,20 +882,6 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
          * The in progress pane
          */
         Progress(android.R.id.progress);
-
-        /**
-         * The resource id for the item
-         */
-        private final int mId;
-
-        /**
-         * The default constructor
-         *
-         * @param id the resource id for this item
-         */
-        ItemFocus(final int id) {
-            mId = id;
-        }
     }
 
     /**
@@ -1034,17 +889,74 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     *
+     *
+     * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
      */
-    public interface OnFragmentInteractionListener {
+    interface OnFragmentInteractionListener {
         /**
          * Action when fragments are interacted with
          *
          * @param item The item that was interacted with
          */
-        void onFragmentInteraction(final DisplayItem item);
+        fun onFragmentInteraction(item: DisplayItem?)
+    }
+
+    companion object {
+        /**
+         * The item id argument string
+         */
+        private const val ARG_ITEM_ID = "itemId"
+
+        /**
+         * The request code for simple upload
+         */
+        private const val REQUEST_CODE_SIMPLE_UPLOAD = 6767
+
+        /**
+         * The scheme to get content from a content resolver
+         */
+        private const val SCHEME_CONTENT = "content"
+
+        /**
+         * The prefix for the item breadcrumb when the parent reference is unavailable
+         */
+        private const val DRIVE_PREFIX = "/drive/"
+
+        /**
+         * Expansion options to get all children, thumbnails of children, and thumbnails
+         */
+        private const val EXPAND_OPTIONS_FOR_CHILDREN_AND_THUMBNAILS =
+            "children(expand=thumbnails),thumbnails"
+
+        /**
+         * Expansion options to get all children, thumbnails of children, and thumbnails when limited
+         */
+        private const val EXPAND_OPTIONS_FOR_CHILDREN_AND_THUMBNAILS_LIMITED = "children,thumbnails"
+
+        /**
+         * The accepted file mime types for uploading to OneDrive
+         */
+        private const val ACCEPTED_UPLOAD_MIME_TYPES = "*/*"
+
+        /**
+         * The copy destination preference key
+         */
+        private const val COPY_DESTINATION_PREF_KEY = "copy_destination"
+
+        /**
+         * Create a new instance of ItemFragment
+         *
+         * @param itemId The item id to create it for
+         * @return The fragment
+         */
+        @JvmStatic
+        fun newInstance(itemId: String?): ItemFragment {
+            val fragment = ItemFragment()
+            val args = Bundle()
+            args.putString(ARG_ITEM_ID, itemId)
+            fragment.arguments = args
+            return fragment
+        }
     }
 }
