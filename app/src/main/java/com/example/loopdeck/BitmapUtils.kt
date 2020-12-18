@@ -16,7 +16,7 @@ import java.util.*
 internal object BitmapUtils {
     private const val FILE_PROVIDER_AUTHORITY = "com.example.android.fileprovider"
 
-    private const val ROOT_DIRECTORY_NAME = "Loopdeck Media Files"
+    const val ROOT_DIRECTORY_NAME = "Loopdeck Media Files"
 
     @Throws(IOException::class)
     fun createTempImageFile(context: Context): File {

@@ -22,7 +22,7 @@ class MediaRepository(private val mediaDao: MediaDao, private val context: Conte
     fun getPlaylistMediaLiveData(playlistName: String): LiveData<List<MediaData>> =
         mediaDao.findByPlaylistLiveData(playlistName)
 
-    suspend fun addMediaOrPlaylist(file: File, playlistName: String? = null) {
+    fun addMediaOrPlaylist(file: File, playlistName: String? = null) {
 
         val mediaCount = playlistName?.let { mediaDao.findByPlaylist(it).size } ?: -1
 
