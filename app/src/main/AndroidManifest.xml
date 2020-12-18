@@ -4,6 +4,11 @@
     package="com.example.loopdeck">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+<!--    android:usesCleartextTraffic="true"-->
+<!--    android:networkSecurityConfig="@xml/security_configs"-->
+<!--    android:requestLegacyExternalStorage="true"-->
     <application
         android:name=".BaseApplication"
         android:allowBackup="true"
