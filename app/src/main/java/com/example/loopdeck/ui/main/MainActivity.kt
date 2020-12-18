@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             // Print the names and IDs for up to 10 files.
             val result: FileList = service.files().list()
                 .setPageSize(100)
-//                .setFields("nextPageToken, files(id, name)")
+                .setFields("nextPageToken, files(id, name)")
                 .execute()
             val files: List<File>? = result.files
             if (files == null || files.isEmpty()) {
@@ -63,6 +63,8 @@ class MainActivity : AppCompatActivity() {
                 println("Files:")
                 for (file in files) {
 
+                    //TODO: Get thumbnail link here and assign it to imageView
+                    file.thumbnailLink
 //                    println("${file.getName()} ${file.getId()} ${file.fileExtension}")
                     println(file.toString())
 
@@ -98,4 +100,7 @@ class MainActivity : AppCompatActivity() {
             )
         }
     }
+
+
+
 }

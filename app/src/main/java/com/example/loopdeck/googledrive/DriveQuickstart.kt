@@ -36,54 +36,6 @@ object DriveQuickstart {
         Collections.singletonList(DriveScopes.DRIVE_METADATA_READONLY)
     private val CREDENTIALS_FILE_PATH = "/credentials.json"
 
-    /**
-     * Creates an authorized Credential object.
-     * @param HTTP_TRANSPORT The network HTTP Transport.
-     * @return An authorized Credential object.
-     * @throws IOException If the credentials.json file cannot be found.
-     */
-//    @Throws(IOException::class)
-//     fun getCredentials(context: Context, HTTP_TRANSPORT: NetHttpTransport): Credential? {
-//        // Load client secrets.
-//        val `in` = DriveQuickstart::class.java.getResourceAsStream(CREDENTIALS_FILE_PATH)
-//            ?: throw FileNotFoundException("Resource not found: $CREDENTIALS_FILE_PATH")
-//        val clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, InputStreamReader(`in`))
-//
-//
-////        val tokenFolder  = File(
-////            Environment.getExternalStorageDirectory().absolutePath+
-////                     TOKENS_DIRECTORY_PATH
-////        )
-//
-//
-//        val tokenFolder =
-//            File(context.getExternalFilesDir(null)!!.absolutePath,TOKENS_DIRECTORY_PATH )
-//
-//        if (!tokenFolder.exists()) {
-//            tokenFolder.mkdir()
-//        }
-//
-//        val flow = GoogleAuthorizationCodeFlow.Builder(
-//            HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES
-//        )
-//            .setDataStoreFactory(FileDataStoreFactory(tokenFolder))
-//            .setAccessType("offline")
-//            .build()
-//
-//
-////        // Build flow and trigger user authorization request.
-////        val flow = GoogleAuthorizationCodeFlow.Builder(
-////            HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES
-////        )
-////            .setDataStoreFactory(FileDataStoreFactory(File(TOKENS_DIRECTORY_PATH)))
-////            .setAccessType("offline")
-////            .build()
-//
-//
-//        val receiver = LocalServerReceiver.Builder().setPort(8888).build()
-//        return AuthorizationCodeInstalledApp(flow, receiver).authorize("user")
-//    }
-
     fun getCredentials(context: Context, HTTP_TRANSPORT: NetHttpTransport): Credential {
         val `in` = DriveQuickstart::class.java.getResourceAsStream(CREDENTIALS_FILE_PATH)
             ?: throw FileNotFoundException("Resource not found: $CREDENTIALS_FILE_PATH")
@@ -132,4 +84,7 @@ object DriveQuickstart {
             .setAccessType("offline")
             .build()
     }
+
+
+
 }
