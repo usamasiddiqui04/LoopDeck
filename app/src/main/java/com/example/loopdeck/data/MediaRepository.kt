@@ -24,6 +24,7 @@ class MediaRepository(private val mediaDao: MediaDao, private val context: Conte
 
     fun addMediaOrPlaylist(file: File, playlistName: String? = null) {
 
+
         val mediaCount = playlistName?.let { mediaDao.findByPlaylist(it).size } ?: -1
 
         val timestamp = Date()

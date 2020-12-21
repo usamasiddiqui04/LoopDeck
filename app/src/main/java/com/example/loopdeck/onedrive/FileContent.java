@@ -71,7 +71,6 @@ public final class FileContent {
         final int fileSize = (int) descriptor.getStatSize();
         return getFileBytes(contentProvider, data, 0, fileSize);
     }
-
     /**
      * Gets the specific offset'ed number of bytes for a file
      *

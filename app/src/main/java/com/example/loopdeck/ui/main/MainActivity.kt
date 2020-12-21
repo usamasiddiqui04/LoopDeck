@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.loopdeck.R
 import com.example.loopdeck.googledrive.DriveQuickstart
 import com.example.loopdeck.ui.collection.CollectionActivity
+import com.example.loopdeck.ui.googledrive.GoogleDriveActivity
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
@@ -16,6 +17,7 @@ import com.loopdeck.photoeditor.EditImageActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+    var list: ArrayList<File>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +72,13 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }
+
+            startActivity(
+                Intent(
+                    this@MainActivity,
+                    GoogleDriveActivity::class.java
+                )
+            )
 
 //            startActivity(Intent(this@MainActivity, MainActivity::class.java))
         }

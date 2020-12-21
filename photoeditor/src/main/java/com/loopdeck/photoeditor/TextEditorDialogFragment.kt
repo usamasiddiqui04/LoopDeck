@@ -115,9 +115,10 @@ class TextEditorDialogFragment : DialogFragment() {
             val args = Bundle()
             args.putString(EXTRA_INPUT_TEXT, inputText)
             args.putInt(EXTRA_COLOR_CODE, colorCode)
-            val fragment = TextEditorDialogFragment()
-            fragment.arguments = args
-            fragment.show(appCompatActivity.supportFragmentManager, TAG)
+            val fragment = TextEditorDialogFragment().apply {
+                arguments = args
+                show(appCompatActivity.supportFragmentManager, TAG)
+            }
             return fragment
         }
     }
