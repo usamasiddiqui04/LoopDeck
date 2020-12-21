@@ -1,30 +1,34 @@
-package com.example.loopdeck.ui.googledrive
+package com.example.loopdeck.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.loopdeck.R
-import com.example.loopdeck.ui.viewholders.GoogleDriveListViewHolder
+import com.example.loopdeck.ui.viewholders.GoogleDrivetViewHolder
 import com.example.loopdeck.ui.viewholders.ImageViewHolder
-import com.example.loopdeck.ui.viewholders.PlaylistViewHolder
 import com.example.loopdeck.ui.viewholders.VideoViewHolder
 import com.example.loopdeck.utils.callbacks.ItemMoveCallback
 import com.google.api.services.drive.model.File
 import java.util.*
-import kotlin.collections.ArrayList
 
 class GoogleDriveFileAdaptor(
     private var mList: MutableList<File>,
+    private val itemClickListener: ((File) -> Unit)? = null,
+    private val itemLongClickListener: ((View, File) -> Boolean)? = null,
+    private val onSequenceChanged: ((List<File>) -> Unit)? = null
 
-    ) : Adapter<ViewHolder>() {
+) : Adapter<ViewHolder>(), ItemMoveCallback.DragAndDropListener {
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
-
-            is GoogleDriveListViewHolder -> {
-                holder.bind(mList.get(position))
+            is GoogleDrivetViewHolder -> {
+                holder.bind(mList.get(position), itemClickListener)
+                holder.itemView.setOnLongClickListener {
+                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
+                }
             }
         }
     }
@@ -41,13 +45,62 @@ class GoogleDriveFileAdaptor(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return PlaylistViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_recent_folder_list, parent, false)
-        )
+        return when (viewType) {
+            VIEW_TYPE_IMAGE -> {
+
+                ImageViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_recent_list_images, parent, false)
+                )
+            }
+            VIEW_TYPE_VIDEO -> {
+                VideoViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_recent_video_lists, parent, false)
+                )
+            }
+            else -> {
+                GoogleDrivetViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_google_drive_folder_list, parent, false)
+                )
+            }
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        val file = mList[position]
+        return VIEW_TYPE_PLAYLIST
+//        when {
+//            file.mimeType.contains(".jpg") -> VIEW_TYPE_IMAGE
+//            file.filePath.contains(".mp4") -> VIEW_TYPE_VIDEO
+//            else -> VIEW_TYPE_PLAYLIST
+//        }
     }
 
 
+    override fun onRowMoved(fromPosition: Int, toPosition: Int) {
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(mList, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(mList, i, i - 1)
+            }
+        }
+
+        notifyItemMoved(fromPosition, toPosition)
+
+        onSequenceChanged?.invoke(mList)
+    }
+
+
+    companion object {
+        const val VIEW_TYPE_IMAGE = 1
+        const val VIEW_TYPE_VIDEO = 2
+        const val VIEW_TYPE_PLAYLIST = 3
+    }
 
 
 }
