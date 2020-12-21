@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.loopdeck.R
 import com.example.loopdeck.ui.adapters.GoogleDriveFileAdaptor
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
+import com.example.loopdeck.utils.extensions.toast
+import com.google.api.services.drive.model.File
 import kotlinx.android.synthetic.main.fragment_googlrdrive.*
 
 class GoogleDriveFragment : Fragment() {
@@ -22,7 +24,20 @@ class GoogleDriveFragment : Fragment() {
 
 
     private val googleDriveFileAdaptor by lazy {
-        GoogleDriveFileAdaptor(mList = mutableListOf())
+        GoogleDriveFileAdaptor(mList = mutableListOf(), onItemClickListener)
+    }
+
+    private val onItemClickListener: (File) -> Unit = { mediaData ->
+        toast(mediaData.id.toString())
+
+
+        viewModel.downloadfiles(mediaData.id, mediaData.mimeType)
+
+
+//        val intent = Intent(requireContext(), EditImageActivity::class.java)
+//        intent.putExtra("imagePath", mediaData.name)
+//        startActivity(intent)
+
     }
 
 
@@ -40,7 +55,7 @@ class GoogleDriveFragment : Fragment() {
         initViews()
         initObservers()
 
-        viewModel.getDrivefiles(requireContext())
+        viewModel.getDrivefiles()
     }
 
 

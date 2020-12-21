@@ -17,9 +17,8 @@ class GoogleDriveFileAdaptor(
     private var mList: MutableList<File>,
     private val itemClickListener: ((File) -> Unit)? = null,
     private val itemLongClickListener: ((View, File) -> Boolean)? = null,
-    private val onSequenceChanged: ((List<File>) -> Unit)? = null
 
-) : Adapter<ViewHolder>(), ItemMoveCallback.DragAndDropListener {
+    ) : Adapter<ViewHolder>() {
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -76,23 +75,6 @@ class GoogleDriveFileAdaptor(
 //            file.filePath.contains(".mp4") -> VIEW_TYPE_VIDEO
 //            else -> VIEW_TYPE_PLAYLIST
 //        }
-    }
-
-
-    override fun onRowMoved(fromPosition: Int, toPosition: Int) {
-        if (fromPosition < toPosition) {
-            for (i in fromPosition until toPosition) {
-                Collections.swap(mList, i, i + 1)
-            }
-        } else {
-            for (i in fromPosition downTo toPosition + 1) {
-                Collections.swap(mList, i, i - 1)
-            }
-        }
-
-        notifyItemMoved(fromPosition, toPosition)
-
-        onSequenceChanged?.invoke(mList)
     }
 
 
