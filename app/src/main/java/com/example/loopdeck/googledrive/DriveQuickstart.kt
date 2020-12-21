@@ -35,7 +35,16 @@ object DriveQuickstart {
 //        Collections.singletonList(DriveScopes.DRIVE_METADATA_READONLY)
 
 
-    private val SCOPES = listOf(DriveScopes.DRIVE, DriveScopes.DRIVE_APPDATA, DriveScopes.DRIVE_METADATA, DriveScopes.DRIVE_FILE)
+    private val SCOPES = listOf(
+        DriveScopes.DRIVE,
+        DriveScopes.DRIVE_APPDATA,
+        DriveScopes.DRIVE_METADATA,
+        DriveScopes.DRIVE_FILE,
+        DriveScopes.DRIVE_SCRIPTS,
+        DriveScopes.DRIVE_METADATA_READONLY,
+        DriveScopes.DRIVE_PHOTOS_READONLY,
+        DriveScopes.DRIVE_READONLY
+    )
 
     private val CREDENTIALS_FILE_PATH = "/credentials.json"
 

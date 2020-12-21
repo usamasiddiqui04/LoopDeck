@@ -30,9 +30,9 @@ class GoogleDriveFragment : Fragment() {
     private val onItemClickListener: (File) -> Unit = { mediaData ->
         toast(mediaData.id.toString())
 
-
-        viewModel.downloadfiles(mediaData.id, mediaData.mimeType)
-
+        suspend {
+            viewModel.downloadfiles(mediaData.id, mediaData.mimeType)
+        }
 
 //        val intent = Intent(requireContext(), EditImageActivity::class.java)
 //        intent.putExtra("imagePath", mediaData.name)
