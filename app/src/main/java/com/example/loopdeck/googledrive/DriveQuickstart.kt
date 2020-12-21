@@ -18,7 +18,6 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStreamReader
-import java.util.*
 
 
 object DriveQuickstart {
@@ -32,8 +31,12 @@ object DriveQuickstart {
      * Global instance of the scopes required by this quickstart.
      * If modifying these scopes, delete your previously saved tokens/ folder.
      */
-    private val SCOPES: List<String> =
-        Collections.singletonList(DriveScopes.DRIVE_METADATA_READONLY)
+//    private val SCOPES: List<String> =
+//        Collections.singletonList(DriveScopes.DRIVE_METADATA_READONLY)
+
+
+    private val SCOPES = listOf(DriveScopes.DRIVE, DriveScopes.DRIVE_APPDATA, DriveScopes.DRIVE_METADATA, DriveScopes.DRIVE_FILE)
+
     private val CREDENTIALS_FILE_PATH = "/credentials.json"
 
     fun getCredentials(context: Context, HTTP_TRANSPORT: NetHttpTransport): Credential {
@@ -45,7 +48,7 @@ object DriveQuickstart {
         createTokenFolderIfMissing(context)
 
         val authorisationFlow: GoogleAuthorizationCodeFlow =
-            getAuthorisationFlow(context,HTTP_TRANSPORT, clientSecrets)
+            getAuthorisationFlow(context, HTTP_TRANSPORT, clientSecrets)
 
         val ab: AuthorizationCodeInstalledApp =
             object : AuthorizationCodeInstalledApp(authorisationFlow, LocalServerReceiver()) {
@@ -84,7 +87,6 @@ object DriveQuickstart {
             .setAccessType("offline")
             .build()
     }
-
 
 
 }
