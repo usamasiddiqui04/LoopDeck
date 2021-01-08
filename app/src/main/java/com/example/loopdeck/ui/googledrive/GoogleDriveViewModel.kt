@@ -5,6 +5,7 @@ import android.os.AsyncTask
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.loopdeck.googledrive.DriveQuickstart
 import com.google.api.client.googleapis.media.MediaHttpDownloader
 import com.google.api.client.googleapis.media.MediaHttpDownloader.DownloadState
@@ -12,8 +13,9 @@ import com.google.api.client.googleapis.media.MediaHttpDownloaderProgressListene
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
-import java.io.FileOutputStream
 import java.io.OutputStream
 import java.lang.reflect.InvocationTargetException
 
@@ -49,7 +51,14 @@ class GoogleDriveViewModel(application: Application) : AndroidViewModel(applicat
     }
 
 
-    suspend fun downloadfiles(resId: String, mintype: String) {
+    fun download(resId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            downloadfiles(resId)
+        }
+    }
+
+
+    fun downloadfiles(resId: String) {
         try {
             val outputStream: OutputStream = ByteArrayOutputStream()
             service.apply {
@@ -61,7 +70,6 @@ class GoogleDriveViewModel(application: Application) : AndroidViewModel(applicat
                 .show()
         }
     }
-
 
     internal class CustomProgressListener : MediaHttpDownloaderProgressListener {
         override fun progressChanged(downloader: MediaHttpDownloader) {

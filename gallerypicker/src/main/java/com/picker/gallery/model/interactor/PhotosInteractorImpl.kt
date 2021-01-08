@@ -45,7 +45,7 @@ class PhotosInteractorImpl(var presenter: PhotosPresenterImpl) : PhotosInteracto
             null
         )
 
-        MLog.e("IMAGES", imagescursor.count.toString())
+        MLog.e("IMAGES", imagescursor?.count.toString())
 
         try {
             if (imagescursor != null && imagescursor.count > 0) {

@@ -230,21 +230,6 @@ class OptiVideoEditor private constructor(private val context: Context) {
             }
 
             OptiConstant.VIDEO_AUDIO_MERGE -> {
-                //Video audio merge - Need audio file, video file & output file
-
-//                ffmpeg -i video.mp4 -i audio.wav -c:v copy -c:a aac output.mp4
-
-//                ffmpeg -i video.mp4 -i audio.wav -c copy output.mkv
-
-
-//                ffmpeg -i audio.mp3 -i video.mp4 -filter_complex \
-//                "[0:a][1:a]amerge,pan=stereo|c0<c0+c2|c1<c1+c3[a]" \
-//                -map 1:v -map "[a]" -c:v copy -c:a aac -shortest output.mp4
-
-//
-//                ffmpeg -i video.mp4 -i audio.mp3 -c:v copy \
-//                -filter_complex "[0:a]aformat=fltp:44100:stereo,apad[0a];[1]aformat=fltp:44100:stereo,volume=1.5[1a];[0a][1a]amerge[a]" \
-//                -map 0:v -map "[a]" -ac 2 output.mp4
 
                 cmd = arrayOf(
                     "-y",
@@ -263,15 +248,40 @@ class OptiVideoEditor private constructor(private val context: Context) {
             }
 
             OptiConstant.VIDEO_AUDIO_OVERRIDE -> {
+
+                //Video audio merge - Need audio file, video file & output file
+
+//                ffmpeg -i video.mp4 -i audio.wav -c:v copy -c:a aac output.mp4
+
+//                ffmpeg -i video.mp4 -i audio.wav -c copy output.mkv
+
+
+//                ffmpeg -i audio.mp3 -i video.mp4 -filter_complex \
+//                "[0:a][1:a]amerge,pan=stereo|c0<c0+c2|c1<c1+c3[a]" \
+//                -map 1:v -map "[a]" -c:v copy -c:a aac -shortest output.mp4
+
+//
+//                ffmpeg -i video.mp4 -i audio.mp3 -c:v copy \
+//                -filter_complex "[0:a]aformat=fltp:44100:stereo,apad[0a];[1]aformat=fltp:44100:stereo,volume=1.5[1a];[0a][1a]amerge[a]" \
+//                -map 0:v -map "[a]" -ac 2 output.mp4
+
+
                 cmd = arrayOf(
-                    "-y",
-                    "-i",
-                    videoFile!!.path,
-                    "-i",
-                    audioFile!!.path,
-                    "-shortest",
+                    "-i", audioFile!!.path, "-i", videoFile!!.path,
+                    "-filter_complex", "[0:a][1:a]amerge,pan=stereo:c0<c0+c2:c1<c1+c3[out]"
+                    , "-map", "1:v", "-map", "[out]", "-c:v", "copy", "-c:a", "aac", "-shortest",
                     outputFile.path
                 )
+
+
+//                cmd = arrayOf(
+//                    "-y",
+//                    "-i",
+//                    audioFile!!.path,
+//                    "-i",
+//                    videoFile!!.path,
+//                    outputFile.path
+//                )
             }
 
             OptiConstant.VIDEO_TRIM -> {

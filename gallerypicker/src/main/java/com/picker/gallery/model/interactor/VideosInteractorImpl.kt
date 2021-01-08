@@ -31,7 +31,7 @@ class VideosInteractorImpl(var presenter: VideosPresenterImpl) : VideosInteracto
             null
         )
 
-        MLog.e("VIDEOS", videocursor.count.toString())
+//        MLog.e("VIDEOS", videocursor.count.toString())
 
         try {
             if (videocursor != null && videocursor.count > 0) {

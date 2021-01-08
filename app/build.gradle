@@ -6,13 +6,13 @@ apply plugin: 'kotlin-kapt'
 
 
 android {
-    compileSdkVersion compileSdk
+    compileSdkVersion 30
     buildToolsVersion "30.0.2"
 
 
     defaultConfig {
         applicationId "com.example.loopdeck"
-        minSdkVersion minSdk
+        minSdkVersion 21
         targetSdkVersion targetSdk
         versionCode 1
         versionName "1.0"

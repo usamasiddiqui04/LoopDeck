@@ -83,7 +83,7 @@ class VideosFragment : Fragment(), ImagePickerContract {
         imageGrid.itemAnimator = null
         val bundle = this.arguments
         if (bundle != null) photoids =
-            if (bundle.containsKey("photoids")) bundle.getIntegerArrayList("photoids") else ArrayList()
+            if (bundle.containsKey("photoids")) bundle.getIntegerArrayList("photoids") as ArrayList<Int> else ArrayList()
         galleryOperation()
     }
 
