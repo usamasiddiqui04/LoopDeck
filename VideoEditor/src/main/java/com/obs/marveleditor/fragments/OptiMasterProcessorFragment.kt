@@ -203,7 +203,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
         }
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
+    override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         //for playing video in landscape mode
         if (newConfig!!.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -439,6 +439,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
         get() = preferences.getBoolean("isFirstTimePermission", false)
         set(isFirstTime) = preferences.edit().putBoolean("isFirstTimePermission", isFirstTime)
             .apply()
+
 
     private val isMarshmallow: Boolean
         get() = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) or (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1)

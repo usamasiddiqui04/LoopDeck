@@ -15,6 +15,7 @@ import android.util.Log
 import java.io.*
 import java.nio.channels.FileChannel
 import java.util.concurrent.TimeUnit
+import kotlin.jvm.Throws
 
 object OptiCommonMethods {
     private val tagName = OptiCommonMethods::class.java.simpleName
@@ -23,7 +24,7 @@ object OptiCommonMethods {
     fun writeIntoFile(context: Context, data: Intent, file: File): File {
         var videoAsset: AssetFileDescriptor? = null
         try {
-            videoAsset = context.contentResolver.openAssetFileDescriptor(data.data, "r")
+            videoAsset = data.data?.let { context.contentResolver.openAssetFileDescriptor(it, "r") }
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
         }

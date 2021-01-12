@@ -201,7 +201,7 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
             download(mItem!!)
             return true
         } else if (itemId == R.id.action_create_link) {
-            createLink(mItem!!)
+//            createLink(mItem!!)
             return true
         } else if (itemId == R.id.action_view_delta) {
             viewDelta(mItem!!)
@@ -449,46 +449,46 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
      *
      * @param item The item to delete
      */
-    private fun createLink(item: Item) {
-        val items = arrayOf<CharSequence>("view", "edit")
-        val nothingSelected = -1
-        val selection = AtomicInteger(nothingSelected)
-        val alertDialog = AlertDialog.Builder(activity)
-            .setTitle(R.string.create_link)
-            .setIcon(android.R.drawable.ic_menu_share)
-            .setPositiveButton(
-                R.string.create_link,
-                DialogInterface.OnClickListener { dialog, which ->
-                    if (selection.get() == nothingSelected) {
-                        return@OnClickListener
-                    }
-                    val application = requireActivity()
-                        .getApplication() as BaseApplication
-                    application.oneDriveClient
-                        .drive
-                        .getItems(item.id)
-                        .getCreateLink(items[selection.get()].toString())
-                        .buildRequest()
-                        .create(object : DefaultCallback<Permission?>(activity) {
-                            override fun success(result: Permission?) {
-                                val cm = activity!!
-                                    .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                                val data = ClipData.newPlainText("Link Url", result!!.link.webUrl)
-                                cm.primaryClip = data
-                                Toast.makeText(
-                                    activity,
-                                    application.getString(R.string.created_link),
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                activity!!.onBackPressed()
-                            }
-                        })
-                })
-            .setSingleChoiceItems(items, 0) { dialog, which -> selection.set(which) }
-            .setNegativeButton(R.string.cancel) { dialog, which -> dialog.cancel() }
-            .create()
-        alertDialog.show()
-    }
+//    private fun createLink(item: Item) {
+//        val items = arrayOf<CharSequence>("view", "edit")
+//        val nothingSelected = -1
+//        val selection = AtomicInteger(nothingSelected)
+//        val alertDialog = AlertDialog.Builder(activity)
+//            .setTitle(R.string.create_link)
+//            .setIcon(android.R.drawable.ic_menu_share)
+//            .setPositiveButton(
+//                R.string.create_link,
+//                DialogInterface.OnClickListener { dialog, which ->
+//                    if (selection.get() == nothingSelected) {
+//                        return@OnClickListener
+//                    }
+//                    val application = requireActivity()
+//                        .getApplication() as BaseApplication
+//                    application.oneDriveClient
+//                        .drive
+//                        .getItems(item.id)
+//                        .getCreateLink(items[selection.get()].toString())
+//                        .buildRequest()
+//                        .create(object : DefaultCallback<Permission?>(activity) {
+//                            override fun success(result: Permission?) {
+//                                var cm = requireActivity()
+//                                    .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+//                                var data = ClipData.newPlainText("Link Url", result!!.link.webUrl)
+//                                cm.primaryClip = data
+//                                Toast.makeText(
+//                                    activity,
+//                                    application.getString(R.string.created_link),
+//                                    Toast.LENGTH_LONG
+//                                ).show()
+//                                activity!!.onBackPressed()
+//                            }
+//                        })
+//                })
+//            .setSingleChoiceItems(items, 0) { dialog, which -> selection.set(which) }
+//            .setNegativeButton(R.string.cancel) { dialog, which -> dialog.cancel() }
+//            .create()
+//        alertDialog.show()
+//    }
 
     /**
      * Renames a sourceItem
@@ -536,7 +536,7 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
                 val updatedItem = Item()
                 updatedItem.id = sourceItem.id
                 updatedItem.name = newName.text.toString()
-                (activity!!.application as BaseApplication)
+                (requireActivity().application as BaseApplication)
                     .oneDriveClient
                     .drive
                     .getItems(updatedItem.id)
@@ -557,7 +557,7 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
         val activity: Activity? = activity
         val newName = EditText(activity)
         newName.inputType = InputType.TYPE_CLASS_TEXT
-        newName.hint = activity!!.getString(R.string.new_folder_hint)
+        newName.hint = requireActivity().getString(R.string.new_folder_hint)
         val alertDialog = AlertDialog.Builder(activity)
             .setTitle(R.string.create_folder)
             .setView(newName)
@@ -567,7 +567,7 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
                     override fun success(result: Item?) {
                         Toast.makeText(
                             activity,
-                            activity.getString(
+                            activity!!.getString(
                                 R.string.created_folder,
                                 result!!.name,
                                 item.name
@@ -583,7 +583,7 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
                         super.failure(error)
                         Toast.makeText(
                             activity,
-                            activity.getString(
+                            activity!!.getString(
                                 R.string.new_folder_error,
                                 item.name
                             ),
@@ -596,7 +596,7 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
                 val newItem = Item()
                 newItem.name = newName.text.toString()
                 newItem.folder = Folder()
-                (activity.application as BaseApplication)
+                (requireActivity().application as BaseApplication)
                     .oneDriveClient
                     .drive
                     .getItems(mItemId)
@@ -624,7 +624,7 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val application = requireActivity().application as BaseApplication
         val oneDriveClient = application.oneDriveClient
-        if (requestCode == REQUEST_CODE_SIMPLE_UPLOAD && data != null && data.data != null && data.data.scheme.equals(
+        if (requestCode == REQUEST_CODE_SIMPLE_UPLOAD && data != null && data.data != null && data.data!!.scheme.equals(
                 SCHEME_CONTENT, ignoreCase = true
             )
         ) {
@@ -642,7 +642,7 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
                         try {
                             val contentResolver = activity!!.contentResolver
                             val contentProvider: ContentProviderClient? = contentResolver
-                                .acquireContentProviderClient(data.data)
+                                .acquireContentProviderClient(data.data!!)
                             val fileInMemory = FileContent.getFileBytes(contentProvider, data.data)
                             contentProvider!!.release()
 
@@ -699,7 +699,7 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
                                         }
                                     })
                         } catch (e: Exception) {
-                            Log.e(javaClass.simpleName, e.message)
+                            e.message?.let { Log.e(javaClass.simpleName, it) }
                             Log.e(javaClass.simpleName, e.toString())
                         }
                         return null
@@ -716,16 +716,16 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
      */
     private fun download(item: Item) {
         val storageDir = File(
-            requireContext().getExternalFilesDir(null).absolutePath,
+            requireContext().getExternalFilesDir(null)!!.absolutePath,
             ROOT_DIRECTORY_NAME
         )
         val activity: Activity? = activity
         val downloadManager =
-            activity!!.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            requireActivity().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val downloadUrl = item.rawObject["@content.downloadUrl"].asString
         val request = DownloadManager.Request(Uri.parse(downloadUrl))
         request.setTitle(item.name)
-        request.setDescription(activity.getString(R.string.file_from_onedrive))
+        request.setDescription(requireActivity().getString(R.string.file_from_onedrive))
         request.allowScanningByMediaScanner()
         request.setDestinationInExternalFilesDir(
             requireContext(), ROOT_DIRECTORY_NAME,
@@ -740,7 +740,7 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         downloadManager.enqueue(request)
         Toast.makeText(
-            activity, activity.getString(R.string.starting_download_message),
+            activity, requireActivity().getString(R.string.starting_download_message),
             Toast.LENGTH_LONG
         ).show()
     }

@@ -21,8 +21,6 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.ChangeBounds
-import androidx.transition.TransitionManager
 import com.loopdeck.photoeditor.EmojiBSFragment.EmojiListener
 import com.loopdeck.photoeditor.base.BaseActivity
 import com.loopdeck.photoeditor.filters.FilterListener
@@ -80,6 +78,7 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
         mStickerBSFragment!!.setStickerListener(this)
         mEmojiBSFragment!!.setEmojiListener(this)
         mPropertiesBSFragment!!.setPropertiesChangeListener(this)
+
         val llmTools = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         mRvTools!!.layoutManager = llmTools
         mRvTools!!.adapter = mEditingToolsAdapter
@@ -268,13 +267,14 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
         }
     }
 
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
             when (requestCode) {
                 CAMERA_REQUEST -> {
                     mPhotoEditor!!.clearAllViews()
-                    val photo = data!!.extras["data"] as Bitmap
+                    val photo = data!!.extras?.get("data") as Bitmap
                     mPhotoEditorView!!.source.setImageBitmap(photo)
                 }
                 PICK_REQUEST -> try {
@@ -391,10 +391,10 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
             )
             mConstraintSet.clear(mRvFilters!!.id, ConstraintSet.END)
         }
-        val changeBounds = ChangeBounds()
+        val changeBounds = android.transition.ChangeBounds()
         changeBounds.duration = 350
         changeBounds.interpolator = AnticipateOvershootInterpolator(1.0f)
-        TransitionManager.beginDelayedTransition(mRootView!!, changeBounds)
+        android.transition.TransitionManager.beginDelayedTransition(mRootView!!, changeBounds)
         mConstraintSet.applyTo(mRootView)
     }
 

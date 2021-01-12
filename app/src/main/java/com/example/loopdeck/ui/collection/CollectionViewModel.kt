@@ -19,7 +19,6 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
 
     var importedFilesIntent: Intent? = null
 
-
     lateinit var recentsMediaLiveData: LiveData<List<MediaData>>
 
     private val repository: MediaRepository
@@ -27,7 +26,6 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
     init {
         val mediaDao = MediaDatabase.getDatabase(application).mediaDao()
         repository = MediaRepository(mediaDao, application.applicationContext)
-
         getRecents()
     }
 
@@ -44,7 +42,6 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-
     fun getPlaylistMedia(playlistName: String) =
         repository.getPlaylistMediaLiveData(playlistName)
 
@@ -56,14 +53,11 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
             }
         }
     }
-
-
     fun createPlaylist(file: File) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addMediaOrPlaylist(file)
         }
     }
-
     fun onSequenceChanged(mList: List<MediaData>) {
         Handler().postDelayed({
             viewModelScope.launch(Dispatchers.IO) {
@@ -75,6 +69,5 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
                 Log.d("MediaAdapter", mList.joinToString { "\n[${it.sequence}] ${it.name}" })
             }
         }, 1500)
-
     }
 }

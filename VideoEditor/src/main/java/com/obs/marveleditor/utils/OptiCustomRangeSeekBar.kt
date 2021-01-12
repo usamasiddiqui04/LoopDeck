@@ -312,19 +312,23 @@ class OptiCustomRangeSeekBar @JvmOverloads constructor(
         if (!thumbs!!.isEmpty()) {
             for (th in thumbs!!) {
                 if (th.index == 0) {
-                    canvas.drawBitmap(
-                        Objects.requireNonNull(th.bitmap),
-                        th.pos + paddingLeft,
-                        paddingTop.toFloat(),
-                        null
-                    )
+                    Objects.requireNonNull(th.bitmap)?.let {
+                        canvas.drawBitmap(
+                            it,
+                            th.pos + paddingLeft,
+                            paddingTop.toFloat(),
+                            null
+                        )
+                    }
                 } else {
-                    canvas.drawBitmap(
-                        Objects.requireNonNull(th.bitmap),
-                        th.pos - paddingRight,
-                        paddingTop.toFloat(),
-                        null
-                    )
+                    Objects.requireNonNull(th.bitmap)?.let {
+                        canvas.drawBitmap(
+                            it,
+                            th.pos - paddingRight,
+                            paddingTop.toFloat(),
+                            null
+                        )
+                    }
                 }
             }
         }

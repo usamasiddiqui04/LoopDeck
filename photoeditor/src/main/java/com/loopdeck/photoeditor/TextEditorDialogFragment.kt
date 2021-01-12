@@ -14,14 +14,13 @@ import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 /**
  * Created by Burhanuddin Rashid on 1/16/2018.
  */
-class TextEditorDialogFragment : DialogFragment() {
+class TextEditorDialogFragment : androidx.fragment.app.DialogFragment() {
     private var mAddTextEditText: EditText? = null
     private var mAddTextDoneTextView: TextView? = null
     private var mInputMethodManager: InputMethodManager? = null

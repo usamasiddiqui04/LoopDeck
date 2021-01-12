@@ -41,11 +41,11 @@ object OptiUiThreadExecutor {
     @JvmStatic
     fun runTask(id: String, task: Runnable?, delay: Long) {
         if ("" == id) {
-            HANDLER.postDelayed(task, delay)
+            HANDLER.postDelayed(task!!, delay)
             return
         }
         val time = SystemClock.uptimeMillis() + delay
-        HANDLER.postAtTime(task, nextToken(id), time)
+        HANDLER.postAtTime(task!!, nextToken(id), time)
     }
 
     private fun nextToken(id: String): Token {

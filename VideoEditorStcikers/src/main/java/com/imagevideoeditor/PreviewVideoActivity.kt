@@ -46,6 +46,8 @@ import java.io.File
 import java.io.IOException
 import java.util.*
 
+private val displayMetrics1 = DisplayMetrics()
+
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFMpegCallback,
     PropertiesBSFragment.Properties, View.OnClickListener, StickerBSFragment.StickerListener,

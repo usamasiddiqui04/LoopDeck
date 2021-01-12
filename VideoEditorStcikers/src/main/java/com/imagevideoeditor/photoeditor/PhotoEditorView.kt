@@ -195,6 +195,10 @@ class PhotoEditorView : RelativeLayout {
                 viewBG.visibility = VISIBLE
                 ivBottom.setImageDrawable(resources.getDrawable(R.drawable.ee))
                 ivBottom.visibility = VISIBLE
+            } else if (position == 5) else if (position == 1) {
+                viewBG.setBackgroundColor(Color.parseColor("#15FF5589"))
+                viewBG.visibility = VISIBLE
+                ivBottom.visibility = GONE
             }
             collection.addView(layout)
             return layout

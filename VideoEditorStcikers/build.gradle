@@ -40,7 +40,7 @@ dependencies {
 
     //seekbar
     implementation "com.github.guilhe:seekbar-ranged-view:${seekbar}"
-//    implementation 'ja.burhanrashid52:photoeditor:0.4.0'
+    implementation 'ja.burhanrashid52:photoeditor:0.4.0'
     implementation 'com.android.support:cardview-v7:30.0.0'
     implementation 'com.android.support:design:30.0.0'
     implementation 'com.android.support:appcompat-v7:30.0.0'

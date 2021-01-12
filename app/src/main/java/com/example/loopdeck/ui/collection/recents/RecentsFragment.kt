@@ -12,6 +12,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.loopdeck.BaseApplication
 import com.example.loopdeck.DragData
@@ -32,6 +34,7 @@ import com.picker.gallery.view.PickerActivity
 import com.xorbix.loopdeck.cameraapp.BitmapUtils
 import kotlinx.android.synthetic.main.custom_layout.view.*
 import kotlinx.android.synthetic.main.dailogbox.view.*
+import kotlinx.android.synthetic.main.fragment_folder_grid.*
 import kotlinx.android.synthetic.main.fragment_recents.*
 import java.io.File
 import java.util.*
@@ -184,7 +187,7 @@ class RecentsFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == REQUEST_RESULT_CODE && data != null) {
             val mediaList = data.getParcelableArrayListExtra<GalleryData>("MEDIA")
-            if (mediaList.size > 1) {
+            if (mediaList!!.size > 1) {
                 showPlaylistNameDialog(requireContext(), mediaList)
             } else {
                 viewModel.addMediaFiles(mediaList)
@@ -223,9 +226,12 @@ class RecentsFragment : Fragment() {
     }
 
     private fun initObservers() {
-        viewModel.recentsMediaLiveData.observe(viewLifecycleOwner, { recentsList ->
-            mediaAdapter.submitList(recentsList.distinctBy { it.name })
-        })
+
+        viewModel.recentsMediaLiveData.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer { list ->
+                mediaAdapter.submitList(list.distinctBy { it.name })
+            })
 
     }
 
