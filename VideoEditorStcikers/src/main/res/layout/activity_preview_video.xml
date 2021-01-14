@@ -8,11 +8,6 @@
     android:background="@android:color/transparent"
     tools:context=".PreviewVideoActivity">
 
-    <!--<ImageView
-        android:id="@+id/ivImage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />-->
-
 
     <TextureView
         android:id="@+id/videoSurface"
@@ -135,6 +130,17 @@
         android:src="@drawable/ic_baseline_add_24px"
         app:layout_constraintStart_toStartOf="@id/imgPlayback"
         app:layout_constraintTop_toBottomOf="@id/imgPlayback" />
+
+    <ImageView
+        android:id="@+id/changesound"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/black_trasp"
+        android:padding="8dp"
+        android:src="@drawable/ic_baseline_add_24px"
+        app:layout_constraintStart_toStartOf="@id/imgAddmusic"
+        app:layout_constraintTop_toBottomOf="@id/imgAddmusic" />
 
 
     <ImageView

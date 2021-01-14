@@ -56,5 +56,7 @@
     <string name="error_title">Error!</string>
     <string name="close">Close</string>
     <string name="max_pages_downloaded">Maximum number of pages downloads</string>
+    <string name="recents">Recents</string>
+    <string name="playlist_title">Playlist title</string>
 
 </resources>

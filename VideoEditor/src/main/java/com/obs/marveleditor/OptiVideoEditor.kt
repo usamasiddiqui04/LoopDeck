@@ -291,12 +291,51 @@ class OptiVideoEditor private constructor(private val context: Context) {
 
             OptiConstant.VIDEO_TRANSITION -> {
                 //Video transition - Need video file, transition command & output file
-                cmd = arrayOf("-y", "-i", videoFile!!.absolutePath, "-acodec", "copy", "-vf", "fade=t=in:st=0:d=5", outputFile.path)
+                cmd = arrayOf(
+                    "-y",
+                    "-i",
+                    videoFile!!.absolutePath,
+                    "-acodec",
+                    "copy",
+                    "-vf",
+                    "fade=t=in:st=0:d=5",
+                    outputFile.path
+                )
             }
 
             OptiConstant.CONVERT_AVI_TO_MP4 -> {
                 //Convert .avi to .mp4 - Need avi video file, command, mp4 output file
-                cmd = arrayOf("-y", "-i", videoFile!!.path, "-c:v", "libx264", "-crf", "19", "-preset", "slow", "-c:a", "aac", "-b:a", "192k", "-ac", "2", outputFile.path)
+                cmd = arrayOf(
+                    "-y",
+                    "-i",
+                    videoFile!!.path,
+                    "-c:v",
+                    "libx264",
+                    "-crf",
+                    "19",
+                    "-preset",
+                    "slow",
+                    "-c:a",
+                    "aac",
+                    "-b:a",
+                    "192k",
+                    "-ac",
+                    "2",
+                    outputFile.path
+                )
+            }
+
+            OptiConstant.CHANGE_VIDEO_SOUND_FREQUENCY -> {
+                //Video filter - Need video file, filter command & output file
+
+                cmd = arrayOf(
+                    "-y",
+                    "-i",
+                    videoFile!!.path,
+                    "-f:a",
+                    "atempo=2,atempo=1.5",
+                    outputFile.path
+                )
             }
 
 

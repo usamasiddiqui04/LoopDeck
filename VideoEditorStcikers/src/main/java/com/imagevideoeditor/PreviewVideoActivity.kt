@@ -34,6 +34,7 @@ import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedExceptio
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.imagevideoeditor.Utils.DimensionData
 import com.imagevideoeditor.Utils.Utils
+import com.imagevideoeditor.fragments.ChangeSoundFragment
 import com.imagevideoeditor.fragments.SpeedFragment
 import com.imagevideoeditor.fragments.TrimFragment
 import com.imagevideoeditor.photoeditor.*
@@ -64,6 +65,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     var imgUndo: ImageView? = null
     var imgSticker: ImageView? = null
     var imgTrim: ImageView? = null
+    var imgChanesound: ImageView? = null
     private var mPhotoEditor: PhotoEditor? = null
     private val globalVideoUrl = ""
     private var propertiesBSFragment: PropertiesBSFragment? = null
@@ -136,7 +138,9 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         imgDraw = findViewById(R.id.imgDraw)
         imgText = findViewById(R.id.imgText)
         imgUndo = findViewById(R.id.imgUndo)
-        imgTrim = findViewById(R.id.imgTrim);
+        imgTrim = findViewById(R.id.imgTrim)
+        imgChanesound = findViewById(R.id.changesound)
+
         imgSticker = findViewById(R.id.imgSticker)
         fFmpeg = FFmpeg.getInstance(this)
         progressDialog = ProgressDialog(this)
@@ -157,6 +161,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         imgUndo?.setOnClickListener(this)
         imgSticker?.setOnClickListener(this)
         imgTrim?.setOnClickListener(this)
+        imgChanesound?.setOnClickListener(this)
         imgPlayback?.setOnClickListener(this)
         imgAddmusic?.setOnClickListener(this)
         videoSurface?.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
@@ -392,43 +397,21 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
                     }.show(supportFragmentManager, "OptiAddMusicFragment")
                 }
             }
-        }
+            R.id.changesound == v.id -> {
 
-//        switch (v.getId()) {
-//            case R.id.imgClose:
-//                onBackPressed();
-//                break;
-//            case R.id.imgDone:
-//                saveImage();
-//                break;
-//            case R.id.imgDraw:
-//                setDrawingMode();
-//                break;
-//            case R.id.imgText:
-//                TextEditorDialogFragment textEditorDialogFragment = TextEditorDialogFragment.show(this, 0);
-//                textEditorDialogFragment.setOnTextEditorListener(new TextEditorDialogFragment.TextEditor() {
-//
-//                    @Override
-//                    public void onDone(String inputText, int colorCode, int position) {
-//                        final TextStyleBuilder styleBuilder = new TextStyleBuilder();
-//                        styleBuilder.withTextColor(colorCode);
-//                        Typeface typeface = ResourcesCompat.getFont(PreviewVideoActivity.this, TextEditorDialogFragment.getDefaultFontIds(PreviewVideoActivity.this).get(position));
-//                        styleBuilder.withTextFont(typeface);
-//                        mPhotoEditor.addText(inputText, styleBuilder, position);
-//                    }
-//                });
-//                break;
-//            case R.id.imgUndo:
-//                Log.d("canvas>>", mPhotoEditor.undoCanvas() + "");
-//                mPhotoEditor.clearBrushAllViews();
-//                break;
-//            case R.id.imgSticker:
-//                mStickerBSFragment.show(getSupportFragmentManager(), mStickerBSFragment.getTag());
-//                break;
-//
-//            default:
-//                throw new IllegalStateException("Unexpected value: " + v.getId());
-//        }
+                masterVideoFile?.let { file ->
+                    val chnageSoundFragment = ChangeSoundFragment()
+                    chnageSoundFragment.setHelper(this)
+                    chnageSoundFragment.setFilePathFromSource(
+                        file,
+                        mediaPlayer?.duration!!.toLong()
+                    )
+                    showBottomSheetDialogFragment(chnageSoundFragment)
+                }
+
+
+            }
+        }
     }
 
 

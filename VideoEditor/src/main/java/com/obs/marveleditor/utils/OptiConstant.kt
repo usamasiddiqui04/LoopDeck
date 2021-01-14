@@ -25,6 +25,7 @@ class OptiConstant {
         const val VIDEO_TRANSITION = 9
         const val CONVERT_AVI_TO_MP4 = 10
         const val VIDEO_AUDIO_OVERRIDE = 11
+        const val CHANGE_VIDEO_SOUND_FREQUENCY = 12
 
         const val FLIRT = "filter"
         const val TRIM = "trim"

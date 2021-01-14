@@ -110,10 +110,10 @@ class PlaylistFragment : Fragment() {
 
 
     private fun initViews() {
-
+        playlistname.text = playlistName
         var touchHelper: ItemTouchHelper? = null
         recyclerview?.adapter = mediaAdapter
-        recyclerview?.layoutManager = GridLayoutManager(requireContext(), 3)
+        recyclerview?.layoutManager = GridLayoutManager(requireContext(), 2)
         val callback = ItemMoveCallback(mediaAdapter)
         touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(recyclerview)

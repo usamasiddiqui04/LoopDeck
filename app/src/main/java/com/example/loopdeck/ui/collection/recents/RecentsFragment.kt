@@ -46,7 +46,6 @@ class RecentsFragment : Fragment() {
         private const val REQUEST_RESULT_CODE = 100
     }
 
-
     private lateinit var viewModel: CollectionViewModel
 
     private val mediaAdapter by lazy {
