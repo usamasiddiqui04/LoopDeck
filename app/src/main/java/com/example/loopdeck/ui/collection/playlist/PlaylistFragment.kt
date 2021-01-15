@@ -47,8 +47,6 @@ class PlaylistFragment : Fragment() {
 
         private const val REQUEST_RESULT_CODE = 0
     }
-
-
     private lateinit var viewModel: CollectionViewModel
 
     private val mediaAdapter by lazy {

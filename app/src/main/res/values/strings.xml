@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LoopDeck</string>
+    <string name="app_name"> </string>
     <string name="add_media">Add Media</string>
     <string name="create_playlist">Create playlist</string>
     <string name="delete">Delete</string>
@@ -58,5 +58,7 @@
     <string name="max_pages_downloaded">Maximum number of pages downloads</string>
     <string name="recents">Recents</string>
     <string name="playlist_title">Playlist title</string>
+    <string name="navigation_drawer_open">open</string>
+    <string name="navigation_drawer_close">close</string>
 
 </resources>

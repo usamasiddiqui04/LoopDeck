@@ -4,29 +4,28 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
-import android.view.DragEvent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.loopdeck.BaseApplication
 import com.example.loopdeck.DragData
 import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.data.MediaType
+import com.example.loopdeck.drawer.AdvanceDrawerLayout
 import com.example.loopdeck.onedrive.ApiExplorer
-import com.example.loopdeck.onedrive.DefaultCallback
 import com.example.loopdeck.onedrive.ItemFragment
 import com.example.loopdeck.ui.adapters.MediaAdaptor
 import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.ui.collection.playlist.PlaylistFragment
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
+import com.google.android.material.navigation.NavigationView
 import com.imagevideoeditor.PreviewVideoActivity
 import com.loopdeck.photoeditor.EditImageActivity
 import com.picker.gallery.model.GalleryData
@@ -34,12 +33,14 @@ import com.picker.gallery.view.PickerActivity
 import com.xorbix.loopdeck.cameraapp.BitmapUtils
 import kotlinx.android.synthetic.main.custom_layout.view.*
 import kotlinx.android.synthetic.main.dailogbox.view.*
-import kotlinx.android.synthetic.main.fragment_folder_grid.*
 import kotlinx.android.synthetic.main.fragment_recents.*
 import java.io.File
 import java.util.*
 
-class RecentsFragment : Fragment() {
+class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener {
+
+    private var drawer: AdvanceDrawerLayout? = null
+
 
     companion object {
         fun newInstance() = RecentsFragment()
@@ -159,8 +160,23 @@ class RecentsFragment : Fragment() {
     }
 
     private fun initViews() {
+        (activity as AppCompatActivity?)!!.setSupportActionBar(toolbar)
 
+//        ViewCompat.setLayoutDirection(drawer_layout!!, ViewCompat.LAYOUT_DIRECTION_RTL)
+        val toggle = ActionBarDrawerToggle(
+            requireActivity(),
+            drawer_layout,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+        drawer_layout!!.addDrawerListener(toggle)
+        toggle.syncState()
 
+        nav_view.setNavigationItemSelectedListener(this)
+        drawer_layout!!.setViewScale(GravityCompat.START, 0.9f)
+        drawer_layout!!.setRadius(GravityCompat.START, 35f)
+        drawer_layout!!.setViewElevation(GravityCompat.START, 20f)
         recyclerview?.adapter = mediaAdapter
         recyclerview?.layoutManager = GridLayoutManager(requireContext(), 3)
 
@@ -181,6 +197,7 @@ class RecentsFragment : Fragment() {
         }
         initContainer()
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -263,5 +280,12 @@ class RecentsFragment : Fragment() {
             Toast.LENGTH_SHORT
         ).show()
     }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        // Handle navigation view item clicks here.
+        drawer_layout!!.closeDrawer(GravityCompat.START)
+        return true
+    }
+
 
 }
