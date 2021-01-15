@@ -4,12 +4,15 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.view.View.GONE
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.solver.widgets.ConstraintWidget.GONE
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
@@ -160,6 +163,10 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
     }
 
     private fun initViews() {
+
+        addfiles.setOnClickListener {
+            showDialog()
+        }
         (activity as AppCompatActivity?)!!.setSupportActionBar(toolbar)
 
 //        ViewCompat.setLayoutDirection(drawer_layout!!, ViewCompat.LAYOUT_DIRECTION_RTL)
@@ -246,6 +253,15 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
         viewModel.recentsMediaLiveData.observe(
             viewLifecycleOwner,
             androidx.lifecycle.Observer { list ->
+                if (list.isEmpty()) {
+                    bottomLayout.visibility = View.INVISIBLE
+                    recyclerview.visibility = View.INVISIBLE
+                    no_mediafile.visibility = View.VISIBLE
+                    return@Observer
+                }
+                bottomLayout.visibility = View.VISIBLE
+                recyclerview.visibility = View.VISIBLE
+                no_mediafile.visibility = View.INVISIBLE
                 mediaAdapter.submitList(list.distinctBy { it.name })
             })
 
