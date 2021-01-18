@@ -13,6 +13,7 @@ import com.example.loopdeck.ui.viewholders.PlaylistViewHolder
 import com.example.loopdeck.ui.viewholders.VideoViewHolder
 import com.example.loopdeck.utils.callbacks.ItemMoveCallback
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MediaAdaptor(
     private var mList: MutableList<MediaData>,
@@ -22,13 +23,18 @@ class MediaAdaptor(
 
 ) : Adapter<ViewHolder>(), ItemMoveCallback.DragAndDropListener {
 
+    val isEnable: Boolean = false
+    val isSelectAll: Boolean = false
+    private var Selectlist = ArrayList<String>()
+
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is ImageViewHolder -> {
                 holder.bind(mList[position], itemClickListener)
                 holder.itemView.setOnLongClickListener {
-                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
+                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition], isEnable)
+                        ?: false
                 }
 
             }
