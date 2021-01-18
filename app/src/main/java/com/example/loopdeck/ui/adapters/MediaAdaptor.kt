@@ -18,7 +18,7 @@ import kotlin.collections.ArrayList
 class MediaAdaptor(
     private var mList: MutableList<MediaData>,
     private val itemClickListener: (MediaData) -> Unit,
-    private val itemLongClickListener: ((View, MediaData) -> Boolean)? = null,
+    private val itemLongClickListener: ((View, Boolean) -> Unit)? = null,
     private val onSequenceChanged: ((List<MediaData>) -> Unit)? = null
 
 ) : Adapter<ViewHolder>(), ItemMoveCallback.DragAndDropListener {
@@ -33,22 +33,22 @@ class MediaAdaptor(
             is ImageViewHolder -> {
                 holder.bind(mList[position], itemClickListener)
                 holder.itemView.setOnLongClickListener {
-                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition], isEnable)
-                        ?: false
+                    (itemLongClickListener?.invoke(it, isEnable)
+                        ?: false) as Boolean
                 }
 
             }
             is VideoViewHolder -> {
                 holder.bind(mList[position], itemClickListener)
                 holder.itemView.setOnLongClickListener {
-                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
+                    (itemLongClickListener?.invoke(it, isEnable) ?: false) as Boolean
                 }
 
             }
             is PlaylistViewHolder -> {
                 holder.bind(mList.get(position), itemClickListener)
                 holder.itemView.setOnLongClickListener {
-                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
+                    (itemLongClickListener?.invoke(it, isEnable) ?: false) as Boolean
                 }
 
             }

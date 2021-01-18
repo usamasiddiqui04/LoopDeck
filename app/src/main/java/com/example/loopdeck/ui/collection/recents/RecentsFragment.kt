@@ -4,17 +4,12 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.opengl.Visibility
-import android.os.Build
 import android.os.Bundle
 import android.view.*
-import android.view.View.GONE
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.solver.widgets.ConstraintWidget.GONE
 import androidx.core.view.GravityCompat
-import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.loopdeck.DragData
@@ -56,10 +51,13 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
         MediaAdaptor(mList = mutableListOf(), onItemClickListener, onItemLongClickListener)
     }
 
-    private val onItemLongClickListener: (View, MediaData) -> Boolean = { itemView, mediaData ->
-        val state = DragData(mediaData, itemView.width, itemView.height)
-        val shadow: View.DragShadowBuilder = View.DragShadowBuilder(itemView)
-        ViewCompat.startDragAndDrop(itemView, null, shadow, state, 0)
+
+    private val onItemLongClickListener: (View, Boolean) -> Unit = { itemView, isEnable ->
+
+        if (!isEnable) {
+
+        }
+
     }
     private val onItemClickListener: (MediaData) -> Unit = { mediaData ->
 

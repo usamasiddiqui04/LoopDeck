@@ -10,8 +10,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
@@ -27,7 +25,6 @@ import com.loopdeck.photoeditor.EditImageActivity
 import com.obs.marveleditor.MainActivity
 import com.picker.gallery.model.GalleryData
 import com.picker.gallery.view.PickerActivity
-import kotlinx.android.synthetic.main.fragment_folder_grid.*
 import kotlinx.android.synthetic.main.fragment_playlist.*
 
 
