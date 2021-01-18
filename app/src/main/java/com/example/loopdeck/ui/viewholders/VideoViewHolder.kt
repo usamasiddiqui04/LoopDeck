@@ -9,7 +9,10 @@ import com.example.loopdeck.data.MediaData
 import kotlinx.android.synthetic.main.item_recent_video_lists.view.*
 
 class VideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(mediaData: MediaData, itemClickListener: ((MediaData) -> Unit)? = null) {
+    fun bind(
+        mediaData: MediaData,
+        itemClickListener: ((MediaData) -> Unit)? = null
+    ) {
         val uri = Uri.parse(mediaData.filePath)
         val bitmap = ThumbnailUtils.createVideoThumbnail(
             uri.toString(),

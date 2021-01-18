@@ -13,19 +13,18 @@ import com.example.loopdeck.ui.viewholders.PlaylistViewHolder
 import com.example.loopdeck.ui.viewholders.VideoViewHolder
 import com.example.loopdeck.utils.callbacks.ItemMoveCallback
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MediaAdaptor(
     private var mList: MutableList<MediaData>,
     private val itemClickListener: (MediaData) -> Unit,
-    private val itemLongClickListener: ((View, Boolean) -> Unit)? = null,
+    private val itemLongClickListener: (View, ViewHolder, MutableList<MediaData>, MediaData) -> Boolean,
     private val onSequenceChanged: ((List<MediaData>) -> Unit)? = null
 
 ) : Adapter<ViewHolder>(), ItemMoveCallback.DragAndDropListener {
 
     val isEnable: Boolean = false
     val isSelectAll: Boolean = false
-    private var Selectlist = ArrayList<String>()
+
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -33,22 +32,21 @@ class MediaAdaptor(
             is ImageViewHolder -> {
                 holder.bind(mList[position], itemClickListener)
                 holder.itemView.setOnLongClickListener {
-                    (itemLongClickListener?.invoke(it, isEnable)
-                        ?: false) as Boolean
+                    (itemLongClickListener.invoke(it, holder, mList, mList[position]))
                 }
 
             }
             is VideoViewHolder -> {
                 holder.bind(mList[position], itemClickListener)
                 holder.itemView.setOnLongClickListener {
-                    (itemLongClickListener?.invoke(it, isEnable) ?: false) as Boolean
+                    (itemLongClickListener.invoke(it, holder, mList, mList[position]))
                 }
 
             }
             is PlaylistViewHolder -> {
                 holder.bind(mList.get(position), itemClickListener)
                 holder.itemView.setOnLongClickListener {
-                    (itemLongClickListener?.invoke(it, isEnable) ?: false) as Boolean
+                    (itemLongClickListener.invoke(it, holder, mList, mList[position]))
                 }
 
             }

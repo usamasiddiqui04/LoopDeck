@@ -329,13 +329,22 @@ class OptiVideoEditor private constructor(private val context: Context) {
                 //Video filter - Need video file, filter command & output file
 
                 cmd = arrayOf(
-                    "-y",
                     "-i",
                     videoFile!!.path,
-                    "-f:a",
-                    "atempo=2,atempo=1.5",
+                    "-filter_complex",
+                    "aphaser=type=t:speed=2:decay=0.6",
                     outputFile.path
                 )
+
+//                cmd = arrayOf(
+//                    "-y",
+//                    "-i",
+//                    videoFile!!.path ,
+//                    "-c",
+//                    "copy",
+//                    "-an",
+//                    outputFile.path
+//                )
             }
 
 

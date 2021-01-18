@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.imagevideoeditor.R
 import com.obs.marveleditor.OptiVideoEditor
@@ -47,7 +48,7 @@ class ChangeSoundFragment : BottomSheetDialogFragment(), OptiFFMpegCallback {
             OptiVideoEditor.with(requireContext())
                 .setType(OptiConstant.CHANGE_VIDEO_SOUND_FREQUENCY)
                 .setFile(videoFile!!)
-                .setOutputPath(outputFile.path)
+                .setOutputPath(outputFile.absolutePath)
                 .setCallback(this)
                 .main()
             helper?.showLoading(true)
@@ -68,15 +69,19 @@ class ChangeSoundFragment : BottomSheetDialogFragment(), OptiFFMpegCallback {
 
     override fun onProgress(progress: String) {
         helper?.showLoading(true)
+        Log.v(tagName, "Process Video : ${progress}")
     }
 
     override fun onSuccess(convertedFile: File, type: String) {
         helper?.showLoading(false)
         helper?.onFileProcessed(convertedFile)
+        Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
     }
 
     override fun onFailure(error: Exception) {
         helper?.showLoading(false)
+        Log.v(tagName, "Failure: ${error.localizedMessage}")
+        Toast.makeText(requireContext(), "Failure", Toast.LENGTH_SHORT).show()
     }
 
     override fun onNotAvailable(error: Exception) {

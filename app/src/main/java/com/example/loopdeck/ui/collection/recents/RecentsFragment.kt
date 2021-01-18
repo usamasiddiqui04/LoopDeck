@@ -6,12 +6,14 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
+import android.widget.Adapter
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.loopdeck.DragData
 import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
@@ -32,12 +34,20 @@ import com.xorbix.loopdeck.cameraapp.BitmapUtils
 import kotlinx.android.synthetic.main.custom_layout.view.*
 import kotlinx.android.synthetic.main.dailogbox.view.*
 import kotlinx.android.synthetic.main.fragment_recents.*
+import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
+import kotlinx.android.synthetic.main.item_recent_folder_list.view.selectitem
+import kotlinx.android.synthetic.main.item_recent_list_images.view.*
+import kotlinx.android.synthetic.main.item_recent_video_lists.view.*
 import java.io.File
 import java.util.*
 
 class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener {
 
     private var drawer: AdvanceDrawerLayout? = null
+    private var Selectlist = ArrayList<MediaData>()
+    private var enable: Boolean = false
+    private var viewholder: RecyclerView.ViewHolder? = null
+    var string: MediaData? = null
 
 
     companion object {
@@ -51,34 +61,99 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
         MediaAdaptor(mList = mutableListOf(), onItemClickListener, onItemLongClickListener)
     }
 
+    private val onItemLongClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Boolean =
+        { itemView, viewHolder, list, mediadata ->
 
-    private val onItemLongClickListener: (View, Boolean) -> Unit = { itemView, isEnable ->
+            string = list.get(viewHolder.adapterPosition)
+            enable = true
+            if (Selectlist.size == 0) {
+                enable = false
+            }
 
-        if (!isEnable) {
+            when (mediadata.mediaType) {
+                MediaType.IMAGE -> {
+                    viewholder = viewHolder
+
+                    if (itemView.selectitem.visibility == View.GONE) {
+                        itemView.selectitem.visibility = View.VISIBLE
+                        itemView.cardview.alpha = 0.5f
+                        Selectlist.add(string!!)
+
+                    } else {
+
+                    } as Boolean
+
+                }
+                MediaType.VIDEO -> {
+                    viewholder = viewHolder
+                    if (viewHolder.itemView.selectitem.visibility == View.GONE) {
+                        viewHolder.itemView.selectitem.visibility = View.VISIBLE
+                        viewHolder.itemView.cardvideo.alpha = 0.5f
+                        Selectlist.add(string!!)
+
+
+                    } else {
+
+                    } as Boolean
+
+                }
+                else -> {
+                    viewholder = viewHolder
+                    if (viewHolder.itemView.selectitem.visibility == View.GONE) {
+                        viewHolder.itemView.selectitem.visibility = View.VISIBLE
+                        viewHolder.itemView.cardfolder.alpha = 0.5f
+                        Selectlist.add(string!!)
+                    } else {
+
+                    } as Boolean
+
+                }
+            }
+
 
         }
-
-    }
     private val onItemClickListener: (MediaData) -> Unit = { mediaData ->
 
 
         when (mediaData.mediaType) {
             MediaType.IMAGE -> {
 
-                val intent = Intent(requireContext(), EditImageActivity::class.java)
-                intent.putExtra("imagePath", mediaData.filePath)
-                startActivity(intent)
+                if (viewholder!!.itemView.selectitem.visibility == View.VISIBLE) {
+                    viewholder!!.itemView.selectitem.visibility = View.GONE
+                    viewholder!!.itemView.cardview.alpha = 1f
+                    Selectlist.remove(string!!)
+                } else {
+                    val intent = Intent(requireContext(), EditImageActivity::class.java)
+                    intent.putExtra("imagePath", mediaData.filePath)
+                    startActivity(intent)
+                }
+
+
             }
             MediaType.VIDEO -> {
-                val intent = Intent(requireContext(), PreviewVideoActivity::class.java)
-                intent.putExtra("videoPath", mediaData.filePath)
-                startActivity(intent)
+                if (viewholder!!.itemView.selectitem.visibility == View.VISIBLE) {
+                    viewholder!!.itemView.selectitem.visibility = View.GONE
+                    viewholder!!.itemView.cardvideo.alpha = 1f
+                    Selectlist.remove(string!!)
+                } else {
+                    val intent = Intent(requireContext(), PreviewVideoActivity::class.java)
+                    intent.putExtra("videoPath", mediaData.filePath)
+                    startActivity(intent)
+                }
+
             }
             else -> {
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, PlaylistFragment.newInstance(mediaData.name))
-                    .addToBackStack(null)
-                    .commit()
+                if (viewholder!!.itemView.selectitem.visibility == View.VISIBLE) {
+                    viewholder!!.itemView.selectitem.visibility = View.GONE
+                    viewholder!!.itemView.cardfolder.alpha = 1f
+                    Selectlist.remove(string!!)
+                } else {
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.container, PlaylistFragment.newInstance(mediaData.name))
+                        .addToBackStack(null)
+                        .commit()
+                }
+
             }
         }
     }
@@ -191,6 +266,12 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             }
         }
 
+        btnDelete.setOnClickListener {
+            for (list in Selectlist) {
+                viewModel.delete(list)
+            }
+        }
+
         btnGallery.setOnClickListener {
 
             showDialog()
@@ -293,6 +374,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             " Deleted successfully ${mediaData.name}",
             Toast.LENGTH_SHORT
         ).show()
+
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.example.loopdeck.DragData
 import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
@@ -26,9 +27,21 @@ import com.obs.marveleditor.MainActivity
 import com.picker.gallery.model.GalleryData
 import com.picker.gallery.view.PickerActivity
 import kotlinx.android.synthetic.main.fragment_playlist.*
+import kotlinx.android.synthetic.main.fragment_playlist.btnDelete
+import kotlinx.android.synthetic.main.fragment_playlist.btnGallery
+import kotlinx.android.synthetic.main.fragment_playlist.recyclerview
+import kotlinx.android.synthetic.main.fragment_recents.*
+import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
+import kotlinx.android.synthetic.main.item_recent_folder_list.view.selectitem
+import kotlinx.android.synthetic.main.item_recent_list_images.view.*
+import kotlinx.android.synthetic.main.item_recent_video_lists.view.*
+import java.util.ArrayList
 
 
 class PlaylistFragment : Fragment() {
+
+    private var Selectlist = ArrayList<MediaData>()
+    private var viewholder: RecyclerView.ViewHolder? = null
 
     private val playlistName by lazy {
         arguments?.getString(KEY_NAME)
@@ -56,11 +69,49 @@ class PlaylistFragment : Fragment() {
     }
 
 
-    private val onItemLongClickListener: (View, MediaData) -> Boolean = { itemView, mediaData ->
-        val state = DragData(mediaData, itemView.width, itemView.height)
-        val shadow: View.DragShadowBuilder = View.DragShadowBuilder(itemView)
-        ViewCompat.startDragAndDrop(itemView, null, shadow, state, 0)
-    }
+    private val onItemLongClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Boolean =
+        { itemView, viewHolder, list, mediadata ->
+            viewholder = viewHolder
+            val string = list.get(viewHolder.adapterPosition)
+
+            when (mediadata.mediaType) {
+                MediaType.IMAGE -> {
+
+                    if (viewHolder.itemView.selectitem.visibility == View.GONE) {
+                        viewHolder.itemView.selectitem.visibility = View.VISIBLE
+                        viewHolder.itemView.cardview.alpha = 0.5f
+                        Selectlist.add(string)
+                    } else {
+                        viewHolder.itemView.selectitem.visibility = View.GONE
+                        viewHolder.itemView.cardview.alpha = 1f
+                    } as Boolean
+
+                }
+                MediaType.VIDEO -> {
+                    if (viewHolder.itemView.selectitem.visibility == View.GONE) {
+                        viewHolder.itemView.selectitem.visibility = View.VISIBLE
+                        viewHolder.itemView.cardvideo.alpha = 0.5f
+                        Selectlist.add(string)
+                    } else {
+                        viewHolder.itemView.selectitem.visibility = View.GONE
+                        viewHolder.itemView.cardview.alpha = 1f
+                    } as Boolean
+
+                }
+                else -> {
+                    if (viewHolder.itemView.selectitem.visibility == View.GONE) {
+                        viewHolder.itemView.selectitem.visibility = View.VISIBLE
+                        viewHolder.itemView.cardfolder.alpha = 0.5f
+                        Selectlist.add(string)
+                    } else {
+                        viewHolder.itemView.selectitem.visibility = View.GONE
+                        viewHolder.itemView.cardview.alpha = 1f
+                    } as Boolean
+
+                }
+            }
+
+        }
 
 
     private val onItemClickListener: (MediaData) -> Unit = { mediaData ->
@@ -121,6 +172,12 @@ class PlaylistFragment : Fragment() {
             i.putExtra("VIDEOS_LIMIT", 100)
             i.putExtra("REQUEST_RESULT_CODE", REQUEST_RESULT_CODE)
             startActivityForResult(i, REQUEST_RESULT_CODE)
+        }
+
+        btnDelete.setOnClickListener {
+            for (list in Selectlist) {
+                viewModel.delete(list)
+            }
         }
 
         initContainer()
