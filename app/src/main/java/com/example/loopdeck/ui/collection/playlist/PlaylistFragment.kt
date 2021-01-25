@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -30,7 +29,6 @@ import kotlinx.android.synthetic.main.fragment_playlist.*
 import kotlinx.android.synthetic.main.fragment_playlist.btnDelete
 import kotlinx.android.synthetic.main.fragment_playlist.btnGallery
 import kotlinx.android.synthetic.main.fragment_playlist.recyclerview
-import kotlinx.android.synthetic.main.fragment_recents.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.selectitem
 import kotlinx.android.synthetic.main.item_recent_list_images.view.*
@@ -57,6 +55,7 @@ class PlaylistFragment : Fragment() {
 
         private const val REQUEST_RESULT_CODE = 0
     }
+
     private lateinit var viewModel: CollectionViewModel
 
     private val mediaAdapter by lazy {

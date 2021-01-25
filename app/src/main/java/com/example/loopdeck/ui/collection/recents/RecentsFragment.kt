@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
-import android.widget.Adapter
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -117,42 +116,21 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
 
         when (mediaData.mediaType) {
             MediaType.IMAGE -> {
-
-                if (viewholder!!.itemView.selectitem.visibility == View.VISIBLE) {
-                    viewholder!!.itemView.selectitem.visibility = View.GONE
-                    viewholder!!.itemView.cardview.alpha = 1f
-                    Selectlist.remove(string!!)
-                } else {
-                    val intent = Intent(requireContext(), EditImageActivity::class.java)
-                    intent.putExtra("imagePath", mediaData.filePath)
-                    startActivity(intent)
-                }
-
-
+                val intent = Intent(requireContext(), EditImageActivity::class.java)
+                intent.putExtra("imagePath", mediaData.filePath)
+                startActivity(intent)
             }
             MediaType.VIDEO -> {
-                if (viewholder!!.itemView.selectitem.visibility == View.VISIBLE) {
-                    viewholder!!.itemView.selectitem.visibility = View.GONE
-                    viewholder!!.itemView.cardvideo.alpha = 1f
-                    Selectlist.remove(string!!)
-                } else {
-                    val intent = Intent(requireContext(), PreviewVideoActivity::class.java)
-                    intent.putExtra("videoPath", mediaData.filePath)
-                    startActivity(intent)
-                }
+                val intent = Intent(requireContext(), PreviewVideoActivity::class.java)
+                intent.putExtra("videoPath", mediaData.filePath)
+                startActivity(intent)
 
             }
             else -> {
-                if (viewholder!!.itemView.selectitem.visibility == View.VISIBLE) {
-                    viewholder!!.itemView.selectitem.visibility = View.GONE
-                    viewholder!!.itemView.cardfolder.alpha = 1f
-                    Selectlist.remove(string!!)
-                } else {
-                    requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, PlaylistFragment.newInstance(mediaData.name))
-                        .addToBackStack(null)
-                        .commit()
-                }
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, PlaylistFragment.newInstance(mediaData.name))
+                    .addToBackStack(null)
+                    .commit()
 
             }
         }
@@ -328,6 +306,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
     }
 
     private fun initObservers() {
+
 
         viewModel.recentsMediaLiveData.observe(
             viewLifecycleOwner,

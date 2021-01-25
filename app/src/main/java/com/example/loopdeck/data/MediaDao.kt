@@ -12,10 +12,8 @@ interface MediaDao : BaseDAO<MediaData> {
     @Query("SELECT * FROM MediaFileTable ORDER BY id ASC")
     fun findAll(): LiveData<List<MediaData>>
 
-
     @Query("SELECT * FROM MediaFileTable WHERE playListName is null ORDER BY modifiedAt ASC ")
     fun findRecents(): LiveData<List<MediaData>>
-
 
     @Query("SELECT * FROM MediaFileTable WHERE playListName is :playlistName ORDER BY modifiedAt ASC ")
     fun findByPlaylist(playlistName: String): List<MediaData>

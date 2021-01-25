@@ -22,11 +22,6 @@ class MediaAdaptor(
 
 ) : Adapter<ViewHolder>(), ItemMoveCallback.DragAndDropListener {
 
-    val isEnable: Boolean = false
-    val isSelectAll: Boolean = false
-
-
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is ImageViewHolder -> {
