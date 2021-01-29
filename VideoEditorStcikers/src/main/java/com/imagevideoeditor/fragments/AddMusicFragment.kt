@@ -396,7 +396,8 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
         }
     }
 
+
     override fun onCancel(dialog: DialogInterface?) {
-        super.onCancel(dialog)
+        super.onCancel(dialog!!)
     }
 }

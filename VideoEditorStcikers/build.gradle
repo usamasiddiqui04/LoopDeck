@@ -19,9 +19,6 @@ android {
         }
     }
 
-    dataBinding {
-        enabled = true
-    }
 }
 
 dependencies {
@@ -31,6 +28,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation project(path: ':VideoEditor')
     testImplementation 'junit:junit:4.12'
+    implementation project(":Filters")
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation project(":VideoEditor")
     //GlideToast
@@ -44,7 +42,6 @@ dependencies {
     implementation 'com.writingminds:FFmpegAndroid:0.3.2'
     implementation 'com.arthenica:mobile-ffmpeg-full:4.3'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
-    implementation 'com.github.bumptech.glide:compiler:4.9.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation "androidx.core:core-ktx:+"

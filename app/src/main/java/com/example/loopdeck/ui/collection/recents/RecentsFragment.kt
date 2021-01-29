@@ -132,8 +132,6 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
 
                 }
             }
-        } else {
-
         }
 
 
