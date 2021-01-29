@@ -36,11 +36,15 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
+
     fun delete(mediaData: MediaData) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteMedia(mediaData)
         }
     }
+
+    fun getPlayListImage(playlistName: String) =
+        repository.getPlaylistImage(playlistName)
 
     fun getPlaylistMedia(playlistName: String) =
         repository.getPlaylistMediaLiveData(playlistName)

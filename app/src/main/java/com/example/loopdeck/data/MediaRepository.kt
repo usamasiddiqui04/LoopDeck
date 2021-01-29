@@ -22,6 +22,9 @@ class MediaRepository(private val mediaDao: MediaDao, private val context: Conte
     fun getPlaylistMediaLiveData(playlistName: String): LiveData<List<MediaData>> =
         mediaDao.findByPlaylistLiveData(playlistName)
 
+    fun getPlaylistImage(playlistName: String): LiveData<String> =
+        mediaDao.findByPlaylistImage(playlistName)
+
     fun addMediaOrPlaylist(file: File, playlistName: String? = null) {
 
 

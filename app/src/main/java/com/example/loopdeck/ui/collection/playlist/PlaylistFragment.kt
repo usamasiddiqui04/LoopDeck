@@ -40,6 +40,7 @@ class PlaylistFragment : Fragment() {
 
     private var Selectlist = ArrayList<MediaData>()
     private var viewholder: RecyclerView.ViewHolder? = null
+    var filepath: String? = null
 
     private val playlistName by lazy {
         arguments?.getString(KEY_NAME)
@@ -63,12 +64,12 @@ class PlaylistFragment : Fragment() {
             mutableListOf(),
             onItemClickListener,
             onItemLongClickListener,
-            viewModel::onSequenceChanged
+            viewModel::onSequenceChanged,
         )
     }
 
 
-    private val onItemLongClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Boolean =
+    private val onItemLongClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Unit =
         { itemView, viewHolder, list, mediadata ->
             viewholder = viewHolder
             val string = list.get(viewHolder.adapterPosition)
@@ -80,10 +81,7 @@ class PlaylistFragment : Fragment() {
                         viewHolder.itemView.selectitem.visibility = View.VISIBLE
                         viewHolder.itemView.cardview.alpha = 0.5f
                         Selectlist.add(string)
-                    } else {
-                        viewHolder.itemView.selectitem.visibility = View.GONE
-                        viewHolder.itemView.cardview.alpha = 1f
-                    } as Boolean
+                    }
 
                 }
                 MediaType.VIDEO -> {
@@ -91,22 +89,14 @@ class PlaylistFragment : Fragment() {
                         viewHolder.itemView.selectitem.visibility = View.VISIBLE
                         viewHolder.itemView.cardvideo.alpha = 0.5f
                         Selectlist.add(string)
-                    } else {
-                        viewHolder.itemView.selectitem.visibility = View.GONE
-                        viewHolder.itemView.cardview.alpha = 1f
-                    } as Boolean
-
+                    }
                 }
                 else -> {
                     if (viewHolder.itemView.selectitem.visibility == View.GONE) {
                         viewHolder.itemView.selectitem.visibility = View.VISIBLE
                         viewHolder.itemView.cardfolder.alpha = 0.5f
                         Selectlist.add(string)
-                    } else {
-                        viewHolder.itemView.selectitem.visibility = View.GONE
-                        viewHolder.itemView.cardview.alpha = 1f
-                    } as Boolean
-
+                    }
                 }
             }
 

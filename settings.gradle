@@ -1,3 +1,4 @@
+include ':Filters'
 include ':drawerbehavior'
 include ':gallerypicker'
 include ':VideoEditorText'

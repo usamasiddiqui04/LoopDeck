@@ -47,6 +47,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
     private var enable: Boolean = false
     private var viewholder: RecyclerView.ViewHolder? = null
     var string: MediaData? = null
+    var check: Boolean = false
 
 
     companion object {
@@ -60,80 +61,82 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
         MediaAdaptor(mList = mutableListOf(), onItemClickListener, onItemLongClickListener)
     }
 
-    private val onItemLongClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Boolean =
+    private val onItemLongClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Unit =
         { itemView, viewHolder, list, mediadata ->
 
-            string = list.get(viewHolder.adapterPosition)
-            enable = true
-            if (Selectlist.size == 0) {
-                enable = false
-            }
+            check = true
 
+            string = list.get(viewHolder.adapterPosition)
             when (mediadata.mediaType) {
                 MediaType.IMAGE -> {
-                    viewholder = viewHolder
 
-                    if (itemView.selectitem.visibility == View.GONE) {
-                        itemView.selectitem.visibility = View.VISIBLE
-                        itemView.cardview.alpha = 0.5f
+                    if (viewHolder.itemView.selectitem.visibility == View.GONE) {
+                        viewHolder.itemView.selectitem.visibility = View.VISIBLE
+                        viewHolder.itemView.cardview.alpha = 0.5f
                         Selectlist.add(string!!)
 
                     } else {
-
-                    } as Boolean
-
+                        viewHolder.itemView.selectitem.visibility = View.GONE
+                        viewHolder.itemView.cardview.alpha = 1f
+                        Selectlist.remove(string!!)
+                    }
                 }
                 MediaType.VIDEO -> {
-                    viewholder = viewHolder
                     if (viewHolder.itemView.selectitem.visibility == View.GONE) {
                         viewHolder.itemView.selectitem.visibility = View.VISIBLE
                         viewHolder.itemView.cardvideo.alpha = 0.5f
                         Selectlist.add(string!!)
-
-
                     } else {
-
-                    } as Boolean
+                        viewHolder.itemView.selectitem.visibility = View.GONE
+                        viewHolder.itemView.cardvideo.alpha = 1f
+                        Selectlist.remove(string!!)
+                    }
 
                 }
                 else -> {
-                    viewholder = viewHolder
                     if (viewHolder.itemView.selectitem.visibility == View.GONE) {
                         viewHolder.itemView.selectitem.visibility = View.VISIBLE
                         viewHolder.itemView.cardfolder.alpha = 0.5f
                         Selectlist.add(string!!)
                     } else {
-
-                    } as Boolean
+                        viewHolder.itemView.selectitem.visibility = View.GONE
+                        viewHolder.itemView.cardfolder.alpha = 1f
+                        Selectlist.remove(string!!)
+                    }
 
                 }
             }
 
-
         }
     private val onItemClickListener: (MediaData) -> Unit = { mediaData ->
 
+        check = Selectlist.size > 0
+        if (!check) {
+            when (mediaData.mediaType) {
+                MediaType.IMAGE -> {
+                    val intent = Intent(requireContext(), EditImageActivity::class.java)
+                    intent.putExtra("imagePath", mediaData.filePath)
+                    startActivity(intent)
+                }
+                MediaType.VIDEO -> {
+                    val intent = Intent(requireContext(), PreviewVideoActivity::class.java)
+                    intent.putExtra("videoPath", mediaData.filePath)
+                    startActivity(intent)
 
-        when (mediaData.mediaType) {
-            MediaType.IMAGE -> {
-                val intent = Intent(requireContext(), EditImageActivity::class.java)
-                intent.putExtra("imagePath", mediaData.filePath)
-                startActivity(intent)
-            }
-            MediaType.VIDEO -> {
-                val intent = Intent(requireContext(), PreviewVideoActivity::class.java)
-                intent.putExtra("videoPath", mediaData.filePath)
-                startActivity(intent)
+                }
+                else -> {
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.container, PlaylistFragment.newInstance(mediaData.name))
+                        .addToBackStack(null)
+                        .commit()
 
+                }
             }
-            else -> {
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, PlaylistFragment.newInstance(mediaData.name))
-                    .addToBackStack(null)
-                    .commit()
+        } else {
 
-            }
         }
+
+
     }
 
 
@@ -213,7 +216,9 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             .commit()
     }
 
+
     private fun initViews() {
+
 
         addfiles.setOnClickListener {
             showDialog()
@@ -306,7 +311,6 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
     }
 
     private fun initObservers() {
-
 
         viewModel.recentsMediaLiveData.observe(
             viewLifecycleOwner,

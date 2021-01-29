@@ -7,7 +7,7 @@ buildscript {
         jcenter()
     }
     ext.compileSdk = 30
-    ext.minSdk = 21
+    ext.minSdk = 24
     ext.targetSdk = 28
 
     ext.gradleVersion = '3.4.2'

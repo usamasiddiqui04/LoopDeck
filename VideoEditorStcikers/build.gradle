@@ -33,11 +33,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation project(":VideoEditor")
-
-
     //GlideToast
     implementation "com.github.imjeevandeshmukh:GlideToast:${GlideToast}"
-
     //seekbar
     implementation "com.github.guilhe:seekbar-ranged-view:${seekbar}"
     implementation 'ja.burhanrashid52:photoeditor:0.4.0'
@@ -45,6 +42,7 @@ dependencies {
     implementation 'com.android.support:design:30.0.0'
     implementation 'com.android.support:appcompat-v7:30.0.0'
     implementation 'com.writingminds:FFmpegAndroid:0.3.2'
+    implementation 'com.arthenica:mobile-ffmpeg-full:4.3'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'com.github.bumptech.glide:compiler:4.9.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

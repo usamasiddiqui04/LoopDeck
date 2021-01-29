@@ -40,6 +40,8 @@ dependencies {
     implementation "com.android.support.constraint:constraint-layout:${constraint}"
     implementation "com.android.support:design:${appCompat}"
 
+    implementation 'com.arthenica:mobile-ffmpeg-full:4.4'
+
     //exoplayer
     implementation "com.google.android.exoplayer:exoplayer-core:${exoPlayerCore}"
     implementation "com.google.android.exoplayer:exoplayer-dash:${exoPlayer}"

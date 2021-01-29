@@ -99,7 +99,7 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
         mContext = context
 
         acivClose?.setOnClickListener {
-            dialog.dismiss()
+            dialog!!.dismiss()
             helper?.onDidNothing()
         }
 
@@ -367,7 +367,7 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
             muxVideoPlayer()
         } else {
             helper?.showLoading(false)
-            dialog.dismiss()
+            dialog!!.dismiss()
         }
     }
 

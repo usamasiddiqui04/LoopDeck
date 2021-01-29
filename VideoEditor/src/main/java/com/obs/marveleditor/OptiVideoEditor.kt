@@ -9,6 +9,10 @@ package com.obs.marveleditor
 
 import android.content.Context
 import android.util.Log
+import com.arthenica.mobileffmpeg.Config
+import com.arthenica.mobileffmpeg.Config.RETURN_CODE_CANCEL
+import com.arthenica.mobileffmpeg.Config.RETURN_CODE_SUCCESS
+import com.arthenica.mobileffmpeg.ExecuteCallback
 import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException
@@ -17,6 +21,7 @@ import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.utils.OptiOutputType
 import java.io.File
 import java.io.IOException
+
 
 class OptiVideoEditor private constructor(private val context: Context) {
 
@@ -332,7 +337,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
                     "-i",
                     videoFile!!.path,
                     "-filter_complex",
-                    "aphaser=type=t:speed=2:decay=0.6",
+                    "afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=10:overlap=0.75",
                     outputFile.path
                 )
 
@@ -349,6 +354,35 @@ class OptiVideoEditor private constructor(private val context: Context) {
 
 
         }
+
+//        val executionId = com.arthenica.mobileffmpeg.FFmpeg.executeAsync(
+//            "-i ${videoFile!!.path} -filter_complex afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=10:overlap=0.75 ${outputFile.path}",
+//            object : ExecuteCallback {
+//
+//                override fun apply(executionId: Long, returnCode: Int) {
+//
+//                    if (returnCode == RETURN_CODE_SUCCESS) {
+//                        Log.i(
+//                            Config.TAG,
+//                            "Async command execution completed successfully."
+//                        )
+//
+//                    } else if (returnCode == RETURN_CODE_CANCEL) {
+//                        Log.i(
+//                            Config.TAG,
+//                            "Async command execution cancelled by user."
+//                        )
+//                    } else {
+//                        Log.i(
+//                            Config.TAG,
+//                            String.format(
+//                                "Async command execution failed with returnCode=%d.",
+//                                returnCode
+//                            )
+//                        )
+//                    }
+//                }
+//            })
 
         try {
             FFmpeg.getInstance(context).execute(cmd, object : ExecuteBinaryResponseHandler() {

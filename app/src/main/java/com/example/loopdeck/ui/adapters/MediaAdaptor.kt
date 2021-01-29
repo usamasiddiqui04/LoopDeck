@@ -17,7 +17,7 @@ import java.util.*
 class MediaAdaptor(
     private var mList: MutableList<MediaData>,
     private val itemClickListener: (MediaData) -> Unit,
-    private val itemLongClickListener: (View, ViewHolder, MutableList<MediaData>, MediaData) -> Boolean,
+    private val itemLongClickListener: (View, ViewHolder, MutableList<MediaData>, MediaData) -> Unit,
     private val onSequenceChanged: ((List<MediaData>) -> Unit)? = null
 
 ) : Adapter<ViewHolder>(), ItemMoveCallback.DragAndDropListener {
@@ -28,6 +28,7 @@ class MediaAdaptor(
                 holder.bind(mList[position], itemClickListener)
                 holder.itemView.setOnLongClickListener {
                     (itemLongClickListener.invoke(it, holder, mList, mList[position]))
+                    false
                 }
 
             }
@@ -35,6 +36,7 @@ class MediaAdaptor(
                 holder.bind(mList[position], itemClickListener)
                 holder.itemView.setOnLongClickListener {
                     (itemLongClickListener.invoke(it, holder, mList, mList[position]))
+                    false
                 }
 
             }
@@ -42,6 +44,7 @@ class MediaAdaptor(
                 holder.bind(mList.get(position), itemClickListener)
                 holder.itemView.setOnLongClickListener {
                     (itemLongClickListener.invoke(it, holder, mList, mList[position]))
+                    false
                 }
 
             }
