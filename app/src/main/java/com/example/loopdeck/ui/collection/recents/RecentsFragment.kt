@@ -357,6 +357,8 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             " Deleted successfully ${mediaData.name}",
             Toast.LENGTH_SHORT
         ).show()
+        check = false
+
 
     }
 
