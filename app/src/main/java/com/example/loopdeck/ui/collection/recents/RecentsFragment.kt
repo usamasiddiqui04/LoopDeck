@@ -252,6 +252,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
         btnDelete.setOnClickListener {
             for (list in Selectlist) {
                 viewModel.delete(list)
+                check = false
             }
         }
 
