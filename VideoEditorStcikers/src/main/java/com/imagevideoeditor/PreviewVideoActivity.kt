@@ -34,7 +34,8 @@ import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedExceptio
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.imagevideoeditor.Utils.DimensionData
 import com.imagevideoeditor.Utils.Utils
-import com.imagevideoeditor.fragments.ChangeSoundFragment
+import com.imagevideoeditor.filter.EditVideoActivity
+import com.imagevideoeditor.filter.FilterMainActivity
 import com.imagevideoeditor.fragments.SpeedFragment
 import com.imagevideoeditor.fragments.TrimFragment
 import com.imagevideoeditor.photoeditor.*
@@ -399,19 +400,24 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
             }
             R.id.changesound == v.id -> {
 
-                masterVideoFile?.let { file ->
-                    val chnageSoundFragment = ChangeSoundFragment()
-                    chnageSoundFragment.setHelper(this)
-                    chnageSoundFragment.setFilePathFromSource(
-                        file,
-                        mediaPlayer?.duration!!.toLong()
-                    )
-                    showBottomSheetDialogFragment(chnageSoundFragment)
-                }
+                startFilterActivity(videoPath!!)
 
-
+//                masterVideoFile?.let { file ->
+//                    val chnageSoundFragment = ChangeSoundFragment()
+//                    chnageSoundFragment.setHelper(this)
+//                    chnageSoundFragment.setFilePathFromSource(
+//                        file,
+//                        mediaPlayer?.duration!!.toLong()
+//                    )
+//                    showBottomSheetDialogFragment(chnageSoundFragment)
+//                }
             }
         }
+    }
+
+    private fun startFilterActivity(uri: String) {
+        val intent = EditVideoActivity.newIntent(this, uri)
+        startActivity(intent)
     }
 
 
