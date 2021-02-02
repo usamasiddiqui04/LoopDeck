@@ -131,7 +131,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:background="@color/colorPrimaryDark" />
+        android:background="@color/drawer" />
 
 
 </com.example.loopdeck.drawer.AdvanceDrawerLayout>
