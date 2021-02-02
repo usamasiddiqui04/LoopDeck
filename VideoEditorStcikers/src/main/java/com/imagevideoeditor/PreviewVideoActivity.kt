@@ -139,7 +139,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         imgDraw = findViewById(R.id.imgDraw)
         imgText = findViewById(R.id.imgText)
         imgUndo = findViewById(R.id.imgUndo)
-        imgTrim = findViewById(R.id.imgTrim)
+//        imgTrim = findViewById(R.id.imgTrim)
         imgChanesound = findViewById(R.id.changesound)
 
         imgSticker = findViewById(R.id.imgSticker)
@@ -163,7 +163,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         imgSticker?.setOnClickListener(this)
         imgTrim?.setOnClickListener(this)
         imgChanesound?.setOnClickListener(this)
-        imgPlayback?.setOnClickListener(this)
+//        imgPlayback?.setOnClickListener(this)
         imgAddmusic?.setOnClickListener(this)
         videoSurface?.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
             override fun onSurfaceTextureAvailable(
@@ -367,23 +367,23 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
             R.id.imgSticker == v.id -> mStickerBSFragment!!.show(
                 supportFragmentManager, mStickerBSFragment!!.tag
             )
-            R.id.imgTrim == v.id -> {
-                masterVideoFile?.let { file ->
-                    val trimFragment = TrimFragment()
-                    trimFragment.setHelper(this)
-                    trimFragment.setFilePathFromSource(file, mediaPlayer?.duration!!.toLong())
-                    showBottomSheetDialogFragment(trimFragment)
-                }
-            }
-            R.id.imgPlayback == v.id -> {
-                masterVideoFile?.let { file ->
-
-                    SpeedFragment.newInstance().apply {
-                        setHelper(this@PreviewVideoActivity)
-                        setFilePathFromSource(file)
-                    }.show(supportFragmentManager, "OptiPlaybackSpeedDialogFragment")
-                }
-            }
+//            R.id.imgTrim == v.id -> {
+//                masterVideoFile?.let { file ->
+//                    val trimFragment = TrimFragment()
+//                    trimFragment.setHelper(this)
+//                    trimFragment.setFilePathFromSource(file, mediaPlayer?.duration!!.toLong())
+//                    showBottomSheetDialogFragment(trimFragment)
+//                }
+//            }
+//            R.id.imgPlayback == v.id -> {
+//                masterVideoFile?.let { file ->
+//
+//                    SpeedFragment.newInstance().apply {
+//                        setHelper(this@PreviewVideoActivity)
+//                        setFilePathFromSource(file)
+//                    }.show(supportFragmentManager, "OptiPlaybackSpeedDialogFragment")
+//                }
+//            }
 
             R.id.imgAddmusic == v.id -> {
                 masterVideoFile?.let { file ->
