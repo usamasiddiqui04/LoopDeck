@@ -16,7 +16,7 @@ import java.util.*
 
 class MediaAdaptor(
     private var mList: MutableList<MediaData>,
-    private val itemClickListener: (MediaData) -> Unit,
+    private val itemClickListener: (View, ViewHolder, MutableList<MediaData>, MediaData) -> Unit,
     private val itemLongClickListener: (View, ViewHolder, MutableList<MediaData>, MediaData) -> Unit,
     private val onSequenceChanged: ((List<MediaData>) -> Unit)? = null
 
@@ -25,26 +25,36 @@ class MediaAdaptor(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is ImageViewHolder -> {
-                holder.bind(mList[position], itemClickListener)
+                holder.bind(mList[position])
+                holder.itemView.setOnClickListener {
+                    itemClickListener.invoke(it, holder, mList, mList[position])
+                }
                 holder.itemView.setOnLongClickListener {
-                    (itemLongClickListener.invoke(it, holder, mList, mList[position]))
-                    false
+                    itemLongClickListener.invoke(it, holder, mList, mList[position])
+                    true
+
                 }
 
             }
             is VideoViewHolder -> {
-                holder.bind(mList[position], itemClickListener)
+                holder.bind(mList[position])
+                holder.itemView.setOnClickListener {
+                    itemClickListener.invoke(it, holder, mList, mList[position])
+                }
                 holder.itemView.setOnLongClickListener {
-                    (itemLongClickListener.invoke(it, holder, mList, mList[position]))
-                    false
+                    itemLongClickListener.invoke(it, holder, mList, mList[position])
+                    true
                 }
 
             }
             is PlaylistViewHolder -> {
-                holder.bind(mList.get(position), itemClickListener)
+                holder.bind(mList.get(position))
+                holder.itemView.setOnClickListener {
+                    itemClickListener.invoke(it, holder, mList, mList[position])
+                }
                 holder.itemView.setOnLongClickListener {
-                    (itemLongClickListener.invoke(it, holder, mList, mList[position]))
-                    false
+                    itemLongClickListener.invoke(it, holder, mList, mList[position])
+                    true
                 }
 
             }

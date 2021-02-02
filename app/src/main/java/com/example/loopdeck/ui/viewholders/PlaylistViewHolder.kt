@@ -10,10 +10,8 @@ import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
 class PlaylistViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(
         mediaData: MediaData,
-        itemClickListener: ((MediaData) -> Unit)? = null,
     ) {
 
         itemView.playlistName.text = mediaData.name
-        itemView.setOnClickListener { itemClickListener?.invoke(mediaData) }
     }
 }

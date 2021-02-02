@@ -10,12 +10,8 @@ import kotlinx.android.synthetic.main.item_recent_list_images.view.*
 class ImageViewHolder(itemView: View) : ViewHolder(itemView) {
     fun bind(
         mediaData: MediaData,
-        itemClickListener: (MediaData) -> Unit
     ) {
         val uri = Uri.parse(mediaData.filePath)
         itemView.imageViewRecentImage.setImageURI(uri)
-        itemView.setOnClickListener {
-            itemClickListener?.invoke(mediaData)
-        }
     }
 }

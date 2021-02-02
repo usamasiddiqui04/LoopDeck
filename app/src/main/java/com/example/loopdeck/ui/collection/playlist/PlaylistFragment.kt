@@ -103,24 +103,25 @@ class PlaylistFragment : Fragment() {
         }
 
 
-    private val onItemClickListener: (MediaData) -> Unit = { mediaData ->
+    private val onItemClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Unit =
+        { itemView, viewHolder, list, mediadata ->
 //        Toast.makeText(requireContext(), "Item clicked $mediaData", Toast.LENGTH_SHORT).show()
 
-        when (mediaData.mediaType) {
-            MediaType.IMAGE -> {
+            when (mediadata.mediaType) {
+                MediaType.IMAGE -> {
 
-                val intent = Intent(requireContext(), EditImageActivity::class.java)
-                intent.putExtra("imagePath", mediaData.filePath)
-                startActivity(intent)
-            }
-            MediaType.VIDEO -> {
-                val intent = Intent(requireContext(), MainActivity::class.java)
-                intent.putExtra("videoPath", mediaData.filePath)
-                startActivity(intent)
+                    val intent = Intent(requireContext(), EditImageActivity::class.java)
+                    intent.putExtra("imagePath", mediadata.filePath)
+                    startActivity(intent)
+                }
+                MediaType.VIDEO -> {
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    intent.putExtra("videoPath", mediadata.filePath)
+                    startActivity(intent)
             }
             else -> {
                 requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, PlaylistFragment.newInstance(mediaData.name))
+                    .replace(R.id.container, PlaylistFragment.newInstance(mediadata.name))
                     .addToBackStack(null)
                     .commit()
             }

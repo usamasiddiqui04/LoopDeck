@@ -43,12 +43,9 @@ import java.util.*
 class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener {
 
     private var drawer: AdvanceDrawerLayout? = null
-    private var Selectlist = ArrayList<MediaData>()
-    private var enable: Boolean = false
-    private var viewholder: RecyclerView.ViewHolder? = null
+    private var selectedList = ArrayList<MediaData>()
     var string: MediaData? = null
-    var check: Boolean = false
-
+    var multiSelection: Boolean = false
 
     companion object {
         fun newInstance() = RecentsFragment()
@@ -64,80 +61,88 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
     private val onItemLongClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Unit =
         { itemView, viewHolder, list, mediadata ->
 
-            check = true
-
-            string = list.get(viewHolder.adapterPosition)
-            when (mediadata.mediaType) {
-                MediaType.IMAGE -> {
-
-                    if (viewHolder.itemView.selectitem.visibility == View.GONE) {
-                        viewHolder.itemView.selectitem.visibility = View.VISIBLE
-                        viewHolder.itemView.cardview.alpha = 0.5f
-                        Selectlist.add(string!!)
-
-                    } else {
-                        viewHolder.itemView.selectitem.visibility = View.GONE
-                        viewHolder.itemView.cardview.alpha = 1f
-                        Selectlist.remove(string!!)
-                    }
-                }
-                MediaType.VIDEO -> {
-                    if (viewHolder.itemView.selectitem.visibility == View.GONE) {
-                        viewHolder.itemView.selectitem.visibility = View.VISIBLE
-                        viewHolder.itemView.cardvideo.alpha = 0.5f
-                        Selectlist.add(string!!)
-                    } else {
-                        viewHolder.itemView.selectitem.visibility = View.GONE
-                        viewHolder.itemView.cardvideo.alpha = 1f
-                        Selectlist.remove(string!!)
-                    }
-
-                }
-                else -> {
-                    if (viewHolder.itemView.selectitem.visibility == View.GONE) {
-                        viewHolder.itemView.selectitem.visibility = View.VISIBLE
-                        viewHolder.itemView.cardfolder.alpha = 0.5f
-                        Selectlist.add(string!!)
-                    } else {
-                        viewHolder.itemView.selectitem.visibility = View.GONE
-                        viewHolder.itemView.cardfolder.alpha = 1f
-                        Selectlist.remove(string!!)
-                    }
-
-                }
-            }
-
-        }
-    private val onItemClickListener: (MediaData) -> Unit = { mediaData ->
-
-        check = Selectlist.size > 0
-        if (!check) {
-            when (mediaData.mediaType) {
-                MediaType.IMAGE -> {
-                    val intent = Intent(requireContext(), EditImageActivity::class.java)
-                    intent.putExtra("imagePath", mediaData.filePath)
-                    startActivity(intent)
-                }
-                MediaType.VIDEO -> {
-                    val intent = Intent(requireContext(), PreviewVideoActivity::class.java)
-                    intent.putExtra("videoPath", mediaData.filePath)
-                    startActivity(intent)
-
-                }
-                else -> {
-                    requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, PlaylistFragment.newInstance(mediaData.name))
-                        .addToBackStack(null)
-                        .commit()
-
-                }
-            }
-        } else {
+            multiSelection = true
+            toggleSelection(viewHolder, mediadata, list)
 
         }
 
+    private fun toggleSelection(
+        viewHolder: RecyclerView.ViewHolder,
+        mediadata: MediaData,
+        list: MutableList<MediaData>
+    ) {
+        string = list.get(viewHolder.adapterPosition)
+        when (mediadata.mediaType) {
+            MediaType.IMAGE -> {
 
+                if (viewHolder.itemView.selectitem.visibility == View.GONE) {
+                    viewHolder.itemView.selectitem.visibility = View.VISIBLE
+                    viewHolder.itemView.cardview.alpha = 0.5f
+                    selectedList.add(string!!)
+
+                } else {
+                    viewHolder.itemView.selectitem.visibility = View.GONE
+                    viewHolder.itemView.cardview.alpha = 1f
+                    selectedList.remove(string!!)
+                }
+            }
+            MediaType.VIDEO -> {
+                if (viewHolder.itemView.selectitem.visibility == View.GONE) {
+                    viewHolder.itemView.selectitem.visibility = View.VISIBLE
+                    viewHolder.itemView.cardvideo.alpha = 0.5f
+                    selectedList.add(string!!)
+                } else {
+                    viewHolder.itemView.selectitem.visibility = View.GONE
+                    viewHolder.itemView.cardvideo.alpha = 1f
+                    selectedList.remove(string!!)
+                }
+            }
+            else -> {
+                if (viewHolder.itemView.selectitem.visibility == View.GONE) {
+                    viewHolder.itemView.selectitem.visibility = View.VISIBLE
+                    viewHolder.itemView.cardfolder.alpha = 0.5f
+                    selectedList.add(string!!)
+                } else {
+                    viewHolder.itemView.selectitem.visibility = View.GONE
+                    viewHolder.itemView.cardfolder.alpha = 1f
+                    selectedList.remove(string!!)
+                }
+            }
+        }
     }
+
+    private val onItemClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Unit =
+        { itemView, viewHolder, list, mediadata ->
+
+            multiSelection = !selectedList.isEmpty()
+            if (!multiSelection) {
+                when (mediadata.mediaType) {
+                    MediaType.IMAGE -> {
+                        val intent = Intent(requireContext(), EditImageActivity::class.java)
+                        intent.putExtra("imagePath", mediadata.filePath)
+                        startActivity(intent)
+                    }
+                    MediaType.VIDEO -> {
+                        val intent = Intent(requireContext(), PreviewVideoActivity::class.java)
+                        intent.putExtra("videoPath", mediadata.filePath)
+                        startActivity(intent)
+
+                    }
+                    else -> {
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.container, PlaylistFragment.newInstance(mediadata.name))
+                            .addToBackStack(null)
+                            .commit()
+
+                    }
+                }
+            } else {
+
+                toggleSelection(viewHolder, mediadata, list)
+            }
+
+
+        }
 
 
     override fun onCreateView(
@@ -216,7 +221,6 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             .commit()
     }
 
-
     private fun initViews() {
 
 
@@ -250,10 +254,11 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
         }
 
         btnDelete.setOnClickListener {
-            for (list in Selectlist) {
+            for (list in selectedList) {
                 viewModel.delete(list)
             }
-            check = false
+            selectedList.clear()
+            multiSelection = false
         }
 
         btnGallery.setOnClickListener {
@@ -358,7 +363,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             " Deleted successfully ${mediaData.name}",
             Toast.LENGTH_SHORT
         ).show()
-        check = false
+        multiSelection = false
 
 
     }

@@ -18,7 +18,6 @@ class VideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     @SuppressLint("SimpleDateFormat")
     fun bind(
         mediaData: MediaData,
-        itemClickListener: ((MediaData) -> Unit)? = null
     ) {
         val uri = Uri.parse(mediaData.filePath)
         val bitmap = ThumbnailUtils.createVideoThumbnail(
@@ -36,7 +35,6 @@ class VideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         itemView.duration.setText("${minutes}:${seconds}")
         itemView.imageViewRecentVideo.setImageBitmap(bitmap)
-        itemView.setOnClickListener { itemClickListener?.invoke(mediaData) }
     }
 
     fun getduration(uri: String): Long {
