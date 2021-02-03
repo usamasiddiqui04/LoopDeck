@@ -1,4 +1,4 @@
-package com.mikkipastel.fildeo.filter
+package com.imagevideoeditor.filter
 
 import android.net.Uri
 import android.os.Bundle
@@ -24,18 +24,22 @@ import com.daasuu.mp4compose.FillMode
 import com.daasuu.mp4compose.Rotation
 import com.daasuu.mp4compose.composer.Mp4Composer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.imagevideoeditor.R
 import com.imagevideoeditor.filter.adapter.AddFilterAdapter
 import com.imagevideoeditor.filter.interfaces.AddFilterListener
+import com.imagevideoeditor.filter.interfaces.FilterVideoCallBack
 import com.imagevideoeditor.filter.share.ShareActivity
 import com.imagevideoeditor.filter.utils.FilterSave
 import com.imagevideoeditor.filter.utils.FilterType
+import com.obs.marveleditor.OptiVideoEditor
+import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 
-class FilterVideoFragment : Fragment(), AddFilterListener {
+class FilterVideoFragment : BottomSheetDialogFragment(), AddFilterListener {
 
     private lateinit var mAppName: String
     private lateinit var mAppPath: File
-
+    private var filtervideocallback: FilterVideoCallBack? = null
     lateinit var player: SimpleExoPlayer
     lateinit var ePlayerView: EPlayerView
 
@@ -45,17 +49,6 @@ class FilterVideoFragment : Fragment(), AddFilterListener {
 
     private var mPosition: Int = 0
 
-    companion object {
-        const val ARG_KEY_URI = "preview:uri"
-
-        fun newInstance(uri: String): FilterVideoFragment {
-            val fragment = FilterVideoFragment()
-            val bundle = Bundle()
-            bundle.putString(ARG_KEY_URI, uri)
-            fragment.arguments = bundle
-            return fragment
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,12 +67,11 @@ class FilterVideoFragment : Fragment(), AddFilterListener {
             mAppName
         )
 
-        filepath = arguments?.getString(ARG_KEY_URI) ?: ""
+//        filepath = arguments?.getString(ARG_KEY_URI) ?: ""
         filename = filepath.substring(filepath.lastIndexOf("/") + 1)
         filterFilepath = "$mAppPath/MP4_$filename"
 
         setHasOptionsMenu(true)
-        setToolbar()
 
         val adapter = AddFilterAdapter(this, filepath)
 
@@ -91,40 +83,46 @@ class FilterVideoFragment : Fragment(), AddFilterListener {
         }
 
         adapter.notifyDataSetChanged()
+
+        saveVideoWithFilter()
     }
 
-    private fun setToolbar() {
-        val supportToolbar = toolbar as Toolbar
-        (activity as AppCompatActivity).setSupportActionBar(supportToolbar)
-        supportToolbar.apply {
-            navigationIcon = ContextCompat.getDrawable(context, R.drawable.ic_arrow_back)
-            setNavigationOnClickListener {
-                activity?.onBackPressed()
-            }
-        }
-        activity?.title = ""
+    fun setFilePathFromSource(file: File) {
+        filepath = file.toString()
     }
+//
+//    private fun setToolbar() {
+//        val supportToolbar = toolbar as Toolbar
+//        (activity as AppCompatActivity).setSupportActionBar(supportToolbar)
+//        supportToolbar.apply {
+//            navigationIcon = ContextCompat.getDrawable(context, R.drawable.ic_arrow_back)
+//            setNavigationOnClickListener {
+//                activity?.onBackPressed()
+//            }
+//        }
+//        activity?.title = ""
+//    }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_next, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_next -> {
-                saveVideoWithFilter()
-                true
-            }
-            else -> false
-        }
-    }
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        inflater.inflate(R.menu.menu_next, menu)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return when (item.itemId) {
+//            R.id.menu_next -> {
+//                saveVideoWithFilter()
+//                true
+//            }
+//            else -> false
+//        }
+//    }
 
     private fun saveVideoWithFilter() {
 
         if (!mAppPath.exists()) {
             mAppPath.mkdirs()
         }
-
+//
         val dialog = context?.let {
             MaterialDialog.Builder(it)
                 .content(R.string.msg_dialog)
@@ -151,9 +149,9 @@ class FilterVideoFragment : Fragment(), AddFilterListener {
                     override fun onCompleted() {
                         Log.d(mAppName, "onCompleted() Filter : $filterFilepath")
                         dialog?.dismiss()
-                        activity?.finish()
-                        val intent = ShareActivity.newIntent(context, filterFilepath)
-                        startActivity(intent)
+//                        activity?.finish()
+//                        val intent = ShareActivity.newIntent(context, filterFilepath)
+//                        startActivity(intent)
                     }
 
                     override fun onCanceled() {
@@ -173,6 +171,7 @@ class FilterVideoFragment : Fragment(), AddFilterListener {
         }
     }
 
+    //
     private fun setUpSimpleExoPlayer() {
 
         val dataSourceFactory = DefaultDataSourceFactory(
@@ -189,11 +188,17 @@ class FilterVideoFragment : Fragment(), AddFilterListener {
         }
     }
 
+    fun setCallback(callback: FilterVideoCallBack) {
+        filtervideocallback = callback
+
+    }
+
+    //
     private fun setUpGlPlayerView() {
         ePlayerView = EPlayerView(context).apply {
             setSimpleExoPlayer(player)
         }
-        filterView.addView(ePlayerView)
+//        filterView.addView(ePlayerView)
         ePlayerView.onResume()
     }
 
@@ -203,17 +208,14 @@ class FilterVideoFragment : Fragment(), AddFilterListener {
         setUpGlPlayerView()
     }
 
-    override fun onPause() {
-        super.onPause()
-        releasePlayer()
-    }
-
+    //
     private fun releasePlayer() {
         ePlayerView.onPause()
         player.stop()
         player.release()
     }
 
+    //
     override fun onClick(v: View, position: Int) {
         mPosition = position
         ePlayerView.setGlFilter(
@@ -222,5 +224,7 @@ class FilterVideoFragment : Fragment(), AddFilterListener {
                 context
             )
         )
+
+        filtervideocallback!!.SaveFilterVideoFilePath(filterFilepath)
     }
 }

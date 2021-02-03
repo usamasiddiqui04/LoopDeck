@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/_20sdp"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:layout_marginTop="@dimen/_150sdp"
+        android:id="@+id/profile_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/person" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/profile_image"
+        app:layout_constraintTop_toTopOf="@id/profile_image"
+        app:layout_constraintBottom_toBottomOf="@id/profile_image"
+        android:text="Profile"
+        android:layout_marginStart="25dp"
+        android:textColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/add_feature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_40sdp"
+        app:layout_constraintTop_toBottomOf="@id/profile_image"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/add_feature" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/add_feature"
+        app:layout_constraintTop_toTopOf="@id/add_feature"
+        app:layout_constraintBottom_toBottomOf="@id/add_feature"
+        android:text="Add Features"
+        android:layout_marginStart="25dp"
+        android:textColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/video_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_40sdp"
+        app:layout_constraintTop_toBottomOf="@id/add_feature"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/video_guides" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/video_guide"
+        app:layout_constraintTop_toTopOf="@id/video_guide"
+        app:layout_constraintBottom_toBottomOf="@id/video_guide"
+        android:text="Video Guides"
+        android:layout_marginStart="25dp"
+        android:textColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/rate_app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_40sdp"
+        app:layout_constraintTop_toBottomOf="@id/video_guide"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/add_feature" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/rate_app"
+        app:layout_constraintTop_toTopOf="@id/rate_app"
+        app:layout_constraintBottom_toBottomOf="@id/rate_app"
+        android:text="Rate the App"
+        android:layout_marginStart="25dp"
+        android:textColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/feature_request"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_40sdp"
+        app:layout_constraintTop_toBottomOf="@id/rate_app"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/request_feature" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/feature_request"
+        app:layout_constraintTop_toTopOf="@id/feature_request"
+        app:layout_constraintBottom_toBottomOf="@id/feature_request"
+        android:text="Feature Request"
+        android:layout_marginStart="25dp"
+        android:textColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/about_us"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_40sdp"
+        app:layout_constraintTop_toBottomOf="@id/feature_request"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/ic_outline_mode_comment_24" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/about_us"
+        app:layout_constraintTop_toTopOf="@id/about_us"
+        app:layout_constraintBottom_toBottomOf="@id/about_us"
+        android:text="Feature Request"
+        android:layout_marginStart="25dp"
+        android:textColor="@color/white" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

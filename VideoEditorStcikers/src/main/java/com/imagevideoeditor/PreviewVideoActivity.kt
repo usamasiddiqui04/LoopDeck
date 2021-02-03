@@ -35,9 +35,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.imagevideoeditor.Utils.DimensionData
 import com.imagevideoeditor.Utils.Utils
 import com.imagevideoeditor.filter.EditVideoActivity
-import com.imagevideoeditor.filter.FilterMainActivity
-import com.imagevideoeditor.fragments.SpeedFragment
-import com.imagevideoeditor.fragments.TrimFragment
+import com.imagevideoeditor.filter.FilterVideoFragment
+import com.imagevideoeditor.filter.interfaces.FilterVideoCallBack
 import com.imagevideoeditor.photoeditor.*
 import com.obs.marveleditor.fragments.OptiAddMusicFragment
 import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
@@ -53,7 +52,7 @@ private val displayMetrics1 = DisplayMetrics()
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFMpegCallback,
     PropertiesBSFragment.Properties, View.OnClickListener, StickerBSFragment.StickerListener,
-    OptiBaseCreatorDialogFragment.CallBacks {
+    OptiBaseCreatorDialogFragment.CallBacks, FilterVideoCallBack {
     var videoSurface: TextureView? = null
     var ivImage: PhotoEditorView? = null
     var imgClose: ImageView? = null
@@ -399,8 +398,12 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
                 }
             }
             R.id.changesound == v.id -> {
+                val filterFragment = FilterVideoFragment()
+                filterFragment.setCallback(this)
+                filterFragment.setFilePathFromSource(masterVideoFile!!)
+                showBottomSheetDialogFragment(filterFragment)
 
-                startFilterActivity(videoPath!!)
+//                startFilterActivity(videoPath!!)
 
 //                masterVideoFile?.let { file ->
 //                    val chnageSoundFragment = ChangeSoundFragment()
@@ -709,6 +712,11 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     override fun onFinish() {
         Log.v(tagName, "onFinish()")
         showLoading(false)
+    }
+
+    override fun SaveFilterVideoFilePath(filterVideoFilePath: String) {
+        masterVideoFile = File(filterVideoFilePath)
+
     }
 
 }

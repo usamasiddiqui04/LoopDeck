@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:id="@+id/drawer_layout"
+    android:background="@color/drawer2"
     xmlns:tools="http://schemas.android.com/tools"
     tools:openDrawer="start"
     android:fitsSystemWindows="true"
@@ -129,9 +130,10 @@
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        app:headerLayout="@layout/header_layout"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        android:background="@color/drawer" />
+        android:background="@drawable/drawer_background"
+        android:fitsSystemWindows="true" />
 
 
 </com.example.loopdeck.drawer.AdvanceDrawerLayout>

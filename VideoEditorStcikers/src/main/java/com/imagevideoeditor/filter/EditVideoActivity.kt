@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Window
 import android.view.WindowManager
 import com.imagevideoeditor.R
-import com.mikkipastel.fildeo.filter.FilterVideoFragment
 
 class EditVideoActivity : AppCompatActivity() {
 
@@ -32,18 +31,18 @@ class EditVideoActivity : AppCompatActivity() {
         )
         setContentView(R.layout.activity_edit_video)
 
-        savedInstanceState ?: intent.extras!!.getString(BUNDLE_KEY_URI)?.let {
-            FilterVideoFragment.newInstance(
-                it
-            )
-        }?.let {
-            supportFragmentManager.beginTransaction()
-                .replace(
-                    R.id.container,
-                    it
-                )
-                .commit()
-        }
+//        savedInstanceState ?: intent.extras!!.getString(BUNDLE_KEY_URI)?.let {
+//            FilterVideoFragment.newInstance(
+//                it
+//            )
+//        }?.let {
+//            supportFragmentManager.beginTransaction()
+//                .replace(
+//                    R.id.container,
+//                    it
+//                )
+//                .commit()
+//        }
     }
 
 }

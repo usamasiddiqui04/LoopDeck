@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorPrimaryDark">#0E2547</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="grey">#F1F4F6</color>
     <color name="drawer">#100C1C</color>
+    <color name="drawer2">#0E2547</color>
+    <color name="stickersborder">#292142</color>
 
 </resources>

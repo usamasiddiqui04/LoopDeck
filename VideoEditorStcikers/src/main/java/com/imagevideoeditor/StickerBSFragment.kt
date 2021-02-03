@@ -47,7 +47,7 @@ class StickerBSFragment() : BottomSheetDialogFragment() {
         }
         (contentView.parent as View).setBackgroundColor(resources.getColor(android.R.color.transparent))
         val rvEmoji: RecyclerView = contentView.findViewById(R.id.rvEmoji)
-        val gridLayoutManager = GridLayoutManager(activity, 3)
+        val gridLayoutManager = GridLayoutManager(activity, 4)
         rvEmoji.layoutManager = gridLayoutManager
         val stickerAdapter: StickerAdapter = StickerAdapter()
         rvEmoji.adapter = stickerAdapter
@@ -59,6 +59,46 @@ class StickerBSFragment() : BottomSheetDialogFragment() {
 
     inner class StickerAdapter() : RecyclerView.Adapter<StickerAdapter.ViewHolder>() {
         var stickerList = intArrayOf(
+            R.drawable.aa,
+            R.drawable.bb,
+            R.drawable.cc,
+            R.drawable.dd,
+            R.drawable.ee,
+            R.drawable.ff,
+            R.drawable.birthday_one,
+            R.drawable.birthday_two,
+            R.drawable.aa,
+            R.drawable.bb,
+            R.drawable.cc,
+            R.drawable.dd,
+            R.drawable.ee,
+            R.drawable.ff,
+            R.drawable.birthday_one,
+            R.drawable.birthday_two,
+            R.drawable.aa,
+            R.drawable.bb,
+            R.drawable.cc,
+            R.drawable.dd,
+            R.drawable.ee,
+            R.drawable.ff,
+            R.drawable.birthday_one,
+            R.drawable.birthday_two,
+            R.drawable.aa,
+            R.drawable.bb,
+            R.drawable.cc,
+            R.drawable.dd,
+            R.drawable.ee,
+            R.drawable.ff,
+            R.drawable.birthday_one,
+            R.drawable.birthday_two,
+            R.drawable.aa,
+            R.drawable.bb,
+            R.drawable.cc,
+            R.drawable.dd,
+            R.drawable.ee,
+            R.drawable.ff,
+            R.drawable.birthday_one,
+            R.drawable.birthday_two,
             R.drawable.aa,
             R.drawable.bb,
             R.drawable.cc,
