@@ -116,7 +116,7 @@
         app:layout_constraintStart_toEndOf="@id/about_us"
         app:layout_constraintTop_toTopOf="@id/about_us"
         app:layout_constraintBottom_toBottomOf="@id/about_us"
-        android:text="Feature Request"
+        android:text="About Us"
         android:layout_marginStart="25dp"
         android:textColor="@color/white" />
 
