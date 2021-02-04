@@ -6,9 +6,7 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.SurfaceTexture
 import android.graphics.Typeface
-import android.media.AudioManager
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.net.Uri
@@ -20,23 +18,33 @@ import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
+import com.daasuu.epf.EPlayerView
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.FFmpegExecuteResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.FFmpegLoadBinaryResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException
+import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.util.Util
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.imagevideoeditor.Utils.DimensionData
 import com.imagevideoeditor.Utils.Utils
 import com.imagevideoeditor.filter.EditVideoActivity
 import com.imagevideoeditor.filter.FilterVideoFragment
+import com.imagevideoeditor.filter.interfaces.AddFilterListener
 import com.imagevideoeditor.filter.interfaces.FilterVideoCallBack
+import com.imagevideoeditor.filter.utils.FilterType
 import com.imagevideoeditor.photoeditor.*
 import com.obs.marveleditor.fragments.OptiAddMusicFragment
 import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
@@ -52,8 +60,8 @@ private val displayMetrics1 = DisplayMetrics()
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFMpegCallback,
     PropertiesBSFragment.Properties, View.OnClickListener, StickerBSFragment.StickerListener,
-    OptiBaseCreatorDialogFragment.CallBacks, FilterVideoCallBack {
-    var videoSurface: TextureView? = null
+    OptiBaseCreatorDialogFragment.CallBacks, AddFilterListener {
+    var videoSurface: FrameLayout? = null
     var ivImage: PhotoEditorView? = null
     var imgClose: ImageView? = null
     var imgDone: ImageView? = null
@@ -83,6 +91,17 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     private var newCanvasHeight = 0
     private var DRAW_CANVASW = 0
     private var DRAW_CANVASH = 0
+    private lateinit var mAppName: String
+    private lateinit var mAppPath: File
+    private var filtervideocallback: FilterVideoCallBack? = null
+    lateinit var player: SimpleExoPlayer
+    lateinit var ePlayerView: EPlayerView
+
+    private lateinit var filename: String
+    private lateinit var filterFilepath: String
+
+    private var mPosition: Int = 0
+
     private val onCompletionListener =
         MediaPlayer.OnCompletionListener { mediaPlayer -> mediaPlayer.start() }
 
@@ -121,15 +140,68 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         setCanvasAspectRatio()
         videoSurface!!.layoutParams.width = newCanvasWidth
         videoSurface!!.layoutParams.height = newCanvasHeight
-        ivImage!!.layoutParams.width = newCanvasWidth
-        ivImage!!.layoutParams.height = newCanvasHeight
+//        ivImage!!.layoutParams.width = newCanvasWidth
+//        ivImage!!.layoutParams.height = newCanvasHeight
         Log.d(
             ">>",
             "width>> " + newCanvasWidth + "height>> " + newCanvasHeight + " rotation >> " + rotation
         )
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        setUpSimpleExoPlayer()
+        setUpGlPlayerView()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        releasePlayer()
+    }
+
+    private fun releasePlayer() {
+        ePlayerView.onPause()
+        player.stop()
+        player.release()
+    }
+
+    private fun setUpGlPlayerView() {
+        ePlayerView = EPlayerView(applicationContext).apply {
+            setSimpleExoPlayer(player)
+        }
+        videoSurface!!.addView(ePlayerView)
+        ePlayerView.onResume()
+    }
+
+    private fun setUpSimpleExoPlayer() {
+
+        val dataSourceFactory = DefaultDataSourceFactory(
+            applicationContext,
+            Util.getUserAgent(applicationContext, mAppName)
+        )
+        val videoSource = ProgressiveMediaSource.Factory(dataSourceFactory)
+            .createMediaSource(Uri.fromFile(masterVideoFile))
+
+        player = ExoPlayerFactory.newSimpleInstance(applicationContext).apply {
+            prepare(videoSource)
+            playWhenReady = true
+            repeatMode = Player.REPEAT_MODE_ONE
+        }
+    }
+
     private fun initViews() {
+        mAppName = getString(R.string.app_name)
+        mAppPath = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES),
+            mAppName
+        )
+
+//        filepath = arguments?.getString(ARG_KEY_URI) ?: ""
+        filename =
+            masterVideoFile!!.toString().substring(masterVideoFile.toString().lastIndexOf("/") + 1)
+        filterFilepath = "$mAppPath/MP4_$filename"
+
         videoSurface = findViewById(R.id.videoSurface)
         ivImage = findViewById(R.id.ivImage)
         imgClose = findViewById(R.id.imgClose)
@@ -164,34 +236,6 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         imgChanesound?.setOnClickListener(this)
 //        imgPlayback?.setOnClickListener(this)
         imgAddmusic?.setOnClickListener(this)
-        videoSurface?.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
-            override fun onSurfaceTextureAvailable(
-                surfaceTexture: SurfaceTexture,
-                i: Int,
-                i1: Int
-            ) {
-
-                surface = Surface(surfaceTexture)
-                initializePlayer()
-            }
-
-            override fun onSurfaceTextureSizeChanged(
-                surfaceTexture: SurfaceTexture,
-                i: Int,
-                i1: Int
-            ) {
-            }
-
-            override fun onSurfaceTextureDestroyed(surfaceTexture: SurfaceTexture): Boolean {
-                return false
-            }
-
-            override fun onSurfaceTextureUpdated(surfaceTexture: SurfaceTexture) {
-
-            }
-        }
-
-
         exeCmd = ArrayList()
         try {
             fFmpeg?.loadBinary(object : FFmpegLoadBinaryResponseHandler {
@@ -217,48 +261,15 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     }
 
 
-    lateinit var surface: Surface
-    fun initializePlayer() {
-
-        try {
-            mediaPlayer = MediaPlayer()
-            //                    mediaPlayer.setDataSource("http://daily3gp.com/vids/747.3gp");
-            Log.d("VideoPath>>", videoPath!!)
-
-            mediaPlayer?.apply {
-                setDataSource(masterVideoFile!!.absolutePath)
-                setSurface(surface)
-                prepare()
-                setOnCompletionListener(onCompletionListener)
-                setAudioStreamType(AudioManager.STREAM_MUSIC)
-                start()
-            }
-
-        } catch (e: IllegalArgumentException) {
-            // TODO Auto-generated catch block
-            e.printStackTrace()
-        } catch (e: SecurityException) {
-            // TODO Auto-generated catch block
-            e.printStackTrace()
-        } catch (e: IllegalStateException) {
-            // TODO Auto-generated catch block
-            e.printStackTrace()
-        } catch (e: IOException) {
-            // TODO Auto-generated catch block
-            e.printStackTrace()
-        }
-
-
-    }
-
     override fun onDidNothing() {
 
     }
 
     override fun onFileProcessed(file: File) {
         masterVideoFile = file
-        mediaPlayer?.release()
-        initializePlayer()
+//        mediaPlayer?.release()
+//        initializePlayer()
+        releasePlayer()
 
     }
 
@@ -399,8 +410,8 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
             }
             R.id.changesound == v.id -> {
                 val filterFragment = FilterVideoFragment()
-                filterFragment.setCallback(this)
                 filterFragment.setFilePathFromSource(masterVideoFile!!)
+                filterFragment.setCallback(this)
                 showBottomSheetDialogFragment(filterFragment)
 
 //                startFilterActivity(videoPath!!)
@@ -588,8 +599,8 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 
     override fun onBackPressed() {
         super.onBackPressed()
-        mediaPlayer!!.stop()
-        mediaPlayer?.release()
+        player.stop()
+
     }
 
     fun generatePath(uri: Uri, context: Context): String? {
@@ -714,9 +725,13 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         showLoading(false)
     }
 
-    override fun SaveFilterVideoFilePath(filterVideoFilePath: String) {
-        masterVideoFile = File(filterVideoFilePath)
-
+    override fun onClick(v: View, position: Int) {
+        mPosition = position
+        ePlayerView.setGlFilter(
+            FilterType.createGlFilter(
+                FilterType.createFilterList()[mPosition],
+                applicationContext
+            )
+        )
     }
-
 }

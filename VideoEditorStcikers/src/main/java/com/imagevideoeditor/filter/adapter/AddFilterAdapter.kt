@@ -17,8 +17,8 @@ import kotlinx.android.synthetic.main.item_filter.view.*
 import java.lang.NullPointerException
 
 class AddFilterAdapter(
-    private val mListener: AddFilterListener,
-    private val mFilename: String
+    private val mFilename: String,
+    private val itemClickListener: (View, Int) -> Unit
 ) : RecyclerView.Adapter<AddFilterAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -27,7 +27,10 @@ class AddFilterAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(position, mListener, mFilename)
+        holder.bind(position, mFilename)
+        holder.itemView.setOnClickListener {
+            itemClickListener.invoke(it, position)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -35,11 +38,10 @@ class AddFilterAdapter(
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(position: Int, listener: AddFilterListener, filename: String) {
+        fun bind(position: Int, filename: String) {
 
             itemView.apply {
                 setOnTouchListener(MotionTouchListener())
-                setOnClickListener { v -> listener.onClick(v, position) }
             }
 
             var bitmap = ThumbnailUtils.createVideoThumbnail(
@@ -109,11 +111,6 @@ class AddFilterAdapter(
                 bitmap = gpuImage.bitmapWithFilterApplied
                 itemView.apply {
                     thumbnails.setImageBitmap(bitmap)
-                    textFilterName.text = when (position) {
-                        0 -> "normal"
-                        1 -> "grayscale"
-                        else -> filterFile[position - 2].drop(4).dropLast(4)
-                    }
                 }
             } catch (e: NullPointerException) {
                 //TODO something with get photo from Google Photos

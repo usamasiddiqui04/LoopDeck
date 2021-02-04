@@ -1,64 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:background="@color/main_menu">
 
-    <!--    <com.google.android.material.appbar.AppBarLayout-->
-    <!--        android:id="@+id/appBar"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:elevation="0dp">-->
+    <ImageView
+        android:id="@+id/iv_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/app_name"
+        android:layout_margin="20dp"
+        android:tint="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recyclerView"
+        app:srcCompat="@drawable/ic_baseline_done_24px" />
 
-    <!--        <androidx.appcompat.widget.Toolbar-->
-    <!--            android:id="@+id/toolbar"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="?attr/actionBarSize"-->
-    <!--            android:background="@color/colorPrimary" />-->
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/app_name"
+        android:layout_margin="20dp"
+        android:tint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recyclerView"
+        app:srcCompat="@drawable/ic_baseline_close_24px" />
 
-    <!--    </com.google.android.material.appbar.AppBarLayout>-->
+    <TextView
+        android:id="@+id/iv_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Filters"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/recyclerView" />
 
-    <!--    <RelativeLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent">-->
 
-    <!--        <RelativeLayout-->
-    <!--            android:id="@+id/layoutFilter"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:layout_above="@id/layoutAdapter"-->
-    <!--            android:background="#000000"-->
-    <!--            android:gravity="center_horizontal">-->
-
-    <!--            <FrameLayout-->
-    <!--                android:id="@+id/filterView"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_centerHorizontal="true"-->
-    <!--                android:layout_centerVertical="true" />-->
-
-    <!--        </RelativeLayout>-->
-
-    <RelativeLayout
-        android:id="@+id/layoutAdapter"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimary">
+        android:clipToPadding="false"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/item_filter" />
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp" />
 
-        </RelativeLayout>
-
-    <!--    </RelativeLayout>-->
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

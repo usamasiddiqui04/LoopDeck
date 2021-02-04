@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/thumbnails"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_margin="4dp"
-        android:background="@color/colorAccent" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textFilterName"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textColor="@android:color/white"
-        android:textSize="12sp"
-        android:textAlignment="center"
-        tools:text="ghosts_in_your_head" />
+        android:layout_width="100dp"
+        android:scaleType="centerCrop"
+        app:riv_corner_radius="15dip"
+        android:adjustViewBounds="true"
+        android:layout_height="100dp"
+        android:layout_margin="4dp" />
 
 </LinearLayout>
