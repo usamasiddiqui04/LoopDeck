@@ -31,6 +31,7 @@ import java.io.IOException
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.jvm.Throws
 
 class PickerActivity : AppCompatActivity() {
 
@@ -156,11 +157,19 @@ class PickerActivity : AppCompatActivity() {
 
 
     val tabIconList: ArrayList<Int> = ArrayList()
-    private val tabIcons = intArrayOf(R.drawable.ic_picker_photos_unselected,
-            R.drawable.ic_video_unselected)
+    private val tabIcons = intArrayOf(
+        R.drawable.ic_picker_photos_unselected,
+        R.drawable.ic_video_unselected
+    )
 
-    private val selectedTabIcons = intArrayOf(R.drawable.ic_picker_photos_selected,
-            R.drawable.ic_video_selected)
+    private val selectedTabText = intArrayOf(
+        R.drawable.ic_picker_photos_selected,
+        R.drawable.ic_video_selected
+    )
+    private val selectedTabIcons = intArrayOf(
+        R.drawable.ic_picker_photos_selected,
+        R.drawable.ic_video_selected
+    )
 
     private fun setupTabIcons() {
         tabIconList.add(tabIcons[0])

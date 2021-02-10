@@ -39,7 +39,7 @@ class FontPickerAdapter internal constructor(
                 )
             )
         } else {
-            viewHolder.name.setBackgroundColor(ContextCompat.getColor(context, R.color.black_trasp))
+            viewHolder.name.setBackgroundResource(R.drawable.stciker_background)
         }
     }
 
