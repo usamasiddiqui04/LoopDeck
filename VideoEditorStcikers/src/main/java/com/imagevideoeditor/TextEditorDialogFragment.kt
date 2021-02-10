@@ -1,6 +1,7 @@
 package com.imagevideoeditor
 
 import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -10,10 +11,11 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.FILL_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -116,7 +118,14 @@ class TextEditorDialogFragment : DialogFragment() {
         colorPickerAdapter.setOnColorPickerClickListener(object : OnColorPickerClickListener {
             override fun onColorPickerClicked(colorCode: Int) {
                 mColorCode = colorCode
-                mAddTextEditText?.setTextColor(colorCode)
+                if (!check) {
+                    mAddTextEditText?.setTextColor(colorCode)
+                } else {
+                    mAddTextEditText!!.setWidth(WRAP_CONTENT);
+                    mAddTextEditText!!.setHeight(WRAP_CONTENT);
+                    mAddTextEditText!!.setPadding(20, 20, 20, 20);
+                    mAddTextEditText?.setBackgroundResource(colorCode)
+                }
             }
         })
 
