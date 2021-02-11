@@ -27,6 +27,8 @@
             android:background="#ffffff"
             android:elevation="8dp"
             app:tabIndicatorHeight="0dp" />
+
+        <include layout="@layout/onlinemedia" />
     </LinearLayout>
 
 
@@ -45,7 +47,7 @@
             android:layout_marginStart="@dimen/_16sdp"
             android:layout_marginTop="@dimen/_16sdp"
             android:layout_marginEnd="@dimen/_16sdp"
-            android:layout_marginBottom="@dimen/_50sdp"
+            android:layout_marginBottom="@dimen/_220sdp"
             android:src="@drawable/ic_camera"
             android:tint="#ffffff" />
 

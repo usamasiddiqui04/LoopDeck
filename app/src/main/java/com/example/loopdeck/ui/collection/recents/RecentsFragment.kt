@@ -4,11 +4,13 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -238,6 +240,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             R.string.navigation_drawer_close
         )
         drawer_layout!!.addDrawerListener(toggle)
+
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
