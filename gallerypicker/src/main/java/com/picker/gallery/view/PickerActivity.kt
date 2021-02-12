@@ -39,6 +39,7 @@ class PickerActivity : AppCompatActivity() {
     var IMAGES_THRESHOLD = 0
     var VIDEOS_THRESHOLD = 0
     var REQUEST_RESULT_CODE = 101
+    val array: Array<String>? = null
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,24 +54,10 @@ class PickerActivity : AppCompatActivity() {
         setUpViewPager(viewpager)
         tabs.setupWithViewPager(viewpager)
         setupTabIcons()
-        tabs.getTabAt(0)?.setIcon(selectedTabIcons[0])
-        tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-            }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                tab?.setIcon(tabIconList[tab.position])
-            }
-
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                tab?.setIcon(selectedTabIcons[tab.position])
-            }
-
-        })
-
-        camera.setOnClickListener {
-            if (isCameraPermitted()) dispatchTakePictureIntent() else checkCameraPermission()
-        }
+//        camera.setOnClickListener {
+//            if (isCameraPermitted()) dispatchTakePictureIntent() else checkCameraPermission()
+//        }
     }
 
     private fun isCameraPermitted(): Boolean {
@@ -157,30 +144,13 @@ class PickerActivity : AppCompatActivity() {
 
 
     val tabIconList: ArrayList<Int> = ArrayList()
-    private val tabIcons = intArrayOf(
-        R.drawable.ic_picker_photos_unselected,
-        R.drawable.ic_video_unselected
-    )
+    val tabtextlist: ArrayList<String> = ArrayList()
 
-    private val selectedTabText = intArrayOf(
-        R.drawable.ic_picker_photos_selected,
-        R.drawable.ic_video_selected
-    )
-    private val selectedTabIcons = intArrayOf(
-        R.drawable.ic_picker_photos_selected,
-        R.drawable.ic_video_selected
-    )
 
     private fun setupTabIcons() {
-        tabIconList.add(tabIcons[0])
-        tabIconList.add(tabIcons[1])
-        tabs.getTabAt(0)?.setIcon(tabIconList[0])
-        tabs.getTabAt(1)?.setIcon(tabIconList[1])
+        tabs.getTabAt(0)?.setText("Photos")
+        tabs.getTabAt(1)?.setText("Videos")
 
-        for (i in 0 until tabs.tabCount) {
-            val tab = tabs.getTabAt(i)
-            tab?.setCustomView(R.layout.tab_icon)
-        }
     }
 
     private fun setUpViewPager(viewPager: ViewPager) {

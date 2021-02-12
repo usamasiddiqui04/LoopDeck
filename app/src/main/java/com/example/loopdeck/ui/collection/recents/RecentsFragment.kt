@@ -60,10 +60,19 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
         MediaAdaptor(mList = mutableListOf(), onItemClickListener, onItemLongClickListener)
     }
 
+    private fun checkmultiselection() {
+        if (multiSelection) {
+            bottomLayout.visibility = View.VISIBLE
+        } else {
+            bottomLayout.visibility = View.GONE
+        }
+    }
+
     private val onItemLongClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Unit =
         { itemView, viewHolder, list, mediadata ->
 
             multiSelection = true
+            checkmultiselection()
             toggleSelection(viewHolder, mediadata, list)
 
         }
@@ -113,6 +122,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
         }
     }
 
+
     private val onItemClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Unit =
         { itemView, viewHolder, list, mediadata ->
 
@@ -141,6 +151,10 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             } else {
 
                 toggleSelection(viewHolder, mediadata, list)
+                multiSelection = !selectedList.isEmpty()
+                if (!multiSelection) {
+                    checkmultiselection()
+                }
             }
 
 
@@ -224,8 +238,6 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
     }
 
     private fun initViews() {
-
-
         addfiles.setOnClickListener {
             showDialog()
         }
@@ -262,6 +274,10 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             }
             selectedList.clear()
             multiSelection = false
+        }
+
+        addmedia.setOnClickListener {
+            showDialog()
         }
 
         btnGallery.setOnClickListener {
@@ -325,14 +341,14 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             viewLifecycleOwner,
             androidx.lifecycle.Observer { list ->
                 if (list.isEmpty()) {
-                    bottomLayout.visibility = View.INVISIBLE
                     recyclerview.visibility = View.INVISIBLE
                     no_mediafile.visibility = View.VISIBLE
+                    addmedia.visibility = View.INVISIBLE
                     return@Observer
                 }
-                bottomLayout.visibility = View.VISIBLE
                 recyclerview.visibility = View.VISIBLE
                 no_mediafile.visibility = View.INVISIBLE
+                addmedia.visibility = View.VISIBLE
                 mediaAdapter.submitList(list.distinctBy { it.name })
             })
 
