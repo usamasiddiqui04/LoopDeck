@@ -11,21 +11,19 @@
         android:id="@+id/sort"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_wrap_text_24"
+        android:src="@drawable/ic_iconaligncenter"
         android:layout_margin="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <TextView
+    <ImageView
         android:id="@+id/font"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="Aa"
-        android:background="@color/white"
-        android:textColor="@color/black"
+        android:src="@drawable/ic_iconbackgroundcolorselection"
         android:padding="2dp"
         android:layout_margin="10dp" />
 
@@ -35,7 +33,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toLeftOf="@id/font"
-        android:src="@drawable/ic_baseline_color_lens_24"
+        android:src="@drawable/ic_iconbackgroundcolorselectioncopy"
         android:layout_margin="10dp" />
 
     <ImageView
@@ -44,7 +42,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toLeftOf="@id/color"
-        android:src="@drawable/text_width_24"
+        android:src="@drawable/ic_icontext"
         android:layout_margin="10dp" />
 
 

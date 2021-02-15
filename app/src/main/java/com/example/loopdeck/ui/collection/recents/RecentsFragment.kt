@@ -344,6 +344,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
                     recyclerview.visibility = View.INVISIBLE
                     no_mediafile.visibility = View.VISIBLE
                     addmedia.visibility = View.INVISIBLE
+                    bottomLayout.visibility = View.GONE
                     return@Observer
                 }
                 recyclerview.visibility = View.VISIBLE
