@@ -45,6 +45,8 @@ import com.imagevideoeditor.filter.FilterVideoFragment
 import com.imagevideoeditor.filter.interfaces.AddFilterListener
 import com.imagevideoeditor.filter.interfaces.FilterVideoCallBack
 import com.imagevideoeditor.filter.utils.FilterType
+import com.imagevideoeditor.fragments.AddMusicFragment
+import com.imagevideoeditor.fragments.SoundPickerFragment
 import com.imagevideoeditor.photoeditor.*
 import com.obs.marveleditor.fragments.OptiAddMusicFragment
 import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
@@ -396,17 +398,20 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 //            }
 
             R.id.imgAddmusic == v.id -> {
-                masterVideoFile?.let { file ->
 
-                    val timeInMillis = OptiUtils.getVideoDuration(applicationContext, file)
-                    /*val duration = OptiCommonMethods.convertDurationInSec(timeInMillis)
-                Log.v(tagName, "videoDuration: $duration")*/
-                    OptiAddMusicFragment.newInstance().apply {
-                        setHelper(this@PreviewVideoActivity)
-                        setFilePathFromSource(file)
-                        setDuration(timeInMillis)
-                    }.show(supportFragmentManager, "OptiAddMusicFragment")
-                }
+                val soundPickerFragment = SoundPickerFragment()
+                showBottomSheetDialogFragment(soundPickerFragment)
+//                masterVideoFile?.let { file ->
+//
+//                    val timeInMillis = OptiUtils.getVideoDuration(applicationContext, file)
+//                    /*val duration = OptiCommonMethods.convertDurationInSec(timeInMillis)
+//                Log.v(tagName, "videoDuration: $duration")*/
+//                   AddMusicFragment.newInstance().apply {
+//                        setHelper(this@PreviewVideoActivity)
+//                        setFilePathFromSource(file)
+//                        setDuration(timeInMillis)
+//                    }.show(supportFragmentManager, "AddMusicFragment")
+//                }
             }
             R.id.changesound == v.id -> {
                 val filterFragment = FilterVideoFragment()
@@ -723,6 +728,8 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     override fun onFinish() {
         Log.v(tagName, "onFinish()")
         showLoading(false)
+        releasePlayer()
+
     }
 
     override fun onClick(v: View, position: Int) {

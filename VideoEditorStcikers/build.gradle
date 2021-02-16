@@ -38,6 +38,8 @@ dependencies {
     implementation "com.github.imjeevandeshmukh:GlideToast:${GlideToast}"
     //seekbar
 
+    compile 'com.makeramen:roundedimageview:2.3.0'
+
     compile 'com.zolad:bubbletextureview:1.0.0'
     compile 'com.makeramen:roundedimageview:2.3.0'
     implementation "com.github.guilhe:seekbar-ranged-view:${seekbar}"
