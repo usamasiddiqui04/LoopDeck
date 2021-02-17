@@ -30,9 +30,10 @@ class OptiVideoOptionFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHel
 
     }
 
-    override fun setDuration(duration: Long) {
-
+    override fun duration(duration: Long) {
+        TODO("Not yet implemented")
     }
+
 
     //private var tagName: String = OptiVideoOptionFragment::class.java.simpleName
     private var acivClose: AppCompatImageView? = null
@@ -40,7 +41,11 @@ class OptiVideoOptionFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHel
     private var tvCamera: TextView? = null
     private var helper: CallBacks? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
         val inflate = inflater.inflate(R.layout.opti_add_video_includer, container, false)

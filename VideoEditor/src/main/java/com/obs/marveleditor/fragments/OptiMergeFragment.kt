@@ -113,13 +113,15 @@ class OptiMergeFragment : BottomSheetDialogFragment(), OptiDialogueHelper, OptiF
 
     }
 
+    override fun duration(duration: Long) {
+        TODO("Not yet implemented")
+    }
+
+
     override fun setHelper(helper: OptiBaseCreatorDialogFragment.CallBacks) {
         this.helper = helper
     }
 
-    override fun setDuration(duration: Long) {
-
-    }
 
     fun checkPermission(requestCode: Int, permission: String) {
         requestPermissions(arrayOf(permission), requestCode)

@@ -84,7 +84,7 @@ class SpeedFragment : BottomSheetDialogFragment(), OptiDialogueHelper, OptiFFMpe
         isHavingAudio = OptiUtils.isVideoHaveAudioTrack(file.absolutePath)
     }
 
-    override fun setDuration(duration: Long) {
+    override fun duration(duration: Long) {
 
     }
 

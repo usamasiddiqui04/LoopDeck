@@ -91,6 +91,7 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
 
         val inflate = inflater.inflate(R.layout.opti_add_music_includer, container, false)
         initView(inflate)
+        setFilePath()
         return inflate
     }
 
@@ -293,7 +294,7 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
         this.helper = helper
     }
 
-    override fun setDuration(duration: Long) {
+    override fun duration(duration: Long) {
         this.seekToValue = duration
     }
 
@@ -312,8 +313,14 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
         }
     }
 
+    fun setaudiofilepath(audioFile: File, videofile: File, duration: Long) {
+        masterAudioFile = audioFile
+        videoFile = videofile
+        this.seekToValue = duration
+    }
+
     companion object {
-        fun newInstance() = OptiAddMusicFragment()
+        fun newInstance() = AddMusicFragment()
     }
 
     fun checkPermission(requestCode: Int, permission: String) {
@@ -375,45 +382,20 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
         when (requestCode) {
             OptiConstant.AUDIO_GALLERY -> {
                 data?.let {
-                    setFilePath(resultCode, it, OptiConstant.AUDIO_GALLERY)
                 }
             }
         }
     }
 
-    private fun setFilePath(resultCode: Int, data: Intent, mode: Int) {
-        if (resultCode == Activity.RESULT_OK) {
-            try {
-                val selectedImage = data.data
+    private fun setFilePath() {
 
-                val filePathColumn = arrayOf(MediaStore.MediaColumns.DATA)
-                val cursor = context!!.contentResolver.query(
-                    selectedImage!!,
-                    filePathColumn,
-                    null,
-                    null,
-                    null
-                )
-                if (cursor != null) {
-                    cursor.moveToFirst()
-                    val columnIndex = cursor.getColumnIndex(filePathColumn[0])
-                    val filePath = cursor.getString(columnIndex)
-                    cursor.close()
-                    if (mode == OptiConstant.AUDIO_GALLERY) {
-                        masterAudioFile = File(filePath)
-                        masterAudioFile?.let { file ->
-                            tvSelectedAudio!!.text = masterAudioFile!!.name.toString()
-                            //setFilePathFromSource(file)
-                            setControls(true)
+        masterAudioFile?.let { file ->
+            tvSelectedAudio!!.text = masterAudioFile!!.name.toString()
+            //setFilePathFromSource(file)
+            setControls(true)
 
-                            if (Util.SDK_INT <= 23 || exoPlayer == null) {
-                                initializePlayer()
-                            }
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-
+            if (Util.SDK_INT <= 23 || exoPlayer == null) {
+                initializePlayer()
             }
         }
     }

@@ -269,7 +269,7 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
         this.helper = helper
     }
 
-    override fun setDuration(duration: Long) {
+    fun setDuration(duration: Long) {
         this.seekToValue = duration
     }
 
@@ -392,6 +392,10 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
     override fun setFilePathFromSource(file: File) {
         videoFile = file
         Log.d("getMimeType = ", "" + getMimeType(videoFile!!.absolutePath))
+    }
+
+    override fun duration(duration: Long) {
+        TODO("Not yet implemented")
     }
 
     override fun onProgress(progress: String) {

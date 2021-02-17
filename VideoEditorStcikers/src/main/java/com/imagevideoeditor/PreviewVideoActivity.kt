@@ -45,10 +45,8 @@ import com.imagevideoeditor.filter.FilterVideoFragment
 import com.imagevideoeditor.filter.interfaces.AddFilterListener
 import com.imagevideoeditor.filter.interfaces.FilterVideoCallBack
 import com.imagevideoeditor.filter.utils.FilterType
-import com.imagevideoeditor.fragments.AddMusicFragment
 import com.imagevideoeditor.fragments.SoundPickerFragment
 import com.imagevideoeditor.photoeditor.*
-import com.obs.marveleditor.fragments.OptiAddMusicFragment
 import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.OptiUtils
@@ -398,15 +396,17 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 //            }
 
             R.id.imgAddmusic == v.id -> {
-
+                val timeInMillis = OptiUtils.getVideoDuration(applicationContext, masterVideoFile!!)
                 val soundPickerFragment = SoundPickerFragment()
+                soundPickerFragment.setFilePath(masterVideoFile!!)
+                soundPickerFragment.setDuartion(timeInMillis)
                 showBottomSheetDialogFragment(soundPickerFragment)
 //                masterVideoFile?.let { file ->
 //
 //                    val timeInMillis = OptiUtils.getVideoDuration(applicationContext, file)
 //                    /*val duration = OptiCommonMethods.convertDurationInSec(timeInMillis)
 //                Log.v(tagName, "videoDuration: $duration")*/
-//                   AddMusicFragment.newInstance().apply {
+//                   OptiAddMusicFragment.newInstance().apply {
 //                        setHelper(this@PreviewVideoActivity)
 //                        setFilePathFromSource(file)
 //                        setDuration(timeInMillis)
@@ -605,7 +605,6 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     override fun onBackPressed() {
         super.onBackPressed()
         player.stop()
-
     }
 
     fun generatePath(uri: Uri, context: Context): String? {

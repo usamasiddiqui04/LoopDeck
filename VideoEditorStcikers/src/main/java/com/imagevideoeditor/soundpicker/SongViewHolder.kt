@@ -1,5 +1,7 @@
 package com.imagevideoeditor.soundpicker
 
+import android.graphics.BitmapFactory
+import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
@@ -9,6 +11,7 @@ import java.util.concurrent.TimeUnit
 class SongViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
 
     var mediaPlayer: MediaPlayer? = null
+    var retriever: MediaMetadataRetriever? = null
     fun bind(songinfo: Songinfo) {
 
         itemView.songtitle.setText(songinfo.Title)
@@ -20,7 +23,6 @@ class SongViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
         val milliseconds: Long = duration
         val minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds)
         val seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds)
-
         itemView.songduration.setText("${minutes}:${seconds}")
 
         itemView.play.setOnClickListener {

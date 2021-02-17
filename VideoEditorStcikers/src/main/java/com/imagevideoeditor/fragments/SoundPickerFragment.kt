@@ -1,32 +1,47 @@
 package com.imagevideoeditor.fragments
 
-import android.media.MediaPlayer
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.imagevideoeditor.R
 import com.imagevideoeditor.soundpicker.SongAdaptor
 import com.imagevideoeditor.soundpicker.Songinfo
+import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
+import com.obs.marveleditor.interfaces.OptiDialogueHelper
+import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import kotlinx.android.synthetic.main.fragment_sound_picker.*
+import java.io.File
 
 
 class SoundPickerFragment : BottomSheetDialogFragment() {
 
 
     var listSongs = ArrayList<Songinfo>()
-    var mediaPlayer: MediaPlayer? = null
     var songAdaptor: SongAdaptor? = null
-    var linearLayoutManager: LinearLayoutManager? = null
+    private var progressDialog: ProgressDialog? = null
+    var videofile: File? = null
+    var videoDuration: Long? = null
 
+
+    companion object {
+        fun newInstance() = SoundPickerFragment
+    }
+
+    private val onItemClickListener: (View, RecyclerView.ViewHolder, Songinfo) -> Unit =
+        { itemView, viewHolder, songinfo ->
+
+            AddMusicFragment.newInstance().apply {
+                setaudiofilepath(File(songinfo.SongUrl!!), videofile!!, videoDuration!!)
+            }.show(fragmentManager, "AddMusicFragment")
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,11 +51,13 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.fragment_sound_picker, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadSongs()
+        progressDialog = ProgressDialog(requireContext())
 
-        songAdaptor = SongAdaptor(listSongs, requireContext())
+        songAdaptor = SongAdaptor(listSongs, requireContext(), onItemClickListener)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = songAdaptor
 
@@ -69,4 +86,15 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
             }
         }
     }
+
+    fun setFilePath(file: File) {
+        videofile = file
+    }
+
+
+    fun setDuartion(timeInMillis: Long) {
+        videoDuration = timeInMillis
+    }
+
+
 }

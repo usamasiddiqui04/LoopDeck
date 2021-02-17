@@ -99,9 +99,10 @@ class OptiPlaybackSpeedDialogFragment : BottomSheetDialogFragment(), OptiDialogu
         Log.d(tagName, "isHavingAudio $isHavingAudio")
     }
 
-    override fun setDuration(duration: Long) {
-
+    override fun duration(duration: Long) {
+        TODO("Not yet implemented")
     }
+
 
     override fun onProgress(progress: String) {
         Log.d(tagName, "onProgress() $progress")
