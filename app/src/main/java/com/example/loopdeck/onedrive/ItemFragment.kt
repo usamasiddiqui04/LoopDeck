@@ -714,7 +714,7 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
      *
      * @param item The item to download
      */
-    private fun download(item: Item) {
+    fun download(item: Item) {
         val storageDir = File(
             requireContext().getExternalFilesDir(null)!!.absolutePath,
             ROOT_DIRECTORY_NAME

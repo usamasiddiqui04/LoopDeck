@@ -88,4 +88,5 @@ public class DisplayItemAdapter extends ArrayAdapter<DisplayItem> {
             getItem(i).cancelThumbnailDownload();
         }
     }
+
 }
