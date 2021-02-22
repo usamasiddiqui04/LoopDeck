@@ -43,10 +43,11 @@ public class PlaceholderFragment extends Fragment {
 
     /**
      * Default constructor
-     *
      */
     public PlaceholderFragment() {
     }
+
+    Button button;
 
     /**
      * Handle creation of the view
@@ -63,34 +64,29 @@ public class PlaceholderFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_api_explorer, container, false);
 
-        final Button button = (Button) view.findViewById(R.id.query_vroom);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                button.setEnabled(false);
-                final BaseApplication app = (BaseApplication) getActivity().getApplication();
-                final ICallback<Void> serviceCreated = new DefaultCallback<Void>(getActivity()) {
-                    @Override
-                    public void success(final Void result) {
-                        navigateToRoot();
-                        button.setEnabled(true);
-                        button.setVisibility(View.GONE);
-                    }
-
-                };
-                try {
-                    app.getOneDriveClient();
-                    navigateToRoot();
-                    button.setEnabled(true);
-                } catch (final UnsupportedOperationException ignored) {
-                    app.createOneDriveClient(getActivity(), serviceCreated);
-                }
-            }
-        });
 
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        final BaseApplication app = (BaseApplication) getActivity().getApplication();
+        final ICallback<Void> serviceCreated = new DefaultCallback<Void>(getActivity()) {
+            @Override
+            public void success(final Void result) {
+                navigateToRoot();
+            }
+
+        };
+        try {
+            app.getOneDriveClient();
+            navigateToRoot();
+        } catch (final UnsupportedOperationException ignored) {
+            app.createOneDriveClient(getActivity(), serviceCreated);
+        }
+    }
 
     /**
      * Navigate to the root object in the onedrive

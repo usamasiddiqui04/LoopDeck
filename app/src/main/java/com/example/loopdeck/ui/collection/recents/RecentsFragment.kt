@@ -4,23 +4,23 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.loopdeck.BaseApplication
 import com.example.loopdeck.DragData
 import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.data.MediaType
 import com.example.loopdeck.drawer.AdvanceDrawerLayout
 import com.example.loopdeck.onedrive.ApiExplorer
+import com.example.loopdeck.onedrive.DefaultCallback
 import com.example.loopdeck.onedrive.ItemFragment
 import com.example.loopdeck.ui.adapters.MediaAdaptor
 import com.example.loopdeck.ui.collection.CollectionViewModel
@@ -29,6 +29,7 @@ import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.google.android.material.navigation.NavigationView
 import com.imagevideoeditor.PreviewVideoActivity
 import com.loopdeck.photoeditor.EditImageActivity
+import com.onedrive.sdk.concurrency.ICallback
 import com.picker.gallery.model.GalleryData
 import com.picker.gallery.view.PickerActivity
 import com.xorbix.loopdeck.cameraapp.BitmapUtils
@@ -211,6 +212,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
 //                app.createOneDriveClient(activity, serviceCreated)
 //            }
             startActivity(Intent(requireActivity(), ApiExplorer::class.java))
+
 
 //            val app = activity?.application as LoopdeckApp
 //            val serviceCreated: DefaultCallback<Void?> = object : DefaultCallback<Void?>(

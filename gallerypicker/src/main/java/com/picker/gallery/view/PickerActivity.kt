@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.jvm.Throws
 
+@Suppress("DEPRECATION")
 class PickerActivity : AppCompatActivity() {
 
     private val PERMISSIONS_CAMERA = 124
