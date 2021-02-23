@@ -8,11 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.imagevideoeditor.R
+import kotlinx.android.synthetic.main.soundpickerlayout.view.*
 
 class SongAdaptor(
     private var mList: ArrayList<Songinfo>,
     private var context: Context,
-    private val itemClickListener: (View, RecyclerView.ViewHolder, Songinfo) -> Unit,
+    private val itemClickListener: (View, RecyclerView.ViewHolder, Songinfo) -> Unit
 
     ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

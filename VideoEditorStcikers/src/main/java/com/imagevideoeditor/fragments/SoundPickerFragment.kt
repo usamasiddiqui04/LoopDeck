@@ -1,6 +1,7 @@
 package com.imagevideoeditor.fragments
 
 import android.app.ProgressDialog
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -18,6 +19,7 @@ import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
 import com.obs.marveleditor.interfaces.OptiDialogueHelper
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import kotlinx.android.synthetic.main.fragment_sound_picker.*
+import kotlinx.android.synthetic.main.soundpickerlayout.view.*
 import java.io.File
 
 
@@ -29,6 +31,7 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
     private var progressDialog: ProgressDialog? = null
     var videofile: File? = null
     var videoDuration: Long? = null
+    var mediaPlayer: MediaPlayer? = null
 
 
     companion object {
@@ -42,6 +45,23 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
                 setaudiofilepath(File(songinfo.SongUrl!!), videofile!!, videoDuration!!)
             }.show(fragmentManager, "AddMusicFragment")
         }
+//    private val playonItemClickListener: (View, RecyclerView.ViewHolder, Songinfo) -> Unit =
+//        { itemView, viewHolder, songinfo ->
+//
+//            mediaPlayer!!.setDataSource(songinfo.SongUrl)
+//            itemView.play.visibility = View.GONE
+//            itemView.pause.visibility = View.VISIBLE
+//            mediaPlayer!!.prepare()
+//            mediaPlayer!!.start()
+//        }
+//    private val pauseonItemClickListener: (View, RecyclerView.ViewHolder, Songinfo) -> Unit =
+//        { itemView, viewHolder, songinfo ->
+//
+//            mediaPlayer!!.setDataSource(songinfo.SongUrl)
+//            itemView.play.visibility = View.VISIBLE
+//            itemView.pause.visibility = View.GONE
+//            mediaPlayer!!.stop()
+//        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +75,7 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadSongs()
+        mediaPlayer = MediaPlayer()
         progressDialog = ProgressDialog(requireContext())
 
         songAdaptor = SongAdaptor(listSongs, requireContext(), onItemClickListener)

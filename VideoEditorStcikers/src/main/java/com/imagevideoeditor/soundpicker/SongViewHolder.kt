@@ -10,13 +10,12 @@ import java.util.concurrent.TimeUnit
 
 class SongViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
 
-    var mediaPlayer: MediaPlayer? = null
+    var mediaPlayer: MediaPlayer = MediaPlayer()
     var retriever: MediaMetadataRetriever? = null
     fun bind(songinfo: Songinfo) {
 
         itemView.songtitle.setText(songinfo.Title)
         itemView.songalbum.setText(songinfo.Author)
-        mediaPlayer = MediaPlayer()
 
         val duration: Long
         duration = songinfo.Duartion!!.toLong()
@@ -25,19 +24,19 @@ class SongViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
         val minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds)
         val seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds)
         itemView.songduration.setText("${minutes}:${seconds}")
-        mediaPlayer!!.setDataSource(songinfo.SongUrl)
+        mediaPlayer.setDataSource(songinfo.SongUrl)
 
         itemView.play.setOnClickListener {
             itemView.play.visibility = View.GONE
             itemView.pause.visibility = View.VISIBLE
-            mediaPlayer!!.prepare()
-            mediaPlayer!!.start()
+            mediaPlayer.prepare()
+            mediaPlayer.start()
         }
 
         itemView.pause.setOnClickListener {
             itemView.play.visibility = View.VISIBLE
             itemView.pause.visibility = View.GONE
-            mediaPlayer!!.stop()
+            mediaPlayer.stop()
         }
 
 
