@@ -8,6 +8,7 @@ import android.widget.SeekBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.imagevideoeditor.photoeditor.PhotoEditor
 
 class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChangeListener {
     private var mProperties: Properties? = null
@@ -84,6 +85,8 @@ class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChang
 //        }
     }
 
-    override fun onStartTrackingTouch(seekBar: SeekBar) {}
+    override fun onStartTrackingTouch(seekBar: SeekBar) {
+    }
+
     override fun onStopTrackingTouch(seekBar: SeekBar) {}
 }

@@ -52,6 +52,7 @@ import com.onedrive.sdk.extensions.*
 import com.onedrive.sdk.options.Option
 import com.onedrive.sdk.options.QueryOption
 import com.xorbix.loopdeck.cameraapp.BitmapUtils.ROOT_DIRECTORY_NAME
+import kotlinx.android.synthetic.main.activity_api_explorer.*
 import org.json.JSONObject
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
@@ -128,6 +129,9 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
             }
         }
         (view.findViewById<View>(R.id.json) as TextView).movementMethod = ScrollingMovementMethod()
+        (view.findViewById<View>(R.id.close) as ImageView).setOnClickListener {
+            requireActivity().finish()
+        }
         refresh()
         return view
     }

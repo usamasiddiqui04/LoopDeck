@@ -16,6 +16,7 @@ class SongViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
 
         itemView.songtitle.setText(songinfo.Title)
         itemView.songalbum.setText(songinfo.Author)
+        mediaPlayer = MediaPlayer()
 
         val duration: Long
         duration = songinfo.Duartion!!.toLong()
@@ -24,12 +25,11 @@ class SongViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
         val minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds)
         val seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds)
         itemView.songduration.setText("${minutes}:${seconds}")
+        mediaPlayer!!.setDataSource(songinfo.SongUrl)
 
         itemView.play.setOnClickListener {
             itemView.play.visibility = View.GONE
             itemView.pause.visibility = View.VISIBLE
-            mediaPlayer = MediaPlayer()
-            mediaPlayer!!.setDataSource(songinfo.SongUrl)
             mediaPlayer!!.prepare()
             mediaPlayer!!.start()
         }

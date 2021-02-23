@@ -34,7 +34,6 @@ class MediaAdaptor(
                     true
 
                 }
-
             }
             is VideoViewHolder -> {
                 holder.bind(mList[position])
@@ -45,7 +44,6 @@ class MediaAdaptor(
                     itemLongClickListener.invoke(it, holder, mList, mList[position])
                     true
                 }
-
             }
             is PlaylistViewHolder -> {
                 holder.bind(mList.get(position))
