@@ -291,7 +291,7 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
         id: Long
     ) {
         if (null != mListener) {
-            mListener!!.onFragmentInteraction(mAdapter!!.getItem(position) as DisplayItem)
+//            mListener!!.onFragmentInteraction(mAdapter!!.getItem(position) as DisplayItem)
             download(mAdapter!!.getItem(position)!!.item)
         }
     }
