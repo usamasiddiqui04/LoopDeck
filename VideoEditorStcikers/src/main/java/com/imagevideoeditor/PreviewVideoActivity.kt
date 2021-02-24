@@ -207,7 +207,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         imgClose = findViewById(R.id.imgClose)
         imgDone = findViewById(R.id.imgDone)
         imgDelete = findViewById(R.id.imgDelete)
-        imgDraw = findViewById(R.id.imgDraw)
+        imgDraw = findViewById(R.id.imgdraw2)
         imgText = findViewById(R.id.imgText)
         imgUndo = findViewById(R.id.imgUndo)
 //        imgTrim = findViewById(R.id.imgTrim)
@@ -352,7 +352,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         when {
             R.id.imgClose == v.id -> onBackPressed()
             R.id.imgDone == v.id -> saveImage()
-            R.id.imgDraw == v.id -> setDrawingMode()
+            R.id.imgdraw2 == v.id -> setDrawingMode()
             R.id.imgText == v.id -> {
                 val textEditorDialogFragment = TextEditorDialogFragment.show(this, 0)
                 textEditorDialogFragment.setOnTextEditorListener(object :

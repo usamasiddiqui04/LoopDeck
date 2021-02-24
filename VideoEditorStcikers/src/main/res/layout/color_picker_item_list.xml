@@ -2,14 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
+    android:background="@drawable/colorbackground"
     android:layout_height="wrap_content">
+
     <View
         android:id="@+id/color_picker_view"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_margin="5dp"
         android:layout_alignParentTop="true"
-        android:background="@drawable/stciker_background"
         tools:text="" />
 
 </RelativeLayout>
