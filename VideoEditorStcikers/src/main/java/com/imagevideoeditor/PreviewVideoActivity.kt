@@ -693,8 +693,14 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         mPhotoEditor!!.brushColor = colorCode
     }
 
-    override fun onOpacityChanged(opacity: Int) {}
-    override fun onBrushSizeChanged(brushSize: Int) {}
+    override fun onOpacityChanged(opacity: Int) {
+        mPhotoEditor!!.setOpacity(opacity)
+    }
+
+    override fun onBrushSizeChanged(brushSize: Int) {
+        mPhotoEditor!!.brushSize = brushSize.toFloat()
+
+    }
 
     companion object {
         private val TAG = PreviewVideoActivity::class.java.simpleName

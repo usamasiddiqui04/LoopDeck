@@ -61,15 +61,17 @@ class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChang
     }
 
     override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
-        if (seekBar.id == R.id.sbOpacity) {
+        val id = seekBar.id
+        if (id == R.id.sbOpacity) {
             if (mProperties != null) {
                 mProperties!!.onOpacityChanged(i)
             }
-        } else if (R.id.sbSize == seekBar.id) {
+        } else if (id == R.id.sbSize) {
             if (mProperties != null) {
                 mProperties!!.onBrushSizeChanged(i)
             }
         }
+    }
 
 //        switch (seekBar.getId()) {
 //            case R.id.sbOpacity:
@@ -83,7 +85,7 @@ class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChang
 //                }
 //                break;
 //        }
-    }
+
 
     override fun onStartTrackingTouch(seekBar: SeekBar) {
     }
