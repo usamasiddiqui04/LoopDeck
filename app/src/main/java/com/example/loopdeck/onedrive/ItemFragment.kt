@@ -291,8 +291,8 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
         id: Long
     ) {
         if (null != mListener) {
-//            mListener!!.onFragmentInteraction(mAdapter!!.getItem(position) as DisplayItem)
-            download(mAdapter!!.getItem(position)!!.item)
+            mListener!!.onFragmentInteraction(mAdapter!!.getItem(position) as DisplayItem)
+//            download(mAdapter!!.getItem(position)!!.item)
         }
     }
 
@@ -311,6 +311,12 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
         return object : DefaultCallback<Item?>(context) {
             override fun success(result: Item?) {
                 mItem = result
+                if (result!!.photo != null) {
+                    download(mItem!!)
+                }
+                if (result.video != null) {
+                    download(mItem!!)
+                }
                 if (view != null) {
                     val mListView = view!!.findViewById<View>(android.R.id.list) as AbsListView
                     val adapter = mListView.adapter as DisplayItemAdapter
@@ -345,7 +351,7 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
                         } else {
                             emptyText.setText(R.string.empty_file)
                         }
-                        setFocus(ItemFocus.Empty, view)
+//                        setFocus(ItemFocus.Visualization, view)
                     } else {
                         for (childItem in result.children.currentPage) {
                             adapter.add(
@@ -357,8 +363,8 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
                                 )
                             )
                         }
-                        setFocus(ItemFocus.Visualization, view)
                     }
+                    setFocus(ItemFocus.Visualization, view)
                     activity!!.invalidateOptionsMenu()
                 }
             }
