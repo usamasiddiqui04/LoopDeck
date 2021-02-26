@@ -1,63 +1,69 @@
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.example.loopdeck.squarelayout.SquareRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cardfolder"
-    app:cardUseCompatPadding="true"
     android:layout_width="match_parent"
-    app:cardCornerRadius="5dp"
-    android:layout_height="150dp">
+    android:layout_height="wrap_content">
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_150sdp">
+        android:id="@+id/cardfolder"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="@dimen/_5sdp"
+        app:cardUseCompatPadding="true">
 
-        <ImageView
-            android:id="@+id/imageViewRecentPlaylist"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_100sdp"
-            android:adjustViewBounds="true"
-            android:src="@drawable/ic_baseline_folder_24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_image"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/imageViewRecentPlaylist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_baseline_folder_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_1sdp"
-            android:src="@drawable/ic_iconplaylist"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_image"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-
-        <TextView
-            android:id="@+id/playlistName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="File name"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@id/imageViewRecentPlaylist"
-            app:layout_constraintStart_toStartOf="@id/imageViewRecentPlaylist"
-            app:layout_constraintTop_toBottomOf="@id/imageViewRecentPlaylist" />
-
-        <ImageView
-            android:id="@+id/selectitem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/_20sdp"
-            android:src="@drawable/ic_baseline_check_circle_24"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_1sdp"
+                android:src="@drawable/ic_iconplaylist"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
-</androidx.cardview.widget.CardView>
+            <TextView
+                android:id="@+id/playlistName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="File name"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@id/imageViewRecentPlaylist"
+                app:layout_constraintStart_toStartOf="@id/imageViewRecentPlaylist"
+                app:layout_constraintTop_toBottomOf="@id/imageViewRecentPlaylist" />
+
+            <ImageView
+                android:id="@+id/selectitem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/_20sdp"
+                android:src="@drawable/ic_baseline_check_circle_24"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</com.example.loopdeck.squarelayout.SquareRelativeLayout>

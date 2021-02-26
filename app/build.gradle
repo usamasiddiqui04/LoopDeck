@@ -76,6 +76,7 @@ dependencies {
     implementation "androidx.core:core-ktx:+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+    
 
     implementation 'com.google.android.exoplayer:exoplayer-core:2.10.2'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.10.2'

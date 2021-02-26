@@ -10,6 +10,7 @@ import com.example.loopdeck.R
 import com.example.loopdeck.googledrive.DriveQuickstart
 import com.example.loopdeck.ui.collection.CollectionActivity
 import com.example.loopdeck.ui.googledrive.GoogleDriveActivity
+import com.example.loopdeck.ui.login.WebviewLoginActivity
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
@@ -103,6 +104,15 @@ class MainActivity : AppCompatActivity() {
                 Intent(
                     this@MainActivity,
                     CollectionActivity::class.java
+                )
+            )
+        }
+
+        btn_login.setOnClickListener {
+            startActivity(
+                Intent(
+                    this@MainActivity,
+                    WebviewLoginActivity::class.java
                 )
             )
         }
