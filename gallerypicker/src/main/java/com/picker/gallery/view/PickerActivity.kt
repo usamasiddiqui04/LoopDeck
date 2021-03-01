@@ -56,6 +56,10 @@ class PickerActivity : AppCompatActivity() {
         tabs.setupWithViewPager(viewpager)
         setupTabIcons()
 
+//        onedrive.setOnClickListener {
+//            startActivity(Intent(applicationContext, ApiExplorer::class.java))
+//        }
+
 //        camera.setOnClickListener {
 //            if (isCameraPermitted()) dispatchTakePictureIntent() else checkCameraPermission()
 //        }

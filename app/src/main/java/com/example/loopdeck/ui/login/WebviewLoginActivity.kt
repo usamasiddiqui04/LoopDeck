@@ -40,8 +40,6 @@ class WebviewLoginActivity : AppCompatActivity() {
 
         }
         webView.loadUrl(url)
-        val cookiename = getCookie(url, "ARRAffinity")
-        Log.d("Webview", "All the cookies in a string:$cookiename")
 
 
     }

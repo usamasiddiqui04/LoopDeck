@@ -159,106 +159,126 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:orientation="horizontal">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_weight="1">
 
             <ImageView
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 android:id="@+id/changesound"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/video_filter" />
+                android:src="@drawable/ic_iconfilters" />
 
             <TextView
+                app:layout_constraintTop_toBottomOf="@id/changesound"
+                app:layout_constraintStart_toStartOf="@id/changesound"
+                app:layout_constraintEnd_toEndOf="@id/changesound"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Filters"
                 android:textColor="@color/white" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_weight="1">
 
             <ImageView
                 android:id="@+id/imgdraw2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_brush" />
+                android:src="@drawable/ic_iconbrush" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Brushes"
+                app:layout_constraintTop_toBottomOf="@id/imgdraw2"
+                app:layout_constraintStart_toStartOf="@id/imgdraw2"
+                app:layout_constraintEnd_toEndOf="@id/imgdraw2"
                 android:textColor="@color/white" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_weight="1">
 
             <ImageView
                 android:id="@+id/imgText"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_text_fields_24" />
+                android:src="@drawable/ic_icontext" />
 
             <TextView
+                app:layout_constraintTop_toBottomOf="@id/imgText"
+                app:layout_constraintStart_toStartOf="@id/imgText"
+                app:layout_constraintEnd_toEndOf="@id/imgText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Text"
                 android:textColor="@color/white" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_weight="1">
 
             <ImageView
                 android:id="@+id/imgSticker"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/stcikers_video" />
+                android:src="@drawable/ic_iconstickers" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Stickers"
+                app:layout_constraintTop_toBottomOf="@id/imgSticker"
+                app:layout_constraintStart_toStartOf="@id/imgSticker"
+                app:layout_constraintEnd_toEndOf="@id/imgSticker"
                 android:textColor="@color/white" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/imgAddmusic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/sound_video" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:src="@drawable/ic_iconsound" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sound"
+                app:layout_constraintTop_toBottomOf="@id/imgAddmusic"
+                app:layout_constraintStart_toStartOf="@id/imgAddmusic"
+                app:layout_constraintEnd_toEndOf="@id/imgAddmusic"
                 android:textColor="@color/white" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </LinearLayout>
