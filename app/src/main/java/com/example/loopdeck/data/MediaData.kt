@@ -3,7 +3,7 @@ package com.example.loopdeck.data
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.loopdeck.utils.extensions.getMediaType
-import com.picker.gallery.model.GalleryData
+import com.example.loopdeck.gallery.model.GalleryData
 import java.util.*
 
 @Entity(tableName = "MediaFileTable")

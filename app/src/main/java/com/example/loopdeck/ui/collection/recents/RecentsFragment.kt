@@ -13,14 +13,12 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.loopdeck.BaseApplication
 import com.example.loopdeck.DragData
 import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.data.MediaType
 import com.example.loopdeck.drawer.AdvanceDrawerLayout
 import com.example.loopdeck.onedrive.ApiExplorer
-import com.example.loopdeck.onedrive.DefaultCallback
 import com.example.loopdeck.onedrive.ItemFragment
 import com.example.loopdeck.ui.adapters.MediaAdaptor
 import com.example.loopdeck.ui.collection.CollectionViewModel
@@ -29,9 +27,8 @@ import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.google.android.material.navigation.NavigationView
 import com.imagevideoeditor.PreviewVideoActivity
 import com.loopdeck.photoeditor.EditImageActivity
-import com.onedrive.sdk.concurrency.ICallback
-import com.picker.gallery.model.GalleryData
-import com.picker.gallery.view.PickerActivity
+import com.example.loopdeck.gallery.model.GalleryData
+import com.example.loopdeck.gallery.view.PickerActivity
 import com.xorbix.loopdeck.cameraapp.BitmapUtils
 import kotlinx.android.synthetic.main.custom_layout.view.*
 import kotlinx.android.synthetic.main.dailogbox.view.*

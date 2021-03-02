@@ -10,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.data.MediaDatabase
 import com.example.loopdeck.data.MediaRepository
-import com.picker.gallery.model.GalleryData
+import com.example.loopdeck.gallery.model.GalleryData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File

@@ -73,7 +73,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     var imgUndo: ImageView? = null
     var imgSticker: ImageView? = null
     var imgTrim: ImageView? = null
-    var imgChanesound: ImageView? = null
+    var imgFilters: ImageView? = null
     private var mPhotoEditor: PhotoEditor? = null
     private val globalVideoUrl = ""
     private var propertiesBSFragment: PropertiesBSFragment? = null
@@ -207,11 +207,11 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         imgClose = findViewById(R.id.imgClose)
         imgDone = findViewById(R.id.imgDone)
         imgDelete = findViewById(R.id.imgDelete)
-        imgDraw = findViewById(R.id.imgdraw2)
-        imgText = findViewById(R.id.imgText)
+        imgDraw = findViewById(R.id.iconBrushes)
+        imgText = findViewById(R.id.iconText)
         imgUndo = findViewById(R.id.imgUndo)
 //        imgTrim = findViewById(R.id.imgTrim)
-        imgChanesound = findViewById(R.id.changesound)
+        imgFilters = findViewById(R.id.iconFilters)
 
         imgSticker = findViewById(R.id.imgSticker)
         fFmpeg = FFmpeg.getInstance(this)
@@ -233,7 +233,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         imgUndo?.setOnClickListener(this)
         imgSticker?.setOnClickListener(this)
         imgTrim?.setOnClickListener(this)
-        imgChanesound?.setOnClickListener(this)
+        imgFilters?.setOnClickListener(this)
 //        imgPlayback?.setOnClickListener(this)
         imgAddmusic?.setOnClickListener(this)
         exeCmd = ArrayList()
@@ -352,8 +352,8 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         when {
             R.id.imgClose == v.id -> onBackPressed()
             R.id.imgDone == v.id -> saveImage()
-            R.id.imgdraw2 == v.id -> setDrawingMode()
-            R.id.imgText == v.id -> {
+            R.id.iconBrushes == v.id -> setDrawingMode()
+            R.id.iconText == v.id -> {
                 val textEditorDialogFragment = TextEditorDialogFragment.show(this, 0)
                 textEditorDialogFragment.setOnTextEditorListener(object :
                     TextEditorDialogFragment.TextEditor {
@@ -413,7 +413,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 //                    }.show(supportFragmentManager, "AddMusicFragment")
 //                }
             }
-            R.id.changesound == v.id -> {
+            R.id.iconFilters == v.id -> {
                 val filterFragment = FilterVideoFragment()
                 filterFragment.setFilePathFromSource(masterVideoFile!!)
                 filterFragment.setCallback(this)

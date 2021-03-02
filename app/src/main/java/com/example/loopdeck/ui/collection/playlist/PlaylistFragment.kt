@@ -23,8 +23,8 @@ import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.utils.callbacks.ItemMoveCallback
 import com.imagevideoeditor.PreviewVideoActivity
 import com.loopdeck.photoeditor.EditImageActivity
-import com.picker.gallery.model.GalleryData
-import com.picker.gallery.view.PickerActivity
+import com.example.loopdeck.gallery.model.GalleryData
+import com.example.loopdeck.gallery.view.PickerActivity
 import kotlinx.android.synthetic.main.fragment_playlist.*
 import kotlinx.android.synthetic.main.fragment_playlist.btnDelete
 import kotlinx.android.synthetic.main.fragment_playlist.btnGallery

@@ -9,7 +9,7 @@ import com.example.loopdeck.utils.FileUtils.uriToMediaFile
 import com.example.loopdeck.utils.extensions.getMediaType
 import com.example.loopdeck.utils.isImage
 import com.example.loopdeck.utils.isVideo
-import com.picker.gallery.model.GalleryData
+import com.example.loopdeck.gallery.model.GalleryData
 import com.xorbix.loopdeck.cameraapp.BitmapUtils
 import java.io.File
 import java.util.*

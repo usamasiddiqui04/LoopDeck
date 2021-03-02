@@ -17,6 +17,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:icon,android:allowBackup,android:roundIcon">
         <activity android:name=".ui.login.WebviewLoginActivity" />
+        <activity android:name=".gallery.view.PickerActivity" />
         <activity android:name=".ui.collection.CollectionActivity" />
         <activity android:name=".ui.googledrive.GoogleDriveActivity" />
         <activity android:name=".ui.main.MainActivity">

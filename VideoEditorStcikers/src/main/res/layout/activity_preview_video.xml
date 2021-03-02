@@ -66,17 +66,17 @@
     <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <ImageView
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/imgDraw"
-        android:visibility="gone"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@color/black_trasp"
         android:padding="8dp"
-        android:src="@drawable/ic_brush" />
+        android:src="@drawable/ic_brush"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!--    <ImageView-->
     <!--        android:id="@+id/imgSticker"-->
@@ -128,36 +128,36 @@
         android:id="@+id/imgDone"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:padding="8dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="25dp"
+        android:padding="8dp"
         android:src="@drawable/ic_save"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/progressbar"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:backgroundTint="@color/colorPrimaryDark"
         android:visibility="invisible"
-        android:id="@+id/progressbar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:backgroundTint="@color/colorPrimaryDark" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/main_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="horizontal">
+        app:layout_constraintStart_toStartOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
@@ -165,24 +165,24 @@
             android:layout_weight="1">
 
             <ImageView
-                app:layout_constraintStart_toStartOf="@id/textFilter"
-                app:layout_constraintEnd_toEndOf="@id/textFilter"
-                app:layout_constraintBottom_toTopOf="@id/textFilter"
                 android:id="@+id/iconFilters"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_iconfilters" />
+                android:src="@drawable/ic_iconfilters"
+                app:layout_constraintBottom_toTopOf="@id/textFilter"
+                app:layout_constraintEnd_toEndOf="@id/textFilter"
+                app:layout_constraintStart_toStartOf="@id/textFilter" />
 
             <TextView
                 android:id="@+id/textFilter"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Filters"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -194,23 +194,23 @@
 
             <ImageView
                 android:id="@+id/iconBrushes"
-                app:layout_constraintStart_toStartOf="@id/textBrushes"
-                app:layout_constraintEnd_toEndOf="@id/textBrushes"
-                app:layout_constraintBottom_toTopOf="@id/textBrushes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_iconbrush" />
+                android:src="@drawable/ic_iconbrush"
+                app:layout_constraintBottom_toTopOf="@id/textBrushes"
+                app:layout_constraintEnd_toEndOf="@id/textBrushes"
+                app:layout_constraintStart_toStartOf="@id/textBrushes" />
 
             <TextView
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/textBrushes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:id="@+id/textBrushes"
                 android:text="Brushes"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -221,23 +221,23 @@
 
             <ImageView
                 android:id="@+id/iconText"
-                app:layout_constraintStart_toStartOf="@id/textText"
-                app:layout_constraintEnd_toEndOf="@id/textText"
-                app:layout_constraintBottom_toTopOf="@id/textText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_icontext" />
+                android:src="@drawable/ic_icontext"
+                app:layout_constraintBottom_toTopOf="@id/textText"
+                app:layout_constraintEnd_toEndOf="@id/textText"
+                app:layout_constraintStart_toStartOf="@id/textText" />
 
             <TextView
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/textText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Text"
-                android:id="@+id/textText"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -249,51 +249,51 @@
 
             <ImageView
                 android:id="@+id/imgSticker"
-                app:layout_constraintStart_toStartOf="@id/textStickers"
-                app:layout_constraintEnd_toEndOf="@id/textStickers"
-                app:layout_constraintBottom_toTopOf="@id/textStickers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_iconstickers" />
+                android:src="@drawable/ic_iconstickers"
+                app:layout_constraintBottom_toTopOf="@id/textStickers"
+                app:layout_constraintEnd_toEndOf="@id/textStickers"
+                app:layout_constraintStart_toStartOf="@id/textStickers" />
 
             <TextView
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/textStickers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Stickers"
-                android:id="@+id/textStickers"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
 
-                android:textColor="@color/white" />
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
             <ImageView
                 android:id="@+id/imgAddmusic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/textSound"
-                app:layout_constraintEnd_toEndOf="@id/textSound"
+                android:src="@drawable/ic_iconsound"
                 app:layout_constraintBottom_toTopOf="@id/textSound"
-                android:src="@drawable/ic_iconsound" />
+                app:layout_constraintEnd_toEndOf="@id/textSound"
+                app:layout_constraintStart_toStartOf="@id/textSound" />
 
             <TextView
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/textSound"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Sound"
-                android:id="@+id/textSound"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
