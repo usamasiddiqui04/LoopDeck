@@ -160,24 +160,27 @@
         android:orientation="horizontal">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
             <ImageView
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:id="@+id/changesound"
+                app:layout_constraintStart_toStartOf="@id/textFilter"
+                app:layout_constraintEnd_toEndOf="@id/textFilter"
+                app:layout_constraintBottom_toTopOf="@id/textFilter"
+                android:id="@+id/iconFilters"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_iconfilters" />
 
             <TextView
-                app:layout_constraintTop_toBottomOf="@id/changesound"
-                app:layout_constraintStart_toStartOf="@id/changesound"
-                app:layout_constraintEnd_toEndOf="@id/changesound"
-                android:layout_width="wrap_content"
+                android:id="@+id/textFilter"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="Filters"
                 android:textColor="@color/white" />
 
@@ -185,97 +188,111 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
             <ImageView
-                android:id="@+id/imgdraw2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/iconBrushes"
+                app:layout_constraintStart_toStartOf="@id/textBrushes"
+                app:layout_constraintEnd_toEndOf="@id/textBrushes"
+                app:layout_constraintBottom_toTopOf="@id/textBrushes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_iconbrush" />
 
             <TextView
-                android:layout_width="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
+                android:id="@+id/textBrushes"
                 android:text="Brushes"
-                app:layout_constraintTop_toBottomOf="@id/imgdraw2"
-                app:layout_constraintStart_toStartOf="@id/imgdraw2"
-                app:layout_constraintEnd_toEndOf="@id/imgdraw2"
                 android:textColor="@color/white" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
             <ImageView
-                android:id="@+id/imgText"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:id="@+id/iconText"
+                app:layout_constraintStart_toStartOf="@id/textText"
+                app:layout_constraintEnd_toEndOf="@id/textText"
+                app:layout_constraintBottom_toTopOf="@id/textText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_icontext" />
 
             <TextView
-                app:layout_constraintTop_toBottomOf="@id/imgText"
-                app:layout_constraintStart_toStartOf="@id/imgText"
-                app:layout_constraintEnd_toEndOf="@id/imgText"
-                android:layout_width="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="Text"
+                android:id="@+id/textText"
                 android:textColor="@color/white" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
             <ImageView
                 android:id="@+id/imgSticker"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@id/textStickers"
+                app:layout_constraintEnd_toEndOf="@id/textStickers"
+                app:layout_constraintBottom_toTopOf="@id/textStickers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_iconstickers" />
 
             <TextView
-                android:layout_width="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="Stickers"
-                app:layout_constraintTop_toBottomOf="@id/imgSticker"
-                app:layout_constraintStart_toStartOf="@id/imgSticker"
-                app:layout_constraintEnd_toEndOf="@id/imgSticker"
+                android:id="@+id/textStickers"
+
                 android:textColor="@color/white" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/imgAddmusic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@id/textSound"
+                app:layout_constraintEnd_toEndOf="@id/textSound"
+                app:layout_constraintBottom_toTopOf="@id/textSound"
                 android:src="@drawable/ic_iconsound" />
 
             <TextView
-                android:layout_width="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="Sound"
-                app:layout_constraintTop_toBottomOf="@id/imgAddmusic"
-                app:layout_constraintStart_toStartOf="@id/imgAddmusic"
-                app:layout_constraintEnd_toEndOf="@id/imgAddmusic"
+                android:id="@+id/textSound"
                 android:textColor="@color/white" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
