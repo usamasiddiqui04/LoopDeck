@@ -11,6 +11,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.loopdeck.DragData
@@ -46,6 +47,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
     private var selectedList = ArrayList<MediaData>()
     var string: MediaData? = null
     var multiSelection: Boolean = false
+    var playlistimage: String? = null
 
     companion object {
         fun newInstance() = RecentsFragment()
@@ -172,6 +174,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
         viewModel = activityViewModelProvider()
         initViews()
         initObservers()
+
 
     }
 

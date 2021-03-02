@@ -1,21 +1,28 @@
 package com.loopdeck.photoeditor
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.InputType
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.add_text_dialog.*
+import java.util.ArrayList
 
 /**
  * Created by Burhanuddin Rashid on 1/16/2018.
@@ -26,6 +33,8 @@ class TextEditorDialogFragment : androidx.fragment.app.DialogFragment() {
     private var mInputMethodManager: InputMethodManager? = null
     private var mColorCode = 0
     private var mTextEditor: TextEditor? = null
+    private var position: Int = 0
+    private var check: Boolean = false
 
     interface TextEditor {
         fun onDone(inputText: String?, colorCode: Int)
@@ -56,7 +65,7 @@ class TextEditorDialogFragment : androidx.fragment.app.DialogFragment() {
         mAddTextEditText = view.findViewById(R.id.add_text_edit_text)
         mInputMethodManager =
             activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        mAddTextDoneTextView = view.findViewById(R.id.add_text_done_tv)
+        mAddTextDoneTextView = view.findViewById(R.id.add_text_done_tv2)
 
         //Setup the color picker for text color
         val addTextColorPickerRecyclerView: RecyclerView =

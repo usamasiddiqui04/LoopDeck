@@ -8,16 +8,15 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/add_text_done_tv"
+        android:id="@+id/add_text_done_tv2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_margin="20dp"
-        android:background="@drawable/rounded_border_text_view"
         android:padding="10dp"
-        android:text="Done"
+        android:drawableStart="@drawable/ic_baseline_done_24"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="15sp" />
@@ -28,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/add_text_color_picker_relative_layout"
-        android:layout_below="@+id/add_text_done_tv"
+        android:layout_below="@+id/add_text_done_tv2"
         android:background="@null"
         android:gravity="center"
         android:inputType="textMultiLine"

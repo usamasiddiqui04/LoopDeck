@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Typeface
+import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -28,6 +29,7 @@ import com.loopdeck.photoeditor.filters.FilterViewAdapter
 import com.loopdeck.photoeditor.tools.EditingToolsAdapter
 import com.loopdeck.photoeditor.tools.ToolType
 import ja.burhanrashid52.photoeditor.*
+import kotlinx.android.synthetic.main.activity_edit_image.*
 import java.io.File
 import java.io.IOException
 
@@ -50,6 +52,7 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
     private var mRootView: ConstraintLayout? = null
     private val mConstraintSet = ConstraintSet()
     private var mIsFilterVisible = false
+    private var imgclose: ImageView? = null
 
     @JvmField
     @VisibleForTesting
@@ -115,32 +118,15 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
 
     private fun initViews() {
         mPhotoEditorView = findViewById(R.id.photoEditorView)
-        mTxtCurrentTool = findViewById(R.id.txtCurrentTool)
         mRvTools = findViewById(R.id.rvConstraintTools)
         mRvFilters = findViewById(R.id.rvFilterView)
         mRootView = findViewById(R.id.rootView)
+        mTxtCurrentTool = findViewById(R.id.txtCurrentTool)
+        imgClose.setOnClickListener {
+            finish()
+        }
 
 
-        val imgUndo: ImageView = findViewById(R.id.imgUndo)
-        imgUndo.setOnClickListener(this)
-
-        val imgRedo: ImageView = findViewById(R.id.imgRedo)
-        imgRedo.setOnClickListener(this)
-
-        val imgCamera: ImageView = findViewById(R.id.imgCamera)
-        imgCamera.setOnClickListener(this)
-
-        val imgGallery: ImageView = findViewById(R.id.imgGallery)
-        imgGallery.setOnClickListener(this)
-
-        val imgSave: ImageView = findViewById(R.id.imgSave)
-        imgSave.setOnClickListener(this)
-
-        val imgClose: ImageView = findViewById(R.id.imgClose)
-        imgClose.setOnClickListener(this)
-
-        val imgShare: ImageView = findViewById(R.id.imgShare)
-        imgShare.setOnClickListener(this)
     }
 
     override fun onEditTextChangeListener(rootView: View, text: String, colorCode: Int) {
@@ -181,31 +167,19 @@ class EditImageActivity : BaseActivity(), OnPhotoEditorListener, View.OnClickLis
 
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.imgUndo -> {
-                mPhotoEditor!!.undo()
-            }
-            R.id.imgRedo -> {
-                mPhotoEditor!!.redo()
-            }
-            R.id.imgSave -> {
-                saveImage()
-            }
-            R.id.imgClose -> {
-                onBackPressed()
-            }
-            R.id.imgShare -> {
-                shareImage()
-            }
-            R.id.imgCamera -> {
-                val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(cameraIntent, CAMERA_REQUEST)
-            }
-            R.id.imgGallery -> {
-                val intent = Intent()
-                intent.type = "image/*"
-                intent.action = Intent.ACTION_GET_CONTENT
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_REQUEST)
-            }
+//            R.id.imgUndo -> {
+//                mPhotoEditor!!.undo()
+//            }
+//            R.id.imgRedo -> {
+//                mPhotoEditor!!.redo()
+//            }
+//            R.id.imgShare -> {
+//                shareImage()
+//            }
+//            R.id.imgCamera -> {
+//                val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//                startActivityForResult(cameraIntent, CAMERA_REQUEST)
+//            }
         }
     }
 

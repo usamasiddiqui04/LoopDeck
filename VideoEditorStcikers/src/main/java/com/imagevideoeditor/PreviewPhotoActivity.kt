@@ -40,6 +40,7 @@ abstract class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListen
     var imgText: ImageView? = null
     var imgUndo: ImageView? = null
     var imgSticker: ImageView? = null
+    private var imagePath: String? = null
     private var binding: ActivityPreviewBinding? = null
     private var mPhotoEditor: PhotoEditor? = null
     private val mPhotoEditorView: PhotoEditorView? = null
@@ -55,7 +56,8 @@ abstract class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListen
         binding = DataBindingUtil.setContentView(this, R.layout.activity_preview)
         initViews()
         //        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-        ivImage!!.source?.let { Glide.with(this).load(intent.getStringExtra("DATA")).into(it) }
+        imagePath = intent!!.getStringExtra("imagePath")
+        ivImage!!.source?.let { Glide.with(this).load(imagePath).into(it) }
         //        Glide.with(this).load(R.drawable.trans).into(binding.ivImage.getSource());
     }
 
