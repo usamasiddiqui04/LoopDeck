@@ -11,6 +11,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import com.example.loopdeck.R
+import com.example.loopdeck.ui.collection.CollectionActivity
 import java.net.CookiePolicy
 
 class WebviewLoginActivity : AppCompatActivity() {
@@ -38,10 +39,23 @@ class WebviewLoginActivity : AppCompatActivity() {
                 }
             }
 
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+
+                val cookiename = getCookie(url, "token")
+
+                if(!cookiename.isNullOrBlank()){
+                    val intent = Intent(this@WebviewLoginActivity,CollectionActivity::class.java )
+                    finish()
+                    startActivity(intent)
+
+
+                }
+                Log.d("Webview", "All the cookies in a string:$cookiename")
+
+            }
         }
         webView.loadUrl(url)
-        val cookiename = getCookie(url, "ARRAffinity")
-        Log.d("Webview", "All the cookies in a string:$cookiename")
 
 
     }
@@ -58,12 +72,15 @@ class WebviewLoginActivity : AppCompatActivity() {
         var CookieValue: String? = null
         val cookieManager = CookieManager.getInstance()
         val cookies = cookieManager.getCookie(siteName)
-        val temp = cookies.split(";".toRegex()).toTypedArray()
-        for (ar1 in temp) {
-            if (ar1.contains(CookieName!!)) {
-                val temp1 = ar1.split("=".toRegex()).toTypedArray()
-                CookieValue = temp1[1]
-                break
+        val temp = cookies?.split(";".toRegex())?.toTypedArray()
+
+        if(temp != null) {
+            for (ar1 in temp) {
+                if (ar1.contains(CookieName!!)) {
+                    val temp1 = ar1.split("=".toRegex()).toTypedArray()
+                    CookieValue = temp1[1]
+                    break
+                }
             }
         }
         return CookieValue
