@@ -101,6 +101,10 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
             layoutfilter.visibility = View.VISIBLE
             showFilter(true)
         }
+
+        imgAddmusic.setOnClickListener {
+            mPhotoEditor!!.brushEraser()
+        }
     }
 
     override fun onBackPressed() {
@@ -336,8 +340,13 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
         mPhotoEditor!!.brushColor = colorCode
     }
 
-    override fun onOpacityChanged(opacity: Int) {}
-    override fun onBrushSizeChanged(brushSize: Int) {}
+    override fun onOpacityChanged(opacity: Int) {
+        mPhotoEditor!!.setOpacity(opacity)
+    }
+
+    override fun onBrushSizeChanged(brushSize: Int) {
+        mPhotoEditor!!.brushSize = brushSize.toFloat()
+    }
 
     companion object {
         private val TAG = PreviewPhotoActivity::class.java.simpleName

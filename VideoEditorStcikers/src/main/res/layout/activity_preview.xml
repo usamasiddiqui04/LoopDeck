@@ -224,7 +224,7 @@
                 android:id="@+id/imgAddmusic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_iconsound"
+                android:src="@drawable/ic_eraser"
                 app:layout_constraintBottom_toTopOf="@id/textSound"
                 app:layout_constraintEnd_toEndOf="@id/textSound"
                 app:layout_constraintStart_toStartOf="@id/textSound" />
@@ -234,7 +234,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Sound"
+                android:text="Eraser"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

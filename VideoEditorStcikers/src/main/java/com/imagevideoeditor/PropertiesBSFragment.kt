@@ -1,6 +1,7 @@
 package com.imagevideoeditor
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,9 +9,14 @@ import android.widget.SeekBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.imagevideoeditor.photoeditor.OnPhotoEditorListener
+import com.imagevideoeditor.photoeditor.PhotoEditor
+import com.imagevideoeditor.photoeditor.ViewType
+import kotlinx.android.synthetic.main.fragment_properties_dialog.*
 
 class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChangeListener {
     private var mProperties: Properties? = null
+    private var mPhotoEditor: PhotoEditor? = null
 
     interface Properties {
         fun onColorChanged(colorCode: Int)
@@ -53,6 +59,10 @@ class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChang
             }
         })
         rvColor.adapter = colorPickerAdapter
+
+        eraser.setOnClickListener {
+            mPhotoEditor!!.brushEraser()
+        }
     }
 
     fun setPropertiesChangeListener(properties: Properties?) {
@@ -90,4 +100,5 @@ class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChang
     }
 
     override fun onStopTrackingTouch(seekBar: SeekBar) {}
+
 }
