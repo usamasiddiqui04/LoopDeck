@@ -226,6 +226,8 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             }
             selectedList.clear()
             multiSelection = false
+            bottomLayout.visibility = View.GONE
+
         }
 
         addmedia.setOnClickListener {

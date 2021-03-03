@@ -25,6 +25,7 @@ import com.imagevideoeditor.PreviewVideoActivity
 import com.loopdeck.photoeditor.EditImageActivity
 import com.example.loopdeck.gallery.model.GalleryData
 import com.example.loopdeck.gallery.view.PickerActivity
+import com.imagevideoeditor.PreviewPhotoActivity
 import kotlinx.android.synthetic.main.fragment_playlist.*
 import kotlinx.android.synthetic.main.fragment_playlist.btnDelete
 import kotlinx.android.synthetic.main.fragment_playlist.btnGallery
@@ -132,7 +133,7 @@ class PlaylistFragment : Fragment() {
             if (!multiSelection) {
                 when (mediadata.mediaType) {
                     MediaType.IMAGE -> {
-                        val intent = Intent(requireContext(), EditImageActivity::class.java)
+                        val intent = Intent(requireContext(), PreviewPhotoActivity::class.java)
                         intent.putExtra("imagePath", mediadata.filePath)
                         startActivity(intent)
                     }
