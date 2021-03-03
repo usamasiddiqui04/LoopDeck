@@ -298,7 +298,6 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
             TextEditor {
 
             override fun onDone(inputText: String?, colorCode: Int, position: Int) {
-                TODO("Not yet implemented")
                 val styleBuilder = TextStyleBuilder()
                 styleBuilder.withTextColor(colorCode)
                 val typeface =
