@@ -206,10 +206,8 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         ivImage = findViewById(R.id.ivImage)
         imgClose = findViewById(R.id.imgClose)
         imgDone = findViewById(R.id.imgDone)
-        imgDelete = findViewById(R.id.imgDelete)
         imgDraw = findViewById(R.id.iconBrushes)
         imgText = findViewById(R.id.iconText)
-        imgUndo = findViewById(R.id.imgUndo)
 //        imgTrim = findViewById(R.id.imgTrim)
         imgFilters = findViewById(R.id.iconFilters)
 
@@ -373,7 +371,6 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
                     }
                 })
             }
-            R.id.imgUndo == v.id -> mPhotoEditor!!.clearBrushAllViews()
             R.id.imgSticker == v.id -> mStickerBSFragment!!.show(
                 supportFragmentManager, mStickerBSFragment!!.tag
             )

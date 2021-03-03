@@ -10,14 +10,12 @@ import android.util.Log
 import android.view.Surface
 import android.view.TextureView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import com.imagevideoeditor.Utils.DimensionData
 import com.imagevideoeditor.Utils.Utils
-import com.imagevideoeditor.databinding.ActivityVideoPreviewBinding
+import kotlinx.android.synthetic.main.activity_video_preview.*
 import java.io.IOException
 
 class VideoPreviewActivity : AppCompatActivity() {
-    private var binding: ActivityVideoPreviewBinding? = null
     private var mediaPlayer: MediaPlayer? = null
     private var videoPath: String? = null
     private var originalDisplayWidth = 0
@@ -51,9 +49,9 @@ class VideoPreviewActivity : AppCompatActivity() {
         }
         setCanvasAspectRatio()
         Log.d("new size>>", "W = $newCanvasWidth H = $newCanvasHeight")
-        binding?.videoPreview!!.layoutParams.width = newCanvasWidth
-        binding?.videoPreview!!.layoutParams.height = newCanvasHeight
-        binding?.videoPreview!!.surfaceTextureListener =
+        videoPreview!!.layoutParams.width = newCanvasWidth
+        videoPreview!!.layoutParams.height = newCanvasHeight
+        videoPreview!!.surfaceTextureListener =
             object : TextureView.SurfaceTextureListener {
                 override fun onSurfaceTextureAvailable(
                     surfaceTexture: SurfaceTexture,

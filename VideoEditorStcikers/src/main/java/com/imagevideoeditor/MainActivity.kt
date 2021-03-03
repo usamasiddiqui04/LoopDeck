@@ -5,28 +5,24 @@ import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import com.imagevideoeditor.PreviewPhotoActivity
-import com.imagevideoeditor.PreviewVideoActivity
 import com.imagevideoeditor.Utils.CameraUtils
 import com.imagevideoeditor.Utils.CameraUtils.OnCameraResult
-import com.imagevideoeditor.databinding.ActivityMainBinding
 import com.kbeanie.multipicker.api.CameraVideoPicker
 import com.kbeanie.multipicker.api.entity.ChosenImage
 import com.kbeanie.multipicker.api.entity.ChosenVideo
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), OnCameraResult {
     private var cameraUtils: CameraUtils? = null
-    private var activityMainBinding: ActivityMainBinding? = null
     private val cameraVideoPicker: CameraVideoPicker? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        setContentView(R.layout.activity_main)
         cameraUtils = CameraUtils(this, this)
-        activityMainBinding?.btnPhoto!!.setOnClickListener {
+        btnPhoto!!.setOnClickListener {
             //                cameraUtils.openCameraGallery();
         }
-        activityMainBinding?.btnVideo!!.setOnClickListener { cameraUtils!!.alertVideoSelcetion() }
+        btnVideo!!.setOnClickListener { cameraUtils!!.alertVideoSelcetion() }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

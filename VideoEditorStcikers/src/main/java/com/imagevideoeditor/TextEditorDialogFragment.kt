@@ -1,7 +1,6 @@
 package com.imagevideoeditor
 
 import android.annotation.SuppressLint
-import android.app.ActionBar
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -11,7 +10,6 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.FILL_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -23,9 +21,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.imagevideoeditor.ColorPickerAdapter.OnColorPickerClickListener
-import kotlinx.android.synthetic.main.add_text_dialog.*
-import kotlinx.android.synthetic.main.addtextlayout.add_text_color_picker_recyclerview
-import kotlinx.android.synthetic.main.addtextlayout.reyFonts
+import kotlinx.android.synthetic.main.text_dialog.*
+import kotlinx.android.synthetic.main.textlayout.add_text_color_picker_recyclerview
+import kotlinx.android.synthetic.main.textlayout.reyFonts
 import java.util.*
 
 
@@ -62,7 +60,7 @@ class TextEditorDialogFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.add_text_dialog, container, false)
+        return inflater.inflate(R.layout.text_dialog, container, false)
     }
 
     @SuppressLint("ClickableViewAccessibility")

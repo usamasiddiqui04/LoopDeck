@@ -19,7 +19,7 @@
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/app_name"
-                android:scaleType="centerCrop"
+                android:scaleType="fitXY"
                 android:src="@drawable/ic_baseline_movie"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

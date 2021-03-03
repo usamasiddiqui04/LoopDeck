@@ -489,7 +489,7 @@ class PhotoEditor private constructor(builder: Builder) : BrushViewChangeListene
         parentView!!.setFilterEffect(customEffect)
     }
 
-    fun setFilterEffect(filterType: PhotoFilter?) {
+    fun setFilterEffect(filterType: PhotoFilter) {
         parentView!!.setFilterEffect(filterType)
     }
 
@@ -710,6 +710,7 @@ class PhotoEditor private constructor(builder: Builder) : BrushViewChangeListene
             mOnPhotoEditorListener!!.onStopViewChangeListener(ViewType.BRUSH_DRAWING)
         }
     }
+
 
     class Builder(val context: Context, val parentView: PhotoEditorView) {
         val imageView: ImageView

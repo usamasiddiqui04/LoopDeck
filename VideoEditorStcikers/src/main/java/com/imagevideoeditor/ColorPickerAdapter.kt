@@ -10,8 +10,10 @@ import android.graphics.drawable.shapes.OvalShape
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.makeramen.roundedimageview.RoundedImageView
 import java.util.*
 
 /**
@@ -36,7 +38,8 @@ class ColorPickerAdapter internal constructor(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.colorPickerView.setBackgroundColor(colorPickerColors[position])
+//        holder.colorPickerView.setBackgroundColor(colorPickerColors[position])
+        holder.colorPickerView.setCardBackgroundColor(colorPickerColors[position])
     }
 
     override fun getItemCount(): Int {
@@ -66,7 +69,7 @@ class ColorPickerAdapter internal constructor(
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var colorPickerView: View = itemView.findViewById(R.id.color_picker_view)
+        var colorPickerView: CardView = itemView.findViewById(R.id.color_picker_view)
 
         init {
             itemView.setOnClickListener {

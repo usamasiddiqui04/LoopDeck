@@ -2,15 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:background="@drawable/colorbackground"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <View
+    <androidx.cardview.widget.CardView
         android:id="@+id/color_picker_view"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_margin="5dp"
-        android:layout_alignParentTop="true"
-        tools:text="" />
+        app:cardCornerRadius="10dp"
+        android:layout_alignParentTop="true" />
 
 </RelativeLayout>

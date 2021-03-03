@@ -29,6 +29,7 @@ import com.imagevideoeditor.PreviewVideoActivity
 import com.loopdeck.photoeditor.EditImageActivity
 import com.example.loopdeck.gallery.model.GalleryData
 import com.example.loopdeck.gallery.view.PickerActivity
+import com.imagevideoeditor.PreviewPhotoActivity
 import com.xorbix.loopdeck.cameraapp.BitmapUtils
 import kotlinx.android.synthetic.main.custom_layout.view.*
 import kotlinx.android.synthetic.main.dailogbox.view.*
@@ -128,7 +129,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             if (!multiSelection) {
                 when (mediadata.mediaType) {
                     MediaType.IMAGE -> {
-                        val intent = Intent(requireContext(), EditImageActivity::class.java)
+                        val intent = Intent(requireContext(), PreviewPhotoActivity::class.java)
                         intent.putExtra("imagePath", mediadata.filePath)
                         startActivity(intent)
                     }

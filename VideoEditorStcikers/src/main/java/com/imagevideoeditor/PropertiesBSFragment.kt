@@ -8,7 +8,6 @@ import android.widget.SeekBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.imagevideoeditor.photoeditor.PhotoEditor
 
 class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChangeListener {
     private var mProperties: Properties? = null
@@ -28,7 +27,7 @@ class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChang
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_bottom_properties_dialog, container, false)
+        return inflater.inflate(R.layout.fragment_properties_dialog, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
