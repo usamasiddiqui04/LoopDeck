@@ -1,6 +1,7 @@
 package com.imagevideoeditor.filter
 
-import ja.burhanrashid52.photoeditor.PhotoFilter
+import com.imagevideoeditor.photoeditor.PhotoFilter
+
 
 interface FilterListener {
     fun onFilterSelected(photoFilter: PhotoFilter?)

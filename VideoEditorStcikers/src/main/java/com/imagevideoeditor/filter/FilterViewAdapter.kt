@@ -1,4 +1,4 @@
-package com.loopdeck.photoeditor.filters
+package com.imagevideoeditor.filter
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -7,13 +7,11 @@ import android.util.Pair
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.imagevideoeditor.R
-import com.imagevideoeditor.filter.FilterListener
+import com.imagevideoeditor.photoeditor.PhotoFilter
 import com.makeramen.roundedimageview.RoundedImageView
-import ja.burhanrashid52.photoeditor.PhotoFilter
 import java.io.IOException
 import java.io.InputStream
 import java.util.*
@@ -45,11 +43,11 @@ internal class FilterViewAdapter(private val mFilterListener: FilterListener) :
         init {
             mImageFilterView = itemView.findViewById(R.id.imgFilterView)
             mTxtFilterName = itemView.findViewById(R.id.txtFilterName)
-            itemView.setOnClickListener(View.OnClickListener {
+            itemView.setOnClickListener {
                 mFilterListener.onFilterSelected(
                     mPairList[layoutPosition].second
                 )
-            })
+            }
         }
     }
 

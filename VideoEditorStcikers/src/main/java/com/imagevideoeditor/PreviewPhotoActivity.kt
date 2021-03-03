@@ -21,13 +21,11 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.imagevideoeditor.TextEditorDialogFragment.TextEditor
 import com.imagevideoeditor.filter.FilterListener
 import com.imagevideoeditor.photoeditor.*
-import com.loopdeck.photoeditor.filters.FilterViewAdapter
-import ja.burhanrashid52.photoeditor.PhotoFilter
+import com.imagevideoeditor.filter.FilterViewAdapter
 import kotlinx.android.synthetic.main.activity_preview.*
 import java.io.File
 import java.io.IOException
@@ -349,8 +347,8 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
         private val PICK_REQUEST = 53
     }
 
-    override fun onFilterSelected(photoFilter: PhotoFilter?) {
-//        mPhotoEditor!!.setFilterEffect(photoFilter)
+    override fun onFilterSelected(photoFilter: com.imagevideoeditor.photoeditor.PhotoFilter?) {
+        mPhotoEditor!!.setFilterEffect(photoFilter!!)
     }
 
 }
