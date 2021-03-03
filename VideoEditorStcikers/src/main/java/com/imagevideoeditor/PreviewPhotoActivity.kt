@@ -108,8 +108,6 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
             showFilter(false)
             main_menu.visibility = View.VISIBLE
             layoutfilter.visibility = View.GONE
-        } else if (!mPhotoEditor!!.isCacheEmpty) {
-
         } else {
             super.onBackPressed()
         }
