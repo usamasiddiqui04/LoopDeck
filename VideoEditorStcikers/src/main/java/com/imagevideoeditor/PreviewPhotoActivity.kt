@@ -29,11 +29,12 @@ import com.imagevideoeditor.filter.FilterViewAdapter
 import kotlinx.android.synthetic.main.activity_preview.*
 import java.io.File
 import java.io.IOException
+import java.time.chrono.Era
 
 @Suppress("UNREACHABLE_CODE")
 class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
     PropertiesBSFragment.Properties, View.OnClickListener, StickerBSFragment.StickerListener,
-    FilterListener {
+    FilterListener, EraseClick {
 
     var videoSurface: TextureView? = null
     var ivImage: PhotoEditorView? = null
@@ -77,6 +78,7 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
         mStickerBSFragment = StickerBSFragment()
         mStickerBSFragment!!.setStickerListener(this)
         propertiesBSFragment = PropertiesBSFragment()
+        propertiesBSFragment!!.EraseClick(this)
         propertiesBSFragment!!.setPropertiesChangeListener(this)
         mPhotoEditor = PhotoEditor.Builder(this, ivImage!!)
             .setPinchTextScalable(true) // set flag to make text scalable when pinch
@@ -102,9 +104,6 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
             showFilter(true)
         }
 
-        imgAddmusic.setOnClickListener {
-            mPhotoEditor!!.brushEraser()
-        }
     }
 
     override fun onBackPressed() {
@@ -356,6 +355,10 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
 
     override fun onFilterSelected(photoFilter: com.imagevideoeditor.photoeditor.PhotoFilter?) {
         mPhotoEditor!!.setFilterEffect(photoFilter!!)
+    }
+
+    override fun onEraserClick() {
+        mPhotoEditor!!.brushEraser()
     }
 
 }

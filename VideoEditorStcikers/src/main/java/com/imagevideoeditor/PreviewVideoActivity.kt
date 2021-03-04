@@ -60,7 +60,7 @@ private val displayMetrics1 = DisplayMetrics()
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFMpegCallback,
     PropertiesBSFragment.Properties, View.OnClickListener, StickerBSFragment.StickerListener,
-    OptiBaseCreatorDialogFragment.CallBacks, AddFilterListener {
+    OptiBaseCreatorDialogFragment.CallBacks, AddFilterListener, EraseClick {
     var videoSurface: FrameLayout? = null
     var ivImage: PhotoEditorView? = null
     var imgClose: ImageView? = null
@@ -217,6 +217,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         mStickerBSFragment = StickerBSFragment()
         mStickerBSFragment!!.setStickerListener(this)
         propertiesBSFragment = PropertiesBSFragment()
+        propertiesBSFragment!!.EraseClick(this)
         propertiesBSFragment!!.setPropertiesChangeListener(this)
         mPhotoEditor = PhotoEditor.Builder(this, ivImage!!)
             .setPinchTextScalable(true) // set flag to make text scalable when pinch
@@ -742,5 +743,9 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
                 applicationContext
             )
         )
+    }
+
+    override fun onEraserClick() {
+        mPhotoEditor!!.brushEraser()
     }
 }

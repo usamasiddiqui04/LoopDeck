@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_properties_dialog.*
 class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChangeListener {
     private var mProperties: Properties? = null
     private var mPhotoEditor: PhotoEditor? = null
+    private var _eraseClick: EraseClick? = null
 
     interface Properties {
         fun onColorChanged(colorCode: Int)
@@ -27,6 +28,11 @@ class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChang
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
+
+    fun EraseClick(eraseClick: EraseClick?) {
+        this._eraseClick = eraseClick
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,6 +55,7 @@ class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChang
         val colorPickerAdapter = ColorPickerAdapter(
             activity!!
         )
+
         colorPickerAdapter.setOnColorPickerClickListener(object :
             ColorPickerAdapter.OnColorPickerClickListener {
             override fun onColorPickerClicked(colorCode: Int) {
@@ -61,8 +68,12 @@ class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChang
         rvColor.adapter = colorPickerAdapter
 
         eraser.setOnClickListener {
-            mPhotoEditor!!.brushEraser()
+//            mPhotoEditor!!.brushEraser()
+            _eraseClick!!.onEraserClick()
+            dismiss()
         }
+
+
     }
 
     fun setPropertiesChangeListener(properties: Properties?) {
