@@ -122,6 +122,7 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
         else if (R.id.imgDone == v.id) saveImage()
         else if (R.id.iconBrushes == v.id) setDrawingMode()
         else if (R.id.iconText == v.id) {
+            mPhotoEditor!!.setBrushDrawingMode(false)
             val textEditorDialogFragment = TextEditorDialogFragment.show(this, 0)
             textEditorDialogFragment.setOnTextEditorListener(object : TextEditor {
                 override fun onDone(inputText: String?, colorCode: Int, position: Int) {
@@ -141,10 +142,13 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
             })
 //        } else if (R.id.imgUndo == v.id)
 //            mPhotoEditor!!.clearBrushAllViews()
+        } else if (R.id.imgSticker == v.id) {
+            mPhotoEditor!!.setBrushDrawingMode(false)
+            mStickerBSFragment!!.show(
+                supportFragmentManager, mStickerBSFragment!!.tag
+            )
         }
-        else if (R.id.imgSticker == v.id) mStickerBSFragment!!.show(
-            supportFragmentManager, mStickerBSFragment!!.tag
-        )
+
         //        switch (v.getId()) {
 //            case R.id.imgClose:
 //                onBackPressed();
@@ -181,14 +185,18 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
     }
 
     private fun setDrawingMode() {
-        if (mPhotoEditor!!.brushDrawableMode) {
-            mPhotoEditor!!.setBrushDrawingMode(false)
-            imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.black_trasp))
-        } else {
-            mPhotoEditor!!.setBrushDrawingMode(true)
-            imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
-            propertiesBSFragment!!.show(supportFragmentManager, propertiesBSFragment!!.tag)
-        }
+
+        mPhotoEditor!!.setBrushDrawingMode(true)
+        imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.black_trasp))
+        propertiesBSFragment!!.show(supportFragmentManager, propertiesBSFragment!!.tag)
+//        if (mPhotoEditor!!.brushDrawableMode) {
+//            mPhotoEditor!!.setBrushDrawingMode(false)
+//            imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.black_trasp))
+//        } else {
+//            mPhotoEditor!!.setBrushDrawingMode(true)
+//            imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
+//            propertiesBSFragment!!.show(supportFragmentManager, propertiesBSFragment!!.tag)
+//        }
     }
 
     @SuppressLint("MissingPermission")
@@ -253,6 +261,7 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
     }
 
     private fun showFilter(isVisible: Boolean) {
+        mPhotoEditor!!.setBrushDrawingMode(false)
         mIsFilterVisible = isVisible
         mConstraintSet.clone(mRootView)
         if (isVisible) {

@@ -5,7 +5,7 @@
     <string name="start_exploring">Start Browsing Your OneDrive</string>
     <string name="sign_out">Sign out</string>
     <string name="empty_list">Folder is empty</string>
-    <string name="empty_file">Item Downloaded</string>
+    <string name="empty_file">Downloading item please wait a few seconds</string>
     <string name="loading_progress_text">Downloading item information…</string>
     <string name="rename">Rename</string>
     <string name="upload_file">Upload File</string>

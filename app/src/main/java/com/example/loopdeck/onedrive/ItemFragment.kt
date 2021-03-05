@@ -351,7 +351,7 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
                         } else {
                             emptyText.setText(R.string.empty_file)
                         }
-//                        setFocus(ItemFocus.Visualization, view)
+                        setFocus(ItemFocus.Visualization, view)
                     } else {
                         for (childItem in result.children.currentPage) {
                             adapter.add(

@@ -90,8 +90,8 @@
         android:layout_below="@android:id/inputArea"
         android:gravity="center"
         android:visibility="invisible"
-        android:background="@color/OneDriveBlue"
-        android:textColor="@android:color/white" />
+        android:background="@color/white"
+        android:textColor="@android:color/black" />
 
     <LinearLayout
         android:id="@android:id/progress"
