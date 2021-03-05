@@ -48,8 +48,6 @@ class WebviewLoginActivity : AppCompatActivity() {
                     val intent = Intent(this@WebviewLoginActivity,CollectionActivity::class.java )
                     finish()
                     startActivity(intent)
-
-
                 }
                 Log.d("Webview", "All the cookies in a string:$cookiename")
 
