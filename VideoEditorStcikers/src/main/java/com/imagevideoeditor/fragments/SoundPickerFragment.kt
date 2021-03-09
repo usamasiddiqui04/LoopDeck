@@ -11,15 +11,21 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.imagevideoeditor.PreviewPhotoActivity
+import com.imagevideoeditor.PreviewVideoActivity
 import com.imagevideoeditor.R
+import com.imagevideoeditor.SoundListner
 import com.imagevideoeditor.soundpicker.SongAdaptor
 import com.imagevideoeditor.soundpicker.Songinfo
 import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
 import com.obs.marveleditor.interfaces.OptiDialogueHelper
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import kotlinx.android.synthetic.main.fragment_sound_picker.*
+import kotlinx.android.synthetic.main.soundpickerlayout.*
 import kotlinx.android.synthetic.main.soundpickerlayout.view.*
+import kotlinx.android.synthetic.main.soundpickerlayout.view.play
 import java.io.File
 
 
@@ -32,6 +38,8 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
     var videofile: File? = null
     var videoDuration: Long? = null
     var mediaPlayer: MediaPlayer? = null
+    var previewVideoActivity: PreviewVideoActivity? = null
+    var player: SimpleExoPlayer? = null
 
 
     companion object {
@@ -78,6 +86,9 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
         mediaPlayer = MediaPlayer()
         progressDialog = ProgressDialog(requireContext())
 
+        previewVideoActivity = PreviewVideoActivity()
+
+
         songAdaptor = SongAdaptor(listSongs, requireContext(), onItemClickListener)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = songAdaptor
@@ -112,6 +123,9 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
         videofile = file
     }
 
+    fun setMediaPlayer(player: SimpleExoPlayer) {
+        this.player = player
+    }
 
     fun setDuartion(timeInMillis: Long) {
         videoDuration = timeInMillis

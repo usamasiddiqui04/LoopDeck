@@ -6,7 +6,6 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Typeface
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.net.Uri
@@ -66,6 +65,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     var imgClose: ImageView? = null
     var imgDone: ImageView? = null
     private var masterVideoFile: File? = null
+    val soundPickerFragment = SoundPickerFragment()
     private var tagName: String = PreviewVideoActivity::class.java.simpleName
     var imgDelete: ImageView? = null
     var imgDraw: ImageView? = null
@@ -189,7 +189,6 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
             repeatMode = Player.REPEAT_MODE_ONE
         }
     }
-
     private fun initViews() {
         mAppName = getString(R.string.app_name)
         mAppPath = File(
@@ -201,7 +200,6 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         filename =
             masterVideoFile!!.toString().substring(masterVideoFile.toString().lastIndexOf("/") + 1)
         filterFilepath = "$mAppPath/MP4_$filename"
-
         videoSurface = findViewById(R.id.videoSurface)
         ivImage = findViewById(R.id.ivImage)
         imgClose = findViewById(R.id.imgClose)
@@ -210,7 +208,6 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         imgText = findViewById(R.id.iconText)
 //        imgTrim = findViewById(R.id.imgTrim)
         imgFilters = findViewById(R.id.iconFilters)
-
         imgSticker = findViewById(R.id.imgSticker)
         fFmpeg = FFmpeg.getInstance(this)
         progressDialog = ProgressDialog(this)
@@ -233,6 +230,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         imgSticker?.setOnClickListener(this)
         imgTrim?.setOnClickListener(this)
         imgFilters?.setOnClickListener(this)
+
 //        imgPlayback?.setOnClickListener(this)
         imgAddmusic?.setOnClickListener(this)
         exeCmd = ArrayList()
@@ -399,11 +397,12 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 //            }
 
             R.id.imgAddmusic == v.id -> {
-                mPhotoEditor!!.setBrushDrawingMode(true)
+                mPhotoEditor!!.setBrushDrawingMode(false)
+                player.stop()
                 val timeInMillis = OptiUtils.getVideoDuration(applicationContext, masterVideoFile!!)
-                val soundPickerFragment = SoundPickerFragment()
                 soundPickerFragment.setFilePath(masterVideoFile!!)
                 soundPickerFragment.setDuartion(timeInMillis)
+                soundPickerFragment.setMediaPlayer(player)
                 showBottomSheetDialogFragment(soundPickerFragment)
 //              masterVideoFile?.let { file ->
 //
