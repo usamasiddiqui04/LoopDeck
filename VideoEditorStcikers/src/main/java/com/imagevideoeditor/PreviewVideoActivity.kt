@@ -353,6 +353,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
             R.id.imgDone == v.id -> saveImage()
             R.id.iconBrushes == v.id -> setDrawingMode()
             R.id.iconText == v.id -> {
+                mPhotoEditor!!.setBrushDrawingMode(false)
                 val textEditorDialogFragment = TextEditorDialogFragment.show(this, 0)
                 textEditorDialogFragment.setOnTextEditorListener(object :
                     TextEditorDialogFragment.TextEditor {
@@ -372,9 +373,13 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
                     }
                 })
             }
-            R.id.imgSticker == v.id -> mStickerBSFragment!!.show(
-                supportFragmentManager, mStickerBSFragment!!.tag
-            )
+            R.id.imgSticker == v.id -> {
+                mPhotoEditor!!.setBrushDrawingMode(true)
+                mStickerBSFragment!!.show(
+                    supportFragmentManager, mStickerBSFragment!!.tag
+                )
+            }
+
 //            R.id.imgTrim == v.id -> {
 //                masterVideoFile?.let { file ->
 //                    val trimFragment = TrimFragment()
@@ -394,12 +399,13 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 //            }
 
             R.id.imgAddmusic == v.id -> {
+                mPhotoEditor!!.setBrushDrawingMode(true)
                 val timeInMillis = OptiUtils.getVideoDuration(applicationContext, masterVideoFile!!)
                 val soundPickerFragment = SoundPickerFragment()
                 soundPickerFragment.setFilePath(masterVideoFile!!)
                 soundPickerFragment.setDuartion(timeInMillis)
                 showBottomSheetDialogFragment(soundPickerFragment)
-//                masterVideoFile?.let { file ->
+//              masterVideoFile?.let { file ->
 //
 //                    val timeInMillis = OptiUtils.getVideoDuration(applicationContext, file)
 //                    /*val duration = OptiCommonMethods.convertDurationInSec(timeInMillis)
@@ -412,6 +418,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 //                }
             }
             R.id.iconFilters == v.id -> {
+                mPhotoEditor!!.setBrushDrawingMode(true)
                 val filterFragment = FilterVideoFragment()
                 filterFragment.setFilePathFromSource(masterVideoFile!!)
                 filterFragment.setCallback(this)
@@ -458,14 +465,17 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     }
 
     private fun setDrawingMode() {
-        if (mPhotoEditor!!.brushDrawableMode) {
-            mPhotoEditor!!.setBrushDrawingMode(false)
-            imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.black_trasp))
-        } else {
-            mPhotoEditor!!.setBrushDrawingMode(true)
-            imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
-            propertiesBSFragment!!.show(supportFragmentManager, propertiesBSFragment!!.tag)
-        }
+        mPhotoEditor!!.setBrushDrawingMode(true)
+        imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.black_trasp))
+        propertiesBSFragment!!.show(supportFragmentManager, propertiesBSFragment!!.tag)
+//        if (mPhotoEditor!!.brushDrawableMode) {
+//            mPhotoEditor!!.setBrushDrawingMode(false)
+//            imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.black_trasp))
+//        } else {
+//            mPhotoEditor!!.setBrushDrawingMode(true)
+//            imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
+//            propertiesBSFragment!!.show(supportFragmentManager, propertiesBSFragment!!.tag)
+//        }
     }
 
     @SuppressLint("MissingPermission")
@@ -577,25 +587,26 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         rootView: View?,
         text: String?,
         colorCode: Int,
-        pos: Int
+        position: Int
     ) {
-
-        val textEditorDialogFragment = TextEditorDialogFragment.show(this, 0)
+        val textEditorDialogFragment =
+            TextEditorDialogFragment.show(this, (text)!!, colorCode, position)
         textEditorDialogFragment.setOnTextEditorListener(object :
             TextEditorDialogFragment.TextEditor {
+
             override fun onDone(inputText: String?, colorCode: Int, position: Int) {
                 val styleBuilder = TextStyleBuilder()
                 styleBuilder.withTextColor(colorCode)
-                val typeface: Typeface? =
-                    TextEditorDialogFragment.getDefaultFontIds(applicationContext)
+                val typeface =
+                    TextEditorDialogFragment.getDefaultFontIds(this@PreviewVideoActivity)
                         ?.get(position)?.let {
                             ResourcesCompat.getFont(
-                                applicationContext,
+                                this@PreviewVideoActivity,
                                 it
                             )
                         }
                 styleBuilder.withTextFont((typeface)!!)
-                mPhotoEditor!!.addText(inputText!!, styleBuilder, position)
+                mPhotoEditor!!.editText((rootView)!!, inputText!!, styleBuilder, position)
             }
         })
     }

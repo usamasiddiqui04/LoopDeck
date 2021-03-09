@@ -13,6 +13,7 @@ import com.imagevideoeditor.photoeditor.OnPhotoEditorListener
 import com.imagevideoeditor.photoeditor.PhotoEditor
 import com.imagevideoeditor.photoeditor.ViewType
 import kotlinx.android.synthetic.main.fragment_properties_dialog.*
+import kotlinx.android.synthetic.main.text_dialog.*
 
 class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChangeListener {
     private var mProperties: Properties? = null
@@ -70,6 +71,14 @@ class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChang
         eraser.setOnClickListener {
 //            mPhotoEditor!!.brushEraser()
             _eraseClick!!.onEraserClick()
+            dismiss()
+        }
+
+        done.setOnClickListener {
+            dismiss()
+        }
+
+        id_close.setOnClickListener {
             dismiss()
         }
 

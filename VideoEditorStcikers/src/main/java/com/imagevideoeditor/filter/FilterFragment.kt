@@ -58,6 +58,14 @@ class FilterVideoFragment : BottomSheetDialogFragment() {
         }
 
         adapter.notifyDataSetChanged()
+
+        iv_done.setOnClickListener {
+            dismiss()
+        }
+
+        iv_close.setOnClickListener {
+            dismiss()
+        }
     }
 
     fun setFilePathFromSource(file: File) {

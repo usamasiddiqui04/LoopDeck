@@ -52,7 +52,6 @@
         android:src="@drawable/ic_iconmarker"
         android:layout_margin="15dp" />
 
-
     <SeekBar
         android:id="@+id/sbOpacity"
         android:layout_width="0dp"
@@ -106,6 +105,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/done"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/rvColors"
@@ -114,6 +114,7 @@
         android:layout_margin="15dp" />
 
     <ImageView
+        android:id="@+id/id_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/rvColors"

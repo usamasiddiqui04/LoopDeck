@@ -116,14 +116,7 @@ class TextEditorDialogFragment : DialogFragment() {
         colorPickerAdapter.setOnColorPickerClickListener(object : OnColorPickerClickListener {
             override fun onColorPickerClicked(colorCode: Int) {
                 mColorCode = colorCode
-                if (!check) {
-                    mAddTextEditText?.setTextColor(colorCode)
-                } else {
-                    mAddTextEditText!!.setWidth(WRAP_CONTENT);
-                    mAddTextEditText!!.setHeight(WRAP_CONTENT);
-                    mAddTextEditText!!.setPadding(20, 20, 20, 20);
-                    mAddTextEditText?.setBackgroundResource(colorCode)
-                }
+                mAddTextEditText?.setTextColor(colorCode)
             }
         })
 
@@ -143,8 +136,6 @@ class TextEditorDialogFragment : DialogFragment() {
             }
 
         })
-
-
 
         reyFonts?.adapter = fontPickerAdapter
         mAddTextEditText?.setText(arguments!!.getString(EXTRA_INPUT_TEXT))

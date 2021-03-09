@@ -5,6 +5,8 @@ import android.app.Dialog
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +16,61 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.android.synthetic.main.fragment_sticker_emoji_dialog.*
 
 class StickerBSFragment() : BottomSheetDialogFragment() {
+
+    var stickerList = intArrayOf(
+        R.drawable.aa,
+        R.drawable.bb,
+        R.drawable.cc,
+        R.drawable.dd,
+        R.drawable.ee,
+        R.drawable.ff,
+        R.drawable.birthday_one,
+        R.drawable.birthday_two,
+        R.drawable.aa,
+        R.drawable.bb,
+        R.drawable.cc,
+        R.drawable.dd,
+        R.drawable.ee,
+        R.drawable.ff,
+        R.drawable.birthday_one,
+        R.drawable.birthday_two,
+        R.drawable.aa,
+        R.drawable.bb,
+        R.drawable.cc,
+        R.drawable.dd,
+        R.drawable.ee,
+        R.drawable.ff,
+        R.drawable.birthday_one,
+        R.drawable.birthday_two,
+        R.drawable.aa,
+        R.drawable.bb,
+        R.drawable.cc,
+        R.drawable.dd,
+        R.drawable.ee,
+        R.drawable.ff,
+        R.drawable.birthday_one,
+        R.drawable.birthday_two,
+        R.drawable.aa,
+        R.drawable.bb,
+        R.drawable.cc,
+        R.drawable.dd,
+        R.drawable.ee,
+        R.drawable.ff,
+        R.drawable.birthday_one,
+        R.drawable.birthday_two,
+        R.drawable.aa,
+        R.drawable.bb,
+        R.drawable.cc,
+        R.drawable.dd,
+        R.drawable.ee,
+        R.drawable.ff,
+        R.drawable.birthday_one,
+        R.drawable.birthday_two
+    )
+
     private var mStickerListener: StickerListener? = null
     fun setStickerListener(stickerListener: StickerListener?) {
         mStickerListener = stickerListener
@@ -51,6 +106,20 @@ class StickerBSFragment() : BottomSheetDialogFragment() {
         rvEmoji.layoutManager = gridLayoutManager
         val stickerAdapter: StickerAdapter = StickerAdapter()
         rvEmoji.adapter = stickerAdapter
+
+        stickersearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        })
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,56 +127,7 @@ class StickerBSFragment() : BottomSheetDialogFragment() {
     }
 
     inner class StickerAdapter() : RecyclerView.Adapter<StickerAdapter.ViewHolder>() {
-        var stickerList = intArrayOf(
-            R.drawable.aa,
-            R.drawable.bb,
-            R.drawable.cc,
-            R.drawable.dd,
-            R.drawable.ee,
-            R.drawable.ff,
-            R.drawable.birthday_one,
-            R.drawable.birthday_two,
-            R.drawable.aa,
-            R.drawable.bb,
-            R.drawable.cc,
-            R.drawable.dd,
-            R.drawable.ee,
-            R.drawable.ff,
-            R.drawable.birthday_one,
-            R.drawable.birthday_two,
-            R.drawable.aa,
-            R.drawable.bb,
-            R.drawable.cc,
-            R.drawable.dd,
-            R.drawable.ee,
-            R.drawable.ff,
-            R.drawable.birthday_one,
-            R.drawable.birthday_two,
-            R.drawable.aa,
-            R.drawable.bb,
-            R.drawable.cc,
-            R.drawable.dd,
-            R.drawable.ee,
-            R.drawable.ff,
-            R.drawable.birthday_one,
-            R.drawable.birthday_two,
-            R.drawable.aa,
-            R.drawable.bb,
-            R.drawable.cc,
-            R.drawable.dd,
-            R.drawable.ee,
-            R.drawable.ff,
-            R.drawable.birthday_one,
-            R.drawable.birthday_two,
-            R.drawable.aa,
-            R.drawable.bb,
-            R.drawable.cc,
-            R.drawable.dd,
-            R.drawable.ee,
-            R.drawable.ff,
-            R.drawable.birthday_one,
-            R.drawable.birthday_two
-        )
+
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view =

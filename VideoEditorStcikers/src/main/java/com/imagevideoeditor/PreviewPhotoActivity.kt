@@ -104,6 +104,17 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
             showFilter(true)
         }
 
+        done.setOnClickListener {
+            main_menu.visibility = View.VISIBLE
+            layoutfilter.visibility = View.GONE
+            showFilter(false)
+        }
+        close.setOnClickListener {
+            main_menu.visibility = View.VISIBLE
+            layoutfilter.visibility = View.GONE
+            showFilter(false)
+        }
+
     }
 
     override fun onBackPressed() {
