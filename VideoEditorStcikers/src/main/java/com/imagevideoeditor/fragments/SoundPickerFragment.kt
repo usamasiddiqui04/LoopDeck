@@ -1,6 +1,7 @@
 package com.imagevideoeditor.fragments
 
 import android.app.ProgressDialog
+import android.content.DialogInterface
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.provider.MediaStore
@@ -13,15 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.imagevideoeditor.PreviewPhotoActivity
+import com.imagevideoeditor.EraseClick
 import com.imagevideoeditor.PreviewVideoActivity
 import com.imagevideoeditor.R
 import com.imagevideoeditor.SoundListner
 import com.imagevideoeditor.soundpicker.SongAdaptor
 import com.imagevideoeditor.soundpicker.Songinfo
-import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
-import com.obs.marveleditor.interfaces.OptiDialogueHelper
-import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import kotlinx.android.synthetic.main.fragment_sound_picker.*
 import kotlinx.android.synthetic.main.soundpickerlayout.*
 import kotlinx.android.synthetic.main.soundpickerlayout.view.*
@@ -38,12 +36,17 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
     var videofile: File? = null
     var videoDuration: Long? = null
     var mediaPlayer: MediaPlayer? = null
-    var previewVideoActivity: PreviewVideoActivity? = null
-    var player: SimpleExoPlayer? = null
+    var _player: SimpleExoPlayer? = null
+    var soundListner: SoundListner? = null
 
 
     companion object {
         fun newInstance() = SoundPickerFragment
+    }
+
+
+    fun setPlayer(soundListner: SoundListner) {
+        this.soundListner = soundListner
     }
 
     private val onItemClickListener: (View, RecyclerView.ViewHolder, Songinfo) -> Unit =
@@ -51,7 +54,7 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
 
             AddMusicFragment.newInstance().apply {
                 setaudiofilepath(File(songinfo.SongUrl!!), videofile!!, videoDuration!!)
-            }.show(fragmentManager, "AddMusicFragment")
+            }.show(fragmentManager, "SoundPikcerFragment")
         }
 //    private val playonItemClickListener: (View, RecyclerView.ViewHolder, Songinfo) -> Unit =
 //        { itemView, viewHolder, songinfo ->
@@ -79,14 +82,12 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.fragment_sound_picker, container, false)
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadSongs()
         mediaPlayer = MediaPlayer()
         progressDialog = ProgressDialog(requireContext())
 
-        previewVideoActivity = PreviewVideoActivity()
 
 
         songAdaptor = SongAdaptor(listSongs, requireContext(), onItemClickListener)
@@ -123,12 +124,13 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
         videofile = file
     }
 
-    fun setMediaPlayer(player: SimpleExoPlayer) {
-        this.player = player
-    }
-
     fun setDuartion(timeInMillis: Long) {
         videoDuration = timeInMillis
+    }
+
+    override fun onDismiss(dialog: DialogInterface?) {
+        super.onDismiss(dialog)
+        soundListner!!.relasePlayer()
     }
 
 

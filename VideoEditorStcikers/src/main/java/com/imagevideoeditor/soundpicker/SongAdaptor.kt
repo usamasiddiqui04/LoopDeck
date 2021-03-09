@@ -1,14 +1,12 @@
 package com.imagevideoeditor.soundpicker
 
 import android.content.Context
-import android.media.MediaActionSound
 import android.media.MediaPlayer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.imagevideoeditor.R
-import kotlinx.android.synthetic.main.soundpickerlayout.view.*
 
 class SongAdaptor(
     private var mList: ArrayList<Songinfo>,
@@ -16,6 +14,8 @@ class SongAdaptor(
     private val itemClickListener: (View, RecyclerView.ViewHolder, Songinfo) -> Unit
 
     ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    val mediaPlayer = MediaPlayer()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 

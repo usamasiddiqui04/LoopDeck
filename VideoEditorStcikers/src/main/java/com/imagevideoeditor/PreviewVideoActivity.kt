@@ -42,7 +42,6 @@ import com.imagevideoeditor.Utils.Utils
 import com.imagevideoeditor.filter.EditVideoActivity
 import com.imagevideoeditor.filter.FilterVideoFragment
 import com.imagevideoeditor.filter.interfaces.AddFilterListener
-import com.imagevideoeditor.filter.interfaces.FilterVideoCallBack
 import com.imagevideoeditor.filter.utils.FilterType
 import com.imagevideoeditor.fragments.SoundPickerFragment
 import com.imagevideoeditor.photoeditor.*
@@ -59,7 +58,7 @@ private val displayMetrics1 = DisplayMetrics()
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFMpegCallback,
     PropertiesBSFragment.Properties, View.OnClickListener, StickerBSFragment.StickerListener,
-    OptiBaseCreatorDialogFragment.CallBacks, AddFilterListener, EraseClick {
+    OptiBaseCreatorDialogFragment.CallBacks, AddFilterListener, EraseClick, SoundListner {
     var videoSurface: FrameLayout? = null
     var ivImage: PhotoEditorView? = null
     var imgClose: ImageView? = null
@@ -75,10 +74,8 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     var imgTrim: ImageView? = null
     var imgFilters: ImageView? = null
     private var mPhotoEditor: PhotoEditor? = null
-    private val globalVideoUrl = ""
     private var propertiesBSFragment: PropertiesBSFragment? = null
     private var mStickerBSFragment: StickerBSFragment? = null
-    private var mediaPlayer: MediaPlayer? = null
     private var videoPath: String? = null
     private var imagePath: String? = null
     private var exeCmd: ArrayList<String>? = null
@@ -93,14 +90,16 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     private var DRAW_CANVASH = 0
     private lateinit var mAppName: String
     private lateinit var mAppPath: File
-    private var filtervideocallback: FilterVideoCallBack? = null
     lateinit var player: SimpleExoPlayer
     lateinit var ePlayerView: EPlayerView
+    private var soundListner: SoundListner? = null
+
 
     private lateinit var filename: String
     private lateinit var filterFilepath: String
 
     private var mPosition: Int = 0
+
 
     private val onCompletionListener =
         MediaPlayer.OnCompletionListener { mediaPlayer -> mediaPlayer.start() }
@@ -148,6 +147,10 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         )
     }
 
+    fun setplayer(soundListner: SoundListner) {
+        this.soundListner = soundListner
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -189,6 +192,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
             repeatMode = Player.REPEAT_MODE_ONE
         }
     }
+
     private fun initViews() {
         mAppName = getString(R.string.app_name)
         mAppPath = File(
@@ -230,6 +234,8 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         imgSticker?.setOnClickListener(this)
         imgTrim?.setOnClickListener(this)
         imgFilters?.setOnClickListener(this)
+
+        soundPickerFragment.setPlayer(this)
 
 //        imgPlayback?.setOnClickListener(this)
         imgAddmusic?.setOnClickListener(this)
@@ -398,11 +404,10 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 
             R.id.imgAddmusic == v.id -> {
                 mPhotoEditor!!.setBrushDrawingMode(false)
-                player.stop()
+                ePlayerView.onPause()
                 val timeInMillis = OptiUtils.getVideoDuration(applicationContext, masterVideoFile!!)
                 soundPickerFragment.setFilePath(masterVideoFile!!)
                 soundPickerFragment.setDuartion(timeInMillis)
-                soundPickerFragment.setMediaPlayer(player)
                 showBottomSheetDialogFragment(soundPickerFragment)
 //              masterVideoFile?.let { file ->
 //
@@ -437,7 +442,6 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
             }
         }
     }
-
     private fun startFilterActivity(uri: String) {
         val intent = EditVideoActivity.newIntent(this, uri)
         startActivity(intent)
@@ -757,5 +761,9 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 
     override fun onEraserClick() {
         mPhotoEditor!!.brushEraser()
+    }
+
+    override fun relasePlayer() {
+        player.release()
     }
 }

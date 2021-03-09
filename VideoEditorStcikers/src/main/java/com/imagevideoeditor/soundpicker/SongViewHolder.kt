@@ -1,6 +1,5 @@
 package com.imagevideoeditor.soundpicker
 
-import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.view.View
@@ -12,7 +11,9 @@ class SongViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
 
 
     var retriever: MediaMetadataRetriever? = null
-    fun bind(songinfo: Songinfo) {
+    fun bind(
+        songinfo: Songinfo
+    ) {
 
         itemView.songtitle.setText(songinfo.Title)
         itemView.songalbum.setText(songinfo.Author)
