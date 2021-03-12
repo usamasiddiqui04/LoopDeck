@@ -49,11 +49,10 @@ import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.OptiUtils
 import kotlinx.android.synthetic.main.activity_preview_video.*
+import kotlinx.android.synthetic.main.soundpickerlayout.view.*
 import java.io.File
 import java.io.IOException
 import java.util.*
-
-private val displayMetrics1 = DisplayMetrics()
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFMpegCallback,
@@ -403,8 +402,8 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 //            }
 
             R.id.imgAddmusic == v.id -> {
+                ePlayerView.pause
                 mPhotoEditor!!.setBrushDrawingMode(false)
-                ePlayerView.onPause()
                 val timeInMillis = OptiUtils.getVideoDuration(applicationContext, masterVideoFile!!)
                 soundPickerFragment.setFilePath(masterVideoFile!!)
                 soundPickerFragment.setDuartion(timeInMillis)

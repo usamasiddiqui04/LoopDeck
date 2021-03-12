@@ -20,6 +20,7 @@ import com.imagevideoeditor.R
 import com.imagevideoeditor.SoundListner
 import com.imagevideoeditor.soundpicker.SongAdaptor
 import com.imagevideoeditor.soundpicker.Songinfo
+import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
 import kotlinx.android.synthetic.main.fragment_sound_picker.*
 import kotlinx.android.synthetic.main.soundpickerlayout.*
 import kotlinx.android.synthetic.main.soundpickerlayout.view.*
@@ -38,6 +39,7 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
     var mediaPlayer: MediaPlayer? = null
     var _player: SimpleExoPlayer? = null
     var soundListner: SoundListner? = null
+    private var helper: OptiBaseCreatorDialogFragment.CallBacks? = null
 
 
     companion object {
