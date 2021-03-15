@@ -34,7 +34,7 @@ class FilterVideoFragment : BottomSheetDialogFragment() {
 
     private val onItemClickListener: (View, Int) -> Unit =
         { itemView, position ->
-            filterListener!!.onClick(itemView, position)
+            filterListener!!.onFilterItemClicked(itemView, position)
         }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

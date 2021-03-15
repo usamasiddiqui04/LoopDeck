@@ -24,17 +24,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.imagevideoeditor.TextEditorDialogFragment.TextEditor
 import com.imagevideoeditor.filter.FilterListener
-import com.imagevideoeditor.photoeditor.*
 import com.imagevideoeditor.filter.FilterViewAdapter
+import com.imagevideoeditor.photoeditor.*
 import kotlinx.android.synthetic.main.activity_preview.*
 import java.io.File
 import java.io.IOException
-import java.time.chrono.Era
 
 @Suppress("UNREACHABLE_CODE")
 class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
-    PropertiesBSFragment.Properties, View.OnClickListener, StickerBSFragment.StickerListener,
-    FilterListener, EraseClick {
+    BrushArtFragment.BrushArtListener, View.OnClickListener, StickerBSFragment.StickerListener,
+    FilterListener, BrushArtListener {
 
     var videoSurface: TextureView? = null
     var ivImage: PhotoEditorView? = null
@@ -51,7 +50,7 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
     private var mIsFilterVisible = false
     private var mPhotoEditor: PhotoEditor? = null
     private val mPhotoEditorView: PhotoEditorView? = null
-    private var propertiesBSFragment: PropertiesBSFragment? = null
+    private var brushArtFragment: BrushArtFragment? = null
     private var mStickerBSFragment: StickerBSFragment? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,9 +76,8 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
         imgSticker = findViewById(R.id.imgSticker)
         mStickerBSFragment = StickerBSFragment()
         mStickerBSFragment!!.setStickerListener(this)
-        propertiesBSFragment = PropertiesBSFragment()
-        propertiesBSFragment!!.EraseClick(this)
-        propertiesBSFragment!!.setPropertiesChangeListener(this)
+        brushArtFragment = BrushArtFragment()
+        brushArtFragment!!.setBrushArtListener(this)
         mPhotoEditor = PhotoEditor.Builder(this, ivImage!!)
             .setPinchTextScalable(true) // set flag to make text scalable when pinch
             .setDeleteView(imgDelete) //.setDefaultTextTypeface(mTextRobotoTf)
@@ -199,7 +197,7 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
 
         mPhotoEditor!!.setBrushDrawingMode(true)
         imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.black_trasp))
-        propertiesBSFragment!!.show(supportFragmentManager, propertiesBSFragment!!.tag)
+        brushArtFragment!!.show(supportFragmentManager, brushArtFragment!!.tag)
 //        if (mPhotoEditor!!.brushDrawableMode) {
 //            mPhotoEditor!!.setBrushDrawingMode(false)
 //            imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.black_trasp))
@@ -355,15 +353,15 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
         Log.d(TAG, "onStopViewChangeListener() called with: viewType = [$viewType]")
     }
 
-    override fun onColorChanged(colorCode: Int) {
+    override fun onBrushArtColorChanged(colorCode: Int) {
         mPhotoEditor!!.brushColor = colorCode
     }
 
-    override fun onOpacityChanged(opacity: Int) {
+    override fun onBrushArtOpacityChanged(opacity: Int) {
         mPhotoEditor!!.setOpacity(opacity)
     }
 
-    override fun onBrushSizeChanged(brushSize: Int) {
+    override fun onBrushArtSizeChanged(brushSize: Int) {
         mPhotoEditor!!.brushSize = brushSize.toFloat()
     }
 
@@ -377,7 +375,7 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
         mPhotoEditor!!.setFilterEffect(photoFilter!!)
     }
 
-    override fun onEraserClick() {
+    override fun onBrushArtEraserClicked() {
         mPhotoEditor!!.brushEraser()
     }
 

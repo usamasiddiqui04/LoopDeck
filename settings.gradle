@@ -1,7 +1,4 @@
-include ':Filters'
-include ':drawerbehavior'
 include ':gallerypicker'
-include ':VideoEditorText'
 include ':PhotoEditor'
 include ':photoeditor'
 include ':VideoEditor'

@@ -58,8 +58,9 @@ private val displayMetrics1 = DisplayMetrics()
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFMpegCallback,
-    PropertiesBSFragment.Properties, View.OnClickListener, StickerBSFragment.StickerListener,
-    OptiBaseCreatorDialogFragment.CallBacks, AddFilterListener, EraseClick, SoundListner,
+    BrushArtFragment.BrushArtListener, View.OnClickListener, StickerBSFragment.StickerListener,
+    OptiBaseCreatorDialogFragment.CallBacks, AddFilterListener,
+    BrushArtListener, SoundListner,
     SoundPickerFragment.SoundPickerListener {
     var videoSurface: FrameLayout? = null
     var ivImage: PhotoEditorView? = null
@@ -78,7 +79,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     var imgTrim: ImageView? = null
     var imgFilters: ImageView? = null
     private var mPhotoEditor: PhotoEditor? = null
-    private var propertiesBSFragment: PropertiesBSFragment? = null
+    private var brushArtFragment: BrushArtFragment? = null
     private var mStickerBSFragment: StickerBSFragment? = null
     private var videoPath: String? = null
     private var imagePath: String? = null
@@ -221,9 +222,8 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         progressDialog = ProgressDialog(this)
         mStickerBSFragment = StickerBSFragment()
         mStickerBSFragment!!.setStickerListener(this)
-        propertiesBSFragment = PropertiesBSFragment()
-        propertiesBSFragment!!.EraseClick(this)
-        propertiesBSFragment!!.setPropertiesChangeListener(this)
+        brushArtFragment = BrushArtFragment()
+        brushArtFragment!!.setBrushArtListener(this)
         mPhotoEditor = PhotoEditor.Builder(this, ivImage!!)
             .setPinchTextScalable(true) // set flag to make text scalable when pinch
             .setDeleteView(imgDelete) //.setDefaultTextTypeface(mTextRobotoTf)
@@ -473,7 +473,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     private fun setDrawingMode() {
         mPhotoEditor!!.setBrushDrawingMode(true)
         imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.black_trasp))
-        propertiesBSFragment!!.show(supportFragmentManager, propertiesBSFragment!!.tag)
+        brushArtFragment!!.show(supportFragmentManager, brushArtFragment!!.tag)
 //        if (mPhotoEditor!!.brushDrawableMode) {
 //            mPhotoEditor!!.setBrushDrawingMode(false)
 //            imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.black_trasp))
@@ -705,16 +705,16 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         Log.d(TAG, "onStopViewChangeListener() called with: viewType = [$viewType]")
     }
 
-    override fun onColorChanged(colorCode: Int) {
-        mPhotoEditor!!.brushColor = colorCode
+    override fun onBrushArtColorChanged(colorCode: Int) {
+        mPhotoEditor?.brushColor = colorCode
     }
 
-    override fun onOpacityChanged(opacity: Int) {
-        mPhotoEditor!!.setOpacity(opacity)
+    override fun onBrushArtOpacityChanged(opacity: Int) {
+        mPhotoEditor?.setOpacity(opacity)
     }
 
-    override fun onBrushSizeChanged(brushSize: Int) {
-        mPhotoEditor!!.brushSize = brushSize.toFloat()
+    override fun onBrushArtSizeChanged(brushSize: Int) {
+        mPhotoEditor?.brushSize = brushSize.toFloat()
 
     }
 
@@ -753,7 +753,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 
     }
 
-    override fun onClick(v: View, position: Int) {
+    override fun onFilterItemClicked(v: View, position: Int) {
         mPosition = position
         ePlayerView.setGlFilter(
             FilterType.createGlFilter(
@@ -763,8 +763,8 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         )
     }
 
-    override fun onEraserClick() {
-        mPhotoEditor!!.brushEraser()
+    override fun onBrushArtEraserClicked() {
+        mPhotoEditor?.brushEraser()
     }
 
     override fun relasePlayer() {

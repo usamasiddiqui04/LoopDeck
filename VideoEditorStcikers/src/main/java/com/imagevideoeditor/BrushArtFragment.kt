@@ -1,7 +1,6 @@
 package com.imagevideoeditor
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,30 +8,24 @@ import android.widget.SeekBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.imagevideoeditor.photoeditor.OnPhotoEditorListener
 import com.imagevideoeditor.photoeditor.PhotoEditor
-import com.imagevideoeditor.photoeditor.ViewType
 import kotlinx.android.synthetic.main.fragment_properties_dialog.*
-import kotlinx.android.synthetic.main.text_dialog.*
 
-class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChangeListener {
-    private var mProperties: Properties? = null
+class BrushArtFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChangeListener {
+    private var mBrushArtListener: BrushArtListener? = null
     private var mPhotoEditor: PhotoEditor? = null
-    private var _eraseClick: EraseClick? = null
 
-    interface Properties {
-        fun onColorChanged(colorCode: Int)
-        fun onOpacityChanged(opacity: Int)
-        fun onBrushSizeChanged(brushSize: Int)
+    interface BrushArtListener {
+        fun onBrushArtColorChanged(colorCode: Int)
+        fun onBrushArtOpacityChanged(opacity: Int)
+        fun onBrushArtSizeChanged(brushSize: Int)
+        fun onBrushArtEraserClicked()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    fun EraseClick(eraseClick: EraseClick?) {
-        this._eraseClick = eraseClick
-    }
 
 
     override fun onCreateView(
@@ -60,9 +53,9 @@ class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChang
         colorPickerAdapter.setOnColorPickerClickListener(object :
             ColorPickerAdapter.OnColorPickerClickListener {
             override fun onColorPickerClicked(colorCode: Int) {
-                if (mProperties != null) {
+                if (mBrushArtListener != null) {
                     dismiss()
-                    mProperties!!.onColorChanged(colorCode)
+                    mBrushArtListener!!.onBrushArtColorChanged(colorCode)
                 }
             }
         })
@@ -70,7 +63,7 @@ class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChang
 
         eraser.setOnClickListener {
 //            mPhotoEditor!!.brushEraser()
-            _eraseClick!!.onEraserClick()
+            mBrushArtListener?.onBrushArtEraserClicked()
             dismiss()
         }
 
@@ -85,19 +78,19 @@ class PropertiesBSFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChang
 
     }
 
-    fun setPropertiesChangeListener(properties: Properties?) {
-        mProperties = properties
+    fun setBrushArtListener(brushArtListener: BrushArtListener?) {
+        mBrushArtListener = brushArtListener
     }
 
     override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
         val id = seekBar.id
         if (id == R.id.sbOpacity) {
-            if (mProperties != null) {
-                mProperties!!.onOpacityChanged(i)
+            if (mBrushArtListener != null) {
+                mBrushArtListener!!.onBrushArtOpacityChanged(i)
             }
         } else if (id == R.id.sbSize) {
-            if (mProperties != null) {
-                mProperties!!.onBrushSizeChanged(i)
+            if (mBrushArtListener != null) {
+                mBrushArtListener!!.onBrushArtSizeChanged(i)
             }
         }
     }
