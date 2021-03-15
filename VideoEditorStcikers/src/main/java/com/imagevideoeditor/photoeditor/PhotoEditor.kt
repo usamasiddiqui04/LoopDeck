@@ -12,6 +12,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -33,6 +34,7 @@ class PhotoEditor private constructor(builder: Builder) : BrushViewChangeListene
     private val parentView: PhotoEditorView?
     private val imageView: ImageView
     private val deleteView: View?
+    private var framelayout: FrameLayout? = null
     private val brushDrawingView: BrushDrawingView?
     private val addedViews: MutableList<View?>
     private val redoViews: MutableList<View?>
@@ -106,6 +108,7 @@ class PhotoEditor private constructor(builder: Builder) : BrushViewChangeListene
         brushDrawingView!!.brushDrawingMode = false
         val textRootView = getLayout(ViewType.TEXT)
         val textInputTv = textRootView!!.findViewById<TextView>(R.id.tvPhotoEditorText)
+        framelayout = textRootView.findViewById(R.id.framelayout)
         textInputTv.tag = position
         //        final ImageView imgClose = textRootView.findViewById(R.id.imgPhotoEditorClose);
 //        final FrameLayout frmBorder = textRootView.findViewById(R.id.frmBorder);
@@ -135,7 +138,6 @@ class PhotoEditor private constructor(builder: Builder) : BrushViewChangeListene
             override fun onLongClick() {
 
                 textInputTv.visibility = View.GONE
-                textInputTv.invalidate()
 //                String textInput = textInputTv.getText().toString();
 //                int currentTextColor = textInputTv.getCurrentTextColor();
 //                if (mOnPhotoEditorListener != null) {
