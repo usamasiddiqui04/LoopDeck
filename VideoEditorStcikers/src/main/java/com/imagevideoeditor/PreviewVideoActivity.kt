@@ -763,6 +763,16 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         )
     }
 
+    override fun onFilterItemDismissClicked(v: View, position: Int) {
+        mPosition = position
+        ePlayerView.setGlFilter(
+            FilterType.createGlFilter(
+                FilterType.createFilterList()[mPosition],
+                applicationContext
+            )
+        )
+    }
+
     override fun onBrushArtEraserClicked() {
         mPhotoEditor?.brushEraser()
     }

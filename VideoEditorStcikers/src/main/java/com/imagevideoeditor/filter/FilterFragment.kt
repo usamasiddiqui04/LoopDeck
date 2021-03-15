@@ -64,6 +64,7 @@ class FilterVideoFragment : BottomSheetDialogFragment() {
         }
 
         iv_close.setOnClickListener {
+            filterListener!!.onFilterItemDismissClicked(view, 0)
             dismiss()
         }
     }
