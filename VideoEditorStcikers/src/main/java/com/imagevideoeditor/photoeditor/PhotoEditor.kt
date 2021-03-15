@@ -133,6 +133,9 @@ class PhotoEditor private constructor(builder: Builder) : BrushViewChangeListene
             }
 
             override fun onLongClick() {
+
+                textInputTv.visibility = View.GONE
+                textInputTv.invalidate()
 //                String textInput = textInputTv.getText().toString();
 //                int currentTextColor = textInputTv.getCurrentTextColor();
 //                if (mOnPhotoEditorListener != null) {
