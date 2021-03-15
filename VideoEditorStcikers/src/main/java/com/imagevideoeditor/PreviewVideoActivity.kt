@@ -108,10 +108,10 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_preview_video)
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
+//        window.setFlags(
+//            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//            WindowManager.LayoutParams.FLAG_FULLSCREEN
+//        )
 
         //        binding = DataBindingUtil.setContentView(this, R.layout.activity_preview_video);
         videoPath = intent!!.getStringExtra("videoPath")
@@ -137,8 +137,8 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
                 Integer.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT))
         }
         setCanvasAspectRatio()
-        videoSurface!!.layoutParams.width = newCanvasWidth
-        videoSurface!!.layoutParams.height = newCanvasHeight
+//        videoSurface!!.layoutParams.width = newCanvasWidth
+//        videoSurface!!.layoutParams.height = newCanvasHeight
 //        ivImage!!.layoutParams.width = newCanvasWidth
 //        ivImage!!.layoutParams.height = newCanvasHeight
         Log.d(
@@ -584,6 +584,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         mPhotoEditor!!.setBrushDrawingMode(false)
         imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.black_trasp))
         mPhotoEditor!!.addImage(bitmap)
+
     }
 
     override fun onEditTextChangeListener(
@@ -764,6 +765,6 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     }
 
     override fun relasePlayer() {
-        player.release()
+        releasePlayer()
     }
 }

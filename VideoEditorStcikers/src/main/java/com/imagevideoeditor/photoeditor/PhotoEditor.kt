@@ -55,7 +55,9 @@ class PhotoEditor private constructor(builder: Builder) : BrushViewChangeListene
 //                frmBorder.setTag(!isBackgroundVisible);
             }
 
-            override fun onLongClick() {}
+            override fun onLongClick() {
+                imageView.visibility = View.GONE
+            }
         })
         multiTouchListener.setOnMultiTouchListener(this)
         imageRootView.setOnTouchListener(multiTouchListener)

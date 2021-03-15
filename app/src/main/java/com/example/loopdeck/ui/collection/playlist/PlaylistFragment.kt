@@ -22,7 +22,6 @@ import com.example.loopdeck.ui.adapters.MediaAdaptor
 import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.utils.callbacks.ItemMoveCallback
 import com.imagevideoeditor.PreviewVideoActivity
-import com.loopdeck.photoeditor.EditImageActivity
 import com.example.loopdeck.gallery.model.GalleryData
 import com.example.loopdeck.gallery.view.PickerActivity
 import com.imagevideoeditor.PreviewPhotoActivity

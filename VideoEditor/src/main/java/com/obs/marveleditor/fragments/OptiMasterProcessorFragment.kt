@@ -28,6 +28,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -313,7 +314,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
 
     private fun checkStoragePermission(permission: Array<String>) {
         val blockedPermission = checkHasPermission(activity, permission)
-        if (blockedPermission != null && blockedPermission.size > 0) {
+        if (blockedPermission.size > 0) {
             val isBlocked = isPermissionBlocked(activity, blockedPermission)
             if (isBlocked) {
                 callPermissionSettings()
@@ -437,6 +438,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
 
     private var isFirstTimePermission: Boolean
         get() = preferences.getBoolean("isFirstTimePermission", false)
+        @RequiresApi(Build.VERSION_CODES.GINGERBREAD)
         set(isFirstTime) = preferences.edit().putBoolean("isFirstTimePermission", isFirstTime)
             .apply()
 
