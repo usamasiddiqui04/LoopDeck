@@ -427,7 +427,6 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
                 filterFragment.setFilePathFromSource(masterVideoFile!!)
                 filterFragment.setCallback(this)
                 showBottomSheetDialogFragment(filterFragment)
-
 //                startFilterActivity(videoPath!!)
 
 //                masterVideoFile?.let { file ->
