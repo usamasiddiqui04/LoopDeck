@@ -20,6 +20,7 @@ import android.view.View
 import android.view.Window
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -60,12 +61,12 @@ private val displayMetrics1 = DisplayMetrics()
 class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFMpegCallback,
     BrushArtFragment.BrushArtListener, View.OnClickListener, StickerBSFragment.StickerListener,
     OptiBaseCreatorDialogFragment.CallBacks, AddFilterListener,
-    BrushArtListener, SoundListner,
+    BrushArtListener,
     SoundPickerFragment.SoundPickerListener {
     var videoSurface: FrameLayout? = null
     var ivImage: PhotoEditorView? = null
     var imgClose: ImageView? = null
-    var imgDone: ImageView? = null
+    var imgDone: TextView? = null
     private var masterVideoFile: File? = null
     val soundPickerFragment = SoundPickerFragment.newInstance(this)
 
@@ -777,9 +778,6 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         mPhotoEditor?.brushEraser()
     }
 
-    override fun relasePlayer() {
-        releasePlayer()
-    }
 
     override fun onDismissSoundPicker() {
         player.playWhenReady = true

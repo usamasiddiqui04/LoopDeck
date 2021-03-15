@@ -80,7 +80,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <ImageView
+    <TextView
         android:id="@+id/imgDone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +89,7 @@
         android:layout_margin="30dp"
         android:background="@color/black_trasp"
         android:padding="8dp"
-        android:src="@drawable/ic_save" />
+        android:text="Done" />
 
 
     <LinearLayout

@@ -172,35 +172,7 @@ class PhotoEditorView : RelativeLayout {
             val inflater = LayoutInflater.from(context)
             val layout =
                 inflater.inflate(R.layout.item_slider_filter, collection, false) as ViewGroup
-            val viewBG = layout.findViewById<ImageView>(R.id.viewBG)
-            val ivBottom = layout.findViewById<ImageView>(R.id.ivBottom)
-            ivBottom.visibility = GONE
-            if (position == 0) {
-                viewBG.setBackgroundColor(Color.parseColor("#10000000"))
-                viewBG.visibility = VISIBLE
-                ivBottom.visibility = GONE
-            } else if (position == 1) {
-                viewBG.setBackgroundColor(Color.parseColor("#15FF5733"))
-                viewBG.visibility = VISIBLE
-                ivBottom.visibility = GONE
-            } else if (position == 2) {
-                viewBG.visibility = GONE
-                ivBottom.visibility = VISIBLE
-                ivBottom.setImageDrawable(resources.getDrawable(R.drawable.gg))
-            } else if (position == 3) {
-                viewBG.visibility = VISIBLE
-                ivBottom.setImageDrawable(resources.getDrawable(R.drawable.hh))
-                ivBottom.visibility = VISIBLE
-            } else if (position == 4) {
-                viewBG.visibility = VISIBLE
-                ivBottom.setImageDrawable(resources.getDrawable(R.drawable.ee))
-                ivBottom.visibility = VISIBLE
-            } else if (position == 5) else if (position == 1) {
-                viewBG.setBackgroundColor(Color.parseColor("#15FF5589"))
-                viewBG.visibility = VISIBLE
-                ivBottom.visibility = GONE
-            }
-            collection.addView(layout)
+
             return layout
         }
 

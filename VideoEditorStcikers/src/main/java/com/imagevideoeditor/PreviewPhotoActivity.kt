@@ -15,6 +15,7 @@ import android.view.Window
 import android.view.WindowManager
 import android.view.animation.AnticipateOvershootInterpolator
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintSet
@@ -38,7 +39,7 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
     var videoSurface: TextureView? = null
     var ivImage: PhotoEditorView? = null
     var imgClose: ImageView? = null
-    var imgDone: ImageView? = null
+    var imgDone: TextView? = null
     var imgDelete: ImageView? = null
     var imgDraw: ImageView? = null
     var imgText: ImageView? = null
