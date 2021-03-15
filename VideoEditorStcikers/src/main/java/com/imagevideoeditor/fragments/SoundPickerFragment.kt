@@ -1,6 +1,7 @@
 package com.imagevideoeditor.fragments
 
 import android.app.ProgressDialog
+import android.content.DialogInterface
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.provider.MediaStore
@@ -29,9 +30,13 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
     var videoDuration: Long? = null
 
     var mediaPlayer: MediaPlayer? = null
+    var listener: SoundPickerListener? = null
+
 
     companion object {
-        fun newInstance() = SoundPickerFragment
+        fun newInstance(soundPickerListener: SoundPickerListener) = SoundPickerFragment().apply {
+            listener = soundPickerListener
+        }
     }
 
     private val onItemClickListener: (View, RecyclerView.ViewHolder, Songinfo) -> Unit =
@@ -114,14 +119,23 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
         }
     }
 
+
     val onPausePressed: (Songinfo) -> Unit = {
 
         if (mediaPlayer == null)
             mediaPlayer = MediaPlayer()
-
         mediaPlayer?.stop()
     }
 
+    override fun onDismiss(dialog: DialogInterface?) {
+        super.onDismiss(dialog)
 
+        listener?.onDismissSoundPicker()
+
+    }
+
+    interface SoundPickerListener{
+        fun onDismissSoundPicker() : Unit
+    }
 }
 

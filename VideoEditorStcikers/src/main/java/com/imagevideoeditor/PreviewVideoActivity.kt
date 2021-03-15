@@ -16,7 +16,8 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.*
+import android.view.View
+import android.view.Window
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
@@ -58,13 +59,16 @@ private val displayMetrics1 = DisplayMetrics()
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFMpegCallback,
     PropertiesBSFragment.Properties, View.OnClickListener, StickerBSFragment.StickerListener,
-    OptiBaseCreatorDialogFragment.CallBacks, AddFilterListener, EraseClick, SoundListner {
+    OptiBaseCreatorDialogFragment.CallBacks, AddFilterListener, EraseClick, SoundListner,
+    SoundPickerFragment.SoundPickerListener {
     var videoSurface: FrameLayout? = null
     var ivImage: PhotoEditorView? = null
     var imgClose: ImageView? = null
     var imgDone: ImageView? = null
     private var masterVideoFile: File? = null
-    val soundPickerFragment = SoundPickerFragment()
+    val soundPickerFragment = SoundPickerFragment.newInstance(this)
+
+
     private var tagName: String = PreviewVideoActivity::class.java.simpleName
     var imgDelete: ImageView? = null
     var imgDraw: ImageView? = null
@@ -403,7 +407,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 
             R.id.imgAddmusic == v.id -> {
                 mPhotoEditor!!.setBrushDrawingMode(false)
-                ePlayerView.onPause()
+                player.playWhenReady = false
                 val timeInMillis = OptiUtils.getVideoDuration(applicationContext, masterVideoFile!!)
                 soundPickerFragment.setFilePath(masterVideoFile!!)
                 soundPickerFragment.setDuartion(timeInMillis)
@@ -440,6 +444,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
             }
         }
     }
+
     private fun startFilterActivity(uri: String) {
         val intent = EditVideoActivity.newIntent(this, uri)
         startActivity(intent)
@@ -765,4 +770,9 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     override fun relasePlayer() {
         releasePlayer()
     }
+
+    override fun onDismissSoundPicker() {
+        player.playWhenReady = true
+    }
+
 }
