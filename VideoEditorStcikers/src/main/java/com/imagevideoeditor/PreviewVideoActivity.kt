@@ -422,7 +422,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 //                }
             }
             R.id.iconFilters == v.id -> {
-                mPhotoEditor!!.setBrushDrawingMode(true)
+                mPhotoEditor!!.setBrushDrawingMode(false)
                 val filterFragment = FilterVideoFragment()
                 filterFragment.setFilePathFromSource(masterVideoFile!!)
                 filterFragment.setCallback(this)
