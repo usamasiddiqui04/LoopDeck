@@ -235,7 +235,6 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         imgTrim?.setOnClickListener(this)
         imgFilters?.setOnClickListener(this)
 
-        soundPickerFragment.setPlayer(this)
 
 //        imgPlayback?.setOnClickListener(this)
         imgAddmusic?.setOnClickListener(this)

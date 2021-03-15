@@ -1,7 +1,6 @@
 package com.imagevideoeditor.fragments
 
 import android.app.ProgressDialog
-import android.content.DialogInterface
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.provider.MediaStore
@@ -12,18 +11,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.imagevideoeditor.EraseClick
-import com.imagevideoeditor.PreviewVideoActivity
 import com.imagevideoeditor.R
-import com.imagevideoeditor.SoundListner
 import com.imagevideoeditor.soundpicker.SongAdaptor
 import com.imagevideoeditor.soundpicker.Songinfo
 import kotlinx.android.synthetic.main.fragment_sound_picker.*
-import kotlinx.android.synthetic.main.soundpickerlayout.*
-import kotlinx.android.synthetic.main.soundpickerlayout.view.*
-import kotlinx.android.synthetic.main.soundpickerlayout.view.play
 import java.io.File
 
 
@@ -35,18 +27,11 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
     private var progressDialog: ProgressDialog? = null
     var videofile: File? = null
     var videoDuration: Long? = null
-    var mediaPlayer: MediaPlayer? = null
-    var _player: SimpleExoPlayer? = null
-    var soundListner: SoundListner? = null
 
+    var mediaPlayer: MediaPlayer? = null
 
     companion object {
         fun newInstance() = SoundPickerFragment
-    }
-
-
-    fun setPlayer(soundListner: SoundListner) {
-        this.soundListner = soundListner
     }
 
     private val onItemClickListener: (View, RecyclerView.ViewHolder, Songinfo) -> Unit =
@@ -54,25 +39,8 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
 
             AddMusicFragment.newInstance().apply {
                 setaudiofilepath(File(songinfo.SongUrl!!), videofile!!, videoDuration!!)
-            }.show(fragmentManager, "SoundPikcerFragment")
+            }.show(fragmentManager, "AddMusicFragment")
         }
-//    private val playonItemClickListener: (View, RecyclerView.ViewHolder, Songinfo) -> Unit =
-//        { itemView, viewHolder, songinfo ->
-//
-//            mediaPlayer!!.setDataSource(songinfo.SongUrl)
-//            itemView.play.visibility = View.GONE
-//            itemView.pause.visibility = View.VISIBLE
-//            mediaPlayer!!.prepare()
-//            mediaPlayer!!.start()
-//        }
-//    private val pauseonItemClickListener: (View, RecyclerView.ViewHolder, Songinfo) -> Unit =
-//        { itemView, viewHolder, songinfo ->
-//
-//            mediaPlayer!!.setDataSource(songinfo.SongUrl)
-//            itemView.play.visibility = View.VISIBLE
-//            itemView.pause.visibility = View.GONE
-//            mediaPlayer!!.stop()
-//        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,15 +50,19 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.fragment_sound_picker, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadSongs()
-        mediaPlayer = MediaPlayer()
         progressDialog = ProgressDialog(requireContext())
 
-
-
-        songAdaptor = SongAdaptor(listSongs, requireContext(), onItemClickListener)
+        songAdaptor = SongAdaptor(
+            listSongs,
+            requireContext(),
+            onItemClickListener,
+            onPlayPressed,
+            onPausePressed
+        )
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = songAdaptor
 
@@ -124,14 +96,32 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
         videofile = file
     }
 
+
     fun setDuartion(timeInMillis: Long) {
         videoDuration = timeInMillis
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
-        super.onDismiss(dialog)
-        soundListner!!.relasePlayer()
+    val onPlayPressed: (Songinfo) -> Unit = {
+
+        mediaPlayer?.stop()
+
+        mediaPlayer = MediaPlayer()
+
+        mediaPlayer?.apply {
+            setDataSource(it.SongUrl)
+            prepare()
+            start()
+        }
+    }
+
+    val onPausePressed: (Songinfo) -> Unit = {
+
+        if (mediaPlayer == null)
+            mediaPlayer = MediaPlayer()
+
+        mediaPlayer?.stop()
     }
 
 
 }
+

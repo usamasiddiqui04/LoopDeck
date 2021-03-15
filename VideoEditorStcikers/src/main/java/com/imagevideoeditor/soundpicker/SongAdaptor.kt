@@ -1,7 +1,6 @@
 package com.imagevideoeditor.soundpicker
 
 import android.content.Context
-import android.media.MediaPlayer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +10,11 @@ import com.imagevideoeditor.R
 class SongAdaptor(
     private var mList: ArrayList<Songinfo>,
     private var context: Context,
-    private val itemClickListener: (View, RecyclerView.ViewHolder, Songinfo) -> Unit
+    private val itemClickListener: (View, RecyclerView.ViewHolder, Songinfo) -> Unit,
+    val onPlayPressed: (Songinfo) -> Unit,
+    val onPausePressed: (Songinfo) -> Unit
 
-    ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    val mediaPlayer = MediaPlayer()
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
@@ -32,11 +31,28 @@ class SongAdaptor(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is SongViewHolder -> {
-                holder.bind(mList[position])
+                holder.bind(mList[position], onPlay, onPause)
                 holder.itemView.setOnClickListener {
                     itemClickListener.invoke(it, holder, mList[position])
                 }
             }
         }
+    }
+
+    private val onPlay: (Songinfo) -> Unit = { songInfo ->
+        onPlayPressed(songInfo)
+        mList.forEach {
+            it.isPlaying = false
+        }
+        songInfo.isPlaying = true
+        notifyDataSetChanged()
+    }
+
+    private val onPause: (Songinfo) -> Unit = { songInfo ->
+        onPausePressed(songInfo)
+        mList.forEach {
+            it.isPlaying = false
+        }
+        notifyDataSetChanged()
     }
 }
