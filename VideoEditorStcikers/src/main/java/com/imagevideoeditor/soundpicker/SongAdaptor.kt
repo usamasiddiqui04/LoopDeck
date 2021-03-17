@@ -9,6 +9,7 @@ import com.imagevideoeditor.R
 
 class SongAdaptor(
     private var mList: ArrayList<Songinfo>,
+    private var filterList: ArrayList<Songinfo>,
     private var context: Context,
     private val itemClickListener: (View, RecyclerView.ViewHolder, Songinfo) -> Unit,
     val onPlayPressed: (Songinfo) -> Unit,
@@ -37,6 +38,12 @@ class SongAdaptor(
                 }
             }
         }
+    }
+
+    fun filterlist(songFilterList: ArrayList<Songinfo>) {
+        filterList = songFilterList
+        mList = filterList
+        notifyDataSetChanged()
     }
 
     private val onPlay: (Songinfo) -> Unit = { songInfo ->

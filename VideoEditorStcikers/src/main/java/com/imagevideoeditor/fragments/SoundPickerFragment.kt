@@ -5,11 +5,14 @@ import android.content.DialogInterface
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -18,12 +21,15 @@ import com.imagevideoeditor.soundpicker.SongAdaptor
 import com.imagevideoeditor.soundpicker.Songinfo
 import kotlinx.android.synthetic.main.fragment_sound_picker.*
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class SoundPickerFragment : BottomSheetDialogFragment() {
 
 
     var listSongs = ArrayList<Songinfo>()
+    var songFilterList = ArrayList<Songinfo>()
     var songAdaptor: SongAdaptor? = null
     private var progressDialog: ProgressDialog? = null
     var videofile: File? = null
@@ -58,11 +64,13 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         loadSongs()
         progressDialog = ProgressDialog(requireContext())
 
         songAdaptor = SongAdaptor(
             listSongs,
+            songFilterList,
             requireContext(),
             onItemClickListener,
             onPlayPressed,
@@ -74,6 +82,20 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
 
         Log.e("List of songs: ", listSongs.toString())
         Toast.makeText(requireContext(), listSongs.size.toString(), Toast.LENGTH_SHORT).show()
+
+
+        stickersearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filterlist(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
     }
 
     private fun loadSongs() {
@@ -134,8 +156,18 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
 
     }
 
-    interface SoundPickerListener{
-        fun onDismissSoundPicker() : Unit
+    interface SoundPickerListener {
+        fun onDismissSoundPicker(): Unit
+    }
+
+    fun filterlist(listsongs: String) {
+        for (song: Songinfo in listSongs) {
+            if (song.Title!!.contains(listsongs)) {
+                songFilterList.add(Songinfo(song.Title, song.Author, song.SongUrl, song.Duartion))
+            }
+        }
+        songAdaptor!!.filterlist(songFilterList)
+
     }
 }
 
