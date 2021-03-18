@@ -10,10 +10,11 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -70,16 +71,24 @@ class TextEditorDialogFragment : DialogFragment() {
         mInputMethodManager =
             activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         mAddTextDoneTextView = view.findViewById(R.id.add_text_done_tv)
+        mAddTextEditText!!.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val imm =
+                    v.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(v.windowToken, 0)
+                setUI()
+                true
+            } else false
+        })
 
 
-
-        mAddTextEditText!!.setOnClickListener {
-            if (mAddTextEditText!!.text.isNotEmpty()) {
-                add_text_color_picker_relative_layout.visibility = View.VISIBLE
-                add_text_color_picker_recyclerview.visibility = View.GONE
-                mAddTextEditText!!.inputType = InputType.TYPE_NULL
-            }
-        }
+//        mAddTextEditText!!.setOnClickListener {
+//            if (mAddTextEditText!!.text.isNotEmpty()) {
+//                add_text_color_picker_relative_layout.visibility = View.VISIBLE
+//                add_text_color_picker_recyclerview.visibility = View.GONE
+//                mAddTextEditText!!.inputType = InputType.TYPE_NULL
+//            }
+//        }
 
         text.setOnClickListener {
             add_text_color_picker_recyclerview.visibility = View.GONE
@@ -155,6 +164,13 @@ class TextEditorDialogFragment : DialogFragment() {
             }
         })
     }
+
+    fun setUI() {
+        add_text_color_picker_relative_layout.visibility = View.VISIBLE
+        add_text_color_picker_recyclerview.visibility = View.GONE
+        mAddTextEditText!!.inputType = InputType.TYPE_NULL
+    }
+
 
     //Callback to listener if user is done with text editing
     fun setOnTextEditorListener(textEditor: TextEditor?) {

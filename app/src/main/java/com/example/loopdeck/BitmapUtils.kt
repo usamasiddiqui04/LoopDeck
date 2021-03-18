@@ -32,7 +32,6 @@ internal object BitmapUtils {
             storageDir /* directory */
         )
     }
-
     /**
      * Deletes image file for a given path.
      *

@@ -14,8 +14,9 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/add_text_color_picker_relative_layout"
         android:background="@null"
+        android:singleLine="true"
         android:gravity="center"
-        android:inputType="textMultiLine"
+        android:imeOptions="actionDone"
         android:textSize="40sp" />
 
     <RelativeLayout

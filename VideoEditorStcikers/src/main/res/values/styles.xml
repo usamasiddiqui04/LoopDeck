@@ -29,7 +29,6 @@
     </style>
 
     <style name="EditText">
-        <item name="android:singleLine">true</item>
         <item name="colorControlNormal">#FFFFFF</item>
         <item name="colorControlActivated">#FFFFFF</item>
         <item name="android:textColorPrimary">#FFFFFF</item>
