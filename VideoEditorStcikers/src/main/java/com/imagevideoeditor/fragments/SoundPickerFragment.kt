@@ -12,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -34,6 +33,7 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
     private var progressDialog: ProgressDialog? = null
     var videofile: File? = null
     var videoDuration: Long? = null
+    var list: List<Songinfo>? = null
 
     var mediaPlayer: MediaPlayer? = null
     var listener: SoundPickerListener? = null
@@ -64,13 +64,12 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        list = ArrayList()
         loadSongs()
         progressDialog = ProgressDialog(requireContext())
 
         songAdaptor = SongAdaptor(
             listSongs,
-            songFilterList,
             requireContext(),
             onItemClickListener,
             onPlayPressed,
@@ -83,14 +82,13 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
         Log.e("List of songs: ", listSongs.toString())
         Toast.makeText(requireContext(), listSongs.size.toString(), Toast.LENGTH_SHORT).show()
 
-
         stickersearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                filterlist(s.toString())
+                songAdaptor!!.filter.filter(s)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -115,6 +113,7 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
                     resultset.getString(resultset.getColumnIndex(MediaStore.Audio.Media.DURATION))
 
                 listSongs.add(Songinfo(title, author, songurl, duration))
+                songAdaptor?.notifyDataSetChanged()
             }
         }
     }
@@ -158,16 +157,6 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
 
     interface SoundPickerListener {
         fun onDismissSoundPicker(): Unit
-    }
-
-    fun filterlist(listsongs: String) {
-        for (song: Songinfo in listSongs) {
-            if (song.Title!!.contains(listsongs)) {
-                songFilterList.add(Songinfo(song.Title, song.Author, song.SongUrl, song.Duartion))
-            }
-        }
-        songAdaptor!!.filterlist(songFilterList)
-
     }
 }
 
