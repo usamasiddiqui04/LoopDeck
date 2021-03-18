@@ -124,7 +124,7 @@
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <ImageView
-                android:id="@+id/btnGallery"
+                android:id="@+id/btndublicate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -133,7 +133,7 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <ImageView
-                android:id="@+id/btnDublicate"
+                android:id="@+id/btnmove"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

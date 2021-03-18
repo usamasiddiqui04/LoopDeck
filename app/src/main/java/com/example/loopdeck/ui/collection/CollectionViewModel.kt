@@ -57,11 +57,20 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
             }
         }
     }
+
+    fun dublicateMediafiles(mediaData: MediaData) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addDublicateMedia(File(mediaData.filePath))
+        }
+    }
+
     fun createPlaylist(file: File) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addMediaOrPlaylist(file)
         }
     }
+
     fun onSequenceChanged(mList: List<MediaData>) {
         Handler().postDelayed({
             viewModelScope.launch(Dispatchers.IO) {

@@ -4,14 +4,15 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
+import com.example.loopdeck.gallery.model.GalleryData
 import com.example.loopdeck.utils.FileUtils.uriToMediaFile
 import com.example.loopdeck.utils.extensions.getMediaType
 import com.example.loopdeck.utils.isImage
 import com.example.loopdeck.utils.isVideo
-import com.example.loopdeck.gallery.model.GalleryData
 import com.xorbix.loopdeck.cameraapp.BitmapUtils
-import java.io.File
+import java.io.*
 import java.util.*
 
 class MediaRepository(private val mediaDao: MediaDao, private val context: Context) {
@@ -51,28 +52,55 @@ class MediaRepository(private val mediaDao: MediaDao, private val context: Conte
         )
     }
 
-    suspend fun addMedia(uri: Uri, playlistName: String? = null) {
 
-        uriToMediaFile(context, uri)?.let { file ->
-            var mResultsBitmap: Bitmap? = null
-
-            when {
-                file.isVideo() -> {
-                    BitmapUtils.SaveVideo(context, uri)?.let {
-                        addMediaOrPlaylist(it, playlistName)
-                    }
-                }
-
-                file.isImage() -> {
-                    mResultsBitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
-
-                    BitmapUtils.saveImage(context, mResultsBitmap)?.let {
-                        addMediaOrPlaylist(it, playlistName)
-                    }
-                }
-                else -> {
-                }
+    fun addDublicateMedia(filepath: File) {
+        if (filepath.isVideo()) {
+            BitmapUtils.SaveVideo(context, Uri.fromFile(filepath)).let {
+                addMediaOrPlaylist(it!!)
             }
+        } else if (filepath.isImage()) {
+            var mResultsBitmap: Bitmap? = null
+            mResultsBitmap =
+                MediaStore.Images.Media.getBitmap(context.contentResolver, Uri.fromFile(filepath))
+            BitmapUtils.saveImage(context, mResultsBitmap).let {
+                addMediaOrPlaylist(it!!)
+            }
+        }
+//        uriToMediaFile(context, Uri.fromFile(filepath))?.let { file ->
+//            when{
+//                file.isVideo() -> {
+//                    BitmapUtils.SaveVideo(context, Uri.fromFile(file.absoluteFile)).let {
+//                        addMediaOrPlaylist(it!!)
+//                    }
+//                }
+//                else -> {
+//                    var mResultsBitmap: Bitmap? = null
+//                    mResultsBitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, Uri.fromFile(file))
+//                    BitmapUtils.saveImage(context ,mResultsBitmap ).let {
+//                        addMediaOrPlaylist(it!!)
+//                    }
+//                }
+//            }
+//        }
+    }
+
+    @Throws(IOException::class)
+    fun copy(src: File?, dst: File?) {
+        val `in`: InputStream = FileInputStream(src)
+        try {
+            val out: OutputStream = FileOutputStream(dst)
+            try {
+                // Transfer bytes from in to out
+                val buf = ByteArray(1024)
+                var len: Int
+                while (`in`.read(buf).also { len = it } > 0) {
+                    out.write(buf, 0, len)
+                }
+            } finally {
+                out.close()
+            }
+        } finally {
+            `in`.close()
         }
     }
 

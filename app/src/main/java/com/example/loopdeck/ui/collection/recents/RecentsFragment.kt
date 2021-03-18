@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -236,13 +237,11 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             startActivityForResult(i, REQUEST_RESULT_CODE)
         }
 
-        btnGallery.setOnClickListener {
+        btndublicate.setOnClickListener {
 
-            val i = Intent(requireActivity(), PickerActivity::class.java)
-            i.putExtra("IMAGES_LIMIT", 100)
-            i.putExtra("VIDEOS_LIMIT", 100)
-            i.putExtra("REQUEST_RESULT_CODE", REQUEST_RESULT_CODE)
-            startActivityForResult(i, REQUEST_RESULT_CODE)
+            selectedList.forEach {
+                viewModel.dublicateMediafiles(it)
+            }
         }
         initContainer()
     }
