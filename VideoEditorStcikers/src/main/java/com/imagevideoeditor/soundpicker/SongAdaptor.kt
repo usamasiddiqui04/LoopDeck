@@ -41,8 +41,7 @@ class SongAdaptor(
     }
 
     fun filterlist(songFilterList: ArrayList<Songinfo>) {
-        filterList = songFilterList
-        mList = filterList
+        mList = songFilterList
         notifyDataSetChanged()
     }
 
