@@ -260,9 +260,10 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
     }
 
     private fun showPlaylistNameDialog(context: Context, mediaList: ArrayList<GalleryData>) {
-        savePlaylistNameDialog(context) {
-            viewModel.createPlaylist(it)
-            viewModel.addMediaFiles(mediaList, it.name)
+
+        savePlaylistNameDialog(context) { file ->
+            viewModel.createPlaylist(file)
+            viewModel.addMediaFiles(mediaList, file.name)
         }
     }
 

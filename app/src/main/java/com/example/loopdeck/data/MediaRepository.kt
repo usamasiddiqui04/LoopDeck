@@ -66,22 +66,6 @@ class MediaRepository(private val mediaDao: MediaDao, private val context: Conte
                 addMediaOrPlaylist(it!!)
             }
         }
-//        uriToMediaFile(context, Uri.fromFile(filepath))?.let { file ->
-//            when{
-//                file.isVideo() -> {
-//                    BitmapUtils.SaveVideo(context, Uri.fromFile(file.absoluteFile)).let {
-//                        addMediaOrPlaylist(it!!)
-//                    }
-//                }
-//                else -> {
-//                    var mResultsBitmap: Bitmap? = null
-//                    mResultsBitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, Uri.fromFile(file))
-//                    BitmapUtils.saveImage(context ,mResultsBitmap ).let {
-//                        addMediaOrPlaylist(it!!)
-//                    }
-//                }
-//            }
-//        }
     }
 
     @Throws(IOException::class)

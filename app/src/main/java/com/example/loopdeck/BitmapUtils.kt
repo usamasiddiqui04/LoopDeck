@@ -69,37 +69,57 @@ internal object BitmapUtils {
     }
 
     @JvmStatic
-    fun SaveVideo(context: Context, selectedImageURI: Uri?): File? {
+    fun SaveVideo(context: Context, selectedImageURI: Uri?, playlistName: String? = null): File? {
         var newfile: File? = null
-        try {
 
-            val videoAsset =
-                context.contentResolver.openAssetFileDescriptor(selectedImageURI!!, "r")
-            val `in` = videoAsset!!.createInputStream()
+        val storageDir = File(context.getExternalFilesDir(null)!!.absolutePath, ROOT_DIRECTORY_NAME)
 
-            val storageDir =
-                File(context.getExternalFilesDir(null)!!.absolutePath, ROOT_DIRECTORY_NAME)
+        Log.d("SAVE", "Storage Directory: $storageDir")
+
+        var rootDirSuccess = true
+        if (!storageDir.exists()) {
+            rootDirSuccess = storageDir.mkdirs()
+        }
+        var playlistDirSuccess = true
+
+        var destination = storageDir
+
+        if (playlistName != null) {
+            val playlistDir = File(storageDir.absolutePath, playlistName)
+
+            Log.d("SAVE", "Playlis Directory: $playlistDir")
+            if (!playlistDir.exists()) {
+                playlistDirSuccess = playlistDir.mkdirs()
+            }
+            destination = playlistDir
+        }
+
+        if (rootDirSuccess && playlistDirSuccess) {
+            try {
+                val videoAsset =
+                    context.contentResolver.openAssetFileDescriptor(selectedImageURI!!, "r")
+                val `in` = videoAsset!!.createInputStream()
+
 //            val filepath = context.getExternalFilesDir(null)!!.absoluteFile
 //            val dir = File(filepath!!.absolutePath, ROOT_DIRECTORY_NAME)
-            if (!storageDir.exists()) {
-                storageDir.mkdirs()
-            }
-            newfile = File(storageDir, "save_" + System.currentTimeMillis() + ".mp4")
-            if (newfile.exists()) newfile.delete()
-            val out: OutputStream = FileOutputStream(newfile)
+                newfile = File(destination, "save_" + System.currentTimeMillis() + ".mp4")
+                if (newfile.exists()) newfile.delete()
+                val out: OutputStream = FileOutputStream(newfile)
 
-            // Copy the bits from instream to outstream
-            val buf = ByteArray(1024)
-            var len: Int
-            while (`in`.read(buf).also { len = it } > 0) {
-                out.write(buf, 0, len)
+                // Copy the bits from instream to outstream
+                val buf = ByteArray(1024)
+                var len: Int
+                while (`in`.read(buf).also { len = it } > 0) {
+                    out.write(buf, 0, len)
+                }
+                `in`.close()
+                out.close()
+                return newfile
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-            `in`.close()
-            out.close()
-            return newfile
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
+
 
         return newfile
 
