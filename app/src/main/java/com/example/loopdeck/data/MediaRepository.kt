@@ -22,7 +22,7 @@ class MediaRepository(private val mediaDao: MediaDao, private val context: Conte
     fun getPlaylistMediaLiveData(playlistName: String): LiveData<List<MediaData>> =
         mediaDao.findByPlaylistLiveData(playlistName)
 
-    fun getPlaylistImage(playlistName: String): LiveData<String> =
+    fun getPlaylistImagePath(playlistName: String): String =
         mediaDao.findByPlaylistImage(playlistName)
 
     fun addMediaOrPlaylist(file: File, playlistName: String? = null) {
@@ -35,6 +35,11 @@ class MediaRepository(private val mediaDao: MediaDao, private val context: Conte
         val mediaType = file.getMediaType()
 
         val dbPlaylistName = if (mediaType == MediaType.PLAYLIST) null else playlistName
+
+        if(mediaType != MediaType.PLAYLIST && mediaCount == -1){
+            mediaDao.fin
+        }
+
 
         mediaDao.insert(
             MediaData(

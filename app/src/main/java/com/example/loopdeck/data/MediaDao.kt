@@ -22,13 +22,18 @@ interface MediaDao : BaseDAO<MediaData> {
     fun findByPlaylistLiveData(playlistName: String): LiveData<List<MediaData>>
 
     @Query("SELECT filePath FROM MediaFileTable WHERE playListName is :playlistName AND sequence is 1")
-    fun findByPlaylistImage(playlistName: String): LiveData<String>
+    fun findByPlaylistImage(playlistName: String): String
 
     @Query("DELETE  FROM MediaFileTable WHERE id is :mediaDataId")
     fun deleteById(mediaDataId: String)
 
     @Query("DELETE FROM MediaFileTable WHERE playListName is :playlistName")
     fun deletePlaylist(playlistName: String)
+
+    @Query("DELETE FROM MediaFileTable WHERE playListName is :playlistName")
+    fun updatePlaylist(playlistName: String)
+
+
 
 
 }

@@ -4,12 +4,11 @@ import android.app.Application
 import android.content.Intent
 import android.os.Handler
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.data.MediaDatabase
 import com.example.loopdeck.data.MediaRepository
+import com.example.loopdeck.data.isPlaylist
 import com.example.loopdeck.gallery.model.GalleryData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,7 +18,7 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
 
     var importedFilesIntent: Intent? = null
 
-    lateinit var recentsMediaLiveData: LiveData<List<MediaData>>
+     var recentsMediaLiveData = MutableLiveData<List<MediaData>>()
 
     private val repository: MediaRepository
 
@@ -27,14 +26,27 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
         val mediaDao = MediaDatabase.getDatabase(application).mediaDao()
         repository = MediaRepository(mediaDao, application.applicationContext)
         getRecents()
+
+
+        Transformations.switchMap(recentsMediaLiveData){
+            repository.getAllRecentsMediaLiveData()
+        }
+
     }
 
     private fun getRecents() {
 
-        viewModelScope.launch {
-            recentsMediaLiveData = repository.getAllRecentsMediaLiveData()
-        }
+//        viewModelScope.launch {
+//            recentsMediaLiveData = repository.getAllRecentsMediaLiveData()
+//
+//            recentsMediaLiveData.value?.forEach {
+//                if (it.isPlaylist()) {
+//                    it.thumbnail = repository.getPlaylistImagePath(it.name)
+//                }
+//            }
+//        }
     }
+
 
 
     fun delete(mediaData: MediaData) {
@@ -43,8 +55,6 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    fun getPlayListImage(playlistName: String) =
-        repository.getPlaylistImage(playlistName)
 
     fun getPlaylistMedia(playlistName: String) =
         repository.getPlaylistMediaLiveData(playlistName)
@@ -57,11 +67,13 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
             }
         }
     }
+
     fun createPlaylist(file: File) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addMediaOrPlaylist(file)
         }
     }
+
     fun onSequenceChanged(mList: List<MediaData>) {
         Handler().postDelayed({
             viewModelScope.launch(Dispatchers.IO) {
@@ -74,4 +86,8 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
             }
         }, 1500)
     }
+
+
+
 }
+

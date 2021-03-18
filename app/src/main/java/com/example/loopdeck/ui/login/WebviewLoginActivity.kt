@@ -16,7 +16,8 @@ import java.net.CookiePolicy
 class WebviewLoginActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
-    private var url = "http://loopdeck-dev-login-app.azurewebsites.net/"
+    private var url = "https://loopdeck-dev-login-app.azurewebsites.net/mainpage"
+//    private var url = "https://wedevelop.ca/temp/Login_Updated/login.html"
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +25,7 @@ class WebviewLoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_webview_login)
 
         webView = findViewById(R.id.webview)
-        webView.settings.setJavaScriptEnabled(true)
+        webView.settings.javaScriptEnabled = true
 
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {

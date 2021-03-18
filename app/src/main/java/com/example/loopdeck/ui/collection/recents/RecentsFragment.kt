@@ -11,6 +11,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.loopdeck.DragData
@@ -29,7 +30,6 @@ import com.google.android.material.navigation.NavigationView
 import com.imagevideoeditor.PreviewPhotoActivity
 import com.imagevideoeditor.PreviewVideoActivity
 import com.xorbix.loopdeck.cameraapp.BitmapUtils
-import kotlinx.android.synthetic.main.custom_layout.view.*
 import kotlinx.android.synthetic.main.dailogbox.view.*
 import kotlinx.android.synthetic.main.fragment_recents.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
@@ -54,7 +54,11 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
     private lateinit var viewModel: CollectionViewModel
 
     private val mediaAdapter by lazy {
-        MediaAdaptor(mList = mutableListOf(), onItemClickListener, onItemLongClickListener)
+        MediaAdaptor(
+            mList = mutableListOf(),
+            itemClickListener = onItemClickListener,
+            itemLongClickListener = onItemLongClickListener
+        )
     }
 
     private fun checkmultiselection() {
@@ -66,7 +70,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
     }
 
     private val onItemLongClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Unit =
-        { itemView, viewHolder, list, mediadata ->
+        { _, viewHolder, list, mediadata ->
 
             multiSelection = true
             checkmultiselection()
@@ -294,7 +298,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
 
         viewModel.recentsMediaLiveData.observe(
             viewLifecycleOwner,
-            androidx.lifecycle.Observer { list ->
+            Observer { list ->
                 if (list.isEmpty()) {
                     recyclerview.visibility = View.INVISIBLE
                     no_mediafile.visibility = View.VISIBLE
