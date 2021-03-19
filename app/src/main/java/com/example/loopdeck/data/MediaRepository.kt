@@ -53,17 +53,17 @@ class MediaRepository(private val mediaDao: MediaDao, private val context: Conte
     }
 
 
-    fun addDublicateMedia(filepath: File) {
+    suspend fun addDublicateMedia(filepath: File, playlistName: String? = null) {
         if (filepath.isVideo()) {
-            BitmapUtils.SaveVideo(context, Uri.fromFile(filepath)).let {
-                addMediaOrPlaylist(it!!)
+            BitmapUtils.SaveVideo(context, Uri.fromFile(filepath), playlistName).let {
+                addMediaOrPlaylist(it!!, playlistName)
             }
         } else if (filepath.isImage()) {
             var mResultsBitmap: Bitmap? = null
             mResultsBitmap =
                 MediaStore.Images.Media.getBitmap(context.contentResolver, Uri.fromFile(filepath))
-            BitmapUtils.saveImage(context, mResultsBitmap).let {
-                addMediaOrPlaylist(it!!)
+            BitmapUtils.saveImage(context, mResultsBitmap, playlistName).let {
+                addMediaOrPlaylist(it!!, playlistName)
             }
         }
     }

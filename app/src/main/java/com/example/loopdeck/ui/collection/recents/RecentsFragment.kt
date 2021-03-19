@@ -6,6 +6,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -220,12 +222,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
         }
 
         btnDelete.setOnClickListener {
-            for (list in selectedList) {
-                viewModel.delete(list)
-            }
-            selectedList.clear()
-            multiSelection = false
-            bottomLayout.visibility = View.GONE
+            deleteMediaFiles()
 
         }
 
@@ -243,7 +240,26 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
                 viewModel.dublicateMediafiles(it)
             }
         }
+
+        btnmove.setOnClickListener {
+
+            moveToPlaylistNameDialog(requireContext())
+        }
         initContainer()
+    }
+
+    fun deleteMediaFiles() {
+        Handler(Looper.getMainLooper()).postDelayed(object : Runnable {
+            override fun run() {
+                for (list in selectedList) {
+                    viewModel.delete(list)
+                }
+                selectedList.clear()
+                multiSelection = false
+                bottomLayout.visibility = View.GONE
+            }
+        }, 2000)
+
     }
 
 
@@ -282,6 +298,30 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             val name = mDialogView.txt_input.text.toString()
             val file = BitmapUtils.createPlatlist(requireContext(), name)
             onCreatePlaylist(file)
+            mAlertDialog.dismiss()
+        }
+
+        mDialogView.btn_cancel.setOnClickListener {
+            mAlertDialog.dismiss()
+        }
+    }
+
+    private fun moveToPlaylistNameDialog(context: Context) {
+
+        val mDialogView = LayoutInflater.from(context).inflate(R.layout.dailogbox, null)
+
+        val mBuilder = AlertDialog.Builder(context)
+            .setView(mDialogView)
+            .setTitle("Enter Playlist Name")
+
+        val mAlertDialog = mBuilder.show()
+
+        mDialogView.btn_okay.setOnClickListener {
+            val name = mDialogView.txt_input.text.toString()
+            BitmapUtils.createPlatlist(requireContext(), name)
+            selectedList.forEach {
+                viewModel.dublicateMediafiles(it, name)
+            }
             mAlertDialog.dismiss()
         }
 

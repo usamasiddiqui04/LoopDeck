@@ -58,10 +58,10 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    fun dublicateMediafiles(mediaData: MediaData) {
+    fun dublicateMediafiles(mediaData: MediaData, playlistName: String? = null) {
 
         viewModelScope.launch(Dispatchers.IO) {
-            repository.addDublicateMedia(File(mediaData.filePath))
+            repository.addDublicateMedia(File(mediaData.filePath), playlistName)
         }
     }
 
