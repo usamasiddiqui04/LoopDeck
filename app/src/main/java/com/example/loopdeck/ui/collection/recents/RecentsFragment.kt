@@ -239,6 +239,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             selectedList.forEach {
                 viewModel.dublicateMediafiles(it)
             }
+            bottomLayout.visibility = View.GONE
         }
 
         btnmove.setOnClickListener {
@@ -258,7 +259,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
                 multiSelection = false
                 bottomLayout.visibility = View.GONE
             }
-        }, 2000)
+        }, 1000)
 
     }
 
@@ -322,6 +323,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             selectedList.forEach {
                 viewModel.dublicateMediafiles(it, name)
             }
+            deleteMediaFiles()
             mAlertDialog.dismiss()
         }
 
