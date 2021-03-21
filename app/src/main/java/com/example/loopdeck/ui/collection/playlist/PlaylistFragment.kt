@@ -18,22 +18,19 @@ import com.example.loopdeck.DragData
 import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.data.MediaType
+import com.example.loopdeck.gallery.model.GalleryData
+import com.example.loopdeck.gallery.view.PickerActivity
 import com.example.loopdeck.ui.adapters.MediaAdaptor
 import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.utils.callbacks.ItemMoveCallback
-import com.imagevideoeditor.PreviewVideoActivity
-import com.example.loopdeck.gallery.model.GalleryData
-import com.example.loopdeck.gallery.view.PickerActivity
 import com.imagevideoeditor.PreviewPhotoActivity
+import com.imagevideoeditor.PreviewVideoActivity
 import kotlinx.android.synthetic.main.fragment_playlist.*
-import kotlinx.android.synthetic.main.fragment_playlist.btnDelete
-import kotlinx.android.synthetic.main.fragment_playlist.btnGallery
-import kotlinx.android.synthetic.main.fragment_playlist.recyclerview
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.selectitem
 import kotlinx.android.synthetic.main.item_recent_list_images.view.*
 import kotlinx.android.synthetic.main.item_recent_video_lists.view.*
-import java.util.ArrayList
+import java.util.*
 
 
 class PlaylistFragment : Fragment() {
@@ -197,6 +194,10 @@ class PlaylistFragment : Fragment() {
             for (list in Selectlist) {
                 viewModel.delete(list)
             }
+        }
+
+        btnBack.setOnClickListener {
+            activity?.onBackPressed()
         }
 
         initContainer()

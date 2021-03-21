@@ -17,6 +17,17 @@
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/fbAddPlaylist"
+            android:src="@drawable/ic_iconplaylistadd"
+            android:tint="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:backgroundTint="#3458F3"
+            app:layout_constraintBottom_toTopOf="@id/addmedia"
+            android:layout_margin="@dimen/_20sdp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/addmedia"
             android:src="@drawable/ic_iconplaylistaddcopy2"
             app:layout_constraintEnd_toEndOf="parent"

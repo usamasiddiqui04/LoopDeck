@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -32,7 +31,6 @@ import com.google.android.material.navigation.NavigationView
 import com.imagevideoeditor.PreviewPhotoActivity
 import com.imagevideoeditor.PreviewVideoActivity
 import com.xorbix.loopdeck.cameraapp.BitmapUtils
-import kotlinx.android.synthetic.main.custom_layout.view.*
 import kotlinx.android.synthetic.main.dailogbox.view.*
 import kotlinx.android.synthetic.main.fragment_recents.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
@@ -57,7 +55,10 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
     private lateinit var viewModel: CollectionViewModel
 
     private val mediaAdapter by lazy {
-        MediaAdaptor(mList = mutableListOf(), onItemClickListener, onItemLongClickListener)
+        MediaAdaptor(
+            mList = mutableListOf(),
+            itemClickListener = onItemClickListener, itemLongClickListener = onItemLongClickListener
+        )
     }
 
     private fun checkmultiselection() {
@@ -82,7 +83,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
         mediadata: MediaData,
         list: MutableList<MediaData>
     ) {
-        string = list.get(viewHolder.adapterPosition)
+        string = list[viewHolder.adapterPosition]
         when (mediadata.mediaType) {
             MediaType.IMAGE -> {
 
@@ -228,10 +229,16 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
 
         addmedia.setOnClickListener {
             val i = Intent(requireActivity(), PickerActivity::class.java)
-            i.putExtra("IMAGES_LIMIT", 100)
-            i.putExtra("VIDEOS_LIMIT", 100)
+            i.putExtra("IMAGES_LIMIT", 1000)
+            i.putExtra("VIDEOS_LIMIT", 1000)
             i.putExtra("REQUEST_RESULT_CODE", REQUEST_RESULT_CODE)
             startActivityForResult(i, REQUEST_RESULT_CODE)
+        }
+
+        fbAddPlaylist.setOnClickListener {
+            savePlaylistNameDialog(requireContext()) {
+                viewModel.createPlaylist(it)
+            }
         }
 
         btndublicate.setOnClickListener {
@@ -351,6 +358,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             })
 
     }
+
 
 
     private fun initContainer() {
