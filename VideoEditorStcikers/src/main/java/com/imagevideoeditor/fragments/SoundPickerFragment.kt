@@ -20,8 +20,6 @@ import com.imagevideoeditor.soundpicker.SongAdaptor
 import com.imagevideoeditor.soundpicker.Songinfo
 import kotlinx.android.synthetic.main.fragment_sound_picker.*
 import java.io.File
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class SoundPickerFragment : BottomSheetDialogFragment() {
@@ -38,10 +36,16 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
     var mediaPlayer: MediaPlayer? = null
     var listener: SoundPickerListener? = null
 
+    private lateinit var addMusicListener: AddMusicFragment.AddMusicFragmentListener
 
     companion object {
-        fun newInstance(soundPickerListener: SoundPickerListener) = SoundPickerFragment().apply {
+        fun newInstance(
+            soundPickerListener: SoundPickerListener,
+            musicListener: AddMusicFragment.AddMusicFragmentListener
+        ) = SoundPickerFragment().apply {
             listener = soundPickerListener
+            addMusicListener = musicListener
+
         }
     }
 
@@ -50,6 +54,8 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
 
             AddMusicFragment.newInstance().apply {
                 setaudiofilepath(File(songinfo.SongUrl!!), videofile!!, videoDuration!!)
+                setAddMusicListener(addMusicListener)
+
             }.show(fragmentManager, "AddMusicFragment")
         }
 

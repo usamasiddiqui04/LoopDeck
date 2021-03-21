@@ -29,7 +29,7 @@ class SongAdaptor(
     }
 
     override fun getItemCount(): Int {
-        return mList.size
+        return filterList.size
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -47,7 +47,7 @@ class SongAdaptor(
 
     private val onPlay: (Songinfo) -> Unit = { songInfo ->
         onPlayPressed(songInfo)
-        mList.forEach {
+        filterList.forEach {
             it.isPlaying = false
         }
         songInfo.isPlaying = true
@@ -56,7 +56,7 @@ class SongAdaptor(
 
     private val onPause: (Songinfo) -> Unit = { songInfo ->
         onPausePressed(songInfo)
-        mList.forEach {
+        filterList.forEach {
             it.isPlaying = false
         }
         notifyDataSetChanged()

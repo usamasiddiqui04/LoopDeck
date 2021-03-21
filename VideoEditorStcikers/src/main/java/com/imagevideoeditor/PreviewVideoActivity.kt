@@ -45,6 +45,7 @@ import com.imagevideoeditor.filter.EditVideoActivity
 import com.imagevideoeditor.filter.FilterVideoFragment
 import com.imagevideoeditor.filter.interfaces.AddFilterListener
 import com.imagevideoeditor.filter.utils.FilterType
+import com.imagevideoeditor.fragments.AddMusicFragment
 import com.imagevideoeditor.fragments.SoundPickerFragment
 import com.imagevideoeditor.photoeditor.*
 import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
@@ -62,13 +63,13 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     BrushArtFragment.BrushArtListener, View.OnClickListener, StickerBSFragment.StickerListener,
     OptiBaseCreatorDialogFragment.CallBacks, AddFilterListener,
     BrushArtListener,
-    SoundPickerFragment.SoundPickerListener {
+    SoundPickerFragment.SoundPickerListener, AddMusicFragment.AddMusicFragmentListener {
     var videoSurface: FrameLayout? = null
     var ivImage: PhotoEditorView? = null
     var imgClose: ImageView? = null
     var imgDone: TextView? = null
     private var masterVideoFile: File? = null
-    val soundPickerFragment = SoundPickerFragment.newInstance(this)
+    val soundPickerFragment = SoundPickerFragment.newInstance(this, this)
 
 
     private var tagName: String = PreviewVideoActivity::class.java.simpleName
@@ -780,6 +781,15 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 
 
     override fun onDismissSoundPicker() {
+        player.playWhenReady = true
+    }
+
+    override fun onFinishAddMusic(file: File) {
+        masterVideoFile = file
+        onResume()
+    }
+
+    override fun OnErrorAddMusic() {
         player.playWhenReady = true
     }
 

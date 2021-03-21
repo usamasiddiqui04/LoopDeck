@@ -13,7 +13,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -28,23 +27,21 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.app.ActivityCompat
 import com.daasuu.epf.EPlayerView
-import com.obs.marveleditor.R
-import com.obs.marveleditor.interfaces.OptiFFMpegCallback
-import com.obs.marveleditor.utils.VideoUtils.secToTime
-import com.obs.marveleditor.interfaces.OptiDialogueHelper
 import com.github.guilhe.views.SeekBarRangedView
 import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.obs.marveleditor.OptiVideoEditor
+import com.obs.marveleditor.R
 import com.obs.marveleditor.fragments.OptiAddMusicFragment
 import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
+import com.obs.marveleditor.interfaces.OptiDialogueHelper
+import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.*
+import com.obs.marveleditor.utils.VideoUtils.secToTime
 import java.io.File
 import kotlin.math.roundToLong
 
@@ -81,6 +78,8 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
 
     lateinit var player: SimpleExoPlayer
     lateinit var ePlayerView: EPlayerView
+    private lateinit var addMusicListener: AddMusicFragmentListener
+    var outputFile: File? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -319,6 +318,10 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
         this.seekToValue = duration
     }
 
+    fun setAddMusicListener(listener: AddMusicFragmentListener) {
+        this.addMusicListener = listener
+    }
+
     companion object {
         fun newInstance() = AddMusicFragment()
     }
@@ -450,6 +453,7 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
         } else {
             helper?.showLoading(false)
         }
+        addMusicListener.OnErrorAddMusic()
     }
 
     override fun onNotAvailable(error: Exception) {
@@ -463,10 +467,12 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
             acbCrop?.visibility = View.VISIBLE
             releasePlayer()
             muxVideoPlayer()
+
         } else {
             helper?.showLoading(false)
             dialog.dismiss()
         }
+        outputFile?.let { addMusicListener.onFinishAddMusic(it) }
     }
 
 
@@ -476,22 +482,22 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
 
         if (!isRunning()) {
             //output file is generated and send to video processing
-            val outputFile = OptiUtils.createVideoFile(context!!)
-            Log.v(tagName, "outputFile: ${outputFile.absolutePath}")
+            outputFile = OptiUtils.createVideoFile(requireContext())
 
-            nextAction = 2
+            outputFile?.let {
+                Log.v(tagName, "outputFile: ${it.absolutePath}")
+                nextAction = 2
+                if (audioFile != null && videoFile != null) {
+                    OptiVideoEditor.with(context!!)
+                        .setType(OptiConstant.VIDEO_AUDIO_MERGE)
+                        .setFile(videoFile!!)
+                        .setAudioFile(audioFile!!)
+                        .setOutputPath(it.path)
+                        .setCallback(this)
+                        .main()
 
-
-            if (audioFile != null && videoFile != null) {
-                OptiVideoEditor.with(context!!)
-                    .setType(OptiConstant.VIDEO_AUDIO_MERGE)
-                    .setFile(videoFile!!)
-                    .setAudioFile(audioFile!!)
-                    .setOutputPath(outputFile.path)
-                    .setCallback(this)
-                    .main()
-
-                helper?.showLoading(true)
+                    helper?.showLoading(true)
+                }
             }
 
         } else {
@@ -502,5 +508,12 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
     override fun onCancel(dialog: DialogInterface?) {
         super.onCancel(dialog)
         releasePlayer()
+    }
+
+
+    interface AddMusicFragmentListener {
+        fun onFinishAddMusic(file: File)
+        fun OnErrorAddMusic()
+
     }
 }
