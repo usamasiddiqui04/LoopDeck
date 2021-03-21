@@ -298,7 +298,6 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
 
         val mBuilder = AlertDialog.Builder(context)
             .setView(mDialogView)
-            .setTitle("Enter Playlist Name")
 
         val mAlertDialog = mBuilder.show()
 
