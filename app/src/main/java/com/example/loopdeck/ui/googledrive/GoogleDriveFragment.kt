@@ -5,13 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.loopdeck.R
-import com.example.loopdeck.ui.adapters.GoogleDriveFileAdaptor
-import com.example.loopdeck.utils.extensions.activityViewModelProvider
+import com.example.loopdeck.imageloader.GlideImageLoader
+import com.example.loopdeck.ui.adapters.GoogleDriveAdaptor
 import com.example.loopdeck.utils.extensions.toast
 import com.google.api.services.drive.model.File
 import kotlinx.android.synthetic.main.fragment_googlrdrive.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 
 class GoogleDriveFragment : Fragment() {
 
@@ -20,17 +24,26 @@ class GoogleDriveFragment : Fragment() {
     }
 
 
-    lateinit var viewModel: GoogleDriveViewModel
+    val job = Job()
 
+    val ioScope = CoroutineScope(Dispatchers.IO + job)
+
+    val imageLoader by lazy {
+        GlideImageLoader(requireContext())
+    }
 
     private val googleDriveFileAdaptor by lazy {
-        GoogleDriveFileAdaptor(mList = mutableListOf(), onItemClickListener)
+        GoogleDriveAdaptor(
+            imageLoader,
+            mList = mutableListOf(),
+            itemClickListener = onItemClickListener
+        )
     }
 
     private val onItemClickListener: (File) -> Unit = { mediaData ->
         toast(mediaData.id.toString())
 
-            viewModel.download(mediaData.id)
+        GoogleDriveController.download(requireContext(), ioScope, mediaData)
 
 //        val intent = Intent(requireContext(), EditImageActivity::class.java)
 //        intent.putExtra("imagePath", mediaData.name)
@@ -48,25 +61,27 @@ class GoogleDriveFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = activityViewModelProvider()
+
         initViews()
         initObservers()
-
-        viewModel.getDrivefiles()
+        GoogleDriveController.init(requireActivity().application)
+        GoogleDriveController.getDrivefiles()
     }
 
 
     private fun initViews() {
         googleDriveRecyclerview?.adapter = googleDriveFileAdaptor
-        googleDriveRecyclerview?.layoutManager = GridLayoutManager(requireContext(), 1)
+        googleDriveRecyclerview?.layoutManager = GridLayoutManager(requireContext(), 4)
 
     }
 
 
     private fun initObservers() {
-        viewModel.recentsMediaLiveData.observe(viewLifecycleOwner, { recentsList ->
-            googleDriveFileAdaptor.submitList(recentsList.distinctBy { it.name })
-        })
+        GoogleDriveController.googleDriveFilesLiveData.observe(
+            viewLifecycleOwner,
+            Observer { recentsList ->
+                googleDriveFileAdaptor.submitList(recentsList.distinctBy { it.name })
+            })
 
     }
 

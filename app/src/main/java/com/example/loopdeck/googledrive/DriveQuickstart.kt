@@ -2,6 +2,7 @@ package com.example.loopdeck.googledrive
 
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.net.Uri
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl
 import com.google.api.client.auth.oauth2.Credential
@@ -18,6 +19,7 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStreamReader
+import kotlin.jvm.Throws
 
 
 object DriveQuickstart {
@@ -65,6 +67,7 @@ object DriveQuickstart {
                 override fun onAuthorization(authorizationUrl: AuthorizationCodeRequestUrl) {
                     val url = authorizationUrl.build()
                     val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                    browserIntent.setFlags(FLAG_ACTIVITY_NEW_TASK)
                     context.startActivity(browserIntent)
                 }
             }

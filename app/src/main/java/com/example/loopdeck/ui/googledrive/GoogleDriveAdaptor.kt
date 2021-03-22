@@ -1,19 +1,20 @@
 package com.example.loopdeck.ui.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.loopdeck.R
-import com.example.loopdeck.ui.viewholders.GoogleDrivetViewHolder
-import com.example.loopdeck.ui.viewholders.ImageViewHolder
-import com.example.loopdeck.ui.viewholders.VideoViewHolder
-import com.example.loopdeck.utils.callbacks.ItemMoveCallback
+import com.example.loopdeck.imageloader.ImageLoader
+import com.example.loopdeck.ui.googledrive.viewholder.GDImageViewHolder
+import com.example.loopdeck.ui.googledrive.viewholder.GDVideoViewHolder
+import com.example.loopdeck.ui.googledrive.viewholder.GoogleDriveFolderViewHolder
 import com.google.api.services.drive.model.File
-import java.util.*
 
-class GoogleDriveFileAdaptor(
+class GoogleDriveAdaptor(
+    private val imageLoader: ImageLoader,
     private var mList: MutableList<File>,
     private val itemClickListener: ((File) -> Unit)? = null,
     private val itemLongClickListener: ((View, File) -> Boolean)? = null,
@@ -23,11 +24,16 @@ class GoogleDriveFileAdaptor(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
-            is GoogleDrivetViewHolder -> {
+            is GoogleDriveFolderViewHolder -> {
                 holder.bind(mList.get(position), itemClickListener)
-                holder.itemView.setOnLongClickListener {
-                    itemLongClickListener?.invoke(it, mList[holder.adapterPosition]) ?: false
-                }
+
+            }
+
+            is GDImageViewHolder -> {
+                holder.bind(imageLoader, mList.get(position), itemClickListener)
+            }
+            is GDVideoViewHolder -> {
+                holder.bind(imageLoader, mList.get(position), itemClickListener)
             }
         }
     }
@@ -47,21 +53,21 @@ class GoogleDriveFileAdaptor(
         return when (viewType) {
             VIEW_TYPE_IMAGE -> {
 
-                ImageViewHolder(
+                GDImageViewHolder(
                     LayoutInflater.from(parent.context)
                         .inflate(R.layout.item_recent_list_images, parent, false)
                 )
             }
             VIEW_TYPE_VIDEO -> {
-                VideoViewHolder(
+                GDVideoViewHolder(
                     LayoutInflater.from(parent.context)
                         .inflate(R.layout.item_recent_video_lists, parent, false)
                 )
             }
             else -> {
-                GoogleDrivetViewHolder(
+                GoogleDriveFolderViewHolder(
                     LayoutInflater.from(parent.context)
-                        .inflate(R.layout.item_google_drive_folder_list, parent, false)
+                        .inflate(R.layout.item_recent_folder_list, parent, false)
                 )
             }
         }
@@ -69,12 +75,20 @@ class GoogleDriveFileAdaptor(
 
     override fun getItemViewType(position: Int): Int {
         val file = mList[position]
-        return VIEW_TYPE_PLAYLIST
-//        when {
-//            file.mimeType.contains(".jpg") -> VIEW_TYPE_IMAGE
-//            file.filePath.contains(".mp4") -> VIEW_TYPE_VIDEO
-//            else -> VIEW_TYPE_PLAYLIST
-//        }
+
+//        Log.d(
+//            "Drive File: ",
+//            file.name + ", mintype: ${file.mimeType}, thumbnail: ${file.webContentLink}"
+//        )
+
+        Log.d("Drive File: ", file.toString())
+
+        return when {
+            file.mimeType.contains("image/") -> VIEW_TYPE_IMAGE
+            file.mimeType.contains("application/vnd.google-apps.folder") -> VIEW_TYPE_PLAYLIST
+            file.mimeType.contains("video/") -> VIEW_TYPE_VIDEO
+            else -> VIEW_TYPE_PLAYLIST
+        }
     }
 
 

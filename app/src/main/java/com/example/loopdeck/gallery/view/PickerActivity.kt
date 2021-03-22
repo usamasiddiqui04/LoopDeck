@@ -14,7 +14,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
@@ -24,11 +23,11 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.example.loopdeck.R
 import com.example.loopdeck.onedrive.ApiExplorer
+import com.example.loopdeck.ui.googledrive.GoogleDriveActivity
 import kotlinx.android.synthetic.main.activity_picker.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.jvm.Throws
@@ -59,6 +58,17 @@ class PickerActivity : AppCompatActivity() {
         onedrive.setOnClickListener {
             startActivity(Intent(applicationContext, ApiExplorer::class.java))
         }
+
+
+        btnGoogleDrive.setOnClickListener {
+            startActivity(
+                Intent(
+                    this,
+                    GoogleDriveActivity::class.java
+                )
+            )
+        }
+
 
 //        camera.setOnClickListener {
 //            if (isCameraPermitted()) dispatchTakePictureIntent() else checkCameraPermission()
