@@ -489,8 +489,8 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     @SuppressLint("MissingPermission")
     private fun saveImage() {
         val file = File(
-            Environment.getExternalStorageDirectory()
-                .toString() + File.separator + ""
+            getExternalFilesDir(null)!!.absolutePath, Companion.ROOT_DIRECTORY_NAME
+                    + File.separator + ""
                     + System.currentTimeMillis() + ".png"
         )
         try {
@@ -724,6 +724,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         private val TAG = PreviewVideoActivity::class.java.simpleName
         private const val CAMERA_REQUEST = 52
         private const val PICK_REQUEST = 53
+        const val ROOT_DIRECTORY_NAME = "Loopdeck Media Files"
     }
 
     override fun onProgress(progress: String) {

@@ -298,7 +298,6 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
 
         val mBuilder = AlertDialog.Builder(context)
             .setView(mDialogView)
-            .setTitle("Enter Playlist Name")
 
         val mAlertDialog = mBuilder.show()
 
@@ -347,7 +346,6 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
                 if (list.isEmpty()) {
                     recyclerview.visibility = View.INVISIBLE
                     no_mediafile.visibility = View.VISIBLE
-                    addmedia.visibility = View.INVISIBLE
                     bottomLayout.visibility = View.GONE
                     return@Observer
                 }
@@ -389,8 +387,6 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             Toast.LENGTH_SHORT
         ).show()
         multiSelection = false
-
-
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -398,6 +394,5 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
         drawer_layout!!.closeDrawer(GravityCompat.START)
         return true
     }
-
 
 }
