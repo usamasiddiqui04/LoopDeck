@@ -98,8 +98,11 @@ class MediaAdaptor(
     override fun getItemViewType(position: Int): Int {
         val file = mList[position]
         return when {
+
             file.filePath.contains(".jpg") -> VIEW_TYPE_IMAGE
+            file.filePath.contains(".jpeg") -> VIEW_TYPE_IMAGE
             file.filePath.contains(".mp4") -> VIEW_TYPE_VIDEO
+            file.filePath.contains(".MP4") -> VIEW_TYPE_VIDEO
             file.filePath.contains(".png") -> VIEW_TYPE_IMAGE
             else -> VIEW_TYPE_PLAYLIST
         }

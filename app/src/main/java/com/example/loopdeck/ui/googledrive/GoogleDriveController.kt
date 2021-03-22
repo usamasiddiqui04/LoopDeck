@@ -1,11 +1,17 @@
 package com.example.loopdeck.ui.googledrive
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
+import com.example.loopdeck.data.MediaDatabase
+import com.example.loopdeck.data.MediaRepository
 import com.example.loopdeck.googledrive.DriveQuickstart
+import com.example.loopdeck.utils.isImage
+import com.example.loopdeck.utils.isVideo
 import com.google.api.client.googleapis.media.MediaHttpDownloader
 import com.google.api.client.googleapis.media.MediaHttpDownloader.DownloadState
 import com.google.api.client.googleapis.media.MediaHttpDownloaderProgressListener
@@ -19,11 +25,13 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
 import java.lang.reflect.InvocationTargetException
-import kotlin.jvm.Throws
 
 object GoogleDriveController {
 
     val googleDriveFilesLiveData = MutableLiveData<List<File>>()
+
+    @SuppressLint("StaticFieldLeak")
+    private var repository: MediaRepository? = null
 
     val HTTP_TRANSPORT = com.google.api.client.http.javanet.NetHttpTransport()
 
@@ -51,6 +59,9 @@ object GoogleDriveController {
 
 
     fun init(application: Application) {
+
+        val mediaDao = MediaDatabase.getDatabase(application).mediaDao()
+        repository = MediaRepository(mediaDao, application.applicationContext)
 
         service = Drive.Builder(
             HTTP_TRANSPORT,
@@ -96,21 +107,25 @@ object GoogleDriveController {
 
             val fileId: String = file.getId()
             val fileName: String = file.getName()
+            val destinationPath = newFile.absolutePath + "/$fileName"
             val outputstream: OutputStream =
-                FileOutputStream(newFile.absolutePath + "/$fileName")
+                FileOutputStream(destinationPath)
 
 
             val downloadableFile = service.files().get(fileId)
 
 //            customProgressListener.
-            downloadableFile.mediaHttpDownloader.setProgressListener(DownloadProgressListener())
+            downloadableFile.mediaHttpDownloader.setProgressListener(
+                DownloadProgressListener(
+                    destinationPath
+                )
+            )
 //                .setChunkSize(1000)
 
             downloadableFile.executeMediaAndDownloadTo(outputstream)
 
             outputstream.flush()
             outputstream.close()
-
 
         } catch (e: InvocationTargetException) {
             Toast.makeText(context, e.targetException.toString(), Toast.LENGTH_SHORT)
@@ -119,7 +134,7 @@ object GoogleDriveController {
     }
 
 
-    internal class DownloadProgressListener :
+    internal class DownloadProgressListener(val destinationPath: String) :
         MediaHttpDownloaderProgressListener {
         @Throws(IOException::class)
         override fun progressChanged(downloader: MediaHttpDownloader) {
@@ -129,6 +144,28 @@ object GoogleDriveController {
                 }
                 DownloadState.MEDIA_COMPLETE -> {
                     Log.d("Google Drive Download", " File Downloaded")
+
+
+                    if (java.io.File(destinationPath).isImage()) {
+                        repository!!.addMediaOrPlaylist(
+                            java.io.File(destinationPath),
+                            null
+                        )
+                    } else if (java.io.File(destinationPath).isVideo()) {
+                        repository!!.addMediaOrPlaylist(
+                            java.io.File(destinationPath),
+                            null
+                        )
+                    }
+
+//                    if (java.io.File(outputFile.absolutePath + "/$name").isImage()) {
+//                        repository!!.addMediaOrPlaylist(
+//                            java.io.File(outputFile.absolutePath + "/$name"),
+//                            ""
+//                        )
+//                    }
+
+
                 }
             }
         }

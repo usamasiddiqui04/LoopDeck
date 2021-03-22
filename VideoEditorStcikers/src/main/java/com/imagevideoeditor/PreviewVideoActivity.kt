@@ -48,6 +48,7 @@ import com.imagevideoeditor.filter.utils.FilterType
 import com.imagevideoeditor.fragments.AddMusicFragment
 import com.imagevideoeditor.fragments.SoundPickerFragment
 import com.imagevideoeditor.photoeditor.*
+import com.kbeanie.multipicker.utils.BitmapUtils
 import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.OptiUtils
@@ -489,7 +490,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     @SuppressLint("MissingPermission")
     private fun saveImage() {
         val file = File(
-            getExternalFilesDir(null)!!.absolutePath, Companion.ROOT_DIRECTORY_NAME
+            applicationContext.getExternalFilesDir(null)!!.absolutePath, ROOT_DIRECTORY_NAME
                     + File.separator + ""
                     + System.currentTimeMillis() + ".png"
         )
