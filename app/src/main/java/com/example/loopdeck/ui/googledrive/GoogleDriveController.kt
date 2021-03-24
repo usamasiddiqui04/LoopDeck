@@ -3,7 +3,6 @@ package com.example.loopdeck.ui.googledrive
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
@@ -71,14 +70,31 @@ object GoogleDriveController {
             .setApplicationName(DriveQuickstart.APPLICATION_NAME)
             .build()
 
+//        result = service.files()
+//            .list()
+//            .setFields("files/thumbnailLink, files/name, files/mimeType, files/id")
+//            .setPageSize(100)
+//            .execute()
 
-        result = service.files()
-            .list()
-            .setFields("files/thumbnailLink, files/name, files/mimeType, files/id")
-            .setPageSize(100)
-            .execute()
+        getDriveImages()
+
 
         initComplete = true
+    }
+
+    fun getDriveImages() {
+        result = service.files().list()
+            .setQ("mimeType='image/jpeg' or mimeType='video/mp4'")
+            .setSpaces("drive, appDataFolder, photos")
+            .setFields("files/thumbnailLink, files/name, files/mimeType, files/id")
+            .setPageSize(1000)
+            .execute()
+        for (file in result.files) {
+            System.out.printf(
+                "Found file: %s (%s)\n",
+                file.name, file.id
+            )
+        }
     }
 
     fun download(context: Context, scope: CoroutineScope, file: File) {
@@ -157,14 +173,6 @@ object GoogleDriveController {
                             null
                         )
                     }
-
-//                    if (java.io.File(outputFile.absolutePath + "/$name").isImage()) {
-//                        repository!!.addMediaOrPlaylist(
-//                            java.io.File(outputFile.absolutePath + "/$name"),
-//                            ""
-//                        )
-//                    }
-
 
                 }
             }

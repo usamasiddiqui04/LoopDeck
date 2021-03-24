@@ -100,6 +100,7 @@ class MediaAdaptor(
         return when {
 
             file.filePath.contains(".jpg") -> VIEW_TYPE_IMAGE
+            file.filePath.contains(".JPG") -> VIEW_TYPE_IMAGE
             file.filePath.contains(".jpeg") -> VIEW_TYPE_IMAGE
             file.filePath.contains(".mp4") -> VIEW_TYPE_VIDEO
             file.filePath.contains(".MP4") -> VIEW_TYPE_VIDEO
