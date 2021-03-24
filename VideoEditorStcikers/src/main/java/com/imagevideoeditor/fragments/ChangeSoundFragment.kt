@@ -2,7 +2,6 @@ package com.imagevideoeditor.fragments
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.utils.OptiUtils
 import kotlinx.android.synthetic.main.fragment_change_sound.*
-import kotlinx.android.synthetic.main.fragment_trim.*
 import java.io.File
 
 
@@ -47,7 +45,7 @@ class ChangeSoundFragment : BottomSheetDialogFragment(), OptiFFMpegCallback {
 
             OptiVideoEditor.with(requireContext())
                 .setType(OptiConstant.CHANGE_VIDEO_SOUND_FREQUENCY)
-                .setFile(videoFile!!)
+                .setVideoFile(videoFile!!)
                 .setOutputPath(outputFile.absolutePath)
                 .setCallback(this)
                 .main()

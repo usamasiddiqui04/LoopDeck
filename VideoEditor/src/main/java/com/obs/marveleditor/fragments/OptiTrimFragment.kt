@@ -69,7 +69,7 @@ class OptiTrimFragment : BottomSheetDialogFragment(), OptiFFMpegCallback {
 
             OptiVideoEditor.with(context!!)
                 .setType(OptiConstant.VIDEO_TRIM)
-                .setFile(videoFile!!)
+                .setVideoFile(videoFile!!)
                 .setOutputPath(outputFile.path)
                 .setStartTime(actvStartTime?.text.toString())
                 .setEndTime(actvEndTime?.text.toString())

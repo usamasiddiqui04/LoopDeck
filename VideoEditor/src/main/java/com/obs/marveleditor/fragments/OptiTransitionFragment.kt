@@ -93,7 +93,7 @@ class OptiTransitionFragment : BottomSheetDialogFragment(), OptiFilterListener, 
 
         OptiVideoEditor.with(context!!)
             .setType(OptiConstant.VIDEO_TRANSITION)
-            .setFile(videoFile!!)
+            .setVideoFile(videoFile!!)
              //.setFilter(command)
             .setOutputPath(outputFile.path)
             .setCallback(this)

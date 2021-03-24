@@ -133,7 +133,7 @@ class OptiFilterFragment : BottomSheetDialogFragment(), OptiFilterListener, Opti
 
         OptiVideoEditor.with(context!!)
             .setType(OptiConstant.VIDEO_FLIRT)
-            .setFile(videoFile!!)
+            .setVideoFile(videoFile!!)
             .setFilter(command)
             .setOutputPath(outputFile.path)
             .setCallback(this)

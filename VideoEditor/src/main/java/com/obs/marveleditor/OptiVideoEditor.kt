@@ -9,10 +9,6 @@ package com.obs.marveleditor
 
 import android.content.Context
 import android.util.Log
-import com.arthenica.mobileffmpeg.Config
-import com.arthenica.mobileffmpeg.Config.RETURN_CODE_CANCEL
-import com.arthenica.mobileffmpeg.Config.RETURN_CODE_SUCCESS
-import com.arthenica.mobileffmpeg.ExecuteCallback
 import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException
@@ -27,11 +23,13 @@ class OptiVideoEditor private constructor(private val context: Context) {
 
     private var tagName: String = OptiVideoEditor::class.java.simpleName
     private var videoFile: File? = null
+    private var imageFile: File? = null
     private var videoFileTwo: File? = null
     private var callback: OptiFFMpegCallback? = null
     private var outputFilePath = ""
     private var type: Int? = null
     private var position: String? = null
+
     //for adding text
     private var font: File? = null
     private var text: String? = null
@@ -40,15 +38,19 @@ class OptiVideoEditor private constructor(private val context: Context) {
     private var border: String? = null
     private var BORDER_FILLED = ": box=1: boxcolor=black@0.5:boxborderw=5"
     private var BORDER_EMPTY = ""
+
     //for clip art
     private var imagePath: String? = null
+
     //for play back speed
     private var havingAudio = true
     private var ffmpegFS: String? = null
+
     //for merge audio video
     private var startTime = "00:00:00"
     private var endTime = "00:00:00"
     private var audioFile: File? = null
+
     //for filter
     private var filterCommand: String? = null
 
@@ -78,8 +80,13 @@ class OptiVideoEditor private constructor(private val context: Context) {
         return this
     }
 
-    fun setFile(file: File): OptiVideoEditor {
+    fun setVideoFile(file: File): OptiVideoEditor {
         this.videoFile = file
+        return this
+    }
+
+    fun setImageFile(file: File): OptiVideoEditor {
+        this.imageFile = file
         return this
     }
 
@@ -147,7 +154,8 @@ class OptiVideoEditor private constructor(private val context: Context) {
     }
 
     fun setSpeedTempo(playbackSpeed: String, tempo: String): OptiVideoEditor {
-        this.ffmpegFS = if (havingAudio) "[0:v]setpts=$playbackSpeed*PTS[v];[0:a]atempo=$tempo[a]" else "setpts=$playbackSpeed*PTS"
+        this.ffmpegFS =
+            if (havingAudio) "[0:v]setpts=$playbackSpeed*PTS[v];[0:a]atempo=$tempo[a]" else "setpts=$playbackSpeed*PTS"
         Log.v(tagName, "ffmpegFS: $ffmpegFS")
         return this
     }
@@ -168,7 +176,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
     }
 
     fun main() {
-        if(type == OptiConstant.AUDIO_TRIM){
+        if (type == OptiConstant.AUDIO_TRIM) {
             if (audioFile == null || !audioFile!!.exists()) {
                 callback!!.onFailure(IOException("File not exists"))
                 return
@@ -178,11 +186,11 @@ class OptiVideoEditor private constructor(private val context: Context) {
                 return
             }
         } else {
-            if (videoFile == null || !videoFile!!.exists()) {
+            if ((videoFile == null && imageFile == null) || (videoFile?.exists() != true && imageFile?.exists() != true)) {
                 callback!!.onFailure(IOException("File not exists"))
                 return
             }
-            if (!videoFile!!.canRead()) {
+            if (videoFile?.canRead() == false || imageFile?.canRead() == false) {
                 callback!!.onFailure(IOException("Can't read the file. Missing permission?"))
                 return
             }
@@ -204,26 +212,73 @@ class OptiVideoEditor private constructor(private val context: Context) {
                 cmd = arrayOf(
                     "-y", "-i", videoFile!!.path, "-vf",
                     "drawtext=fontfile=" + font!!.path + ": text=" + text + ": fontcolor=" + color + ": fontsize=" + size + border + ": " + position,
-                    "-c:v", "libx264", "-c:a", "copy", "-movflags", "+faststart", outputFile.path)
+                    "-c:v", "libx264", "-c:a", "copy", "-movflags", "+faststart", outputFile.path
+                )
             }
 
             OptiConstant.VIDEO_CLIP_ART_OVERLAY -> {
                 //Clipart overlay on video - Need video file, image path, position to apply & output file
-                cmd = arrayOf("-y", "-i", videoFile!!.path, "-i", imagePath!!, "-filter_complex", position!!, "-codec:a", "copy", outputFile.path)
+                cmd = arrayOf(
+                    "-y",
+                    "-i",
+                    videoFile!!.path,
+                    "-i",
+                    imagePath!!,
+                    "-filter_complex",
+                    position!!,
+                    "-codec:a",
+                    "copy",
+                    outputFile.path
+                )
             }
 
             OptiConstant.MERGE_VIDEO -> {
                 //Merge videos - Need two video file, approx video size & output file
-                cmd = arrayOf("-y", "-i", videoFile!!.path, "-i", videoFileTwo!!.path, "-strict", "experimental", "-filter_complex",
+                cmd = arrayOf(
+                    "-y",
+                    "-i",
+                    videoFile!!.path,
+                    "-i",
+                    videoFileTwo!!.path,
+                    "-strict",
+                    "experimental",
+                    "-filter_complex",
                     "[0:v]scale=iw*min(1920/iw\\,1080/ih):ih*min(1920/iw\\,1080/ih), pad=1920:1080:(1920-iw*min(1920/iw\\,1080/ih))/2:(1080-ih*min(1920/iw\\,1080/ih))/2,setsar=1:1[v0];[1:v] scale=iw*min(1920/iw\\,1080/ih):ih*min(1920/iw\\,1080/ih), pad=1920:1080:(1920-iw*min(1920/iw\\,1080/ih))/2:(1080-ih*min(1920/iw\\,1080/ih))/2,setsar=1:1[v1];[v0][0:a][v1][1:a] concat=n=2:v=1:a=1",
-                    "-ab", "48000", "-ac", "2", "-ar", "22050", "-s", "1920x1080", "-vcodec", "libx264", "-crf", "27",
-                    "-q", "4", "-preset", "ultrafast", outputFile.path)
+                    "-ab",
+                    "48000",
+                    "-ac",
+                    "2",
+                    "-ar",
+                    "22050",
+                    "-s",
+                    "1920x1080",
+                    "-vcodec",
+                    "libx264",
+                    "-crf",
+                    "27",
+                    "-q",
+                    "4",
+                    "-preset",
+                    "ultrafast",
+                    outputFile.path
+                )
             }
 
             OptiConstant.VIDEO_PLAYBACK_SPEED -> {
                 //Video playback speed - Need video file, speed & tempo value according to playback and output file
                 cmd = if (havingAudio) {
-                    arrayOf("-y", "-i", videoFile!!.path, "-filter_complex", ffmpegFS!!, "-map", "[v]", "-map", "[a]", outputFile.path)
+                    arrayOf(
+                        "-y",
+                        "-i",
+                        videoFile!!.path,
+                        "-filter_complex",
+                        ffmpegFS!!,
+                        "-map",
+                        "[v]",
+                        "-map",
+                        "[a]",
+                        outputFile.path
+                    )
                 } else {
                     arrayOf("-y", "-i", videoFile!!.path, "-filter:v", ffmpegFS!!, outputFile.path)
                 }
@@ -231,7 +286,18 @@ class OptiVideoEditor private constructor(private val context: Context) {
 
             OptiConstant.AUDIO_TRIM -> {
                 //Audio trim - Need audio file, start time, end time & output file
-                cmd = arrayOf("-y", "-i", audioFile!!.path, "-ss", startTime, "-to", endTime, "-c", "copy", outputFile.path)
+                cmd = arrayOf(
+                    "-y",
+                    "-i",
+                    audioFile!!.path,
+                    "-ss",
+                    startTime,
+                    "-to",
+                    endTime,
+                    "-c",
+                    "copy",
+                    outputFile.path
+                )
             }
 
             OptiConstant.VIDEO_AUDIO_MERGE -> {
@@ -248,6 +314,23 @@ class OptiVideoEditor private constructor(private val context: Context) {
                     "0:v:0",
                     "-map",
                     "1:a:0",
+                    outputFile.path
+                )
+            }
+
+
+            OptiConstant.IMAGE_AUDIO_MERGE -> {
+//                ffmpeg -i still.png -i narrate.wav -acodec libvo_aacenc -vcodec libx264 final.flv
+                cmd = arrayOf(
+                    "-y",
+                    "-i",
+                    imageFile!!.path,
+                    "-i",
+                    audioFile!!.path,
+                    "-acodec",
+                    "libvo_aacenc",
+                    "-vcodec",
+                    "libx264",
                     outputFile.path
                 )
             }
@@ -291,7 +374,18 @@ class OptiVideoEditor private constructor(private val context: Context) {
 
             OptiConstant.VIDEO_TRIM -> {
                 //Video trim - Need video file, start time, end time & output file
-                cmd = arrayOf("-y", "-i", videoFile!!.path, "-ss", startTime, "-t", endTime, "-c", "copy", outputFile.path)
+                cmd = arrayOf(
+                    "-y",
+                    "-i",
+                    videoFile!!.path,
+                    "-ss",
+                    startTime,
+                    "-t",
+                    endTime,
+                    "-c",
+                    "copy",
+                    outputFile.path
+                )
             }
 
             OptiConstant.VIDEO_TRANSITION -> {

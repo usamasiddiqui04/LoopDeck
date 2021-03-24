@@ -121,7 +121,7 @@ class OptiAddTextFragment : BottomSheetDialogFragment(), OptiPositionListener, O
 
                     OptiVideoEditor.with(context!!)
                         .setType(OptiConstant.VIDEO_TEXT_OVERLAY)
-                        .setFile(videoFile!!)
+                        .setVideoFile(videoFile!!)
                         .setOutputPath(outputFile.path)
                         .setFont(fontFile)
                         .setText(text)

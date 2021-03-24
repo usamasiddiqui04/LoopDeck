@@ -152,7 +152,7 @@ class OptiAddClipArtFragment : BottomSheetDialogFragment(), OptiClipArtListener,
 
         OptiVideoEditor.with(context!!)
             .setType(OptiConstant.VIDEO_CLIP_ART_OVERLAY)
-            .setFile(videoFile!!)
+            .setVideoFile(videoFile!!)
             .setOutputPath(outputFile.path)
             .setImagePath(imgPath)
             .setPosition(position)

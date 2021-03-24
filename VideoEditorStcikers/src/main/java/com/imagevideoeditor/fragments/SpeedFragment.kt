@@ -122,7 +122,7 @@ class SpeedFragment : BottomSheetDialogFragment(), OptiDialogueHelper, OptiFFMpe
 
             OptiVideoEditor.with(context!!)
                 .setType(OptiConstant.VIDEO_PLAYBACK_SPEED)
-                .setFile(masterFile!!)
+                .setVideoFile(masterFile!!)
                 .setOutputPath(outputFile.absolutePath)
                 .setIsHavingAudio(isHavingAudio)
                 .setSpeedTempo(playbackSpeed, tempo)

@@ -51,6 +51,7 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
     private var tagName: String = OptiAddMusicFragment::class.java.simpleName
     private var audioFile: File? = null
     private var videoFile: File? = null
+    private var imageFile: File? = null
     private var playWhenReady: Boolean? = false
     private var exoPlayer: SimpleExoPlayer? = null
     private var sbrvVideoTrim: SeekBarRangedView? = null
@@ -312,9 +313,15 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
         }
     }
 
-    fun setaudiofilepath(audioFile: File, videofile: File, duration: Long) {
+    fun setAudioVideoFilePaths(audioFile: File, videofile: File, duration: Long) {
         masterAudioFile = audioFile
         videoFile = videofile
+        this.seekToValue = duration
+    }
+
+    fun setAudioImageFilePaths(audioFile: File, imageFile: File, duration: Long) {
+        masterAudioFile = audioFile
+        this.imageFile = imageFile
         this.seekToValue = duration
     }
 
@@ -420,8 +427,8 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
     }
 
     override fun setFilePathFromSource(file: File) {
-        videoFile = file
-        Log.d("getMimeType = ", "" + getMimeType(videoFile!!.absolutePath))
+/*//        videoFile = file
+//        Log.d("getMimeType = ", "" + getMimeType(videoFile!!.absolutePath))*/
     }
 
     override fun onProgress(progress: String) {
@@ -433,15 +440,27 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
     }
 
     override fun onSuccess(convertedFile: File, type: String) {
-        Log.v(tagName, "onSuccess()")
+        Log.v(tagName, "onSuccess() Audio Trim")
         if (nextAction == 1) {
             flLoadingView?.visibility = View.GONE
             acbCrop?.visibility = View.VISIBLE
             audioFile = convertedFile
+            releasePlayer()
+
+            if (videoFile != null) {
+                muxVideoPlayer()
+            } else if (imageFile != null) {
+                muxImagePlayer()
+            }
+
+
         } else {
             helper?.showLoading(false)
             helper?.onFileProcessed(convertedFile)
+            dialog.dismiss()
         }
+
+        outputFile?.let { addMusicListener.onSuccessAddMusic(it) }
     }
 
     override fun onFailure(error: Exception) {
@@ -460,19 +479,16 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
         Log.v(tagName, "onNotAvailable() ${error.localizedMessage}")
     }
 
+
     override fun onFinish() {
         Log.v(tagName, "onFinish()")
         if (nextAction == 1) {
             flLoadingView?.visibility = View.GONE
             acbCrop?.visibility = View.VISIBLE
-            releasePlayer()
-            muxVideoPlayer()
 
         } else {
             helper?.showLoading(false)
-            dialog.dismiss()
         }
-        outputFile?.let { addMusicListener.onFinishAddMusic(it) }
     }
 
 
@@ -490,7 +506,7 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
                 if (audioFile != null && videoFile != null) {
                     OptiVideoEditor.with(context!!)
                         .setType(OptiConstant.VIDEO_AUDIO_MERGE)
-                        .setFile(videoFile!!)
+                        .setVideoFile(videoFile!!)
                         .setAudioFile(audioFile!!)
                         .setOutputPath(it.path)
                         .setCallback(this)
@@ -505,6 +521,37 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
         }
     }
 
+
+    private fun muxImagePlayer() {
+
+        stopRunningProcess()
+
+        if (!isRunning()) {
+            //output file is generated and send to video processing
+            outputFile = OptiUtils.createVideoFile(requireContext())
+
+            outputFile?.let {
+                Log.v(tagName, "outputFile: ${it.absolutePath}")
+                nextAction = 2
+                if (audioFile != null && imageFile != null) {
+                    OptiVideoEditor.with(context!!)
+                        .setType(OptiConstant.IMAGE_AUDIO_MERGE)
+                        .setImageFile(imageFile!!)
+                        .setAudioFile(audioFile!!)
+                        .setOutputPath(it.path)
+                        .setCallback(this)
+                        .main()
+
+                    helper?.showLoading(true)
+                }
+            }
+
+        } else {
+            showInProgressToast()
+        }
+    }
+
+
     override fun onCancel(dialog: DialogInterface?) {
         super.onCancel(dialog)
         releasePlayer()
@@ -512,7 +559,7 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
 
 
     interface AddMusicFragmentListener {
-        fun onFinishAddMusic(file: File)
+        fun onSuccessAddMusic(file: File)
         fun OnErrorAddMusic()
 
     }

@@ -14,6 +14,7 @@ import com.example.loopdeck.utils.isVideo
 import com.xorbix.loopdeck.cameraapp.BitmapUtils
 import java.io.*
 import java.util.*
+import kotlin.jvm.Throws
 
 class MediaRepository(private val mediaDao: MediaDao, private val context: Context) {
 

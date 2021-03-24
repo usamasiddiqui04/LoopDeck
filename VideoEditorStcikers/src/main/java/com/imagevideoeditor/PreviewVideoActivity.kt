@@ -411,7 +411,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
                 mPhotoEditor!!.setBrushDrawingMode(false)
                 player.playWhenReady = false
                 val timeInMillis = OptiUtils.getVideoDuration(applicationContext, masterVideoFile!!)
-                soundPickerFragment.setFilePath(masterVideoFile!!)
+                soundPickerFragment.setVideoFilePath(masterVideoFile!!)
                 soundPickerFragment.setDuartion(timeInMillis)
                 showBottomSheetDialogFragment(soundPickerFragment)
 //              masterVideoFile?.let { file ->
@@ -785,7 +785,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         player.playWhenReady = true
     }
 
-    override fun onFinishAddMusic(file: File) {
+    override fun onSuccessAddMusic(file: File) {
         masterVideoFile = file
         onResume()
     }

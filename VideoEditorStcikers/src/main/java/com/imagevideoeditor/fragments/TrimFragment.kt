@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.github.guilhe.views.SeekBarRangedView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.imagevideoeditor.R
@@ -56,7 +55,7 @@ class TrimFragment : BottomSheetDialogFragment(), OptiFFMpegCallback {
 
             OptiVideoEditor.with(requireContext())
                 .setType(OptiConstant.VIDEO_TRIM)
-                .setFile(videoFile!!)
+                .setVideoFile(videoFile!!)
                 .setOutputPath(outputFile.path)
                 .setStartTime(StartTime?.text.toString())
                 .setEndTime(EndTime?.text.toString())

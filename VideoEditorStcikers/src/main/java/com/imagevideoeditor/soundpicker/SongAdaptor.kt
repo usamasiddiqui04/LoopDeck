@@ -35,11 +35,15 @@ class SongAdaptor(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is SongViewHolder -> {
-                val songinfo: Songinfo = filterList.get(position)
-                holder.bind(songinfo, onPlay, onPause)
-                holder.itemView.setOnClickListener {
-                    itemClickListener.invoke(it, holder, songinfo)
+                val songinfo: Songinfo? = filterList.get(position)
+
+                songinfo?.let {
+                    holder.bind(songinfo, onPlay, onPause)
+                    holder.itemView.setOnClickListener {
+                        itemClickListener.invoke(it, holder, songinfo)
+                    }
                 }
+
             }
 
         }

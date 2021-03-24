@@ -84,7 +84,7 @@ class OptiMergeFragment : BottomSheetDialogFragment(), OptiDialogueHelper, OptiF
 
                 OptiVideoEditor.with(context!!)
                     .setType(OptiConstant.MERGE_VIDEO)
-                    .setFile(videoFileOne!!)
+                    .setVideoFile(videoFileOne!!)
                     .setFileTwo(videoFileTwo!!)
                     .setOutputPath(outputFile.path)
                     .setCallback(this)

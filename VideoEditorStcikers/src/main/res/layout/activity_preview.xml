@@ -223,8 +223,8 @@
 
             <ImageView
                 android:id="@+id/imgAddmusic"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="18dp"
+                android:layout_height="30dp"
                 android:src="@drawable/ic_iconsound"
                 app:layout_constraintBottom_toTopOf="@id/textSound"
                 app:layout_constraintEnd_toEndOf="@id/textSound"

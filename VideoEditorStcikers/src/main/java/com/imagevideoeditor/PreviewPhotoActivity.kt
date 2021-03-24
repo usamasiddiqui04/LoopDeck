@@ -23,9 +23,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.imagevideoeditor.TextEditorDialogFragment.TextEditor
 import com.imagevideoeditor.filter.FilterListener
 import com.imagevideoeditor.filter.FilterViewAdapter
+import com.imagevideoeditor.fragments.AddMusicFragment
+import com.imagevideoeditor.fragments.SoundPickerFragment
 import com.imagevideoeditor.photoeditor.*
 import kotlinx.android.synthetic.main.activity_preview.*
 import java.io.File
@@ -34,7 +37,8 @@ import java.io.IOException
 @Suppress("UNREACHABLE_CODE")
 class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
     BrushArtFragment.BrushArtListener, View.OnClickListener, StickerBSFragment.StickerListener,
-    FilterListener, BrushArtListener {
+    FilterListener, BrushArtListener, SoundPickerFragment.SoundPickerListener,
+    AddMusicFragment.AddMusicFragmentListener {
 
     var videoSurface: TextureView? = null
     var ivImage: PhotoEditorView? = null
@@ -45,14 +49,23 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
     var imgText: ImageView? = null
     var imgUndo: ImageView? = null
     var imgSticker: ImageView? = null
+    var imgAdMusic: ImageView? = null
     private val mFilterViewAdapter = FilterViewAdapter(this)
     var imgPath: String? = null
+    private var masterImageFile: File? = null
     private val mConstraintSet = ConstraintSet()
     private var mIsFilterVisible = false
     private var mPhotoEditor: PhotoEditor? = null
     private val mPhotoEditorView: PhotoEditorView? = null
     private var brushArtFragment: BrushArtFragment? = null
     private var mStickerBSFragment: StickerBSFragment? = null
+
+    val soundPickerFragment = SoundPickerFragment.newInstance(
+        soundPickerListener = this,
+        musicListener = this,
+        selectForVideo = false
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -62,8 +75,13 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
         )
         setContentView(R.layout.activity_preview)
         initViews()
+
+
+        imgPath = intent.getStringExtra("imagePath")
+        masterImageFile = File(imgPath)
+
         //        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-        ivImage!!.source?.let { Glide.with(this).load(intent.getStringExtra("imagePath")).into(it) }
+        ivImage!!.source?.let { Glide.with(this).load(imgPath).into(it) }
         //        Glide.with(this).load(R.drawable.trans).into(binding.ivImage.getSource());
     }
 
@@ -75,6 +93,7 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
         imgDraw = findViewById(R.id.iconBrushes)
         imgText = findViewById(R.id.iconText)
         imgSticker = findViewById(R.id.imgSticker)
+        imgAdMusic = findViewById(R.id.imgAddmusic)
         mStickerBSFragment = StickerBSFragment()
         mStickerBSFragment!!.setStickerListener(this)
         brushArtFragment = BrushArtFragment()
@@ -90,6 +109,9 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
         imgDraw!!.setOnClickListener(this)
         imgText!!.setOnClickListener(this)
         imgSticker!!.setOnClickListener(this)
+        imgAdMusic!!.setOnClickListener(this)
+
+        imgAddmusic
         if (mPhotoEditor!!.undoCanvas()) {
         }
         val llmFilters = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -157,6 +179,15 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
             mStickerBSFragment!!.show(
                 supportFragmentManager, mStickerBSFragment!!.tag
             )
+        } else if (R.id.imgAddmusic == v.id) {
+            mPhotoEditor!!.setBrushDrawingMode(false)
+
+            val timeInMillis =
+                10L * 1000L//OptiUtils.getVideoDuration(applicationContext, masterImageFile!!)
+            soundPickerFragment.setImageFilePath(masterImageFile!!)
+            soundPickerFragment.setDuartion(timeInMillis)
+            showBottomSheetDialogFragment(soundPickerFragment)
+
         }
 
         //        switch (v.getId()) {
@@ -192,6 +223,12 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
 //                break;
 //
 //        }
+    }
+
+    private fun showBottomSheetDialogFragment(bottomSheetDialogFragment: BottomSheetDialogFragment) {
+        val bundle = Bundle()
+        bottomSheetDialogFragment.arguments = bundle
+        bottomSheetDialogFragment.show(supportFragmentManager, bottomSheetDialogFragment.tag)
     }
 
     private fun setDrawingMode() {
@@ -378,6 +415,21 @@ class PreviewPhotoActivity() : AppCompatActivity(), OnPhotoEditorListener,
 
     override fun onBrushArtEraserClicked() {
         mPhotoEditor!!.brushEraser()
+    }
+
+    override fun onDismissSoundPicker() {
+
+    }
+
+    override fun onSuccessAddMusic(file: File) {
+        val intent = Intent(this, PreviewVideoActivity::class.java)
+        intent.putExtra("videoPath", file.absolutePath)
+        startActivity(intent)
+        finish()
+    }
+
+    override fun OnErrorAddMusic() {
+        Toast.makeText(this, "Adding music to image failed", Toast.LENGTH_SHORT).show()
     }
 
 }

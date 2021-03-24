@@ -30,21 +30,25 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
     var songAdaptor: SongAdaptor? = null
     private var progressDialog: ProgressDialog? = null
     var videofile: File? = null
+    var imagefile: File? = null
     var videoDuration: Long? = null
     var list: List<Songinfo>? = null
 
     var mediaPlayer: MediaPlayer? = null
     var listener: SoundPickerListener? = null
 
+    var selectForVideo = true
     private lateinit var addMusicListener: AddMusicFragment.AddMusicFragmentListener
 
     companion object {
         fun newInstance(
             soundPickerListener: SoundPickerListener,
-            musicListener: AddMusicFragment.AddMusicFragmentListener
+            musicListener: AddMusicFragment.AddMusicFragmentListener,
+            selectForVideo: Boolean = true
         ) = SoundPickerFragment().apply {
             listener = soundPickerListener
             addMusicListener = musicListener
+            this.selectForVideo = selectForVideo
 
         }
     }
@@ -53,7 +57,12 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
         { itemView, viewHolder, songinfo ->
 
             AddMusicFragment.newInstance().apply {
-                setaudiofilepath(File(songinfo.SongUrl!!), videofile!!, videoDuration!!)
+                if (selectForVideo) {
+                    setAudioVideoFilePaths(File(songinfo.SongUrl!!), videofile!!, videoDuration!!)
+                } else {
+                    setAudioImageFilePaths(File(songinfo.SongUrl!!), imagefile!!, videoDuration!!)
+                }
+
                 setAddMusicListener(addMusicListener)
 
             }.show(fragmentManager, "AddMusicFragment")
@@ -124,8 +133,12 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
         }
     }
 
-    fun setFilePath(file: File) {
+    fun setVideoFilePath(file: File) {
         videofile = file
+    }
+
+    fun setImageFilePath(file: File) {
+        imagefile = file
     }
 
 

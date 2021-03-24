@@ -544,7 +544,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
 
                     OptiVideoEditor.with(context!!)
                         .setType(OptiConstant.VIDEO_TRIM)
-                        .setFile(masterVideoFile!!)
+                        .setVideoFile(masterVideoFile!!)
                         .setOutputPath(outputFile.path)
                         .setStartTime(startPos)
                         .setEndTime(endPos)
@@ -738,7 +738,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
 
                 OptiVideoEditor.with(context!!)
                     .setType(OptiConstant.CONVERT_AVI_TO_MP4)
-                    .setFile(masterVideoFile!!)
+                    .setVideoFile(masterVideoFile!!)
                     .setOutputPath(outputFile.path)
                     .setCallback(this)
                     .main()
