@@ -25,8 +25,7 @@ class GoogleDriveAdaptor(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is GoogleDriveFolderViewHolder -> {
-                holder.bind(mList.get(position), itemClickListener)
-
+                holder.bind(imageLoader, mList.get(position), itemClickListener)
             }
 
             is GDImageViewHolder -> {

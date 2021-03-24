@@ -41,9 +41,16 @@ class GoogleDriveFragment : Fragment() {
     }
 
     private val onItemClickListener: (File) -> Unit = { mediaData ->
-        toast(mediaData.id.toString())
+        if (mediaData.mimeType.contains("image/")) {
+            GoogleDriveController.download(requireContext(), ioScope, mediaData)
+        } else if (mediaData.mimeType.contains("video/")) {
+            GoogleDriveController.download(requireContext(), ioScope, mediaData)
+        } else if (mediaData.mimeType.contains("application/vnd.google-apps.folder")) {
+            toast(mediaData.name)
+        } else {
+            toast("This file cant be download")
+        }
 
-        GoogleDriveController.download(requireContext(), ioScope, mediaData)
 
 //        val intent = Intent(requireContext(), EditImageActivity::class.java)
 //        intent.putExtra("imagePath", mediaData.name)
@@ -70,6 +77,8 @@ class GoogleDriveFragment : Fragment() {
 
 
     private fun initViews() {
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black)
+        toolbar.setNavigationOnClickListener { activity!!.onBackPressed() }
         googleDriveRecyclerview?.adapter = googleDriveFileAdaptor
         googleDriveRecyclerview?.layoutManager = GridLayoutManager(requireContext(), 4)
 
