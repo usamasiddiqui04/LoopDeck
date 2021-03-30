@@ -321,16 +321,21 @@ class OptiVideoEditor private constructor(private val context: Context) {
 
             OptiConstant.IMAGE_AUDIO_MERGE -> {
 //                ffmpeg -i still.png -i narrate.wav -acodec libvo_aacenc -vcodec libx264 final.flv
+//                -shortest -acodec copy -vcodec mjpeg
+//                ffmpeg -loop 1 -i image.jpg -i audio.wav -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -shortest out.mp4
                 cmd = arrayOf(
+                    "-loop",
+                    "1",
                     "-y",
                     "-i",
                     imageFile!!.path,
                     "-i",
                     audioFile!!.path,
+                    "-shortest",
                     "-acodec",
-                    "libvo_aacenc",
+                    "copy",
                     "-vcodec",
-                    "libx264",
+                    "mjpeg",
                     outputFile.path
                 )
             }

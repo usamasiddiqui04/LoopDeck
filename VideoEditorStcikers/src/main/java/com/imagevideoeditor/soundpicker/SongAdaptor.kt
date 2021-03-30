@@ -35,9 +35,9 @@ class SongAdaptor(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is SongViewHolder -> {
-                val songinfo: Songinfo? = filterList.get(position)
+                val songinfo: Songinfo = filterList.get(position)
 
-                songinfo?.let {
+                songinfo.let {
                     holder.bind(songinfo, onPlay, onPause)
                     holder.itemView.setOnClickListener {
                         itemClickListener.invoke(it, holder, songinfo)
@@ -77,8 +77,6 @@ class SongAdaptor(
                     val finalfilteredList: ArrayList<Songinfo> = ArrayList()
                     for (row: Songinfo in mList) {
 
-                        // name match condition. this might differ depending on your requirement
-                        // here we are looking for name or phone number match
                         if (row.Title!!.toLowerCase()
                                 .contains(charString.toLowerCase())
                         ) {

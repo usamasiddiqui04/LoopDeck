@@ -427,8 +427,8 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
     }
 
     override fun setFilePathFromSource(file: File) {
-/*//        videoFile = file
-//        Log.d("getMimeType = ", "" + getMimeType(videoFile!!.absolutePath))*/
+        videoFile = file
+        Log.d("getMimeType = ", "" + getMimeType(videoFile!!.absolutePath))
     }
 
     override fun onProgress(progress: String) {

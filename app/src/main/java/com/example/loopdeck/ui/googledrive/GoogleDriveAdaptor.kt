@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.loopdeck.R
@@ -25,8 +26,7 @@ class GoogleDriveAdaptor(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is GoogleDriveFolderViewHolder -> {
-                holder.bind(mList.get(position), itemClickListener)
-
+                holder.bind(imageLoader, mList.get(position), itemClickListener)
             }
 
             is GDImageViewHolder -> {
@@ -81,7 +81,8 @@ class GoogleDriveAdaptor(
 //            file.name + ", mintype: ${file.mimeType}, thumbnail: ${file.webContentLink}"
 //        )
 
-        Log.d("Drive File: ", file.toString())
+        Log.d("Drive File ${file.size}: ", file.toString())
+
 
         return when {
             file.mimeType.contains("image/") -> VIEW_TYPE_IMAGE

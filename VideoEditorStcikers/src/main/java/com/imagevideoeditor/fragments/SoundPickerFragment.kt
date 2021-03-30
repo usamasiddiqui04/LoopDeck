@@ -128,7 +128,6 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
                     resultset.getString(resultset.getColumnIndex(MediaStore.Audio.Media.DURATION))
 
                 listSongs.add(Songinfo(title, author, songurl, duration))
-                songAdaptor?.notifyDataSetChanged()
             }
         }
     }
