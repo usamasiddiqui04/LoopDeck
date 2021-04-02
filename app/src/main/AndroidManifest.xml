@@ -23,6 +23,8 @@
         <activity android:name=".gallery.view.PickerActivity" />
         <activity android:name=".ui.collection.CollectionActivity" />
         <activity android:name=".ui.googledrive.GoogleDriveActivity" />
+        <activity android:name=".editor.PreviewPhotoActivity" />
+        <activity android:name=".editor.PreviewVideoActivity" />
         <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

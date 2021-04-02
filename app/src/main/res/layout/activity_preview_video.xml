@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_menu"
-    tools:context=".PreviewVideoActivity">
+    android:background="@color/main_menu">
 
 
     <FrameLayout
@@ -20,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.imagevideoeditor.photoeditor.PhotoEditorView
+    <com.example.loopdeck.editor.photoeditor.PhotoEditorView
         android:id="@+id/ivImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

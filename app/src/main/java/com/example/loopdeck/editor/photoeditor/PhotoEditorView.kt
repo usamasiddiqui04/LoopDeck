@@ -13,9 +13,9 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 import androidx.viewpager.widget.PagerAdapter
-import com.imagevideoeditor.R
-import com.imagevideoeditor.Utils.InfinitePagerAdapter
-import com.imagevideoeditor.Utils.InfiniteViewPager
+import com.example.loopdeck.R
+import com.example.loopdeck.editor.Utils.InfinitePagerAdapter
+import com.example.loopdeck.editor.Utils.InfiniteViewPager
 
 /**
  *

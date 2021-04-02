@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/mRootView"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/main_menu"
-    tools:context=".PreviewPhotoActivity">
+    android:background="@color/main_menu">
 
     <com.imagevideoeditor.photoeditor.PhotoEditorView
         android:id="@+id/ivImage"

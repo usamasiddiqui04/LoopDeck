@@ -28,6 +28,8 @@ import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.daasuu.epf.EPlayerView
 import com.example.loopdeck.R
+import com.example.loopdeck.editor.Utils.DimensionData
+import com.example.loopdeck.editor.Utils.Utils
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.FFmpegExecuteResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.FFmpegLoadBinaryResponseHandler
@@ -40,15 +42,13 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.imagevideoeditor.Utils.DimensionData
-import com.imagevideoeditor.Utils.Utils
 import com.example.loopdeck.editor.filter.EditVideoActivity
 import com.example.loopdeck.editor.filter.FilterVideoFragment
 import com.example.loopdeck.editor.filter.interfaces.AddFilterListener
 import com.example.loopdeck.editor.filter.utils.FilterType
-import com.imagevideoeditor.fragments.AddMusicFragment
-import com.imagevideoeditor.fragments.SoundPickerFragment
-import com.imagevideoeditor.photoeditor.*
+import com.example.loopdeck.editor.fragments.AddMusicFragment
+import com.example.loopdeck.editor.fragments.SoundPickerFragment
+import com.example.loopdeck.editor.photoeditor.*
 import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.OptiUtils

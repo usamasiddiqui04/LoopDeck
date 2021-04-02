@@ -27,6 +27,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.app.ActivityCompat
 import com.daasuu.epf.EPlayerView
+import com.example.loopdeck.R
 import com.github.guilhe.views.SeekBarRangedView
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.TrackGroupArray
@@ -35,8 +36,6 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.util.Util
 import com.obs.marveleditor.OptiVideoEditor
-import com.obs.marveleditor.R
-import com.obs.marveleditor.fragments.OptiAddMusicFragment
 import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
 import com.obs.marveleditor.interfaces.OptiDialogueHelper
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
@@ -45,10 +44,10 @@ import com.obs.marveleditor.utils.VideoUtils.secToTime
 import java.io.File
 import kotlin.math.roundToLong
 
-public class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
+class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
     OptiFFMpegCallback {
 
-    private var tagName: String = OptiAddMusicFragment::class.java.simpleName
+    private var tagName: String = AddMusicFragment::class.java.simpleName
     private var audioFile: File? = null
     private var videoFile: File? = null
     private var imageFile: File? = null
@@ -298,6 +297,14 @@ public class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHel
         this.seekToValue = duration
     }
 
+    override fun dismiss() {
+
+    }
+
+    override fun permissionsBlocked() {
+
+    }
+
     override fun onStop() {
         super.onStop()
         if (Util.SDK_INT > 23) {
@@ -543,7 +550,10 @@ public class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHel
         }
     }
 
-    override fun permissionsBlocked() {
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        releasePlayer()
     }
 
 

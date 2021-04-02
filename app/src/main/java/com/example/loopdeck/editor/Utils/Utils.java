@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.imagevideoeditor.Utils.DimensionData;
+import com.example.loopdeck.editor.Utils.DimensionData;
 
 
 public class Utils {
