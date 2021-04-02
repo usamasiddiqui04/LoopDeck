@@ -1,4 +1,4 @@
-package com.imagevideoeditor.photoeditor
+package com.example.loopdeck.editor.photoeditor
 
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -17,7 +17,7 @@ import javax.microedition.khronos.opengles.GL10
  * @version 0.1.2
  * @since 5/21/2018
  */
-object BitmapUtil {
+internal object BitmapUtil {
     /**
      * Remove transparency in edited bitmap
      *

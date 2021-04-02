@@ -20,6 +20,8 @@ import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.data.MediaType
 import com.example.loopdeck.drawer.AdvanceDrawerLayout
+import com.example.loopdeck.editor.PreviewPhotoActivity
+import com.example.loopdeck.editor.PreviewVideoActivity
 import com.example.loopdeck.gallery.model.GalleryData
 import com.example.loopdeck.gallery.view.PickerActivity
 import com.example.loopdeck.onedrive.ItemFragment
@@ -28,8 +30,6 @@ import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.ui.collection.playlist.PlaylistFragment
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.google.android.material.navigation.NavigationView
-import com.imagevideoeditor.PreviewPhotoActivity
-import com.imagevideoeditor.PreviewVideoActivity
 import com.xorbix.loopdeck.cameraapp.BitmapUtils
 import kotlinx.android.synthetic.main.dailogbox.view.*
 import kotlinx.android.synthetic.main.fragment_recents.*

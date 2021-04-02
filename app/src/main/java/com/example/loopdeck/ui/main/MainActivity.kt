@@ -7,14 +7,9 @@ import android.os.Bundle
 import android.os.StrictMode
 import androidx.appcompat.app.AppCompatActivity
 import com.example.loopdeck.R
-import com.example.loopdeck.googledrive.DriveQuickstart
 import com.example.loopdeck.ui.collection.CollectionActivity
 import com.example.loopdeck.ui.googledrive.GoogleDriveActivity
 import com.example.loopdeck.ui.login.WebviewLoginActivity
-import com.google.api.services.drive.Drive
-import com.google.api.services.drive.model.File
-import com.google.api.services.drive.model.FileList
-import com.loopdeck.photoeditor.EditImageActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -78,14 +73,6 @@ class MainActivity : AppCompatActivity() {
 //            startActivity(Intent(this@MainActivity, MainActivity::class.java))
         }
 
-        btn_image.setOnClickListener {
-            startActivity(
-                Intent(
-                    this@MainActivity,
-                    EditImageActivity::class.java
-                )
-            )
-        }
         btn_video.setOnClickListener {
             startActivity(
                 Intent(

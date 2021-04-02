@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.imagevideoeditor.photoeditor
+package com.example.loopdeck.editor.photoeditor
 
 import android.opengl.GLES20
 
-object GLToolbox {
+internal object GLToolbox {
     private fun loadShader(shaderType: Int, source: String): Int {
         val shader = GLES20.glCreateShader(shaderType)
         if (shader != 0) {

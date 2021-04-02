@@ -135,6 +135,38 @@ dependencies {
     implementation 'com.android.support:design:30.0.0'
     implementation 'com.android.support:recyclerview-v7:30.0.0'
     implementation 'com.android.support:cardview-v7:30.0.0'
+
+    implementation "com.github.imjeevandeshmukh:GlideToast:${GlideToast}"
+    //seekbar
+
+    compile 'com.makeramen:roundedimageview:2.3.0'
+
+    compile 'com.zolad:bubbletextureview:1.0.0'
+    compile 'com.makeramen:roundedimageview:2.3.0'
+    implementation "com.github.guilhe:seekbar-ranged-view:${seekbar}"
+    implementation 'ja.burhanrashid52:photoeditor:0.4.0'
+    implementation 'com.android.support:cardview-v7:30.0.0'
+    implementation 'com.android.support:design:30.0.0'
+    implementation 'com.android.support:appcompat-v7:30.0.0'
+    implementation 'com.writingminds:FFmpegAndroid:0.3.2'
+    implementation 'com.arthenica:mobile-ffmpeg-full:4.3'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    implementation 'com.github.bumptech.glide:compiler:4.9.0'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.10.2'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.10.2'
+
+    implementation 'com.github.MasayukiSuda:ExoPlayerFilter:v0.2.4'
+    implementation 'com.github.MasayukiSuda:Mp4Composer-android:v0.3.8'
+    implementation 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.3.0'
+
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+
+    implementation 'com.google.firebase:firebase-analytics:17.2.3'
 }
 repositories {
     mavenCentral()
