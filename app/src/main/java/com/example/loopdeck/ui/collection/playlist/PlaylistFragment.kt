@@ -18,13 +18,13 @@ import com.example.loopdeck.DragData
 import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.data.MediaType
+import com.example.loopdeck.editor.PreviewPhotoActivity
+import com.example.loopdeck.editor.PreviewVideoActivity
 import com.example.loopdeck.gallery.model.GalleryData
 import com.example.loopdeck.gallery.view.PickerActivity
 import com.example.loopdeck.ui.adapters.MediaAdaptor
 import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.utils.callbacks.ItemMoveCallback
-import com.imagevideoeditor.PreviewPhotoActivity
-import com.imagevideoeditor.PreviewVideoActivity
 import kotlinx.android.synthetic.main.fragment_playlist.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.selectitem
@@ -131,13 +131,14 @@ class PlaylistFragment : Fragment() {
                     MediaType.IMAGE -> {
                         val intent = Intent(requireContext(), PreviewPhotoActivity::class.java)
                         intent.putExtra("imagePath", mediadata.filePath)
+                        intent.putExtra("playlistName", mediadata.playListName)
                         startActivity(intent)
                     }
                     MediaType.VIDEO -> {
                         val intent = Intent(requireContext(), PreviewVideoActivity::class.java)
                         intent.putExtra("videoPath", mediadata.filePath)
+                        intent.putExtra("playlistName", mediadata.playListName)
                         startActivity(intent)
-
                     }
                     else -> {
                         requireActivity().supportFragmentManager.beginTransaction()

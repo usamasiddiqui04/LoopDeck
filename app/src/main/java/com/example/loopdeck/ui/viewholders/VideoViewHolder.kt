@@ -24,26 +24,26 @@ class VideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             uri.toString(),
             MediaStore.Video.Thumbnails.MINI_KIND
         )
-        val _duration: Long
-        _duration = getduration(uri.toString())
+//        val _duration: Long
+////        _duration = getduration(uri.toString())
+//
+//        val milliseconds: Long = _duration
+//// long minutes = (milliseconds / 1000) / 60;
+//        val minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds)
+//// long seconds = (milliseconds / 1000);
+//        val seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds)
 
-        val milliseconds: Long = _duration
-// long minutes = (milliseconds / 1000) / 60;
-        val minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds)
-// long seconds = (milliseconds / 1000);
-        val seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds)
-
-        itemView.duration.setText("${minutes}:${seconds}")
+//        itemView.duration.setText("${minutes}:${seconds}")
         itemView.imageViewRecentVideo.setImageBitmap(bitmap)
     }
 
-    fun getduration(uri: String): Long {
-        val retriever = MediaMetadataRetriever()
-        retriever.setDataSource(uri)
-        val duration =
-            java.lang.Long.parseLong(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION))
-        retriever.release()
-
-        return duration
-    }
+//    fun getduration(uri: String): Long {
+//        val retriever = MediaMetadataRetriever()
+//        retriever.setDataSource(uri)
+//        val duration =
+//            java.lang.Long.parseLong(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION))
+//        retriever.release()
+//
+//        return duration
+//    }
 }

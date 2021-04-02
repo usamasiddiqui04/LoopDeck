@@ -49,6 +49,8 @@ import com.example.loopdeck.editor.filter.utils.FilterType
 import com.example.loopdeck.editor.fragments.AddMusicFragment
 import com.example.loopdeck.editor.fragments.SoundPickerFragment
 import com.example.loopdeck.editor.photoeditor.*
+import com.example.loopdeck.ui.collection.CollectionViewModel
+import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.OptiUtils
@@ -68,11 +70,13 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     var videoSurface: FrameLayout? = null
     var ivImage: PhotoEditorView? = null
     var imgClose: ImageView? = null
+    var playlistName: String? = null
     var imgDone: TextView? = null
     private var masterVideoFile: File? = null
     val soundPickerFragment = SoundPickerFragment.newInstance(this, this)
+    private lateinit var viewModel: CollectionViewModel
 
-
+    var output: File? = null
     private var tagName: String = PreviewVideoActivity::class.java.simpleName
     var imgDelete: ImageView? = null
     var imgDraw: ImageView? = null
@@ -116,6 +120,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_preview_video)
+        viewModel = activityViewModelProvider()
 //        window.setFlags(
 //            WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //            WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -123,6 +128,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 
         //        binding = DataBindingUtil.setContentView(this, R.layout.activity_preview_video);
         videoPath = intent!!.getStringExtra("videoPath")
+        playlistName = intent!!.getStringExtra("playlistName")
         masterVideoFile = File(videoPath)
         initViews()
         //        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
@@ -326,10 +332,8 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
             fFmpeg!!.execute(command, object : FFmpegExecuteResponseHandler {
                 override fun onSuccess(s: String) {
                     Log.d("CommandExecute", "onSuccess  $s")
-                    Toast.makeText(applicationContext, "Sucess", Toast.LENGTH_SHORT).show()
-                    val i = Intent(this@PreviewVideoActivity, VideoPreviewActivity::class.java)
-                    i.putExtra("DATA", absolutePath)
-                    startActivity(i)
+                    Toast.makeText(applicationContext, "Success", Toast.LENGTH_SHORT).show()
+                    viewModel.editedImageFiles(output!!, playlistName)
                 }
 
                 override fun onProgress(s: String) {
@@ -531,28 +535,13 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     }
 
     private fun applayWaterMark() {
-
-//        imagePath = generatePath(Uri.fromFile(new File(imagePath)),PreviewVideoActivity.this);
-
-//        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-//        retriever.setDataSource(videoPath);
-//        int width = Integer.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
-//        int height = Integer.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
-        /*if (width > height) {
-            int tempWidth = width;
-            width = height;
-            height = tempWidth;
-        }*/
-
-//        Log.d(">>", "width>> " + width + "height>> " + height);
-//        retriever.release();
-        val output = File(
+        output = File(
             Environment.getExternalStorageDirectory()
                 .toString() + File.separator + ""
                     + System.currentTimeMillis() + ".mp4"
         )
         try {
-            output.createNewFile()
+            output?.createNewFile()
             exeCmd!!.add("-y")
             exeCmd!!.add("-i")
             exeCmd!!.add(videoPath!!)
@@ -570,7 +559,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
             exeCmd!!.add("libx264")
             exeCmd!!.add("-preset")
             exeCmd!!.add("ultrafast")
-            exeCmd!!.add(output.absolutePath)
+            exeCmd!!.add(output!!.absolutePath)
             newCommand = arrayOfNulls(exeCmd!!.size)
             for (j in exeCmd!!.indices) {
                 newCommand[j] = exeCmd!![j]
@@ -580,10 +569,12 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
             }
 
 //            newCommand = new String[]{"-i", videoPath, "-i", imagePath, "-preset", "ultrafast", "-filter_complex", "[1:v]scale=2*trunc(" + (width / 2) + "):2*trunc(" + (height/ 2) + ") [ovrl], [0:v][ovrl]overlay=0:0" , output.getAbsolutePath()};
-            executeCommand(newCommand, output.absolutePath)
+            executeCommand(newCommand, output!!.absolutePath)
         } catch (e: Exception) {
             e.printStackTrace()
         }
+
+
     }
 
     override fun onStickerClick(bitmap: Bitmap?) {

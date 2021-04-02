@@ -24,12 +24,15 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.loopdeck.R
+import com.example.loopdeck.data.MediaRepository
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.example.loopdeck.editor.filter.FilterListener
 import com.example.loopdeck.editor.filter.FilterViewAdapter
 import com.example.loopdeck.editor.fragments.AddMusicFragment
 import com.example.loopdeck.editor.fragments.SoundPickerFragment
 import com.example.loopdeck.editor.photoeditor.*
+import com.example.loopdeck.ui.collection.CollectionViewModel
+import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import kotlinx.android.synthetic.main.activity_preview.*
 import java.io.File
 import java.io.IOException
@@ -41,6 +44,7 @@ class PreviewPhotoActivity : AppCompatActivity(), OnPhotoEditorListener,
     AddMusicFragment.AddMusicFragmentListener {
 
     var videoSurface: TextureView? = null
+    var playListName: String? = null
     var ivImage: PhotoEditorView? = null
     var imgClose: ImageView? = null
     var imgDone: TextView? = null
@@ -59,6 +63,7 @@ class PreviewPhotoActivity : AppCompatActivity(), OnPhotoEditorListener,
     private val mPhotoEditorView: PhotoEditorView? = null
     private var brushArtFragment: BrushArtFragment? = null
     private var mStickerBSFragment: StickerBSFragment? = null
+    private lateinit var viewModel: CollectionViewModel
 
     val soundPickerFragment = SoundPickerFragment.newInstance(
         soundPickerListener = this,
@@ -74,10 +79,12 @@ class PreviewPhotoActivity : AppCompatActivity(), OnPhotoEditorListener,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
         setContentView(R.layout.activity_preview)
+        viewModel = activityViewModelProvider()
         initViews()
 
 
         imgPath = intent.getStringExtra("imagePath")
+        playListName = intent.getStringExtra("playlistName")
         masterImageFile = File(imgPath)
 
         //        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);

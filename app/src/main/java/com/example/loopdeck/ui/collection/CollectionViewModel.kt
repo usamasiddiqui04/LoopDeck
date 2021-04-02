@@ -65,6 +65,12 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
+    fun editedImageFiles(file: File, playlistName: String? = null) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addEditedFile(file, playlistName)
+        }
+    }
+
     fun createPlaylist(file: File) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addMediaOrPlaylist(file)
