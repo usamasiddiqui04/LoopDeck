@@ -59,6 +59,16 @@ class PickerActivity : AppCompatActivity() {
             startActivity(Intent(applicationContext, ApiExplorer::class.java))
         }
 
+        btnGoogleDrive.setOnClickListener {
+            startActivity(
+                Intent(
+                    this@PickerActivity,
+                    GoogleDriveActivity::class.java
+                )
+            )
+        }
+
+
 
         btnGoogleDrive.setOnClickListener {
             startActivity(
