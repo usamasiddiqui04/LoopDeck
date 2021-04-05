@@ -86,6 +86,7 @@
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
+        android:textColor="@color/white"
         android:background="@color/black_trasp"
         android:padding="8dp"
         android:text="Done" />

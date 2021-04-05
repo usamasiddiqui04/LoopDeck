@@ -132,14 +132,12 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
                 when (mediadata.mediaType) {
                     MediaType.IMAGE -> {
                         val intent = Intent(requireContext(), PreviewPhotoActivity::class.java)
-                        intent.putExtra("imagePath", mediadata.filePath)
-                        intent.putExtra("playlistName", mediadata.playListName)
+                        intent.putExtra("mediaData", mediadata)
                         startActivity(intent)
                     }
                     MediaType.VIDEO -> {
                         val intent = Intent(requireContext(), PreviewVideoActivity::class.java)
-                        intent.putExtra("videoPath", mediadata.filePath)
-                        intent.putExtra("playlistName", mediadata.playListName)
+                        intent.putExtra("mediaData", mediadata)
                         startActivity(intent)
 
                     }

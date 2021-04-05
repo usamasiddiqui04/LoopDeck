@@ -28,6 +28,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.daasuu.epf.EPlayerView
 import com.example.loopdeck.R
+import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.editor.Utils.DimensionData
 import com.example.loopdeck.editor.Utils.Utils
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
@@ -105,6 +106,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     lateinit var player: SimpleExoPlayer
     lateinit var ePlayerView: EPlayerView
     private var soundListner: SoundListner? = null
+    var mediaData: MediaData? = null
 
 
     private lateinit var filename: String
@@ -127,15 +129,15 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 //        )
 
         //        binding = DataBindingUtil.setContentView(this, R.layout.activity_preview_video);
-        videoPath = intent!!.getStringExtra("videoPath")
-        playlistName = intent!!.getStringExtra("playlistName")
-        masterVideoFile = File(videoPath)
+        mediaData = intent!!.getParcelableExtra("mediaData")
+        playlistName = mediaData!!.playListName
+        masterVideoFile = File(mediaData!!.filePath)
         initViews()
         //        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
 //        Glide.with(this).load(getIntent().getStringExtra("DATA")).into(binding.ivImage.getSource());
         ivImage!!.source?.let { Glide.with(this).load(R.drawable.trans).centerCrop().into(it) }
         val retriever = MediaMetadataRetriever()
-        retriever.setDataSource(videoPath)
+        retriever.setDataSource(mediaData!!.filePath)
         val metaRotation =
             retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)
         val rotation = metaRotation?.toInt() ?: 0
@@ -334,6 +336,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
                     Log.d("CommandExecute", "onSuccess  $s")
                     Toast.makeText(applicationContext, "Success", Toast.LENGTH_SHORT).show()
                     viewModel.editedImageFiles(output!!, playlistName)
+                    viewModel.delete(mediaData!!)
                 }
 
                 override fun onProgress(s: String) {

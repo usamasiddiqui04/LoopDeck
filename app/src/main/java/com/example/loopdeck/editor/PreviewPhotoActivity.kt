@@ -24,6 +24,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.loopdeck.R
+import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.data.MediaRepository
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.example.loopdeck.editor.filter.FilterListener
@@ -64,6 +65,7 @@ class PreviewPhotoActivity : AppCompatActivity(), OnPhotoEditorListener,
     private var brushArtFragment: BrushArtFragment? = null
     private var mStickerBSFragment: StickerBSFragment? = null
     private lateinit var viewModel: CollectionViewModel
+    var mediaData: MediaData? = null
 
     val soundPickerFragment = SoundPickerFragment.newInstance(
         soundPickerListener = this,
@@ -83,12 +85,12 @@ class PreviewPhotoActivity : AppCompatActivity(), OnPhotoEditorListener,
         initViews()
 
 
-        imgPath = intent.getStringExtra("imagePath")
-        playListName = intent.getStringExtra("playlistName")
-        masterImageFile = File(imgPath)
+        mediaData = intent!!.getParcelableExtra("mediaData")
+        playListName = mediaData!!.playListName
+        masterImageFile = File(mediaData!!.filePath)
 
         //        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-        ivImage!!.source?.let { Glide.with(this).load(imgPath).into(it) }
+        ivImage!!.source?.let { Glide.with(this).load(mediaData!!.filePath).into(it) }
         //        Glide.with(this).load(R.drawable.trans).into(binding.ivImage.getSource());
     }
 
@@ -257,9 +259,9 @@ class PreviewPhotoActivity : AppCompatActivity(), OnPhotoEditorListener,
     @SuppressLint("MissingPermission")
     private fun saveImage() {
         val file = File(
-            (Environment.getExternalStorageDirectory()
-                .toString() + File.separator + ""
-                    + System.currentTimeMillis() + ".png")
+            getExternalFilesDir(null)!!.absolutePath, ROOT_DIRECTORY_NAME
+                    + File.separator + ""
+                    + System.currentTimeMillis() + ".png"
         )
         try {
             file.createNewFile()
@@ -278,6 +280,10 @@ class PreviewPhotoActivity : AppCompatActivity(), OnPhotoEditorListener,
                             "Saved successfully...",
                             Toast.LENGTH_SHORT
                         ).show()
+
+                        viewModel.editedImageFiles(file, playListName)
+                        viewModel.delete(mediaData!!)
+
                     }
 
                     override fun onFailure(exception: Exception) {
@@ -416,6 +422,7 @@ class PreviewPhotoActivity : AppCompatActivity(), OnPhotoEditorListener,
         private val TAG = PreviewPhotoActivity::class.java.simpleName
         private val CAMERA_REQUEST = 52
         private val PICK_REQUEST = 53
+        const val ROOT_DIRECTORY_NAME = "Loopdeck Media Files"
     }
 
     override fun onFilterSelected(photoFilter: PhotoFilter) {
