@@ -352,6 +352,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
                 override fun onStart() {
                     progressDialog!!.setTitle("Downloading file please wait a sec...")
                     progressDialog!!.setMessage("Starting")
+                    progressDialog!!.setCanceledOnTouchOutside(false)
                     progressDialog!!.show()
                 }
 
