@@ -544,7 +544,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
             output?.createNewFile()
             exeCmd!!.add("-y")
             exeCmd!!.add("-i")
-            exeCmd!!.add(videoPath!!)
+            exeCmd!!.add(masterVideoFile!!.absolutePath)
             //            exeCmd.add("-framerate 30000/1001 -loop 1");
             exeCmd!!.add("-i")
             exeCmd!!.add(imagePath!!)
