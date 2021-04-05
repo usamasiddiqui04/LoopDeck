@@ -350,7 +350,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
                 }
 
                 override fun onStart() {
-                    progressDialog!!.setTitle("Preccesing")
+                    progressDialog!!.setTitle("Downloading file please wait a sec...")
                     progressDialog!!.setMessage("Starting")
                     progressDialog!!.show()
                 }
@@ -516,11 +516,6 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
                         Log.d("imagePath>>", imagePath)
                         Log.d("imagePath2>>", Uri.fromFile(File(imagePath)).toString())
                         ivImage!!.source?.setImageURI(Uri.fromFile(File(imagePath)))
-                        Toast.makeText(
-                            this@PreviewVideoActivity,
-                            "Saved successfully...",
-                            Toast.LENGTH_SHORT
-                        ).show()
                         applayWaterMark()
                     }
 
