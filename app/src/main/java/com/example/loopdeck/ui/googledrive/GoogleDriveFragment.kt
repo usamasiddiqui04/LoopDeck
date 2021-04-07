@@ -18,7 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
-class GoogleDriveFragment : Fragment(), GoogleDriveController.GoogleDriveDownloadProgress {
+class GoogleDriveFragment : Fragment() {
 
     companion object {
         private const val KEY_NAME = "playlistName"
@@ -58,10 +58,6 @@ class GoogleDriveFragment : Fragment(), GoogleDriveController.GoogleDriveDownloa
             GoogleDriveController.download(requireContext(), ioScope, mediaData, playlistName)
         } else if (mediaData.mimeType.contains("video/")) {
             GoogleDriveController.download(requireContext(), ioScope, mediaData, playlistName)
-        } else if (mediaData.mimeType.contains("application/vnd.google-apps.folder")) {
-            toast(mediaData.name)
-        } else {
-            toast("This file cant be download")
         }
 
 
@@ -87,8 +83,6 @@ class GoogleDriveFragment : Fragment(), GoogleDriveController.GoogleDriveDownloa
         GoogleDriveController.init(requireActivity().application)
         GoogleDriveController.getDrivefiles()
         progressDialog = ProgressDialog(context)
-        GoogleDriveController.setGoogleDriveDownloadListner(this)
-
     }
 
 
@@ -110,15 +104,6 @@ class GoogleDriveFragment : Fragment(), GoogleDriveController.GoogleDriveDownloa
 
     }
 
-    override fun InProgress() {
-        progressDialog!!.setMessage("Downloading file please wait a sec.....")
-        progressDialog!!.setCanceledOnTouchOutside(false)
-        progressDialog!!.show()
-    }
-
-    override fun onComplete() {
-        progressDialog!!.dismiss()
-    }
 
 
 }

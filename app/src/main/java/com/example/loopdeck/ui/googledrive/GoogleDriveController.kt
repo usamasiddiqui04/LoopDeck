@@ -1,13 +1,20 @@
 package com.example.loopdeck.ui.googledrive
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Application
+import android.app.DownloadManager
+import android.app.ProgressDialog
 import android.content.Context
+import android.content.Context.DOWNLOAD_SERVICE
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.MutableLiveData
+import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaDatabase
 import com.example.loopdeck.data.MediaRepository
 import com.example.loopdeck.googledrive.DriveQuickstart
@@ -26,6 +33,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
 import java.lang.reflect.InvocationTargetException
+import kotlin.coroutines.coroutineContext
 
 
 object GoogleDriveController {
@@ -38,7 +46,8 @@ object GoogleDriveController {
     val HTTP_TRANSPORT = com.google.api.client.http.javanet.NetHttpTransport()
 
     lateinit var service: Drive
-    var googleDriveDownloadProgress: GoogleDriveDownloadProgress? = null
+
+    var progressDialog: ProgressDialog? = null
 
     var initComplete: Boolean = false
 
@@ -80,6 +89,7 @@ object GoogleDriveController {
 //            .execute()
 
         getDriveImages()
+        progressDialog = ProgressDialog(application.applicationContext)
 
 
 
@@ -87,9 +97,6 @@ object GoogleDriveController {
         initComplete = true
     }
 
-    fun setGoogleDriveDownloadListner(googleDriveDownloadProgress: GoogleDriveDownloadProgress) {
-        this.googleDriveDownloadProgress = googleDriveDownloadProgress
-    }
 
     fun getDriveImages() {
         result = service.files().list()
@@ -166,14 +173,8 @@ object GoogleDriveController {
             when (downloader.downloadState) {
                 DownloadState.MEDIA_IN_PROGRESS -> {
                     Log.d("Google Drive Download", "${downloader.progress}")
-                    Handler(Looper.getMainLooper()).post {
-                        googleDriveDownloadProgress!!.InProgress()
-                    }
                 }
                 DownloadState.MEDIA_COMPLETE -> {
-                    Handler(Looper.getMainLooper()).post {
-                        googleDriveDownloadProgress!!.onComplete()
-                    }
                     Log.d("Google Drive Download", " File Downloaded")
 
                     if (playlistName.isNotEmpty()) {
@@ -207,11 +208,8 @@ object GoogleDriveController {
                 }
             }
         }
+
     }
 
-    interface GoogleDriveDownloadProgress {
-        fun InProgress()
-        fun onComplete()
-    }
 
 }
