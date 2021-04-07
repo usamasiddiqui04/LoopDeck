@@ -1,5 +1,6 @@
 package com.example.loopdeck.ui.googledrive
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,10 +18,22 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
-class GoogleDriveFragment : Fragment() {
+class GoogleDriveFragment : Fragment(), GoogleDriveController.GoogleDriveDownloadProgress {
 
     companion object {
-        fun newInstance() = GoogleDriveFragment()
+        private const val KEY_NAME = "playlistName"
+        fun newInstance(playlistName: String?) = GoogleDriveFragment().apply {
+            val args = Bundle()
+            args.putString(KEY_NAME, playlistName)
+            arguments = args
+        }
+    }
+
+    var progressDialog: ProgressDialog? = null
+
+
+    private val playlistName by lazy {
+        arguments?.getString(KEY_NAME)
     }
 
 
@@ -42,9 +55,9 @@ class GoogleDriveFragment : Fragment() {
 
     private val onItemClickListener: (File) -> Unit = { mediaData ->
         if (mediaData.mimeType.contains("image/")) {
-            GoogleDriveController.download(requireContext(), ioScope, mediaData)
+            GoogleDriveController.download(requireContext(), ioScope, mediaData, playlistName)
         } else if (mediaData.mimeType.contains("video/")) {
-            GoogleDriveController.download(requireContext(), ioScope, mediaData)
+            GoogleDriveController.download(requireContext(), ioScope, mediaData, playlistName)
         } else if (mediaData.mimeType.contains("application/vnd.google-apps.folder")) {
             toast(mediaData.name)
         } else {
@@ -73,6 +86,8 @@ class GoogleDriveFragment : Fragment() {
         initObservers()
         GoogleDriveController.init(requireActivity().application)
         GoogleDriveController.getDrivefiles()
+        progressDialog = ProgressDialog(context)
+        GoogleDriveController.setGoogleDriveDownloadListner(this)
 
     }
 
@@ -93,6 +108,16 @@ class GoogleDriveFragment : Fragment() {
                 googleDriveFileAdaptor.submitList(recentsList.distinctBy { it.name })
             })
 
+    }
+
+    override fun InProgress() {
+        progressDialog!!.setMessage("Downloading file please wait a sec.....")
+        progressDialog!!.setCanceledOnTouchOutside(false)
+        progressDialog!!.show()
+    }
+
+    override fun onComplete() {
+        progressDialog!!.dismiss()
     }
 
 

@@ -193,6 +193,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             i.putExtra("IMAGES_LIMIT", 100)
             i.putExtra("VIDEOS_LIMIT", 100)
             i.putExtra("REQUEST_RESULT_CODE", REQUEST_RESULT_CODE)
+            i.putExtra("playlistName", "")
             startActivityForResult(i, REQUEST_RESULT_CODE)
         }
         (activity as AppCompatActivity?)!!.setSupportActionBar(toolbar)
@@ -232,6 +233,7 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             i.putExtra("IMAGES_LIMIT", 1000)
             i.putExtra("VIDEOS_LIMIT", 1000)
             i.putExtra("REQUEST_RESULT_CODE", REQUEST_RESULT_CODE)
+            i.putExtra("playlistName", "")
             startActivityForResult(i, REQUEST_RESULT_CODE)
         }
 

@@ -1,8 +1,11 @@
 package com.example.loopdeck.ui.collection.playlist
 
+import android.app.ProgressDialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -25,22 +28,31 @@ import com.example.loopdeck.gallery.view.PickerActivity
 import com.example.loopdeck.ui.adapters.MediaAdaptor
 import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.utils.callbacks.ItemMoveCallback
+import com.example.loopdeck.utils.extensions.toast
+import com.obs.marveleditor.OptiVideoEditor
+import com.obs.marveleditor.interfaces.OptiFFMpegCallback
+import com.obs.marveleditor.utils.OptiConstant
+import com.obs.marveleditor.utils.OptiUtils
 import kotlinx.android.synthetic.main.fragment_playlist.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.selectitem
 import kotlinx.android.synthetic.main.item_recent_list_images.view.*
 import kotlinx.android.synthetic.main.item_recent_video_lists.view.*
+import java.io.File
 import java.util.*
 
 
-class PlaylistFragment : Fragment() {
+class PlaylistFragment : Fragment(), OptiFFMpegCallback {
 
     private var Selectlist = ArrayList<MediaData>()
+    private var tagName: String = PlaylistFragment::class.java.simpleName
     private var viewholder: RecyclerView.ViewHolder? = null
     var filepath: String? = null
     private var selectedList = ArrayList<MediaData>()
     var mediaData: MediaData? = null
     var multiSelection: Boolean = false
+    var progressDialog: ProgressDialog? = null
+    var sharedpreferences: SharedPreferences? = null
 
     private val playlistName by lazy {
         arguments?.getString(KEY_NAME)
@@ -130,15 +142,14 @@ class PlaylistFragment : Fragment() {
                 when (mediadata.mediaType) {
                     MediaType.IMAGE -> {
                         val intent = Intent(requireContext(), PreviewPhotoActivity::class.java)
-                        intent.putExtra("imagePath", mediadata.filePath)
-                        intent.putExtra("playlistName", mediadata.playListName)
+                        intent.putExtra("mediaData", mediadata)
                         startActivity(intent)
                     }
                     MediaType.VIDEO -> {
                         val intent = Intent(requireContext(), PreviewVideoActivity::class.java)
-                        intent.putExtra("videoPath", mediadata.filePath)
-                        intent.putExtra("playlistName", mediadata.playListName)
+                        intent.putExtra("mediaData", mediadata)
                         startActivity(intent)
+
                     }
                     else -> {
                         requireActivity().supportFragmentManager.beginTransaction()
@@ -180,6 +191,8 @@ class PlaylistFragment : Fragment() {
         val callback = ItemMoveCallback(mediaAdapter)
         touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(recyclerview)
+        progressDialog = ProgressDialog(requireContext())
+
 
 
         btnGallery.setOnClickListener {
@@ -188,6 +201,7 @@ class PlaylistFragment : Fragment() {
             i.putExtra("IMAGES_LIMIT", 100)
             i.putExtra("VIDEOS_LIMIT", 100)
             i.putExtra("REQUEST_RESULT_CODE", REQUEST_RESULT_CODE)
+            i.putExtra("playlistName", playlistName)
             startActivityForResult(i, REQUEST_RESULT_CODE)
         }
 
@@ -199,6 +213,28 @@ class PlaylistFragment : Fragment() {
 
         btnBack.setOnClickListener {
             activity?.onBackPressed()
+        }
+
+        btnplay.setOnClickListener {
+            val videoFileOne = File(selectedList[0].filePath)
+            val videoFileTwo = File(selectedList[1].filePath)
+            val videoFilethree = File(selectedList[2].filePath)
+            var sb = StringBuilder()
+
+
+            val outputFile = OptiUtils.createVideoFile(context!!)
+
+            outputFile?.let {
+                toast(outputFile.path.toString())
+                OptiVideoEditor.with(context!!)
+                    .setType(OptiConstant.MERGE_VIDEO)
+                    .setVideoFile(videoFileOne)
+                    .setFileTwo(videoFileTwo)
+                    .setFilePathThree(videoFilethree)
+                    .setOutputPath(it.path)
+                    .setCallback(this)
+                    .main()
+            }
         }
 
         initContainer()
@@ -251,6 +287,35 @@ class PlaylistFragment : Fragment() {
             " Deleted successfully ${mediaData.name}",
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    override fun onProgress(progress: String) {
+        progressDialog!!.setMessage("Converting please wait")
+        progressDialog!!.setCanceledOnTouchOutside(false)
+        progressDialog!!.show()
+    }
+
+    override fun onSuccess(convertedFile: File, type: String) {
+        toast("Success")
+        toast(convertedFile.toString())
+        viewModel.editedImageFiles(convertedFile, playlistName)
+        progressDialog!!.dismiss()
+    }
+
+    override fun onFailure(error: Exception) {
+        progressDialog!!.dismiss()
+        Log.d(tagName, "onFailure " + error.message)
+
+        toast(error.toString())
+    }
+
+    override fun onNotAvailable(error: Exception) {
+        Log.d(tagName, "onNotAvailable() " + error.message)
+        Log.v(tagName, "Exception: ${error.localizedMessage}")
+    }
+
+    override fun onFinish() {
+        Log.d(tagName, "onFinish()")
     }
 
 

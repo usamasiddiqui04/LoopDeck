@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.example.loopdeck.R
+import com.example.loopdeck.editor.PreviewPhotoActivity
 import com.example.loopdeck.onedrive.ApiExplorer
 import com.example.loopdeck.ui.googledrive.GoogleDriveActivity
 import kotlinx.android.synthetic.main.activity_picker.*
@@ -39,6 +40,7 @@ class PickerActivity : AppCompatActivity() {
     var IMAGES_THRESHOLD = 0
     var VIDEOS_THRESHOLD = 0
     var REQUEST_RESULT_CODE = 101
+    var playlistName: String? = null
     val array: Array<String>? = null
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -50,6 +52,7 @@ class PickerActivity : AppCompatActivity() {
         IMAGES_THRESHOLD = i.getIntExtra("IMAGES_LIMIT", 0)
         VIDEOS_THRESHOLD = i.getIntExtra("VIDEOS_LIMIT", 0)
         REQUEST_RESULT_CODE = i.getIntExtra("REQUEST_RESULT_CODE", 0)
+        playlistName = intent!!.getStringExtra("playlistName")
 
         setUpViewPager(viewpager)
         tabs.setupWithViewPager(viewpager)
@@ -71,12 +74,10 @@ class PickerActivity : AppCompatActivity() {
 
 
         btnGoogleDrive.setOnClickListener {
-            startActivity(
-                Intent(
-                    this,
-                    GoogleDriveActivity::class.java
-                )
-            )
+
+            val intent = Intent(applicationContext, GoogleDriveActivity::class.java)
+            intent.putExtra("playlistName", playlistName)
+            startActivity(intent)
         }
 
 

@@ -29,6 +29,8 @@ class OptiVideoEditor private constructor(private val context: Context) {
     private var outputFilePath = ""
     private var type: Int? = null
     private var position: String? = null
+    var videoPathOne: String? = null
+    var videoFileThree: File? = null
 
     //for adding text
     private var font: File? = null
@@ -50,6 +52,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
     private var startTime = "00:00:00"
     private var endTime = "00:00:00"
     private var audioFile: File? = null
+    private var listOfVideos: ArrayList<String>? = null
 
     //for filter
     private var filterCommand: String? = null
@@ -115,6 +118,11 @@ class OptiVideoEditor private constructor(private val context: Context) {
         return this
     }
 
+    fun setFilePathThree(file: File): OptiVideoEditor {
+        videoFileThree = file
+        return this
+    }
+
     fun setFont(font: File): OptiVideoEditor {
         this.font = font
         return this
@@ -158,6 +166,10 @@ class OptiVideoEditor private constructor(private val context: Context) {
             if (havingAudio) "[0:v]setpts=$playbackSpeed*PTS[v];[0:a]atempo=$tempo[a]" else "setpts=$playbackSpeed*PTS"
         Log.v(tagName, "ffmpegFS: $ffmpegFS")
         return this
+    }
+
+    fun listOfVideos(videosList: ArrayList<String>) {
+        listOfVideos = videosList
     }
 
     fun setStartTime(startTime: String): OptiVideoEditor {
@@ -232,18 +244,19 @@ class OptiVideoEditor private constructor(private val context: Context) {
                 )
             }
 
+
             OptiConstant.MERGE_VIDEO -> {
-                //Merge videos - Need two video file, approx video size & output file
+
                 cmd = arrayOf(
                     "-y",
                     "-i",
                     videoFile!!.path,
                     "-i",
                     videoFileTwo!!.path,
-                    "-strict",
-                    "experimental",
+                    "-i",
+                    videoFileThree!!.path,
                     "-filter_complex",
-                    "[0:v]scale=iw*min(1920/iw\\,1080/ih):ih*min(1920/iw\\,1080/ih), pad=1920:1080:(1920-iw*min(1920/iw\\,1080/ih))/2:(1080-ih*min(1920/iw\\,1080/ih))/2,setsar=1:1[v0];[1:v] scale=iw*min(1920/iw\\,1080/ih):ih*min(1920/iw\\,1080/ih), pad=1920:1080:(1920-iw*min(1920/iw\\,1080/ih))/2:(1080-ih*min(1920/iw\\,1080/ih))/2,setsar=1:1[v1];[v0][0:a][v1][1:a] concat=n=2:v=1:a=1",
+                    "[0:v]scale=480x640,setsar=1[v0];[1:v]scale=480x640,setsar=1[v1];[2:v]scale=480x640,setsar=1[v2];[v0][0:a][v1][1:a][v2][2:a]concat=n=3:v=1:a=1",
                     "-ab",
                     "48000",
                     "-ac",
@@ -251,17 +264,48 @@ class OptiVideoEditor private constructor(private val context: Context) {
                     "-ar",
                     "22050",
                     "-s",
-                    "1920x1080",
+                    "480x640",
                     "-vcodec",
                     "libx264",
                     "-crf",
                     "27",
-                    "-q",
-                    "4",
                     "-preset",
                     "ultrafast",
-                    outputFile.path
+                    outputFilePath
                 )
+
+//                cmd = arrayOf("-y", "-i",videoFile!!.path, "-i", videoFileTwo!!.path,"-i" ,videoFileThree!!.path, "-strict", "experimental", "-filter_complex",
+//                    "[0:v]scale=iw*min(1920/iw\\,1080/ih):ih*min(1920/iw\\,1080/ih), pad=1920:1080:(1920-iw*min(1920/iw\\,1080/ih))/2:(1080-ih*min(1920/iw\\,1080/ih))/2,setsar=1:1[v0];[1:v] scale=iw*min(1920/iw\\,1080/ih):ih*min(1920/iw\\,1080/ih), pad=1920:1080:(1920-iw*min(1920/iw\\,1080/ih))/2:(1080-ih*min(1920/iw\\,1080/ih))/2,setsar=1:1[v1];[v0][0:a][v1][1:a] concat=n=2:v=1:a=1",
+//                    "-ab", "48000", "-ac", "2", "-ar", "22050", "-s", "1920x1080", "-vcodec", "libx264", "-crf", "27", "-q", "4", "-preset", "ultrafast", outputFilePath)
+                //Merge videos - Need two video file, approx video size & output file
+//                cmd = arrayOf(
+//                    "-y",
+//                    "-i",
+//                    videoPathOne!!,
+//                    "-i",
+//                    videoPathTwo!!,
+//                    "-strict",
+//                    "experimental",
+//                    "-filter_complex",
+//                    "[0:v]scale=iw*min(1920/iw\\,1080/ih):ih*min(1920/iw\\,1080/ih), pad=1920:1080:(1920-iw*min(1920/iw\\,1080/ih))/2:(1080-ih*min(1920/iw\\,1080/ih))/2,setsar=1:1[v0];[1:v] scale=iw*min(1920/iw\\,1080/ih):ih*min(1920/iw\\,1080/ih), pad=1920:1080:(1920-iw*min(1920/iw\\,1080/ih))/2:(1080-ih*min(1920/iw\\,1080/ih))/2,setsar=1:1[v1];[v0][0:a][v1][1:a] concat=n=2:v=1:a=1",
+//                    "-ab",
+//                    "48000",
+//                    "-ac",
+//                    "2",
+//                    "-ar",
+//                    "22050",
+//                    "-s",
+//                    "1920x1080",
+//                    "-vcodec",
+//                    "libx264",
+//                    "-crf",
+//                    "27",
+//                    "-q",
+//                    "4",
+//                    "-preset",
+//                    "ultrafast",
+//                    outputFile.path
+//                )
             }
 
             OptiConstant.VIDEO_PLAYBACK_SPEED -> {

@@ -3,6 +3,8 @@ package com.example.loopdeck.ui.googledrive
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
@@ -25,6 +27,7 @@ import java.io.IOException
 import java.io.OutputStream
 import java.lang.reflect.InvocationTargetException
 
+
 object GoogleDriveController {
 
     val googleDriveFilesLiveData = MutableLiveData<List<File>>()
@@ -35,13 +38,13 @@ object GoogleDriveController {
     val HTTP_TRANSPORT = com.google.api.client.http.javanet.NetHttpTransport()
 
     lateinit var service: Drive
+    var googleDriveDownloadProgress: GoogleDriveDownloadProgress? = null
 
     var initComplete: Boolean = false
 
     var destinationFolder = "/GoogleDriveFiles/"
 
     lateinit var result: FileList
-
     fun getDrivefiles() {
 
         if (!initComplete)
@@ -79,7 +82,13 @@ object GoogleDriveController {
         getDriveImages()
 
 
+
+
         initComplete = true
+    }
+
+    fun setGoogleDriveDownloadListner(googleDriveDownloadProgress: GoogleDriveDownloadProgress) {
+        this.googleDriveDownloadProgress = googleDriveDownloadProgress
     }
 
     fun getDriveImages() {
@@ -97,18 +106,18 @@ object GoogleDriveController {
         }
     }
 
-    fun download(context: Context, scope: CoroutineScope, file: File) {
+    fun download(context: Context, scope: CoroutineScope, file: File, playlistName: String?) {
 
         if (!initComplete)
             return
 
         scope.launch(Dispatchers.IO) {
-            downloadfiles(context, file)
+            downloadfiles(context, file, playlistName!!)
         }
     }
 
 
-    fun downloadfiles(context: Context, file: File) {
+    fun downloadfiles(context: Context, file: File, playlistName: String) {
         try {
 
             if (!initComplete)
@@ -133,7 +142,7 @@ object GoogleDriveController {
 //            customProgressListener.
             downloadableFile.mediaHttpDownloader.setProgressListener(
                 DownloadProgressListener(
-                    destinationPath
+                    destinationPath, playlistName
                 )
             )
 //                .setChunkSize(1000)
@@ -150,33 +159,59 @@ object GoogleDriveController {
     }
 
 
-    internal class DownloadProgressListener(val destinationPath: String) :
+    internal class DownloadProgressListener(val destinationPath: String, val playlistName: String) :
         MediaHttpDownloaderProgressListener {
         @Throws(IOException::class)
         override fun progressChanged(downloader: MediaHttpDownloader) {
             when (downloader.downloadState) {
                 DownloadState.MEDIA_IN_PROGRESS -> {
                     Log.d("Google Drive Download", "${downloader.progress}")
+                    Handler(Looper.getMainLooper()).post {
+                        googleDriveDownloadProgress!!.InProgress()
+                    }
                 }
                 DownloadState.MEDIA_COMPLETE -> {
+                    Handler(Looper.getMainLooper()).post {
+                        googleDriveDownloadProgress!!.onComplete()
+                    }
                     Log.d("Google Drive Download", " File Downloaded")
 
+                    if (playlistName.isNotEmpty()) {
+                        if (java.io.File(destinationPath).isImage()) {
+                            repository!!.addMediaOrPlaylist(
+                                java.io.File(destinationPath),
+                                playlistName
 
-                    if (java.io.File(destinationPath).isImage()) {
-                        repository!!.addMediaOrPlaylist(
-                            java.io.File(destinationPath),
-                            null
-                        )
-                    } else if (java.io.File(destinationPath).isVideo()) {
-                        repository!!.addMediaOrPlaylist(
-                            java.io.File(destinationPath),
-                            null
-                        )
+                            )
+                        } else if (java.io.File(destinationPath).isVideo()) {
+                            repository!!.addMediaOrPlaylist(
+                                java.io.File(destinationPath),
+                                playlistName
+                            )
+                        }
+                    } else {
+                        if (java.io.File(destinationPath).isImage()) {
+                            repository!!.addMediaOrPlaylist(
+                                java.io.File(destinationPath),
+                                null
+
+                            )
+                        } else if (java.io.File(destinationPath).isVideo()) {
+                            repository!!.addMediaOrPlaylist(
+                                java.io.File(destinationPath),
+                                null
+                            )
+                        }
                     }
 
                 }
             }
         }
+    }
+
+    interface GoogleDriveDownloadProgress {
+        fun InProgress()
+        fun onComplete()
     }
 
 }
