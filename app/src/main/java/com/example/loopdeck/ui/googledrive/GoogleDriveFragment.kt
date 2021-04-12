@@ -10,8 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.loopdeck.R
 import com.example.loopdeck.imageloader.GlideImageLoader
-import com.example.loopdeck.ui.adapters.GoogleDriveAdaptor
-import com.example.loopdeck.utils.extensions.toast
 import com.google.api.services.drive.model.File
 import kotlinx.android.synthetic.main.fragment_googlrdrive.*
 import kotlinx.coroutines.CoroutineScope

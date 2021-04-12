@@ -1,4 +1,4 @@
-package com.xorbix.loopdeck.cameraapp
+package com.example.loopdeck
 
 import android.content.Context
 import android.content.Intent
@@ -32,6 +32,7 @@ internal object BitmapUtils {
             storageDir /* directory */
         )
     }
+
     /**
      * Deletes image file for a given path.
      *

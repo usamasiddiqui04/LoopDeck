@@ -4,8 +4,8 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.loopdeck.utils.extensions.getMediaType
 import com.example.loopdeck.gallery.model.GalleryData
+import com.example.loopdeck.utils.extensions.getMediaType
 import java.util.*
 
 @Entity(tableName = "MediaFileTable")
@@ -19,7 +19,7 @@ data class MediaData(
     val mediaType: String,
     val createdAt: Date? = null,
     val modifiedAt: Date? = null,
-    val playListName: String? = null //Foriegn Lkey,
+    val playListName: String? = null
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),

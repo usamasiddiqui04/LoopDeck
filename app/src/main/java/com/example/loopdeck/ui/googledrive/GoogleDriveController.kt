@@ -1,20 +1,12 @@
 package com.example.loopdeck.ui.googledrive
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Application
-import android.app.DownloadManager
 import android.app.ProgressDialog
 import android.content.Context
-import android.content.Context.DOWNLOAD_SERVICE
-import android.net.Uri
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.MutableLiveData
-import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaDatabase
 import com.example.loopdeck.data.MediaRepository
 import com.example.loopdeck.googledrive.DriveQuickstart
@@ -33,7 +25,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
 import java.lang.reflect.InvocationTargetException
-import kotlin.coroutines.coroutineContext
 
 
 object GoogleDriveController {

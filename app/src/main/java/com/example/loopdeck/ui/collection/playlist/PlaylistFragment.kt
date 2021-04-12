@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.DragEvent
 import android.view.LayoutInflater
@@ -34,6 +36,11 @@ import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.utils.OptiUtils
 import kotlinx.android.synthetic.main.fragment_playlist.*
+import kotlinx.android.synthetic.main.fragment_playlist.bottomLayout
+import kotlinx.android.synthetic.main.fragment_playlist.btnDelete
+import kotlinx.android.synthetic.main.fragment_playlist.btnplay
+import kotlinx.android.synthetic.main.fragment_playlist.recyclerview
+import kotlinx.android.synthetic.main.fragment_recents.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.selectitem
 import kotlinx.android.synthetic.main.item_recent_list_images.view.*
@@ -206,9 +213,7 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
         }
 
         btnDelete.setOnClickListener {
-            for (list in Selectlist) {
-                viewModel.delete(list)
-            }
+            deleteMediaFiles()
         }
 
         btnBack.setOnClickListener {
@@ -234,6 +239,13 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
                     .setOutputPath(it.path)
                     .setCallback(this)
                     .main()
+            }
+        }
+
+        btnDublicate.setOnClickListener {
+
+            selectedList.forEach {
+                viewModel.dublicateMediafiles(it, playlistName)
             }
         }
 
@@ -316,6 +328,18 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
 
     override fun onFinish() {
         Log.d(tagName, "onFinish()")
+    }
+
+    fun deleteMediaFiles() {
+        Handler(Looper.getMainLooper()).postDelayed(object : Runnable {
+            override fun run() {
+                for (list in selectedList) {
+                    viewModel.delete(list)
+                }
+                selectedList.clear()
+            }
+        }, 1000)
+
     }
 
 

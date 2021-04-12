@@ -38,25 +38,22 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.loopdeck.BaseApplication
 import com.example.loopdeck.R
-import com.example.loopdeck.data.MediaRepository
 import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.example.loopdeck.utils.extensions.toast
 import com.onedrive.sdk.authentication.AccountType
 import com.onedrive.sdk.concurrency.AsyncMonitor
-import com.onedrive.sdk.concurrency.ICallback
 import com.onedrive.sdk.concurrency.IProgressCallback
 import com.onedrive.sdk.core.ClientException
 import com.onedrive.sdk.core.OneDriveErrorCodes
 import com.onedrive.sdk.extensions.*
 import com.onedrive.sdk.options.Option
 import com.onedrive.sdk.options.QueryOption
-import com.xorbix.loopdeck.cameraapp.BitmapUtils.ROOT_DIRECTORY_NAME
+import com.example.loopdeck.BitmapUtils.ROOT_DIRECTORY_NAME
 import kotlinx.android.synthetic.main.activity_api_explorer.*
 import org.json.JSONObject
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Handles interacting with Items on OneDrive

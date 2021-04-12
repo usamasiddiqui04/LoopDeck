@@ -4,17 +4,14 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
-import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import com.example.loopdeck.gallery.model.GalleryData
-import com.example.loopdeck.utils.FileUtils.uriToMediaFile
 import com.example.loopdeck.utils.extensions.getMediaType
 import com.example.loopdeck.utils.isImage
 import com.example.loopdeck.utils.isVideo
-import com.xorbix.loopdeck.cameraapp.BitmapUtils
+import com.example.loopdeck.BitmapUtils
 import java.io.*
 import java.util.*
-import kotlin.jvm.Throws
 
 class MediaRepository(private val mediaDao: MediaDao, private val context: Context) {
 

@@ -30,7 +30,7 @@ import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.ui.collection.playlist.PlaylistFragment
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.google.android.material.navigation.NavigationView
-import com.xorbix.loopdeck.cameraapp.BitmapUtils
+import com.example.loopdeck.BitmapUtils
 import kotlinx.android.synthetic.main.dailogbox.view.*
 import kotlinx.android.synthetic.main.fragment_recents.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
