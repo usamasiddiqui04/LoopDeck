@@ -115,43 +115,117 @@
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent">
 
-
-            <ImageView
-                android:id="@+id/btnDelete"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_icontrashcan"
-                android:layout_weight="1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:layout_weight="1">
 
-            <ImageView
-                android:id="@+id/btnCreate"
+                <ImageView
+                    android:id="@+id/btnDelete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_icontrashcan"
+                    app:layout_constraintBottom_toTopOf="@id/textDelete"
+                    app:layout_constraintEnd_toEndOf="@id/textDelete"
+                    app:layout_constraintStart_toStartOf="@id/textDelete" />
+
+
+                <TextView
+                    android:id="@+id/textDelete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Delete"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_iconedit"
-                android:layout_weight="1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:layout_weight="1">
 
-            <ImageView
-                android:id="@+id/btndublicate"
+                <ImageView
+                    android:id="@+id/btnCreate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_iconedit"
+                    app:layout_constraintBottom_toTopOf="@id/textCreate"
+                    app:layout_constraintEnd_toEndOf="@id/textCreate"
+                    app:layout_constraintStart_toStartOf="@id/textCreate" />
+
+                <TextView
+                    android:id="@+id/textCreate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Edit"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/ic_iconplaylistadd"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:layout_weight="1">
 
-            <ImageView
-                android:id="@+id/btnmove"
+                <ImageView
+                    android:id="@+id/btndublicate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_iconplaylistadd"
+                    app:layout_constraintBottom_toTopOf="@id/textDublicate"
+                    app:layout_constraintEnd_toEndOf="@id/textDublicate"
+                    app:layout_constraintStart_toStartOf="@id/textDublicate" />
+
+
+                <TextView
+                    android:id="@+id/textDublicate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Dublicate"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/ic_iconduplicate"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:layout_weight="1">
 
+                <ImageView
+                    android:id="@+id/btnmove"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_iconduplicate"
+                    app:layout_constraintBottom_toTopOf="@id/textMove"
+                    app:layout_constraintEnd_toEndOf="@id/textMove"
+                    app:layout_constraintStart_toStartOf="@id/textMove" />
+
+
+                <TextView
+                    android:id="@+id/textMove"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Move"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </LinearLayout>

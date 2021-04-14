@@ -34,6 +34,7 @@ import java.util.*
 class TextEditorDialogFragment : DialogFragment() {
     private var mAddTextEditText: EditText? = null
     private var mAddTextDoneTextView: ImageView? = null
+    private var close: ImageView? = null
     private var mInputMethodManager: InputMethodManager? = null
     private var mColorCode = 0
     private var mTextEditor: TextEditor? = null
@@ -68,6 +69,7 @@ class TextEditorDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mAddTextEditText = view.findViewById(R.id.add_text_edit_text)
+        close = view.findViewById(R.id.close)
         mInputMethodManager =
             activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         mAddTextDoneTextView = view.findViewById(R.id.add_text_done_tv)
@@ -105,6 +107,10 @@ class TextEditorDialogFragment : DialogFragment() {
             add_text_color_picker_recyclerview.visibility = View.VISIBLE
             reyFonts.visibility = View.GONE
             check = true
+        }
+
+        close!!.setOnClickListener {
+            dismiss()
         }
 
 

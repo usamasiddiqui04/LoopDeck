@@ -130,8 +130,11 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 
         //        binding = DataBindingUtil.setContentView(this, R.layout.activity_preview_video);
         mediaData = intent!!.getParcelableExtra("mediaData")
-        playlistName = mediaData!!.playListName
-        masterVideoFile = File(mediaData!!.filePath)
+        mediaData!!.let {
+            playlistName = mediaData!!.playListName
+            masterVideoFile = File(mediaData!!.filePath)
+        }
+
         initViews()
         //        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
 //        Glide.with(this).load(getIntent().getStringExtra("DATA")).into(binding.ivImage.getSource());

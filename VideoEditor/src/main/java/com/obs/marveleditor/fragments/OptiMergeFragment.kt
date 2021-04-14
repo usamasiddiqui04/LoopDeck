@@ -82,13 +82,13 @@ class OptiMergeFragment : BottomSheetDialogFragment(), OptiDialogueHelper, OptiF
                 val outputFile = OptiUtils.createVideoFile(context!!)
                 Log.v(tagName, "outputFile: ${outputFile.absolutePath}")
 
-                OptiVideoEditor.with(context!!)
-                    .setType(OptiConstant.MERGE_VIDEO)
-                    .setVideoFile(videoFileOne!!)
-                    .setFileTwo(videoFileTwo!!)
-                    .setOutputPath(outputFile.path)
-                    .setCallback(this)
-                    .main()
+//                OptiVideoEditor.with(context!!)
+//                    .setType(OptiConstant.MERGE_VIDEO)
+//                    .setVideoFile(videoFileOne!!)
+//                    .setFileTwo(videoFileTwo!!)
+//                    .setOutputPath(outputFile.path)
+//                    .setCallback(this)
+//                    .main()
 
                 helper?.showLoading(true)
             } else {

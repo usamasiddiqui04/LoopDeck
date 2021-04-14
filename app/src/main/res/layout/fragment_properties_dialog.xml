@@ -118,7 +118,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="BRUSh"
+        android:text="BRUSH"
+        android:textAllCaps="true"
         android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/rvColors"
         app:layout_constraintStart_toStartOf="parent"

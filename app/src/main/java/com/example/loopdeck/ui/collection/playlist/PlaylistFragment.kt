@@ -36,11 +36,6 @@ import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.utils.OptiUtils
 import kotlinx.android.synthetic.main.fragment_playlist.*
-import kotlinx.android.synthetic.main.fragment_playlist.bottomLayout
-import kotlinx.android.synthetic.main.fragment_playlist.btnDelete
-import kotlinx.android.synthetic.main.fragment_playlist.btnplay
-import kotlinx.android.synthetic.main.fragment_playlist.recyclerview
-import kotlinx.android.synthetic.main.fragment_recents.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.selectitem
 import kotlinx.android.synthetic.main.item_recent_list_images.view.*
@@ -221,25 +216,29 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
         }
 
         btnplay.setOnClickListener {
-            val videoFileOne = File(selectedList[0].filePath)
-            val videoFileTwo = File(selectedList[1].filePath)
-            val videoFilethree = File(selectedList[2].filePath)
-            var sb = StringBuilder()
 
+            if (selectedList.size > 0) {
 
-            val outputFile = OptiUtils.createVideoFile(context!!)
+                val fileList = mutableListOf<File>()
+                selectedList.forEach {
+                    fileList.add(File(it.filePath))
+                }
 
-            outputFile?.let {
-                toast(outputFile.path.toString())
-                OptiVideoEditor.with(context!!)
-                    .setType(OptiConstant.MERGE_VIDEO)
-                    .setVideoFile(videoFileOne)
-                    .setFileTwo(videoFileTwo)
-                    .setFilePathThree(videoFilethree)
-                    .setOutputPath(it.path)
-                    .setCallback(this)
-                    .main()
+                val outputFile = context?.let { it1 -> OptiUtils.createVideoFile(it1) }
+
+                outputFile?.let {
+                    toast(outputFile.path.toString())
+                    OptiVideoEditor.with(context!!)
+                        .setType(OptiConstant.MERGE_VIDEO)
+                        .setMutlipleFiles(fileList)
+                        .setOutputPath(it.path)
+                        .setCallback(this)
+                        .main()
+                }
+            } else {
+                toast("Please select video files to merge and play")
             }
+
         }
 
         btnDublicate.setOnClickListener {
@@ -330,7 +329,7 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
         Log.d(tagName, "onFinish()")
     }
 
-    fun deleteMediaFiles() {
+    private fun deleteMediaFiles() {
         Handler(Looper.getMainLooper()).postDelayed(object : Runnable {
             override fun run() {
                 for (list in selectedList) {

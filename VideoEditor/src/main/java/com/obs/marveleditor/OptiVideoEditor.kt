@@ -24,6 +24,9 @@ class OptiVideoEditor private constructor(private val context: Context) {
     private var tagName: String = OptiVideoEditor::class.java.simpleName
     private var videoFile: File? = null
     private var imageFile: File? = null
+
+    private var multipleVideoFiles = mutableListOf<File>()
+
     private var videoFileTwo: File? = null
     private var callback: OptiFFMpegCallback? = null
     private var outputFilePath = ""
@@ -93,8 +96,9 @@ class OptiVideoEditor private constructor(private val context: Context) {
         return this
     }
 
-    fun setFileTwo(file: File): OptiVideoEditor {
-        this.videoFileTwo = file
+    fun setMutlipleFiles(files: List<File>): OptiVideoEditor {
+        this.multipleVideoFiles.clear()
+        this.multipleVideoFiles.addAll(files)
         return this
     }
 
@@ -197,7 +201,20 @@ class OptiVideoEditor private constructor(private val context: Context) {
                 callback!!.onFailure(IOException("Can't read the file. Missing permission?"))
                 return
             }
+        } else if (type == OptiConstant.MERGE_VIDEO) {
+            if (multipleVideoFiles.isEmpty()) {
+                callback!!.onFailure(IOException("File not exists"))
+                return
+            }
+            multipleVideoFiles.forEach {
+                if (!it.canRead()) {
+                    callback!!.onFailure(IOException("Can't read the file. Missing permission?"))
+                    return
+                }
+            }
+
         } else {
+
             if ((videoFile == null && imageFile == null) || (videoFile?.exists() != true && imageFile?.exists() != true)) {
                 callback!!.onFailure(IOException("File not exists"))
                 return
@@ -247,65 +264,70 @@ class OptiVideoEditor private constructor(private val context: Context) {
 
             OptiConstant.MERGE_VIDEO -> {
 
-                cmd = arrayOf(
-                    "-y",
-                    "-i",
-                    videoFile!!.path,
-                    "-i",
-                    videoFileTwo!!.path,
-                    "-i",
-                    videoFileThree!!.path,
-                    "-filter_complex",
-                    "[0:v]scale=480x640,setsar=1[v0];[1:v]scale=480x640,setsar=1[v1];[2:v]scale=480x640,setsar=1[v2];[v0][0:a][v1][1:a][v2][2:a]concat=n=3:v=1:a=1",
-                    "-ab",
-                    "48000",
-                    "-ac",
-                    "2",
-                    "-ar",
-                    "22050",
-                    "-s",
-                    "480x640",
-                    "-vcodec",
-                    "libx264",
-                    "-crf",
-                    "27",
-                    "-preset",
-                    "ultrafast",
-                    outputFilePath
-                )
 
-//                cmd = arrayOf("-y", "-i",videoFile!!.path, "-i", videoFileTwo!!.path,"-i" ,videoFileThree!!.path, "-strict", "experimental", "-filter_complex",
-//                    "[0:v]scale=iw*min(1920/iw\\,1080/ih):ih*min(1920/iw\\,1080/ih), pad=1920:1080:(1920-iw*min(1920/iw\\,1080/ih))/2:(1080-ih*min(1920/iw\\,1080/ih))/2,setsar=1:1[v0];[1:v] scale=iw*min(1920/iw\\,1080/ih):ih*min(1920/iw\\,1080/ih), pad=1920:1080:(1920-iw*min(1920/iw\\,1080/ih))/2:(1080-ih*min(1920/iw\\,1080/ih))/2,setsar=1:1[v1];[v0][0:a][v1][1:a] concat=n=2:v=1:a=1",
-//                    "-ab", "48000", "-ac", "2", "-ar", "22050", "-s", "1920x1080", "-vcodec", "libx264", "-crf", "27", "-q", "4", "-preset", "ultrafast", outputFilePath)
-                //Merge videos - Need two video file, approx video size & output file
-//                cmd = arrayOf(
-//                    "-y",
-//                    "-i",
-//                    videoPathOne!!,
-//                    "-i",
-//                    videoPathTwo!!,
-//                    "-strict",
-//                    "experimental",
-//                    "-filter_complex",
-//                    "[0:v]scale=iw*min(1920/iw\\,1080/ih):ih*min(1920/iw\\,1080/ih), pad=1920:1080:(1920-iw*min(1920/iw\\,1080/ih))/2:(1080-ih*min(1920/iw\\,1080/ih))/2,setsar=1:1[v0];[1:v] scale=iw*min(1920/iw\\,1080/ih):ih*min(1920/iw\\,1080/ih), pad=1920:1080:(1920-iw*min(1920/iw\\,1080/ih))/2:(1080-ih*min(1920/iw\\,1080/ih))/2,setsar=1:1[v1];[v0][0:a][v1][1:a] concat=n=2:v=1:a=1",
-//                    "-ab",
-//                    "48000",
-//                    "-ac",
-//                    "2",
-//                    "-ar",
-//                    "22050",
-//                    "-s",
-//                    "1920x1080",
-//                    "-vcodec",
-//                    "libx264",
-//                    "-crf",
-//                    "27",
-//                    "-q",
-//                    "4",
-//                    "-preset",
-//                    "ultrafast",
-//                    outputFile.path
-//                )
+//                "-filter_complex",
+//                "[0:v]scale=480x640,setsar=1[v0];" +
+//                "[1:v]scale=480x640,setsar=1[v1];" +
+//                "[2:v]scale=480x640,setsar=1[v2];" +
+//                "[v0][0:a][v1][1:a][v2][2:a]concat=n=3:v=1:a=1",
+//                "-ab",
+//                "48000",
+//                "-ac",
+//                "2",
+//                "-ar",
+//                "22050",
+//                "-s",
+//                "480x640",
+//                "-vcodec",
+//                "libx264",
+//                "-crf",
+//                "27",
+//                "-preset",
+//                "ultrafast",
+//                outputFilePath
+                val cmdList = mutableListOf<String>()
+
+                cmdList += "-y"
+                multipleVideoFiles.forEach { file ->
+                    cmdList += "-i"
+                    cmdList += file.path
+                }
+
+                cmdList += "-filter_complex"
+                var tempStr = ""
+                multipleVideoFiles.forEachIndexed { index, _ ->
+                    tempStr += "[$index:v]scale=480x640,setsar=1[v$index];"
+                }
+                cmdList += tempStr
+
+                tempStr = ""
+                multipleVideoFiles.forEachIndexed { index, _ ->
+                    tempStr += "[v$index][$index:a]"
+                }
+
+                tempStr += "concat=n=${multipleVideoFiles.size}:v=1:a=1"
+
+                cmdList += tempStr
+
+                cmdList += "-ab"
+                cmdList += "48000"
+                cmdList += "-ac"
+                cmdList += "2"
+                cmdList += "-ar"
+                cmdList += "22050"
+                cmdList += "-s"
+                cmdList += "480x640"
+                cmdList += "-vcodec"
+                cmdList += "libx264"
+                cmdList += "-crf"
+                cmdList += "27"
+                cmdList += "-preset"
+                cmdList += "ultrafast"
+                cmdList += outputFilePath
+
+                cmd = cmdList.toTypedArray()
+
+
             }
 
             OptiConstant.VIDEO_PLAYBACK_SPEED -> {
@@ -367,19 +389,41 @@ class OptiVideoEditor private constructor(private val context: Context) {
 //                ffmpeg -i still.png -i narrate.wav -acodec libvo_aacenc -vcodec libx264 final.flv
 //                -shortest -acodec copy -vcodec mjpeg
 //                ffmpeg -loop 1 -i image.jpg -i audio.wav -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -shortest out.mp4
+
+
+//                -loop_input -vframes 14490 -i imagine.jpg -i audio.mp3 -y -r 30
+//                -b 2500k -acodec ac3 -ab 384k -vcodec mpeg4 result.mp4
+
+
+//                cmd = arrayOf("-loop" ,"1","-vframes" ,"14490" , "-i" ,imageFile!!.path
+//                 , "-i",audioFile!!.path , "-y", "-r","30","-b","2500k","-acodec","ac3","-ab","384k"
+//                ,"-vcodec","mpeg4",outputFile.path)
+
                 cmd = arrayOf(
+                    "-y",
                     "-loop",
                     "1",
-                    "-y",
+                    "-r",
+                    "1",
                     "-i",
                     imageFile!!.path,
                     "-i",
                     audioFile!!.path,
-                    "-shortest",
                     "-acodec",
-                    "copy",
+                    "aac",
                     "-vcodec",
-                    "mjpeg",
+                    "mpeg4",
+                    "-s",
+                    "480x320",
+                    "-strict",
+                    "experimental",
+                    "-b:a",
+                    "32k",
+                    "-shortest",
+                    "-f",
+                    "mp4",
+                    "-r",
+                    "2",
                     outputFile.path
                 )
             }
@@ -404,9 +448,21 @@ class OptiVideoEditor private constructor(private val context: Context) {
 
 
                 cmd = arrayOf(
-                    "-i", audioFile!!.path, "-i", videoFile!!.path,
-                    "-filter_complex", "[0:a][1:a]amerge,pan=stereo:c0<c0+c2:c1<c1+c3[out]"
-                    , "-map", "1:v", "-map", "[out]", "-c:v", "copy", "-c:a", "aac", "-shortest",
+                    "-i",
+                    audioFile!!.path,
+                    "-i",
+                    videoFile!!.path,
+                    "-filter_complex",
+                    "[0:a][1:a]amerge,pan=stereo:c0<c0+c2:c1<c1+c3[out]",
+                    "-map",
+                    "1:v",
+                    "-map",
+                    "[out]",
+                    "-c:v",
+                    "copy",
+                    "-c:a",
+                    "aac",
+                    "-shortest",
                     outputFile.path
                 )
 
