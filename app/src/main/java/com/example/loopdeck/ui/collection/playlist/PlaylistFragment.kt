@@ -23,6 +23,7 @@ import com.example.loopdeck.DragData
 import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.data.MediaType
+import com.example.loopdeck.editor.PlayActivity
 import com.example.loopdeck.editor.PreviewPhotoActivity
 import com.example.loopdeck.editor.PreviewVideoActivity
 import com.example.loopdeck.gallery.model.GalleryData
@@ -55,6 +56,7 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
     var multiSelection: Boolean = false
     var progressDialog: ProgressDialog? = null
     var sharedpreferences: SharedPreferences? = null
+
 
     private val playlistName by lazy {
         arguments?.getString(KEY_NAME)
@@ -162,7 +164,7 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
                     }
                 }
             } else {
-
+                multiSelection = !selectedList.isEmpty()
                 toggleSelection(viewHolder, mediadata, list)
             }
 
@@ -308,8 +310,10 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
 
     override fun onSuccess(convertedFile: File, type: String) {
         toast("Success")
-        toast(convertedFile.toString())
-        viewModel.editedImageFiles(convertedFile, playlistName)
+        val intent = Intent(requireContext(), PlayActivity::class.java)
+        intent.putExtra("videoFilePath", convertedFile.absolutePath)
+        startActivity(intent)
+//        viewModel.editedImageFiles(convertedFile, playlistName)
         progressDialog!!.dismiss()
     }
 

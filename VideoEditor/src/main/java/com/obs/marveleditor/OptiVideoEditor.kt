@@ -263,28 +263,6 @@ class OptiVideoEditor private constructor(private val context: Context) {
 
 
             OptiConstant.MERGE_VIDEO -> {
-
-
-//                "-filter_complex",
-//                "[0:v]scale=480x640,setsar=1[v0];" +
-//                "[1:v]scale=480x640,setsar=1[v1];" +
-//                "[2:v]scale=480x640,setsar=1[v2];" +
-//                "[v0][0:a][v1][1:a][v2][2:a]concat=n=3:v=1:a=1",
-//                "-ab",
-//                "48000",
-//                "-ac",
-//                "2",
-//                "-ar",
-//                "22050",
-//                "-s",
-//                "480x640",
-//                "-vcodec",
-//                "libx264",
-//                "-crf",
-//                "27",
-//                "-preset",
-//                "ultrafast",
-//                outputFilePath
                 val cmdList = mutableListOf<String>()
 
                 cmdList += "-y"
@@ -298,9 +276,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
                 multipleVideoFiles.forEachIndexed { index, _ ->
                     tempStr += "[$index:v]scale=480x640,setsar=1[v$index];"
                 }
-                cmdList += tempStr
 
-                tempStr = ""
                 multipleVideoFiles.forEachIndexed { index, _ ->
                     tempStr += "[v$index][$index:a]"
                 }

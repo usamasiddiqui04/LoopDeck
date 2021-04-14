@@ -128,21 +128,10 @@ class PhotoEditor private constructor(builder: Builder) : BrushViewChangeListene
                         position
                     )
                 }
-
-//                boolean isBackgroundVisible = frmBorder.getTag() != null && (boolean) frmBorder.getTag();
-//                frmBorder.setBackgroundResource(isBackgroundVisible ? 0 : R.drawable.rounded_border_tv);
-//                imgClose.setVisibility(isBackgroundVisible ? View.GONE : View.VISIBLE);
-//                frmBorder.setTag(!isBackgroundVisible);
             }
 
             override fun onLongClick() {
-
                 textInputTv.visibility = View.GONE
-//                String textInput = textInputTv.getText().toString();
-//                int currentTextColor = textInputTv.getCurrentTextColor();
-//                if (mOnPhotoEditorListener != null) {
-//                    mOnPhotoEditorListener.onEditTextChangeListener(textRootView, textInput, currentTextColor);
-//                }
             }
         })
         multiTouchListener.setOnMultiTouchListener(this)
