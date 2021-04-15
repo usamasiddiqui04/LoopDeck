@@ -25,12 +25,6 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_keyboard_backspace_24" />
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView

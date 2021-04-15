@@ -1,12 +1,14 @@
 package com.example.loopdeck.ui.collection.recents
 
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -31,8 +33,20 @@ import com.example.loopdeck.ui.collection.playlist.PlaylistFragment
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.google.android.material.navigation.NavigationView
 import com.example.loopdeck.BitmapUtils
+import com.example.loopdeck.editor.PlayActivity
+import com.example.loopdeck.utils.extensions.toast
+import com.obs.marveleditor.OptiVideoEditor
+import com.obs.marveleditor.interfaces.OptiFFMpegCallback
+import com.obs.marveleditor.utils.OptiConstant
+import com.obs.marveleditor.utils.OptiUtils
 import kotlinx.android.synthetic.main.dailogbox.view.*
+import kotlinx.android.synthetic.main.fragment_playlist.*
 import kotlinx.android.synthetic.main.fragment_recents.*
+import kotlinx.android.synthetic.main.fragment_recents.bottomLayout
+import kotlinx.android.synthetic.main.fragment_recents.btnDelete
+import kotlinx.android.synthetic.main.fragment_recents.btnplay
+import kotlinx.android.synthetic.main.fragment_recents.recyclerview
+import kotlinx.android.synthetic.main.fragment_recents.toolbar
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.selectitem
 import kotlinx.android.synthetic.main.item_recent_list_images.view.*
@@ -40,12 +54,15 @@ import kotlinx.android.synthetic.main.item_recent_video_lists.view.*
 import java.io.File
 import java.util.*
 
-class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener {
+class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener,
+    OptiFFMpegCallback {
 
     private var drawer: AdvanceDrawerLayout? = null
     private var selectedList = ArrayList<MediaData>()
     var string: MediaData? = null
+    private var tagName: String = RecentsFragment::class.java.simpleName
     var multiSelection: Boolean = false
+    var progressDialog: ProgressDialog? = null
 
     companion object {
         fun newInstance() = RecentsFragment()
@@ -198,6 +215,8 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
         }
         (activity as AppCompatActivity?)!!.setSupportActionBar(toolbar)
 
+        progressDialog = ProgressDialog(requireContext())
+
 //        ViewCompat.setLayoutDirection(drawer_layout!!, ViewCompat.LAYOUT_DIRECTION_RTL)
         val toggle = ActionBarDrawerToggle(
             requireActivity(),
@@ -254,6 +273,31 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
         btnmove.setOnClickListener {
 
             moveToPlaylistNameDialog(requireContext())
+        }
+
+        btnplay.setOnClickListener {
+
+            if (selectedList.size > 0) {
+
+                val fileList = mutableListOf<File>()
+                selectedList.forEach {
+                    fileList.add(File(it.filePath))
+                }
+
+                val outputFile = context?.let { it1 -> OptiUtils.createVideoFile(it1) }
+
+                outputFile?.let {
+                    OptiVideoEditor.with(context!!)
+                        .setType(OptiConstant.MERGE_VIDEO)
+                        .setMutlipleFiles(fileList)
+                        .setOutputPath(it.path)
+                        .setCallback(this)
+                        .main()
+                }
+            } else {
+                toast("Please select video files to merge and play")
+            }
+
         }
         initContainer()
     }
@@ -395,6 +439,37 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
         // Handle navigation view item clicks here.
         drawer_layout!!.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun onProgress(progress: String) {
+        progressDialog!!.setMessage("Playing please wait")
+        progressDialog!!.setCanceledOnTouchOutside(false)
+        progressDialog!!.show()
+    }
+
+    override fun onSuccess(convertedFile: File, type: String) {
+        toast("Success")
+        val intent = Intent(requireContext(), PlayActivity::class.java)
+        intent.putExtra("videoFilePath", convertedFile.absolutePath)
+        startActivity(intent)
+//        viewModel.editedImageFiles(convertedFile, playlistName)
+        progressDialog!!.dismiss()
+    }
+
+    override fun onFailure(error: Exception) {
+        progressDialog!!.dismiss()
+        Log.d(tagName, "onFailure " + error.message)
+
+        toast(error.toString())
+    }
+
+    override fun onNotAvailable(error: Exception) {
+        Log.d(tagName, "onNotAvailable() " + error.message)
+        Log.v(tagName, "Exception: ${error.localizedMessage}")
+    }
+
+    override fun onFinish() {
+        Log.d(tagName, "onFinish()")
     }
 
 }

@@ -2,7 +2,6 @@ package com.example.loopdeck.ui.collection.playlist
 
 import android.app.ProgressDialog
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -47,15 +46,11 @@ import java.util.*
 
 class PlaylistFragment : Fragment(), OptiFFMpegCallback {
 
-    private var Selectlist = ArrayList<MediaData>()
     private var tagName: String = PlaylistFragment::class.java.simpleName
-    private var viewholder: RecyclerView.ViewHolder? = null
-    var filepath: String? = null
     private var selectedList = ArrayList<MediaData>()
     var mediaData: MediaData? = null
     var multiSelection: Boolean = false
     var progressDialog: ProgressDialog? = null
-    var sharedpreferences: SharedPreferences? = null
 
 
     private val playlistName by lazy {
@@ -196,8 +191,8 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
         touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(recyclerview)
         progressDialog = ProgressDialog(requireContext())
-
-
+        toolbar.setNavigationIcon(R.drawable.ic_back_black)
+        toolbar.setNavigationOnClickListener { activity!!.onBackPressed() }
 
         btnGallery.setOnClickListener {
 
@@ -213,10 +208,6 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
             deleteMediaFiles()
         }
 
-        btnBack.setOnClickListener {
-            activity?.onBackPressed()
-        }
-
         btnplay.setOnClickListener {
 
             if (selectedList.size > 0) {
@@ -229,7 +220,6 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
                 val outputFile = context?.let { it1 -> OptiUtils.createVideoFile(it1) }
 
                 outputFile?.let {
-                    toast(outputFile.path.toString())
                     OptiVideoEditor.with(context!!)
                         .setType(OptiConstant.MERGE_VIDEO)
                         .setMutlipleFiles(fileList)
@@ -303,7 +293,7 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
     }
 
     override fun onProgress(progress: String) {
-        progressDialog!!.setMessage("Converting please wait")
+        progressDialog!!.setMessage("Playing please wait")
         progressDialog!!.setCanceledOnTouchOutside(false)
         progressDialog!!.show()
     }
