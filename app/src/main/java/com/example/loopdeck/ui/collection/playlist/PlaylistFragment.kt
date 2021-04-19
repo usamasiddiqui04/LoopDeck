@@ -210,11 +210,12 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
 
         btnplay.setOnClickListener {
 
-            if (selectedList.size > 0) {
+            if (selectedList.size > 1) {
 
                 val fileList = mutableListOf<File>()
                 selectedList.forEach {
-                    fileList.add(File(it.filePath))
+                    if (it.filePath.contains("mp4"))
+                        fileList.add(File(it.filePath))
                 }
 
                 val outputFile = context?.let { it1 -> OptiUtils.createVideoFile(it1) }
@@ -227,8 +228,14 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
                         .setCallback(this)
                         .main()
                 }
-            } else {
+            } else if (selectedList.isEmpty()) {
                 toast("Please select video files to merge and play")
+            } else {
+                val intent = Intent(requireContext(), PlayActivity::class.java)
+                intent.putExtra("videoFilePath", selectedList[0].filePath)
+                startActivity(intent)
+//        viewModel.editedImageFiles(convertedFile, playlistName)
+                progressDialog!!.dismiss()
             }
 
         }

@@ -274,7 +274,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
                 cmdList += "-filter_complex"
                 var tempStr = ""
                 multipleVideoFiles.forEachIndexed { index, _ ->
-                    tempStr += "[$index:v]scale=480x640,setsar=1[v$index];"
+                    tempStr += "[$index:v]scale=480x720,setsar=1[v$index];"
                 }
 
                 multipleVideoFiles.forEachIndexed { index, _ ->
@@ -292,7 +292,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
                 cmdList += "-ar"
                 cmdList += "22050"
                 cmdList += "-s"
-                cmdList += "480x640"
+                cmdList += "480x720"
                 cmdList += "-vcodec"
                 cmdList += "libx264"
                 cmdList += "-crf"

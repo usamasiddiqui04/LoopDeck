@@ -17,8 +17,6 @@ import java.io.File
 
 class CollectionViewModel(application: Application) : AndroidViewModel(application) {
 
-    var importedFilesIntent: Intent? = null
-
     lateinit var recentsMediaLiveData: LiveData<List<MediaData>>
 
     private val repository: MediaRepository
