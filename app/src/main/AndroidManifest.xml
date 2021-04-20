@@ -16,8 +16,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon,android:allowBackup,android:roundIcon">
-        <activity android:name=".editor.PlayActivity"></activity>
-        <activity android:name=".ui.onboardingscreen.OnBoardingScreenActivity"></activity>
+        <activity android:name=".ui.collection.playlist.PlaylistActivity"></activity>
+        <activity android:name=".editor.PlayActivity" />
+        <activity android:name=".ui.onboardingscreen.OnBoardingScreenActivity" />
         <activity android:name=".ui.login.WebviewLoginActivity" />
         <activity android:name=".gallery.view.PickerActivity" />
         <activity android:name=".ui.collection.CollectionActivity" />

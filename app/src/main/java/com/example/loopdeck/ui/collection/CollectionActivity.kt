@@ -18,7 +18,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_recents.*
 import kotlinx.android.synthetic.main.activity_recents.drawer_layout
 import kotlinx.android.synthetic.main.activity_recents.nav_view
-import kotlinx.android.synthetic.main.fragment_recents.*
 
 class CollectionActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 

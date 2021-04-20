@@ -29,6 +29,7 @@ import com.example.loopdeck.gallery.view.PickerActivity
 import com.example.loopdeck.onedrive.ItemFragment
 import com.example.loopdeck.ui.adapters.MediaAdaptor
 import com.example.loopdeck.ui.collection.CollectionViewModel
+import com.example.loopdeck.ui.collection.playlist.PlaylistActivity
 import com.example.loopdeck.ui.collection.playlist.PlaylistFragment
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.example.loopdeck.utils.extensions.toast
@@ -153,11 +154,10 @@ class RecentsFragment : Fragment(),
 
                     }
                     else -> {
-                        requireActivity().supportFragmentManager.beginTransaction()
-                            .replace(R.id.container, PlaylistFragment.newInstance(mediadata.name))
-                            .addToBackStack(null)
-                            .commit()
 
+                        val intent = Intent(requireContext(), PlaylistActivity::class.java)
+                        intent.putExtra("mediaData", mediadata)
+                        startActivity(intent)
                     }
                 }
             } else {
