@@ -31,17 +31,13 @@ import com.example.loopdeck.ui.adapters.MediaAdaptor
 import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.utils.callbacks.ItemMoveCallback
 import com.example.loopdeck.utils.extensions.toast
-import com.obs.marveleditor.OptiVideoEditor
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
-import com.obs.marveleditor.utils.OptiConstant
-import com.obs.marveleditor.utils.OptiUtils
 import kotlinx.android.synthetic.main.fragment_playlist.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.selectitem
 import kotlinx.android.synthetic.main.item_recent_list_images.view.*
 import kotlinx.android.synthetic.main.item_recent_video_lists.view.*
 import java.io.File
-import java.util.*
 
 
 class PlaylistFragment : Fragment(), OptiFFMpegCallback {
@@ -210,33 +206,41 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
 
         btnplay.setOnClickListener {
 
-            if (selectedList.size > 1) {
+            val videoFileList = ArrayList<MediaData>()
+            val intent = Intent(requireContext(), PlayActivity::class.java)
+            val bundle = Bundle()
 
-                val fileList = mutableListOf<File>()
-                selectedList.forEach {
-                    if (it.filePath.contains("mp4"))
-                        fileList.add(File(it.filePath))
-                }
+            bundle.putParcelableArrayList("videoFileList", selectedList)
+            intent.putExtras(bundle)
+            startActivity(intent)
 
-                val outputFile = context?.let { it1 -> OptiUtils.createVideoFile(it1) }
-
-                outputFile?.let {
-                    OptiVideoEditor.with(context!!)
-                        .setType(OptiConstant.MERGE_VIDEO)
-                        .setMutlipleFiles(fileList)
-                        .setOutputPath(it.path)
-                        .setCallback(this)
-                        .main()
-                }
-            } else if (selectedList.isEmpty()) {
-                toast("Please select video files to merge and play")
-            } else {
-                val intent = Intent(requireContext(), PlayActivity::class.java)
-                intent.putExtra("videoFilePath", selectedList[0].filePath)
-                startActivity(intent)
-//        viewModel.editedImageFiles(convertedFile, playlistName)
-                progressDialog!!.dismiss()
-            }
+//            if (selectedList.size > 1) {
+//
+//                val fileList = mutableListOf<File>()
+//                selectedList.forEach {
+//                    if (it.filePath.contains("mp4"))
+//                        fileList.add(File(it.filePath))
+//                }
+//
+//                val outputFile = context?.let { it1 -> OptiUtils.createVideoFile(it1) }
+//
+//                outputFile?.let {
+//                    OptiVideoEditor.with(context!!)
+//                        .setType(OptiConstant.MERGE_VIDEO)
+//                        .setMutlipleFiles(fileList)
+//                        .setOutputPath(it.path)
+//                        .setCallback(this)
+//                        .main()
+//                }
+//            } else if (selectedList.isEmpty()) {
+//                toast("Please select video files to merge and play")
+//            } else {
+//                val intent = Intent(requireContext(), PlayActivity::class.java)
+//                intent.putExtra("videoFilePath", selectedList[0].filePath)
+//                startActivity(intent)
+////        viewModel.editedImageFiles(convertedFile, playlistName)
+//                progressDialog!!.dismiss()
+//            }
 
         }
 
@@ -307,9 +311,6 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
 
     override fun onSuccess(convertedFile: File, type: String) {
         toast("Success")
-        val intent = Intent(requireContext(), PlayActivity::class.java)
-        intent.putExtra("videoFilePath", convertedFile.absolutePath)
-        startActivity(intent)
 //        viewModel.editedImageFiles(convertedFile, playlistName)
         progressDialog!!.dismiss()
     }

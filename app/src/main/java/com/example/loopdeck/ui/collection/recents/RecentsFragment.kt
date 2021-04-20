@@ -17,11 +17,13 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.loopdeck.BitmapUtils
 import com.example.loopdeck.DragData
 import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.data.MediaType
 import com.example.loopdeck.drawer.AdvanceDrawerLayout
+import com.example.loopdeck.editor.PlayActivity
 import com.example.loopdeck.editor.PreviewPhotoActivity
 import com.example.loopdeck.editor.PreviewVideoActivity
 import com.example.loopdeck.gallery.model.GalleryData
@@ -31,10 +33,8 @@ import com.example.loopdeck.ui.adapters.MediaAdaptor
 import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.ui.collection.playlist.PlaylistFragment
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
-import com.google.android.material.navigation.NavigationView
-import com.example.loopdeck.BitmapUtils
-import com.example.loopdeck.editor.PlayActivity
 import com.example.loopdeck.utils.extensions.toast
+import com.google.android.material.navigation.NavigationView
 import com.obs.marveleditor.OptiVideoEditor
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.OptiConstant
@@ -277,31 +277,39 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
 
         btnplay.setOnClickListener {
 
-            if (selectedList.size > 1) {
 
-                val fileList = mutableListOf<File>()
-                selectedList.forEach {
-                    if (it.filePath.contains("mp4"))
-                        fileList.add(File(it.filePath))
-                }
+            val intent = Intent(requireContext(), PlayActivity::class.java)
+            val bundle = Bundle()
+            bundle.putParcelableArrayList("videoFileList", selectedList)
+            intent.putExtras(bundle)
+            startActivity(intent)
 
-                val outputFile = context?.let { it1 -> OptiUtils.createVideoFile(it1) }
 
-                outputFile?.let {
-                    OptiVideoEditor.with(context!!)
-                        .setType(OptiConstant.MERGE_VIDEO)
-                        .setMutlipleFiles(fileList)
-                        .setOutputPath(it.path)
-                        .setCallback(this)
-                        .main()
-                }
-            } else if (selectedList.isEmpty()) {
-                toast("Please select video files to merge and play")
-            } else {
-                val intent = Intent(requireContext(), PlayActivity::class.java)
-                intent.putExtra("videoFilePath", selectedList[0].filePath)
-                startActivity(intent)
-            }
+//            if (selectedList.size > 1) {
+//
+//                val fileList = mutableListOf<File>()
+//                selectedList.forEach {
+//                    if (it.filePath.contains("mp4"))
+//                        fileList.add(File(it.filePath))
+//                }
+//
+//                val outputFile = context?.let { it1 -> OptiUtils.createVideoFile(it1) }
+//
+//                outputFile?.let {
+//                    OptiVideoEditor.with(context!!)
+//                        .setType(OptiConstant.MERGE_VIDEO)
+//                        .setMutlipleFiles(fileList)
+//                        .setOutputPath(it.path)
+//                        .setCallback(this)
+//                        .main()
+//                }
+//            } else if (selectedList.isEmpty()) {
+//                toast("Please select video files to merge and play")
+//            } else {
+//                val intent = Intent(requireContext(), PlayActivity::class.java)
+//                intent.putExtra("videoFilePath", selectedList[0].filePath)
+//                startActivity(intent)
+//            }
 
         }
         initContainer()
