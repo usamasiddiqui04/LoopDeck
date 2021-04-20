@@ -11,9 +11,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,11 +32,8 @@ import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.ui.collection.playlist.PlaylistFragment
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.example.loopdeck.utils.extensions.toast
-import com.google.android.material.navigation.NavigationView
-import com.obs.marveleditor.OptiVideoEditor
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
-import com.obs.marveleditor.utils.OptiConstant
-import com.obs.marveleditor.utils.OptiUtils
+import kotlinx.android.synthetic.main.activity_recents.*
 import kotlinx.android.synthetic.main.dailogbox.view.*
 import kotlinx.android.synthetic.main.fragment_playlist.*
 import kotlinx.android.synthetic.main.fragment_recents.*
@@ -46,7 +41,6 @@ import kotlinx.android.synthetic.main.fragment_recents.bottomLayout
 import kotlinx.android.synthetic.main.fragment_recents.btnDelete
 import kotlinx.android.synthetic.main.fragment_recents.btnplay
 import kotlinx.android.synthetic.main.fragment_recents.recyclerview
-import kotlinx.android.synthetic.main.fragment_recents.toolbar
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.selectitem
 import kotlinx.android.synthetic.main.item_recent_list_images.view.*
@@ -54,7 +48,7 @@ import kotlinx.android.synthetic.main.item_recent_video_lists.view.*
 import java.io.File
 import java.util.*
 
-class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener,
+class RecentsFragment : Fragment(),
     OptiFFMpegCallback {
 
     private var drawer: AdvanceDrawerLayout? = null
@@ -213,29 +207,13 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             i.putExtra("playlistName", "")
             startActivityForResult(i, REQUEST_RESULT_CODE)
         }
-        (activity as AppCompatActivity?)!!.setSupportActionBar(toolbar)
 
         progressDialog = ProgressDialog(requireContext())
 
 //        ViewCompat.setLayoutDirection(drawer_layout!!, ViewCompat.LAYOUT_DIRECTION_RTL)
-        val toggle = ActionBarDrawerToggle(
-            requireActivity(),
-            drawer_layout,
-            toolbar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
-        drawer_layout!!.addDrawerListener(toggle)
 
-        toggle.syncState()
-
-        nav_view.setNavigationItemSelectedListener(this)
-        drawer_layout!!.setViewScale(GravityCompat.START, 0.9f)
-        drawer_layout!!.setRadius(GravityCompat.START, 35f)
-        drawer_layout!!.setViewElevation(GravityCompat.START, 20f)
         recyclerview?.adapter = mediaAdapter
         recyclerview?.layoutManager = GridLayoutManager(requireContext(), 3)
-
         btnCreateRecents.setOnClickListener {
             savePlaylistNameDialog(requireContext()) {
                 viewModel.createPlaylist(it)
@@ -417,7 +395,6 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
     }
 
 
-
     private fun initContainer() {
         btnDelete.setOnDragListener { view, dragEvent ->
             when (dragEvent.action) {
@@ -446,12 +423,6 @@ class RecentsFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
             Toast.LENGTH_SHORT
         ).show()
         multiSelection = false
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        drawer_layout!!.closeDrawer(GravityCompat.START)
-        return true
     }
 
     override fun onProgress(progress: String) {
