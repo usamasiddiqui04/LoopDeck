@@ -7,5 +7,6 @@
     <color name="drawer">#100C1C</color>
     <color name="drawer2">#0E2547</color>
     <color name="stickersborder">#292142</color>
+    <color name="battleshipGrey">#6c7b8a</color>
 
 </resources>

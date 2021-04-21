@@ -103,7 +103,8 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
         } else if (mediaList.isEmpty()) {
             toast("Please select video files to merge and play")
         } else {
-//            viewModel.publishedFiles(File(mediaList[0].filePath))
+            viewModel.publishedFiles(File(mediaList[0].filePath))
+            toast("Saved to publish")
         }
 
     }
@@ -152,13 +153,13 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
 
 
     override fun onProgress(progress: String) {
-        progressDialog!!.setMessage("Playing please wait")
+        progressDialog!!.setMessage("Publishing please wait")
         progressDialog!!.setCanceledOnTouchOutside(false)
         progressDialog!!.show()
     }
 
     override fun onSuccess(convertedFile: File, type: String) {
-        toast("Success")
+        toast("Saved to publish")
         viewModel.publishedFiles(convertedFile)
         progressDialog!!.dismiss()
     }

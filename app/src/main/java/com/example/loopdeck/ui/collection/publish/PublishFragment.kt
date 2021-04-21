@@ -5,16 +5,27 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.loopdeck.R
+import com.example.loopdeck.ui.adapters.MediaAdaptor
+import com.example.loopdeck.ui.adapters.PublishAdaptors
 import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.example.loopdeck.utils.extensions.toast
+import kotlinx.android.synthetic.main.fragment_publish.*
 import kotlinx.android.synthetic.main.fragment_recents.*
 
 
 class PublishFragment : Fragment() {
 
     private lateinit var viewModel: PublishViewModel
+
+    private val publishAdaptor by lazy {
+        PublishAdaptors(
+            mList = mutableListOf()
+        )
+    }
 
 
     override fun onCreateView(
@@ -30,12 +41,22 @@ class PublishFragment : Fragment() {
 
         viewModel = activityViewModelProvider()
 
+        recyclerviewPublish.adapter = publishAdaptor
+        recyclerviewPublish.layoutManager = LinearLayoutManager(context)
+
+        initObservers()
+
+    }
+
+    private fun initObservers() {
+
         viewModel.publishedLiveData.observe(
             viewLifecycleOwner,
             androidx.lifecycle.Observer { list ->
-
-                toast(list.size.toString())
+                publishAdaptor.submitList(list.distinctBy { it.name })
             })
+
+
     }
 
 

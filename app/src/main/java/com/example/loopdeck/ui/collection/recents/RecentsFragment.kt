@@ -212,8 +212,8 @@ class RecentsFragment : Fragment(),
 
 //        ViewCompat.setLayoutDirection(drawer_layout!!, ViewCompat.LAYOUT_DIRECTION_RTL)
 
-        recyclerview?.adapter = mediaAdapter
-        recyclerview?.layoutManager = GridLayoutManager(requireContext(), 3)
+        recyclerview.adapter = mediaAdapter
+        recyclerview.layoutManager = GridLayoutManager(requireContext(), 3)
         btnCreateRecents.setOnClickListener {
             savePlaylistNameDialog(requireContext()) {
                 viewModel.createPlaylist(it)
