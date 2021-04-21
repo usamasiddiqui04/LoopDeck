@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.loopdeck.data.converters.Converters
 
-@Database(entities = [MediaData::class], version = 1, exportSchema = false)
+@Database(entities = [MediaData::class, PublishData::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class MediaDatabase : RoomDatabase() {
 

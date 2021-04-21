@@ -6,18 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.loopdeck.R
+import com.example.loopdeck.ui.collection.CollectionViewModel
+import com.example.loopdeck.utils.extensions.activityViewModelProvider
+import com.example.loopdeck.utils.extensions.toast
+import kotlinx.android.synthetic.main.fragment_recents.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [PublishFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PublishFragment : Fragment() {
+
+    private lateinit var viewModel: PublishViewModel
 
 
     override fun onCreateView(
@@ -25,6 +22,21 @@ class PublishFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_blank, container, false)
+        return inflater.inflate(R.layout.fragment_publish, container, false)
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel = activityViewModelProvider()
+
+        viewModel.publishedLiveData.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer { list ->
+
+                toast(list.size.toString())
+            })
+    }
+
+
 }

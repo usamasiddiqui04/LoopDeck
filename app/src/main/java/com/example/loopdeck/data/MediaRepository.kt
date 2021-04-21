@@ -18,14 +18,34 @@ class MediaRepository(private val mediaDao: MediaDao, private val context: Conte
 
     fun getAllRecentsMediaLiveData(): LiveData<List<MediaData>> = mediaDao.findRecents()
 
+    fun getAllPublihsedMediaLiveData(): LiveData<List<PublishData>> = mediaDao.findPublish()
+
     fun getPlaylistMediaLiveData(playlistName: String): LiveData<List<MediaData>> =
         mediaDao.findByPlaylistLiveData(playlistName)
 
     fun getPlaylistImage(playlistName: String): LiveData<String> =
         mediaDao.findByPlaylistImage(playlistName)
 
-    fun addMediaOrPlaylist(file: File, playlistName: String? = null) {
+    fun addPublishData(file: File) {
+        val timestamp = Date()
 
+        val mediaType = file.getMediaType()
+
+        mediaDao.insertPublish(
+            PublishData(
+                id = 0,
+                name = file.name,
+                extension = file.extension,
+                filePath = file.absolutePath,
+                createdAt = timestamp,
+                modifiedAt = timestamp,
+                mediaType = mediaType
+            )
+        )
+
+    }
+
+    fun addMediaOrPlaylist(file: File, playlistName: String? = null) {
 
         val mediaCount = playlistName?.let { mediaDao.findByPlaylist(it).size } ?: -1
 
@@ -61,6 +81,21 @@ class MediaRepository(private val mediaDao: MediaDao, private val context: Conte
                 MediaStore.Images.Media.getBitmap(context.contentResolver, Uri.fromFile(filepath))
             BitmapUtils.saveImage(context, mResultsBitmap, playlistName).let {
                 addMediaOrPlaylist(it!!, playlistName)
+            }
+        }
+    }
+
+    suspend fun addPublishedFileData(filepath: File) {
+        if (filepath.isVideo()) {
+            BitmapUtils.SaveVideo(context, Uri.fromFile(filepath)).let {
+                addPublishData(it!!)
+            }
+        } else if (filepath.isImage()) {
+            var mResultsBitmap: Bitmap? = null
+            mResultsBitmap =
+                MediaStore.Images.Media.getBitmap(context.contentResolver, Uri.fromFile(filepath))
+            BitmapUtils.saveImage(context, mResultsBitmap).let {
+                addPublishData(it!!)
             }
         }
     }

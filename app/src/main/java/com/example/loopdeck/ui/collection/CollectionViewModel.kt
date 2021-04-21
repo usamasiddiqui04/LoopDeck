@@ -1,7 +1,6 @@
 package com.example.loopdeck.ui.collection
 
 import android.app.Application
-import android.content.Intent
 import android.os.Handler
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
@@ -19,6 +18,7 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
 
     lateinit var recentsMediaLiveData: LiveData<List<MediaData>>
 
+
     private val repository: MediaRepository
 
     init {
@@ -26,6 +26,7 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
         repository = MediaRepository(mediaDao, application.applicationContext)
         getRecents()
     }
+
 
     private fun getRecents() {
 
@@ -40,9 +41,6 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
             repository.deleteMedia(mediaData)
         }
     }
-
-    fun getPlayListImage(playlistName: String) =
-        repository.getPlaylistImage(playlistName)
 
     fun getPlaylistMedia(playlistName: String) =
         repository.getPlaylistMediaLiveData(playlistName)

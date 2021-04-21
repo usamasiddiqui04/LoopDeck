@@ -3,7 +3,7 @@ package com.example.loopdeck.data.dao
 import androidx.room.*
 
 @Dao
-interface BaseDAO<T> {
+interface BaseDAO<T, K> {
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -24,6 +24,9 @@ interface BaseDAO<T> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(value: T): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertPublish(value: K): Long
 
     @Delete
     fun delete(vararg value: T)

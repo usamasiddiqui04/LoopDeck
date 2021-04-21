@@ -132,7 +132,7 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
     private val onItemClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Unit =
         { itemView, viewHolder, list, mediadata ->
 
-            multiSelection = !selectedList.isEmpty()
+            multiSelection = selectedList.isNotEmpty()
             if (!multiSelection) {
                 when (mediadata.mediaType) {
                     MediaType.IMAGE -> {
