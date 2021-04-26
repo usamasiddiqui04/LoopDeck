@@ -8,5 +8,6 @@
     <color name="drawer2">#0E2547</color>
     <color name="stickersborder">#292142</color>
     <color name="battleshipGrey">#6c7b8a</color>
+    <color name="tabindicator">#3458f3</color>
 
 </resources>
