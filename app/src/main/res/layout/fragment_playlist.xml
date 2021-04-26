@@ -49,6 +49,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
+            android:visibility="gone"
+            android:id="@+id/constraintDel"
             android:layout_height="wrap_content"
             android:layout_weight="1">
 

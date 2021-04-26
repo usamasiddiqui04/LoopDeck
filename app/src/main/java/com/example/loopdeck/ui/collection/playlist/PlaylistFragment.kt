@@ -33,6 +33,11 @@ import com.example.loopdeck.utils.callbacks.ItemMoveCallback
 import com.example.loopdeck.utils.extensions.toast
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import kotlinx.android.synthetic.main.fragment_playlist.*
+import kotlinx.android.synthetic.main.fragment_playlist.bottomLayout
+import kotlinx.android.synthetic.main.fragment_playlist.btnDelete
+import kotlinx.android.synthetic.main.fragment_playlist.btnplay
+import kotlinx.android.synthetic.main.fragment_playlist.recyclerview
+import kotlinx.android.synthetic.main.fragment_recents.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.selectitem
 import kotlinx.android.synthetic.main.item_recent_list_images.view.*
@@ -80,6 +85,8 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
         { itemView, viewHolder, list, mediadata ->
 
             multiSelection = true
+            checkmultiselection()
+
             toggleSelection(viewHolder, mediadata, list)
 
         }
@@ -132,7 +139,7 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
     private val onItemClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Unit =
         { itemView, viewHolder, list, mediadata ->
 
-            multiSelection = selectedList.isNotEmpty()
+            multiSelection = !selectedList.isEmpty()
             if (!multiSelection) {
                 when (mediadata.mediaType) {
                     MediaType.IMAGE -> {
@@ -155,8 +162,11 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
                     }
                 }
             } else {
-                multiSelection = !selectedList.isEmpty()
                 toggleSelection(viewHolder, mediadata, list)
+                multiSelection = !selectedList.isEmpty()
+                if (!multiSelection) {
+                    checkmultiselection()
+                }
             }
 
         }
@@ -175,6 +185,14 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
         viewModel = ViewModelProviders.of(this).get(CollectionViewModel::class.java)
         initViews()
         initObservers()
+    }
+
+    private fun checkmultiselection() {
+        if (multiSelection) {
+            constraintDel.visibility = View.VISIBLE
+        } else {
+            constraintDel.visibility = View.GONE
+        }
     }
 
 
