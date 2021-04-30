@@ -376,6 +376,7 @@ class RecentsFragment : Fragment(),
 
     private fun initObservers() {
 
+
         viewModel.recentsMediaLiveData.observe(
             viewLifecycleOwner,
             androidx.lifecycle.Observer { list ->

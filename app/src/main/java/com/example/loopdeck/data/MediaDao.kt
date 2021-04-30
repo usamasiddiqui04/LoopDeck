@@ -15,6 +15,10 @@ interface MediaDao : BaseDAO<MediaData, PublishData> {
     @Query("SELECT * FROM MediaFileTable WHERE playListName is null ORDER BY modifiedAt ASC ")
     fun findRecents(): LiveData<List<MediaData>>
 
+    @Query("SELECT * FROM MediaFileTable WHERE playListName is not null ORDER BY modifiedAt ASC ")
+    fun findAllPlaylist(): LiveData<List<MediaData>>
+
+
     @Query("SELECT * FROM PublishTable ORDER BY modifiedAt ASC ")
     fun findPublish(): LiveData<List<PublishData>>
 

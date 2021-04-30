@@ -18,6 +18,8 @@ class MediaRepository(private val mediaDao: MediaDao, private val context: Conte
 
     fun getAllRecentsMediaLiveData(): LiveData<List<MediaData>> = mediaDao.findRecents()
 
+    fun getAllPlaylistMediaLiveData(): LiveData<List<MediaData>> = mediaDao.findAllPlaylist()
+
     fun getAllPublihsedMediaLiveData(): LiveData<List<PublishData>> = mediaDao.findPublish()
 
     fun getPlaylistMediaLiveData(playlistName: String): LiveData<List<MediaData>> =

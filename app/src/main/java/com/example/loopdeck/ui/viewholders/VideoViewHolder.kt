@@ -40,6 +40,7 @@ class VideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     fun getDuration(uri: String): Long {
+
         val retriever = MediaMetadataRetriever()
         retriever.setDataSource(uri)
         val duration =
