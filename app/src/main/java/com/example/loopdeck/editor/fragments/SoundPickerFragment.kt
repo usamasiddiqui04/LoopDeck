@@ -77,6 +77,7 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
     }
 
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         list = ArrayList()
@@ -169,6 +170,14 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
 
+        listSongs.clear()
+        songAdaptor = SongAdaptor(
+            listSongs,
+            requireContext(),
+            onItemClickListener,
+            onPlayPressed,
+            onPausePressed
+        )
         listener?.onDismissSoundPicker()
 
     }
