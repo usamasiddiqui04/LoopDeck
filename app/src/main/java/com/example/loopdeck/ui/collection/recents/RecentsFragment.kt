@@ -29,10 +29,12 @@ import com.example.loopdeck.gallery.view.PickerActivity
 import com.example.loopdeck.onedrive.ItemFragment
 import com.example.loopdeck.ui.adapters.MediaAdaptor
 import com.example.loopdeck.ui.collection.CollectionViewModel
+import com.example.loopdeck.ui.collection.move.MoveToPlaylistFragment
 import com.example.loopdeck.ui.collection.playlist.PlaylistActivity
 import com.example.loopdeck.ui.collection.playlist.PlaylistFragment
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.example.loopdeck.utils.extensions.toast
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import kotlinx.android.synthetic.main.activity_recents.*
 import kotlinx.android.synthetic.main.dailogbox.view.*
@@ -249,7 +251,11 @@ class RecentsFragment : Fragment(),
 
         btnmove.setOnClickListener {
 
-            moveToPlaylistNameDialog(requireContext())
+            val moveToPlaylistFragment = MoveToPlaylistFragment()
+            moveToPlaylistFragment.moveFileList(selectedList)
+
+            showBottomSheetDialogFragment(moveToPlaylistFragment)
+//            moveToPlaylistNameDialog(requireContext())
         }
 
         btnplay.setOnClickListener {
@@ -261,32 +267,6 @@ class RecentsFragment : Fragment(),
             intent.putExtras(bundle)
             startActivity(intent)
 
-
-//            if (selectedList.size > 1) {
-//
-//                val fileList = mutableListOf<File>()
-//                selectedList.forEach {
-//                    if (it.filePath.contains("mp4"))
-//                        fileList.add(File(it.filePath))
-//                }
-//
-//                val outputFile = context?.let { it1 -> OptiUtils.createVideoFile(it1) }
-//
-//                outputFile?.let {
-//                    OptiVideoEditor.with(context!!)
-//                        .setType(OptiConstant.MERGE_VIDEO)
-//                        .setMutlipleFiles(fileList)
-//                        .setOutputPath(it.path)
-//                        .setCallback(this)
-//                        .main()
-//                }
-//            } else if (selectedList.isEmpty()) {
-//                toast("Please select video files to merge and play")
-//            } else {
-//                val intent = Intent(requireContext(), PlayActivity::class.java)
-//                intent.putExtra("videoFilePath", selectedList[0].filePath)
-//                startActivity(intent)
-//            }
 
         }
         initContainer()
@@ -454,6 +434,12 @@ class RecentsFragment : Fragment(),
 
     override fun onFinish() {
         Log.d(tagName, "onFinish()")
+    }
+
+    private fun showBottomSheetDialogFragment(bottomSheetDialogFragment: BottomSheetDialogFragment) {
+        val bundle = Bundle()
+        bottomSheetDialogFragment.arguments = bundle
+        fragmentManager?.let { bottomSheetDialogFragment.show(it, bottomSheetDialogFragment.tag) }
     }
 
 }

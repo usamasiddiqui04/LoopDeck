@@ -19,8 +19,6 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
 
     lateinit var recentsMediaLiveData: LiveData<List<MediaData>>
 
-    lateinit var recentsPlaylistLiveData: LiveData<List<MediaData>>
-
 
     private val repository: MediaRepository
 
@@ -28,7 +26,6 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
         val mediaDao = MediaDatabase.getDatabase(application).mediaDao()
         repository = MediaRepository(mediaDao, application.applicationContext)
         getRecents()
-        getAllPlaylist()
     }
 
 
@@ -39,12 +36,6 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    private fun getAllPlaylist() {
-
-        viewModelScope.launch {
-            recentsPlaylistLiveData = repository.getAllPlaylistMediaLiveData()
-        }
-    }
 
     fun delete(mediaData: MediaData) {
         viewModelScope.launch(Dispatchers.IO) {
