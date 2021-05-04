@@ -145,7 +145,7 @@
             android:textStyle="bold" />
 
         <LinearLayout
-            android:id="@+id/cpasslayout"
+            android:id="@+id/changepasswordlayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/profileinformation2"
@@ -173,8 +173,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/iconarrowoneline"
-            app:layout_constraintTop_toTopOf="@id/cpasslayout"
-            app:layout_constraintBottom_toBottomOf="@id/cpasslayout"
+            app:layout_constraintTop_toTopOf="@id/changepasswordlayout"
+            app:layout_constraintBottom_toBottomOf="@id/changepasswordlayout"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="@dimen/_10sdp"
             android:padding="@dimen/_10sdp" />
@@ -184,7 +184,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:id="@+id/line3"
-            app:layout_constraintTop_toBottomOf="@id/cpasslayout"
+            app:layout_constraintTop_toBottomOf="@id/changepasswordlayout"
             app:layout_constraintStart_toStartOf="parent"
             android:background="#e5e8eb"
             android:layout_margin="@dimen/_10sdp" />

@@ -16,7 +16,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon,android:allowBackup,android:roundIcon">
-        <activity android:name=".ui.profilescreen.ProfileActivity"></activity>
+        <activity android:name=".ui.changepassword.ChangePasswordActivity"></activity>
+        <activity android:name=".ui.profilescreen.ProfileActivity" />
         <activity android:name=".ui.collection.playlist.PlaylistActivity" />
         <activity android:name=".editor.PlayActivity" />
         <activity android:name=".ui.onboardingscreen.OnBoardingScreenActivity" />
