@@ -1,17 +1,23 @@
 package com.example.loopdeck.ui.collection
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.loopdeck.R
+import com.example.loopdeck.editor.PreviewVideoActivity
 import com.example.loopdeck.ui.collection.publish.PublishFragment
 import com.example.loopdeck.ui.collection.recents.RecentsFragment
+import com.example.loopdeck.ui.profilescreen.ProfileActivity
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -23,11 +29,21 @@ class CollectionActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
 
     private var titles = arrayOf("Recent", "Published")
 
+    var headerView: View? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recents)
 
         setSupportActionBar(toolbar)
+
+        headerView = nav_view.inflateHeaderView(R.layout.header_layout)
+
+        headerView!!.findViewById<TextView>(R.id.text_profile).setOnClickListener {
+
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+        }
 
         view_pager.adapter = ViewPagerFragmentAdapter(this);
 
