@@ -12,10 +12,14 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.GridLayoutManager
@@ -29,6 +33,7 @@ import com.example.loopdeck.editor.entities.SearchEntity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_sticker_emoji_dialog.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,6 +49,7 @@ class StickerBSFragment() : BottomSheetDialogFragment() {
     fun setStickerListener(stickerListener: StickerListener?) {
         mStickerListener = stickerListener
     }
+    var searchStickers: EditText? = null
 
     interface StickerListener {
         fun onStickerClick(bitmap: Bitmap?)
@@ -90,12 +96,12 @@ class StickerBSFragment() : BottomSheetDialogFragment() {
         if (behavior != null && behavior is BottomSheetBehavior<*>) {
             behavior.setBottomSheetCallback(mBottomSheetBehaviorCallback)
         }
+        searchStickers = contentView.findViewById(R.id.stickersearch)
         (contentView.parent as View).setBackgroundColor(resources.getColor(android.R.color.transparent))
         val rvEmoji: RecyclerView = contentView.findViewById(R.id.rvEmoji)
         val gridLayoutManager = GridLayoutManager(activity, 4)
         rvEmoji.layoutManager = gridLayoutManager
         rvEmoji.adapter = stickerAdapter
-
 
     }
 
@@ -123,10 +129,6 @@ class StickerBSFragment() : BottomSheetDialogFragment() {
             t.printStackTrace()
             showErrorToast()
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
     inner class StickerAdapter() : RecyclerView.Adapter<StickerAdapter.ViewHolder>() {
