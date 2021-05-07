@@ -353,7 +353,7 @@ class PreviewPhotoActivity : AppCompatActivity(), OnPhotoEditorListener,
     override fun onStickerClick(bitmap: Bitmap?) {
         mPhotoEditor!!.setBrushDrawingMode(false)
         imgSticker!!.setBackgroundColor(ContextCompat.getColor(this, R.color.black_trasp))
-        mPhotoEditor!!.addImage(bitmap)
+        mPhotoEditor!!.addImage(bitmap!!)
     }
 
     override fun onEditTextChangeListener(

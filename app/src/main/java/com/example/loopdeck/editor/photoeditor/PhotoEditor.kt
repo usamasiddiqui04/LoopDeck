@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.AsyncTask
 import android.text.TextUtils
 import android.util.Log
@@ -42,7 +43,7 @@ class PhotoEditor private constructor(builder: Builder) : BrushViewChangeListene
     private val isTextPinchZoomable: Boolean
     private val mDefaultTextTypeface: Typeface?
     private val mDefaultEmojiTypeface: Typeface?
-    fun addImage(desiredImage: Bitmap?) {
+    fun addImage(desiredImage: Bitmap) {
         val imageRootView = getLayout(ViewType.IMAGE)
         val imageView = imageRootView!!.findViewById<ImageView>(R.id.imgPhotoEditorImage)
         //        final FrameLayout frmBorder = imageRootView.findViewById(R.id.frmBorder);

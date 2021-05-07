@@ -582,7 +582,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     override fun onStickerClick(bitmap: Bitmap?) {
         mPhotoEditor!!.setBrushDrawingMode(false)
         imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.black_trasp))
-        mPhotoEditor!!.addImage(bitmap)
+        mPhotoEditor!!.addImage(bitmap!!)
 
     }
 
@@ -787,5 +787,6 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
     override fun OnErrorAddMusic() {
         player.playWhenReady = true
     }
+
 
 }
