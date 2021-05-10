@@ -33,13 +33,10 @@ import com.example.loopdeck.utils.callbacks.ItemMoveCallback
 import com.example.loopdeck.utils.extensions.toast
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import kotlinx.android.synthetic.main.fragment_playlist.*
-import kotlinx.android.synthetic.main.fragment_playlist.bottomLayout
 import kotlinx.android.synthetic.main.fragment_playlist.btnDelete
 import kotlinx.android.synthetic.main.fragment_playlist.btnplay
 import kotlinx.android.synthetic.main.fragment_playlist.recyclerview
-import kotlinx.android.synthetic.main.fragment_recents.*
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
-import kotlinx.android.synthetic.main.item_recent_folder_list.view.selectitem
 import kotlinx.android.synthetic.main.item_recent_list_images.view.*
 import kotlinx.android.synthetic.main.item_recent_video_lists.view.*
 import java.io.File
@@ -74,102 +71,100 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
     private val mediaAdapter by lazy {
         MediaAdaptor(
             mutableListOf(),
-            onItemClickListener,
-            onItemLongClickListener,
             viewModel::onSequenceChanged,
         )
     }
 
 
-    private val onItemLongClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Unit =
-        { itemView, viewHolder, list, mediadata ->
+//    private val onItemLongClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Unit =
+//        { itemView, viewHolder, list, mediadata ->
+//
+//            multiSelection = true
+//            checkmultiselection()
+//
+//            toggleSelection(viewHolder, mediadata, list)
+//
+//        }
 
-            multiSelection = true
-            checkmultiselection()
+//    private fun toggleSelection(
+//        viewHolder: RecyclerView.ViewHolder,
+//        mediadata: MediaData,
+//        list: MutableList<MediaData>
+//    ) {
+//        mediaData = list.get(viewHolder.adapterPosition)
+//        when (mediadata.mediaType) {
+//            MediaType.IMAGE -> {
+//
+//                if (viewHolder.itemView.selectitem.visibility == View.GONE) {
+//                    viewHolder.itemView.selectitem.visibility = View.VISIBLE
+//                    viewHolder.itemView.cardview.alpha = 0.5f
+//                    selectedList.add(mediaData!!)
+//
+//                } else {
+//                    viewHolder.itemView.selectitem.visibility = View.GONE
+//                    viewHolder.itemView.cardview.alpha = 1f
+//                    selectedList.remove(mediaData!!)
+//                }
+//            }
+//            MediaType.VIDEO -> {
+//                if (viewHolder.itemView.selectitem.visibility == View.GONE) {
+//                    viewHolder.itemView.selectitem.visibility = View.VISIBLE
+//                    viewHolder.itemView.cardvideo.alpha = 0.5f
+//                    selectedList.add(mediaData!!)
+//                } else {
+//                    viewHolder.itemView.selectitem.visibility = View.GONE
+//                    viewHolder.itemView.cardvideo.alpha = 1f
+//                    selectedList.remove(mediaData!!)
+//                }
+//            }
+//            else -> {
+//                if (viewHolder.itemView.selectitem.visibility == View.GONE) {
+//                    viewHolder.itemView.selectitem.visibility = View.VISIBLE
+//                    viewHolder.itemView.cardfolder.alpha = 0.5f
+//                    selectedList.add(mediaData!!)
+//                } else {
+//                    viewHolder.itemView.selectitem.visibility = View.GONE
+//                    viewHolder.itemView.cardfolder.alpha = 1f
+//                    selectedList.remove(mediaData!!)
+//                }
+//            }
+//        }
+//    }
 
-            toggleSelection(viewHolder, mediadata, list)
-
-        }
-
-    private fun toggleSelection(
-        viewHolder: RecyclerView.ViewHolder,
-        mediadata: MediaData,
-        list: MutableList<MediaData>
-    ) {
-        mediaData = list.get(viewHolder.adapterPosition)
-        when (mediadata.mediaType) {
-            MediaType.IMAGE -> {
-
-                if (viewHolder.itemView.selectitem.visibility == View.GONE) {
-                    viewHolder.itemView.selectitem.visibility = View.VISIBLE
-                    viewHolder.itemView.cardview.alpha = 0.5f
-                    selectedList.add(mediaData!!)
-
-                } else {
-                    viewHolder.itemView.selectitem.visibility = View.GONE
-                    viewHolder.itemView.cardview.alpha = 1f
-                    selectedList.remove(mediaData!!)
-                }
-            }
-            MediaType.VIDEO -> {
-                if (viewHolder.itemView.selectitem.visibility == View.GONE) {
-                    viewHolder.itemView.selectitem.visibility = View.VISIBLE
-                    viewHolder.itemView.cardvideo.alpha = 0.5f
-                    selectedList.add(mediaData!!)
-                } else {
-                    viewHolder.itemView.selectitem.visibility = View.GONE
-                    viewHolder.itemView.cardvideo.alpha = 1f
-                    selectedList.remove(mediaData!!)
-                }
-            }
-            else -> {
-                if (viewHolder.itemView.selectitem.visibility == View.GONE) {
-                    viewHolder.itemView.selectitem.visibility = View.VISIBLE
-                    viewHolder.itemView.cardfolder.alpha = 0.5f
-                    selectedList.add(mediaData!!)
-                } else {
-                    viewHolder.itemView.selectitem.visibility = View.GONE
-                    viewHolder.itemView.cardfolder.alpha = 1f
-                    selectedList.remove(mediaData!!)
-                }
-            }
-        }
-    }
-
-    private val onItemClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Unit =
-        { itemView, viewHolder, list, mediadata ->
-
-            multiSelection = !selectedList.isEmpty()
-            if (!multiSelection) {
-                when (mediadata.mediaType) {
-                    MediaType.IMAGE -> {
-                        val intent = Intent(requireContext(), PreviewPhotoActivity::class.java)
-                        intent.putExtra("mediaData", mediadata)
-                        startActivity(intent)
-                    }
-                    MediaType.VIDEO -> {
-                        val intent = Intent(requireContext(), PreviewVideoActivity::class.java)
-                        intent.putExtra("mediaData", mediadata)
-                        startActivity(intent)
-
-                    }
-                    else -> {
-                        requireActivity().supportFragmentManager.beginTransaction()
-                            .replace(R.id.container, PlaylistFragment.newInstance(mediadata.name))
-                            .addToBackStack(null)
-                            .commit()
-
-                    }
-                }
-            } else {
-                toggleSelection(viewHolder, mediadata, list)
-                multiSelection = !selectedList.isEmpty()
-                if (!multiSelection) {
-                    checkmultiselection()
-                }
-            }
-
-        }
+//    private val onItemClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Unit =
+//        { itemView, viewHolder, list, mediadata ->
+//
+//            multiSelection = !selectedList.isEmpty()
+//            if (!multiSelection) {
+//                when (mediadata.mediaType) {
+//                    MediaType.IMAGE -> {
+//                        val intent = Intent(requireContext(), PreviewPhotoActivity::class.java)
+//                        intent.putExtra("mediaData", mediadata)
+//                        startActivity(intent)
+//                    }
+//                    MediaType.VIDEO -> {
+//                        val intent = Intent(requireContext(), PreviewVideoActivity::class.java)
+//                        intent.putExtra("mediaData", mediadata)
+//                        startActivity(intent)
+//
+//                    }
+//                    else -> {
+//                        requireActivity().supportFragmentManager.beginTransaction()
+//                            .replace(R.id.container, PlaylistFragment.newInstance(mediadata.name))
+//                            .addToBackStack(null)
+//                            .commit()
+//
+//                    }
+//                }
+//            } else {
+//                toggleSelection(viewHolder, mediadata, list)
+//                multiSelection = !selectedList.isEmpty()
+//                if (!multiSelection) {
+//                    checkmultiselection()
+//                }
+//            }
+//
+//        }
 
 
     override fun onCreateView(

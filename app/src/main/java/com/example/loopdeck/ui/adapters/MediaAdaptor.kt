@@ -8,29 +8,47 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
+import com.example.loopdeck.data.MediaType
+import com.example.loopdeck.ui.googledrive.GoogleDriveAdaptor.Companion.VIEW_TYPE_PLAYLIST
 import com.example.loopdeck.ui.viewholders.ImageViewHolder
 import com.example.loopdeck.ui.viewholders.PlaylistViewHolder
 import com.example.loopdeck.ui.viewholders.VideoViewHolder
 import com.example.loopdeck.utils.callbacks.ItemMoveCallback
+import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
+import kotlinx.android.synthetic.main.item_recent_list_images.view.*
+import kotlinx.android.synthetic.main.item_recent_video_lists.view.*
 import java.util.*
+
 
 class MediaAdaptor(
     private var mList: MutableList<MediaData>,
-    private val itemClickListener: (View, ViewHolder, MutableList<MediaData>, MediaData) -> Unit,
-    private val itemLongClickListener: (View, ViewHolder, MutableList<MediaData>, MediaData) -> Unit,
     private val onSequenceChanged: ((List<MediaData>) -> Unit)? = null
 
 ) : Adapter<ViewHolder>(), ItemMoveCallback.DragAndDropListener {
+
+    var multiSelection: Boolean = false
+    var string: MediaData? = null
+    private var selectedIndex = -1
+    private var selectedList = ArrayList<MediaData>()
+
+    private var itemClick: OnItemClick? = null
+
+    fun setItemClick(itemClick: OnItemClick?) {
+        this.itemClick = itemClick
+    }
+
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is ImageViewHolder -> {
                 holder.bind(mList[position])
                 holder.itemView.setOnClickListener {
-                    itemClickListener.invoke(it, holder, mList, mList[position])
+                    onclick(holder, mList[position], mList, position)
                 }
                 holder.itemView.setOnLongClickListener {
-                    itemLongClickListener.invoke(it, holder, mList, mList[position])
+                    multiSelection = true
+                    itemClick!!.onItemClick(multiSelection)
+                    toggleSelection(holder, mList[position], mList, position)
                     true
 
                 }
@@ -38,21 +56,27 @@ class MediaAdaptor(
             is VideoViewHolder -> {
                 holder.bind(mList[position])
                 holder.itemView.setOnClickListener {
-                    itemClickListener.invoke(it, holder, mList, mList[position])
+                    onclick(holder, mList[position], mList, position)
                 }
                 holder.itemView.setOnLongClickListener {
-                    itemLongClickListener.invoke(it, holder, mList, mList[position])
+                    multiSelection = true
+                    itemClick!!.onItemClick(multiSelection)
+                    toggleSelection(holder, mList[position], mList, position)
                     true
+
                 }
             }
             is PlaylistViewHolder -> {
                 holder.bind(mList.get(position))
                 holder.itemView.setOnClickListener {
-                    itemClickListener.invoke(it, holder, mList, mList[position])
+                    onclick(holder, mList[position], mList, position)
                 }
                 holder.itemView.setOnLongClickListener {
-                    itemLongClickListener.invoke(it, holder, mList, mList[position])
+                    multiSelection = true
+                    itemClick!!.onItemClick(multiSelection)
+                    toggleSelection(holder, mList[position], mList, position)
                     true
+
                 }
 
             }
@@ -130,9 +154,119 @@ class MediaAdaptor(
     companion object {
         const val VIEW_TYPE_IMAGE = 1
         const val VIEW_TYPE_VIDEO = 2
-        const val VIEW_TYPE_PLAYLIST = 3
+    }
+
+
+    private fun toggleSelection(
+        viewHolder: ViewHolder,
+        mediadata: MediaData,
+        list: MutableList<MediaData>,
+        position: Int
+    ) {
+        string = list[viewHolder.adapterPosition]
+        when (mediadata.mediaType) {
+            MediaType.IMAGE -> {
+
+                if (viewHolder.itemView.selectitemimages.visibility == View.GONE) {
+                    viewHolder.itemView.selectitemimages.visibility = View.VISIBLE
+                    viewHolder.itemView.cardview.alpha = 0.5f
+                    selectedList.add(string!!)
+                    if (selectedIndex == position) selectedIndex = -1;
+
+                } else if (viewHolder.itemView.selectitemimages.visibility == View.VISIBLE) {
+                    viewHolder.itemView.selectitemimages.visibility = View.GONE
+                    viewHolder.itemView.cardview.alpha = 1f
+                    selectedList.remove(string!!)
+                    if (selectedIndex == position) selectedIndex = -1;
+                } else if (getSelectedList().size == 0) {
+                    viewHolder.itemView.selectitemimages.visibility = View.VISIBLE
+                    viewHolder.itemView.cardview.alpha = 0.5f
+                }
+            }
+            MediaType.VIDEO -> {
+                if (viewHolder.itemView.selectitemvideo.visibility == View.GONE) {
+                    viewHolder.itemView.selectitemvideo.visibility = View.VISIBLE
+                    viewHolder.itemView.cardvideo.alpha = 0.5f
+                    selectedList.add(string!!)
+                    if (selectedIndex == position) selectedIndex = -1;
+                } else {
+                    viewHolder.itemView.selectitemvideo.visibility = View.GONE
+                    viewHolder.itemView.cardvideo.alpha = 1f
+                    selectedList.remove(string!!)
+                    if (selectedIndex == position) selectedIndex = -1
+
+                }
+            }
+            else -> {
+                if (viewHolder.itemView.selectitemfolder.visibility == View.GONE) {
+                    viewHolder.itemView.selectitemfolder.visibility = View.VISIBLE
+                    viewHolder.itemView.cardfolder.alpha = 0.5f
+                    selectedList.add(string!!)
+                    if (selectedIndex == position) selectedIndex = -1;
+                } else {
+                    viewHolder.itemView.selectitemfolder.visibility = View.GONE
+                    viewHolder.itemView.cardfolder.alpha = 1f
+                    selectedList.remove(string!!)
+                    if (selectedIndex == position) selectedIndex = -1;
+                }
+            }
+        }
+    }
+
+    fun onclick(
+        viewHolder: ViewHolder,
+        mediadata: MediaData,
+        list: MutableList<MediaData>,
+        position: Int
+    ) {
+
+        multiSelection = !selectedList.isEmpty()
+
+        itemClick!!.onItemClick(multiSelection)
+        if (!multiSelection) {
+//            when (mediadata.mediaType) {
+//                MediaType.IMAGE -> {
+//                    val intent = Intent(get, PreviewPhotoActivity::class.java)
+//                    intent.putExtra("mediaData", mediadata)
+//                    startActivity(intent)
+//                }
+//                MediaType.VIDEO -> {
+//                    val intent = Intent(requireContext(), PreviewVideoActivity::class.java)
+//                    intent.putExtra("mediaData", mediadata)
+//                    startActivity(intent)
+//
+//                }
+//                else -> {
+//
+//                    val intent = Intent(requireContext(), PlaylistActivity::class.java)
+//                    intent.putExtra("mediaData", mediadata)
+//                    startActivity(intent)
+//                }
+//            }
+        } else {
+
+            toggleSelection(viewHolder, mediadata, list, position)
+            multiSelection = !selectedList.isEmpty()
+            itemClick!!.onItemClick(multiSelection)
+        }
+
+
+    }
+
+    fun getSelectedList(): ArrayList<MediaData> {
+        return selectedList
+    }
+
+    fun setSeletedList() {
+        selectedList.clear()
+    }
+
+
+    interface OnItemClick {
+        fun onItemClick(multiselection: Boolean)
     }
 
 
 }
+
 

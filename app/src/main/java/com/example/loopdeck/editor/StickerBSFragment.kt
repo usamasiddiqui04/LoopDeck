@@ -10,45 +10,40 @@ import android.content.Context.DOWNLOAD_SERVICE
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Bundle
 import android.os.Environment
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.loopdeck.R
 import com.example.loopdeck.editor.Utils.StringConverter
-import com.example.loopdeck.editor.api.Fabric
+import com.example.loopdeck.editor.api.ApiClient
 import com.example.loopdeck.editor.api.SearchApi
 import com.example.loopdeck.editor.entities.ItemEntity
 import com.example.loopdeck.editor.entities.SearchEntity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_sticker_emoji_dialog.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class StickerBSFragment() : BottomSheetDialogFragment() {
+class StickerBSFragment : BottomSheetDialogFragment() {
 
     private var items: ArrayList<ItemEntity>? = null
     var progressDialog: ProgressDialog? = null
     val stickerAdapter = StickerAdapter()
-    var refid: Long? = null
     var mStickerListener: StickerListener? = null
     fun setStickerListener(stickerListener: StickerListener?) {
         mStickerListener = stickerListener
     }
+
     var searchStickers: EditText? = null
 
     interface StickerListener {
@@ -86,7 +81,7 @@ class StickerBSFragment() : BottomSheetDialogFragment() {
         var orientation = "Any orientation"
         orientation = StringConverter.getImageOrientationQuery(orientation)
 
-        val searchApi: SearchApi = Fabric.getSearchApi()
+        val searchApi: SearchApi = ApiClient.getSearchApi()
         val searchEntities: Call<SearchEntity> = searchApi
             .getSearchResult(query, type, orientation)
         searchEntities.enqueue(callback)
@@ -112,7 +107,6 @@ class StickerBSFragment() : BottomSheetDialogFragment() {
                 if (result != null) {
                     items = result.items
                     if (items != null && items!!.size > 0) {
-
                         stickerAdapter.notifyDataSetChanged()
 
                     } else {

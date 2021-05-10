@@ -11,27 +11,20 @@ import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.loopdeck.BitmapUtils
 import com.example.loopdeck.DragData
 import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
-import com.example.loopdeck.data.MediaType
 import com.example.loopdeck.drawer.AdvanceDrawerLayout
 import com.example.loopdeck.editor.PlayActivity
-import com.example.loopdeck.editor.PreviewPhotoActivity
-import com.example.loopdeck.editor.PreviewVideoActivity
 import com.example.loopdeck.gallery.model.GalleryData
 import com.example.loopdeck.gallery.view.PickerActivity
 import com.example.loopdeck.onedrive.ItemFragment
 import com.example.loopdeck.ui.adapters.MediaAdaptor
 import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.ui.collection.move.MoveToPlaylistFragment
-import com.example.loopdeck.ui.collection.playlist.PlaylistActivity
-import com.example.loopdeck.ui.collection.playlist.PlaylistFragment
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.example.loopdeck.utils.extensions.toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -45,14 +38,13 @@ import kotlinx.android.synthetic.main.fragment_recents.btnDelete
 import kotlinx.android.synthetic.main.fragment_recents.btnplay
 import kotlinx.android.synthetic.main.fragment_recents.recyclerview
 import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
-import kotlinx.android.synthetic.main.item_recent_folder_list.view.selectitem
 import kotlinx.android.synthetic.main.item_recent_list_images.view.*
 import kotlinx.android.synthetic.main.item_recent_video_lists.view.*
 import java.io.File
 import java.util.*
 
 class RecentsFragment : Fragment(),
-    OptiFFMpegCallback {
+    OptiFFMpegCallback, MediaAdaptor.OnItemClick {
 
     private var drawer: AdvanceDrawerLayout? = null
     private var selectedList = ArrayList<MediaData>()
@@ -69,109 +61,17 @@ class RecentsFragment : Fragment(),
     private lateinit var viewModel: CollectionViewModel
     private val mediaAdapter by lazy {
         MediaAdaptor(
-            mList = mutableListOf(),
-            itemClickListener = onItemClickListener, itemLongClickListener = onItemLongClickListener
+            mList = mutableListOf()
         )
     }
 
-    private fun checkmultiselection() {
-        if (multiSelection) {
+    private fun checkmultiselection(multiselection: Boolean) {
+        if (multiselection) {
             bottomLayout.visibility = View.VISIBLE
         } else {
             bottomLayout.visibility = View.GONE
         }
     }
-
-    private val onItemLongClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Unit =
-        { itemView, viewHolder, list, mediadata ->
-
-            multiSelection = true
-            checkmultiselection()
-            toggleSelection(viewHolder, mediadata, list)
-
-        }
-
-    private fun toggleSelection(
-        viewHolder: RecyclerView.ViewHolder,
-        mediadata: MediaData,
-        list: MutableList<MediaData>
-    ) {
-        string = list[viewHolder.adapterPosition]
-        when (mediadata.mediaType) {
-            MediaType.IMAGE -> {
-
-                if (viewHolder.itemView.selectitem.visibility == View.GONE) {
-                    viewHolder.itemView.selectitem.visibility = View.VISIBLE
-                    viewHolder.itemView.cardview.alpha = 0.5f
-                    selectedList.add(string!!)
-
-                } else {
-                    viewHolder.itemView.selectitem.visibility = View.GONE
-                    viewHolder.itemView.cardview.alpha = 1f
-                    selectedList.remove(string!!)
-                }
-            }
-            MediaType.VIDEO -> {
-                if (viewHolder.itemView.selectitem.visibility == View.GONE) {
-                    viewHolder.itemView.selectitem.visibility = View.VISIBLE
-                    viewHolder.itemView.cardvideo.alpha = 0.5f
-                    selectedList.add(string!!)
-                } else {
-                    viewHolder.itemView.selectitem.visibility = View.GONE
-                    viewHolder.itemView.cardvideo.alpha = 1f
-                    selectedList.remove(string!!)
-                }
-            }
-            else -> {
-                if (viewHolder.itemView.selectitem.visibility == View.GONE) {
-                    viewHolder.itemView.selectitem.visibility = View.VISIBLE
-                    viewHolder.itemView.cardfolder.alpha = 0.5f
-                    selectedList.add(string!!)
-                } else {
-                    viewHolder.itemView.selectitem.visibility = View.GONE
-                    viewHolder.itemView.cardfolder.alpha = 1f
-                    selectedList.remove(string!!)
-                }
-            }
-        }
-    }
-
-
-    private val onItemClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Unit =
-        { itemView, viewHolder, list, mediadata ->
-
-            multiSelection = !selectedList.isEmpty()
-            if (!multiSelection) {
-                when (mediadata.mediaType) {
-                    MediaType.IMAGE -> {
-                        val intent = Intent(requireContext(), PreviewPhotoActivity::class.java)
-                        intent.putExtra("mediaData", mediadata)
-                        startActivity(intent)
-                    }
-                    MediaType.VIDEO -> {
-                        val intent = Intent(requireContext(), PreviewVideoActivity::class.java)
-                        intent.putExtra("mediaData", mediadata)
-                        startActivity(intent)
-
-                    }
-                    else -> {
-
-                        val intent = Intent(requireContext(), PlaylistActivity::class.java)
-                        intent.putExtra("mediaData", mediadata)
-                        startActivity(intent)
-                    }
-                }
-            } else {
-
-                toggleSelection(viewHolder, mediadata, list)
-                multiSelection = !selectedList.isEmpty()
-                if (!multiSelection) {
-                    checkmultiselection()
-                }
-            }
-
-
-        }
 
 
     override fun onCreateView(
@@ -187,6 +87,11 @@ class RecentsFragment : Fragment(),
         viewModel = activityViewModelProvider()
         initViews()
         initObservers()
+
+        mediaAdapter.setItemClick(this)
+
+        selectedList = mediaAdapter.getSelectedList()
+
 
     }
 
@@ -247,6 +152,8 @@ class RecentsFragment : Fragment(),
                 viewModel.dublicateMediafiles(it)
             }
             bottomLayout.visibility = View.GONE
+            mediaAdapter.setSeletedList()
+            mediaAdapter.notifyDataSetChanged()
         }
 
         btnmove.setOnClickListener {
@@ -281,6 +188,8 @@ class RecentsFragment : Fragment(),
             multiSelection = false
             bottomLayout.visibility = View.GONE
         }, 1000)
+
+        initObservers()
 
     }
 
@@ -401,6 +310,9 @@ class RecentsFragment : Fragment(),
             Toast.LENGTH_SHORT
         ).show()
         multiSelection = false
+
+        mediaAdapter.setSeletedList()
+        mediaAdapter.notifyDataSetChanged()
     }
 
     override fun onProgress(progress: String) {
@@ -438,6 +350,10 @@ class RecentsFragment : Fragment(),
         val bundle = Bundle()
         bottomSheetDialogFragment.arguments = bundle
         fragmentManager?.let { bottomSheetDialogFragment.show(it, bottomSheetDialogFragment.tag) }
+    }
+
+    override fun onItemClick(multiselection: Boolean) {
+        checkmultiselection(multiselection)
     }
 
 }

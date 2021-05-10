@@ -1,6 +1,6 @@
 <com.example.loopdeck.squarelayout.SquareRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/container"
+    android:id="@+id/containerimages"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -23,7 +23,7 @@
             android:src="@drawable/ic_baseline_image" />
 
         <ImageView
-            android:id="@+id/selectitem"
+            android:id="@+id/selectitemimages"
             android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
