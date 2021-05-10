@@ -213,6 +213,7 @@ class StickerBSFragment : BottomSheetDialogFragment() {
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                 mStickerListener?.let {
                     it.onStickerClick(bitmap)
+                    dismiss()
                 }
             }
 
