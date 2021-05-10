@@ -72,6 +72,7 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
         MediaAdaptor(
             mutableListOf(),
             viewModel::onSequenceChanged,
+            requireContext()
         )
     }
 

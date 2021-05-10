@@ -1,14 +1,20 @@
 package com.example.loopdeck.ui.adapters
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.data.MediaType
+import com.example.loopdeck.editor.PreviewPhotoActivity
+import com.example.loopdeck.editor.PreviewVideoActivity
+import com.example.loopdeck.ui.collection.playlist.PlaylistActivity
 import com.example.loopdeck.ui.googledrive.GoogleDriveAdaptor.Companion.VIEW_TYPE_PLAYLIST
 import com.example.loopdeck.ui.viewholders.ImageViewHolder
 import com.example.loopdeck.ui.viewholders.PlaylistViewHolder
@@ -22,7 +28,8 @@ import java.util.*
 
 class MediaAdaptor(
     private var mList: MutableList<MediaData>,
-    private val onSequenceChanged: ((List<MediaData>) -> Unit)? = null
+    private val onSequenceChanged: ((List<MediaData>) -> Unit)? = null,
+    private val context: Context
 
 ) : Adapter<ViewHolder>(), ItemMoveCallback.DragAndDropListener {
 
@@ -222,27 +229,28 @@ class MediaAdaptor(
 
         multiSelection = !selectedList.isEmpty()
 
-        itemClick!!.onItemClick(multiSelection)
+//        itemClick!!.onItemClick(multiSelection)
         if (!multiSelection) {
-//            when (mediadata.mediaType) {
-//                MediaType.IMAGE -> {
-//                    val intent = Intent(get, PreviewPhotoActivity::class.java)
-//                    intent.putExtra("mediaData", mediadata)
-//                    startActivity(intent)
-//                }
-//                MediaType.VIDEO -> {
-//                    val intent = Intent(requireContext(), PreviewVideoActivity::class.java)
-//                    intent.putExtra("mediaData", mediadata)
-//                    startActivity(intent)
+            when (mediadata.mediaType) {
+                MediaType.IMAGE -> {
+                    val intent = Intent(context, PreviewPhotoActivity::class.java)
+                    intent.putExtra("mediaData", mediadata)
+                    context.startActivity(intent)
+                }
+                MediaType.VIDEO -> {
+                    val intent = Intent(context, PreviewVideoActivity::class.java)
+                    intent.putExtra("mediaData", mediadata)
+                    context.startActivity(intent)
+
+                }
+                else -> {
+
+                    val intent = Intent(context, PlaylistActivity::class.java)
+                    intent.putExtra("mediaData", mediadata)
+                    context.startActivity(intent)
+                }
+            }
 //
-//                }
-//                else -> {
-//
-//                    val intent = Intent(requireContext(), PlaylistActivity::class.java)
-//                    intent.putExtra("mediaData", mediadata)
-//                    startActivity(intent)
-//                }
-//            }
         } else {
 
             toggleSelection(viewHolder, mediadata, list, position)

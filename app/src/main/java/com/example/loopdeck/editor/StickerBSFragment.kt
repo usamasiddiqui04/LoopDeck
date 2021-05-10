@@ -209,6 +209,11 @@ class StickerBSFragment : BottomSheetDialogFragment() {
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, name);
         downloadManager?.enqueue(request) ?: showErrorToast()
 
+        val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+
+        val ImgPath = "$path/$name.png"
+//        mStickerListener!!.onStickerClick(Uri.parse(ImgPath))
+
 
     }
 

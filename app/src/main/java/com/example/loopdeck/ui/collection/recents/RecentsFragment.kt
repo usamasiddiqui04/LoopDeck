@@ -61,7 +61,9 @@ class RecentsFragment : Fragment(),
     private lateinit var viewModel: CollectionViewModel
     private val mediaAdapter by lazy {
         MediaAdaptor(
-            mList = mutableListOf()
+            mList = mutableListOf(),
+            null,
+            context!!
         )
     }
 
