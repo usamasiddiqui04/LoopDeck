@@ -273,15 +273,13 @@ class RecentsFragment : Fragment(),
     }
 
     fun deleteMediaFiles() {
-        Handler(Looper.getMainLooper()).postDelayed(object : Runnable {
-            override fun run() {
-                for (list in selectedList) {
-                    viewModel.delete(list)
-                }
-                selectedList.clear()
-                multiSelection = false
-                bottomLayout.visibility = View.GONE
+        Handler(Looper.getMainLooper()).postDelayed({
+            for (list in selectedList) {
+                viewModel.delete(list)
             }
+            selectedList.clear()
+            multiSelection = false
+            bottomLayout.visibility = View.GONE
         }, 1000)
 
     }
