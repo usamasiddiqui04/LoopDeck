@@ -1,6 +1,7 @@
 package com.example.loopdeck.ui.adapters
 
 import android.util.Log
+import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,11 @@ import com.example.loopdeck.ui.viewholders.ImageViewHolder
 import com.example.loopdeck.ui.viewholders.PlaylistViewHolder
 import com.example.loopdeck.ui.viewholders.VideoViewHolder
 import com.example.loopdeck.utils.callbacks.ItemMoveCallback
+import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
+import kotlinx.android.synthetic.main.item_recent_folder_list.view.selectitem
+import kotlinx.android.synthetic.main.item_recent_list_images.view.*
 import java.util.*
+
 
 class MediaAdaptor(
     private var mList: MutableList<MediaData>,
@@ -22,41 +27,117 @@ class MediaAdaptor(
 
 ) : Adapter<ViewHolder>(), ItemMoveCallback.DragAndDropListener {
 
+
+    private var itemClick: OnItemClick? = null
+    private val selectedItems: SparseBooleanArray? = null
+    private var selectedIndex = -1
+
+    fun setItemClick(itemClick: OnItemClick?) {
+        this.itemClick = itemClick
+    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is ImageViewHolder -> {
                 holder.bind(mList[position])
                 holder.itemView.setOnClickListener {
-                    itemClickListener.invoke(it, holder, mList, mList[position])
+                    itemClick!!.onItemClick(it, mList[position], position)
                 }
                 holder.itemView.setOnLongClickListener {
-                    itemLongClickListener.invoke(it, holder, mList, mList[position])
-                    true
-
+                    if (itemClick == null) {
+                        return@setOnLongClickListener false
+                    } else {
+                        itemClick?.onLongPress(it, mList[position], position);
+                        return@setOnLongClickListener true
+                    }
                 }
+                toggleIcon(holder, position)
+
             }
             is VideoViewHolder -> {
                 holder.bind(mList[position])
                 holder.itemView.setOnClickListener {
-                    itemClickListener.invoke(it, holder, mList, mList[position])
+                    itemClick!!.onItemClick(it, mList[position], position)
                 }
                 holder.itemView.setOnLongClickListener {
-                    itemLongClickListener.invoke(it, holder, mList, mList[position])
-                    true
+                    if (itemClick == null) {
+                        return@setOnLongClickListener false
+                    } else {
+                        itemClick?.onLongPress(it, mList[position], position);
+                        return@setOnLongClickListener true
+                    }
                 }
+                toggleIcon(holder, position);
             }
             is PlaylistViewHolder -> {
-                holder.bind(mList.get(position))
+                holder.bind(mList[position])
                 holder.itemView.setOnClickListener {
-                    itemClickListener.invoke(it, holder, mList, mList[position])
+                    itemClick!!.onItemClick(it, mList[position], position)
                 }
                 holder.itemView.setOnLongClickListener {
-                    itemLongClickListener.invoke(it, holder, mList, mList[position])
-                    true
+                    if (itemClick == null) {
+                        return@setOnLongClickListener false
+                    } else {
+                        itemClick?.onLongPress(it, mList[position], position);
+                        return@setOnLongClickListener true
+                    }
                 }
+                toggleIcon(holder, position);
 
             }
         }
+
+    }
+
+    private fun toggleIcon(viewHolder: ViewHolder, position: Int) {
+
+        if (selectedItems!!.get(position, false)) {
+            viewHolder.itemView.selectitem.visibility = View.VISIBLE
+            viewHolder.itemView.cardview.alpha = 0.5f
+            if (selectedIndex == position) selectedIndex = -1;
+        } else {
+            viewHolder.itemView.selectitem.visibility = View.GONE
+            viewHolder.itemView.cardview.alpha = 1f
+            if (selectedIndex == position) selectedIndex = -1;
+        }
+    }
+
+    fun getSelectedItems(): List<Int>? {
+        val items: MutableList<Int> = ArrayList(selectedItems!!.size())
+        for (i in 0 until selectedItems.size()) {
+            items.add(selectedItems.keyAt(i))
+        }
+        return items
+    }
+
+    fun removeItems(position: Int) {
+        mList.removeAt(position)
+        selectedIndex = -1
+    }
+
+    fun clearSelection() {
+        selectedItems!!.clear()
+        notifyDataSetChanged()
+    }
+
+    fun toggleSelection(position: Int) {
+        selectedIndex = position
+        if (selectedItems!![position, false]) {
+            selectedItems.delete(position)
+        } else {
+            selectedItems.put(position, true)
+        }
+        notifyItemChanged(position)
+    }
+
+    fun selectedItemCount(): Int {
+        return selectedItems!!.size()
+    }
+
+
+    interface OnItemClick {
+        fun onItemClick(view: View?, mediaData: MediaData?, position: Int)
+        fun onLongPress(view: View?, mediaData: MediaData??, position: Int)
     }
 
 

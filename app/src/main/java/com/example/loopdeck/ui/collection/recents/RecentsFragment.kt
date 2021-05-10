@@ -11,7 +11,6 @@ import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,7 +30,6 @@ import com.example.loopdeck.ui.adapters.MediaAdaptor
 import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.ui.collection.move.MoveToPlaylistFragment
 import com.example.loopdeck.ui.collection.playlist.PlaylistActivity
-import com.example.loopdeck.ui.collection.playlist.PlaylistFragment
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.example.loopdeck.utils.extensions.toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -187,6 +185,23 @@ class RecentsFragment : Fragment(),
         viewModel = activityViewModelProvider()
         initViews()
         initObservers()
+
+        mediaAdapter.setItemClick(object : MediaAdaptor.OnItemClick {
+            override fun onItemClick(view: View?, mediaData: MediaData?, position: Int) {
+                if (mediaAdapter.selectedItemCount() > 0) {
+                    mediaAdapter.toggleSelection(position)
+                } else {
+
+                    toast("Clicked")
+
+                }
+            }
+
+            override fun onLongPress(view: View?, mediaData: MediaData?, position: Int) {
+                mediaAdapter.toggleSelection(position);
+            }
+
+        })
 
     }
 

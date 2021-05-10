@@ -39,7 +39,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class StickerBSFragment() : BottomSheetDialogFragment() {
+class StickerBSFragment : BottomSheetDialogFragment() {
 
     private var items: ArrayList<ItemEntity>? = null
     var progressDialog: ProgressDialog? = null
@@ -49,6 +49,7 @@ class StickerBSFragment() : BottomSheetDialogFragment() {
     fun setStickerListener(stickerListener: StickerListener?) {
         mStickerListener = stickerListener
     }
+
     var searchStickers: EditText? = null
 
     interface StickerListener {
