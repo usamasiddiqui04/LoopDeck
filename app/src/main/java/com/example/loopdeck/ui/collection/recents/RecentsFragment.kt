@@ -9,7 +9,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.*
+import android.view.DragEvent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -29,17 +32,8 @@ import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.example.loopdeck.utils.extensions.toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
-import kotlinx.android.synthetic.main.activity_recents.*
 import kotlinx.android.synthetic.main.dailogbox.view.*
-import kotlinx.android.synthetic.main.fragment_playlist.*
 import kotlinx.android.synthetic.main.fragment_recents.*
-import kotlinx.android.synthetic.main.fragment_recents.bottomLayout
-import kotlinx.android.synthetic.main.fragment_recents.btnDelete
-import kotlinx.android.synthetic.main.fragment_recents.btnplay
-import kotlinx.android.synthetic.main.fragment_recents.recyclerview
-import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
-import kotlinx.android.synthetic.main.item_recent_list_images.view.*
-import kotlinx.android.synthetic.main.item_recent_video_lists.view.*
 import java.io.File
 import java.util.*
 
@@ -60,11 +54,8 @@ class RecentsFragment : Fragment(),
 
     private lateinit var viewModel: CollectionViewModel
     private val mediaAdapter by lazy {
-        MediaAdaptor(
-            mList = mutableListOf(),
-            null,
-            context!!
-        )
+
+        MediaAdaptor(mList = mutableListOf(), context = requireContext())
     }
 
     private fun checkmultiselection(multiselection: Boolean) {
@@ -90,11 +81,7 @@ class RecentsFragment : Fragment(),
         initViews()
         initObservers()
 
-        mediaAdapter.setItemClick(this)
-
         selectedList = mediaAdapter.getSelectedList()
-
-
     }
 
 
@@ -120,6 +107,7 @@ class RecentsFragment : Fragment(),
 
 //        ViewCompat.setLayoutDirection(drawer_layout!!, ViewCompat.LAYOUT_DIRECTION_RTL)
 
+        mediaAdapter.setItemClick(this)
         recyclerview.adapter = mediaAdapter
         recyclerview.layoutManager = GridLayoutManager(requireContext(), 3)
         btnCreateRecents.setOnClickListener {
@@ -150,34 +138,27 @@ class RecentsFragment : Fragment(),
 
         btndublicate.setOnClickListener {
 
-            selectedList.forEach {
-                viewModel.dublicateMediafiles(it)
-            }
+            selectedList.forEach { viewModel.dublicateMediafiles(it) }
             bottomLayout.visibility = View.GONE
             mediaAdapter.setSeletedList()
             mediaAdapter.notifyDataSetChanged()
         }
 
         btnmove.setOnClickListener {
-
             val moveToPlaylistFragment = MoveToPlaylistFragment()
             moveToPlaylistFragment.moveFileList(selectedList)
-
             showBottomSheetDialogFragment(moveToPlaylistFragment)
 //            moveToPlaylistNameDialog(requireContext())
         }
 
         btnplay.setOnClickListener {
-
-
             val intent = Intent(requireContext(), PlayActivity::class.java)
             val bundle = Bundle()
             bundle.putParcelableArrayList("videoFileList", selectedList)
             intent.putExtras(bundle)
             startActivity(intent)
-
-
         }
+
         initContainer()
     }
 

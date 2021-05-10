@@ -67,7 +67,7 @@ class MediaAdaptor(
                 }
                 holder.itemView.setOnLongClickListener {
                     multiSelection = true
-                    itemClick!!.onItemClick(multiSelection)
+                    itemClick?.onItemClick(multiSelection)
                     toggleSelection(holder, mList[position], mList, position)
                     true
 
@@ -80,7 +80,7 @@ class MediaAdaptor(
                 }
                 holder.itemView.setOnLongClickListener {
                     multiSelection = true
-                    itemClick!!.onItemClick(multiSelection)
+                    itemClick?.onItemClick(multiSelection)
                     toggleSelection(holder, mList[position], mList, position)
                     true
 

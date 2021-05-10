@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Context.DOWNLOAD_SERVICE
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Environment
 import android.view.LayoutInflater
@@ -29,6 +30,7 @@ import com.example.loopdeck.editor.entities.SearchEntity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,7 +38,8 @@ import retrofit2.Response
 
 class StickerBSFragment : BottomSheetDialogFragment() {
 
-    private var items: ArrayList<ItemEntity>? = null
+    private var items = mutableListOf<ItemEntity>()
+
     var progressDialog: ProgressDialog? = null
     val stickerAdapter = StickerAdapter()
     var mStickerListener: StickerListener? = null
@@ -44,7 +47,11 @@ class StickerBSFragment : BottomSheetDialogFragment() {
         mStickerListener = stickerListener
     }
 
-    var searchStickers: EditText? = null
+    val searchApi: SearchApi by lazy {
+        ApiClient.getSearchApi()
+    }
+
+    var editTextSearch: EditText? = null
 
     interface StickerListener {
         fun onStickerClick(bitmap: Bitmap?)
@@ -70,20 +77,7 @@ class StickerBSFragment : BottomSheetDialogFragment() {
         items = ArrayList()
         progressDialog = ProgressDialog(context)
 
-
-        var query = "vectors"
-        query = StringConverter.getQueryString(query)
-
-        var type = "Vector graphics"
-        type = StringConverter.getImageTypeQuery(type)
-
-
-        var orientation = "Any orientation"
-        orientation = StringConverter.getImageOrientationQuery(orientation)
-
-        val searchApi: SearchApi = ApiClient.getSearchApi()
-        val searchEntities: Call<SearchEntity> = searchApi
-            .getSearchResult(query, type, orientation)
+        val searchEntities: Call<SearchEntity> = searchApi.getSearchResult(query = "sticker")
         searchEntities.enqueue(callback)
 
         val params = (contentView.parent as View).layoutParams as CoordinatorLayout.LayoutParams
@@ -91,7 +85,16 @@ class StickerBSFragment : BottomSheetDialogFragment() {
         if (behavior != null && behavior is BottomSheetBehavior<*>) {
             behavior.setBottomSheetCallback(mBottomSheetBehaviorCallback)
         }
-        searchStickers = contentView.findViewById(R.id.stickersearch)
+        editTextSearch = contentView.findViewById(R.id.stickersearch)
+
+        editTextSearch?.setOnEditorActionListener { textView, _, _ ->
+            val q = textView.text.toString()
+            val searchEntity = searchApi
+                .getSearchResult(q, "vector", "all")
+            searchEntity.enqueue(callback)
+            false
+        }
+
         (contentView.parent as View).setBackgroundColor(resources.getColor(android.R.color.transparent))
         val rvEmoji: RecyclerView = contentView.findViewById(R.id.rvEmoji)
         val gridLayoutManager = GridLayoutManager(activity, 4)
@@ -137,10 +140,10 @@ class StickerBSFragment : BottomSheetDialogFragment() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
             val entity = items!![position]
-            setThumbnailImage(entity.webformatURL, holder.imgSticker)
+            setThumbnailImage(entity.previewURL, holder.imgSticker)
 
             holder.imgSticker.setOnClickListener {
-                downloadImage(position)
+                downloadViaPicasso(items[position])
             }
         }
 
@@ -195,18 +198,44 @@ class StickerBSFragment : BottomSheetDialogFragment() {
         Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
     }
 
-    private fun downloadImage(position: Int) {
-        val url = items!![position].webformatURL
+
+    private fun downloadViaPicasso(sticker: ItemEntity) {
+
+        val target = object : Target {
+            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                Toast.makeText(context, "Download Started", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onBitmapFailed(errorDrawable: Drawable?) {
+                Toast.makeText(context, "Download Failed", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                mStickerListener?.let {
+                    it.onStickerClick(bitmap)
+                }
+            }
+
+        }
+        Picasso.with(requireContext()).load(sticker.webformatURL).into(target)
+
+    }
+
+    private fun downloadImage(sticker: ItemEntity) {
+        val url = sticker.webformatURL
         val name = StringConverter.getImageNameFromUrl(url)
-        val downloadManager = activity!!.getSystemService(DOWNLOAD_SERVICE) as DownloadManager?
+        val downloadManager =
+            requireActivity().getSystemService(DOWNLOAD_SERVICE) as DownloadManager?
+
         val request = DownloadManager.Request(Uri.parse(url))
+
         request.setAllowedNetworkTypes(
-            DownloadManager.Request.NETWORK_WIFI
-                    or DownloadManager.Request.NETWORK_MOBILE
+            DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE
         )
             .setAllowedOverRoaming(false)
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, name);
+
         downloadManager?.enqueue(request) ?: showErrorToast()
 
         val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
@@ -220,7 +249,7 @@ class StickerBSFragment : BottomSheetDialogFragment() {
 
     inner class DownloadBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
-            val action: String? = intent.getAction()
+            val action: String? = intent.action
             if (DownloadManager.ACTION_DOWNLOAD_COMPLETE == action) {
                 Toast.makeText(context, "Download Complete", Toast.LENGTH_SHORT).show()
             }
