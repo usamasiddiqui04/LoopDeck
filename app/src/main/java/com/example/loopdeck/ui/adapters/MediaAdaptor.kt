@@ -228,8 +228,6 @@ class MediaAdaptor(
     ) {
 
         multiSelection = !selectedList.isEmpty()
-
-//        itemClick!!.onItemClick(multiSelection)
         if (!multiSelection) {
             when (mediadata.mediaType) {
                 MediaType.IMAGE -> {

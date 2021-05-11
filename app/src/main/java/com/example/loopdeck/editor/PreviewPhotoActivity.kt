@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.TextureView
@@ -25,8 +24,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
-import com.example.loopdeck.data.MediaRepository
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.example.loopdeck.editor.filter.FilterListener
 import com.example.loopdeck.editor.filter.FilterViewAdapter
 import com.example.loopdeck.editor.fragments.AddMusicFragment
@@ -34,6 +31,7 @@ import com.example.loopdeck.editor.fragments.SoundPickerFragment
 import com.example.loopdeck.editor.photoeditor.*
 import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.activity_preview.*
 import java.io.File
 import java.io.IOException
@@ -199,39 +197,6 @@ class PreviewPhotoActivity : AppCompatActivity(), OnPhotoEditorListener,
             showBottomSheetDialogFragment(soundPickerFragment)
 
         }
-
-        //        switch (v.getId()) {
-//            case R.id.imgClose:
-//                onBackPressed();
-//                break;
-//            case R.id.imgDone:
-//                saveImage();
-//                break;
-//            case R.id.imgDraw:
-//                setDrawingMode();
-//                break;
-//            case R.id.imgText:
-//                TextEditorDialogFragment textEditorDialogFragment = TextEditorDialogFragment.show(this,0);
-//                textEditorDialogFragment.setOnTextEditorListener(new TextEditorDialogFragment.TextEditor() {
-//
-//                    @Override
-//                    public void onDone(String inputText, int colorCode,int position) {
-//                        final TextStyleBuilder styleBuilder = new TextStyleBuilder();
-//                        styleBuilder.withTextColor(colorCode);
-//                        Typeface typeface = ResourcesCompat.getFont(PreviewPhotoActivity.this,TextEditorDialogFragment.getDefaultFontIds(PreviewPhotoActivity.this).get(position));
-//                        styleBuilder.withTextFont(typeface);
-//                        mPhotoEditor.addText(inputText, styleBuilder,position);
-//                    }
-//                });
-//                break;
-//            case R.id.imgUndo:
-//                Log.d("canvas>>",mPhotoEditor.undoCanvas()+"");
-//                mPhotoEditor.clearBrushAllViews();
-//                break;
-//            case R.id.imgSticker:
-//                mStickerBSFragment.show(getSupportFragmentManager(), mStickerBSFragment.getTag());
-//                break;
-//
 //        }
     }
 
@@ -246,14 +211,6 @@ class PreviewPhotoActivity : AppCompatActivity(), OnPhotoEditorListener,
         mPhotoEditor!!.setBrushDrawingMode(true)
         imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.black_trasp))
         brushArtFragment!!.show(supportFragmentManager, brushArtFragment!!.tag)
-//        if (mPhotoEditor!!.brushDrawableMode) {
-//            mPhotoEditor!!.setBrushDrawingMode(false)
-//            imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.black_trasp))
-//        } else {
-//            mPhotoEditor!!.setBrushDrawingMode(true)
-//            imgDraw!!.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
-//            propertiesBSFragment!!.show(supportFragmentManager, propertiesBSFragment!!.tag)
-//        }
     }
 
     @SuppressLint("MissingPermission")
@@ -283,6 +240,8 @@ class PreviewPhotoActivity : AppCompatActivity(), OnPhotoEditorListener,
 
                         viewModel.editedImageFiles(file, playListName)
                         viewModel.delete(mediaData!!)
+
+                        onBackPressed()
 
                     }
 

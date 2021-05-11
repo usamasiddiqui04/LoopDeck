@@ -340,6 +340,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
                     Toast.makeText(applicationContext, "Success", Toast.LENGTH_SHORT).show()
                     viewModel.editedImageFiles(output!!, playlistName)
                     viewModel.delete(mediaData!!)
+                    onBackPressed()
                 }
 
                 override fun onProgress(s: String) {
@@ -534,6 +535,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         } catch (e: IOException) {
             e.printStackTrace()
         }
+
     }
 
     private fun applayWaterMark() {

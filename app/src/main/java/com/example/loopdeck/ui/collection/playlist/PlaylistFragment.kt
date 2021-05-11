@@ -17,14 +17,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
 import com.example.loopdeck.DragData
 import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaData
-import com.example.loopdeck.data.MediaType
 import com.example.loopdeck.editor.PlayActivity
-import com.example.loopdeck.editor.PreviewPhotoActivity
-import com.example.loopdeck.editor.PreviewVideoActivity
 import com.example.loopdeck.gallery.model.GalleryData
 import com.example.loopdeck.gallery.view.PickerActivity
 import com.example.loopdeck.ui.adapters.MediaAdaptor
@@ -36,13 +32,10 @@ import kotlinx.android.synthetic.main.fragment_playlist.*
 import kotlinx.android.synthetic.main.fragment_playlist.btnDelete
 import kotlinx.android.synthetic.main.fragment_playlist.btnplay
 import kotlinx.android.synthetic.main.fragment_playlist.recyclerview
-import kotlinx.android.synthetic.main.item_recent_folder_list.view.*
-import kotlinx.android.synthetic.main.item_recent_list_images.view.*
-import kotlinx.android.synthetic.main.item_recent_video_lists.view.*
 import java.io.File
 
 
-class PlaylistFragment : Fragment(), OptiFFMpegCallback {
+class PlaylistFragment : Fragment(), OptiFFMpegCallback, MediaAdaptor.OnItemClick {
 
     private var tagName: String = PlaylistFragment::class.java.simpleName
     private var selectedList = ArrayList<MediaData>()
@@ -72,100 +65,9 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
         MediaAdaptor(
             mutableListOf(),
             viewModel::onSequenceChanged,
-            requireContext()
+            context = requireContext()
         )
     }
-
-
-//    private val onItemLongClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Unit =
-//        { itemView, viewHolder, list, mediadata ->
-//
-//            multiSelection = true
-//            checkmultiselection()
-//
-//            toggleSelection(viewHolder, mediadata, list)
-//
-//        }
-
-//    private fun toggleSelection(
-//        viewHolder: RecyclerView.ViewHolder,
-//        mediadata: MediaData,
-//        list: MutableList<MediaData>
-//    ) {
-//        mediaData = list.get(viewHolder.adapterPosition)
-//        when (mediadata.mediaType) {
-//            MediaType.IMAGE -> {
-//
-//                if (viewHolder.itemView.selectitem.visibility == View.GONE) {
-//                    viewHolder.itemView.selectitem.visibility = View.VISIBLE
-//                    viewHolder.itemView.cardview.alpha = 0.5f
-//                    selectedList.add(mediaData!!)
-//
-//                } else {
-//                    viewHolder.itemView.selectitem.visibility = View.GONE
-//                    viewHolder.itemView.cardview.alpha = 1f
-//                    selectedList.remove(mediaData!!)
-//                }
-//            }
-//            MediaType.VIDEO -> {
-//                if (viewHolder.itemView.selectitem.visibility == View.GONE) {
-//                    viewHolder.itemView.selectitem.visibility = View.VISIBLE
-//                    viewHolder.itemView.cardvideo.alpha = 0.5f
-//                    selectedList.add(mediaData!!)
-//                } else {
-//                    viewHolder.itemView.selectitem.visibility = View.GONE
-//                    viewHolder.itemView.cardvideo.alpha = 1f
-//                    selectedList.remove(mediaData!!)
-//                }
-//            }
-//            else -> {
-//                if (viewHolder.itemView.selectitem.visibility == View.GONE) {
-//                    viewHolder.itemView.selectitem.visibility = View.VISIBLE
-//                    viewHolder.itemView.cardfolder.alpha = 0.5f
-//                    selectedList.add(mediaData!!)
-//                } else {
-//                    viewHolder.itemView.selectitem.visibility = View.GONE
-//                    viewHolder.itemView.cardfolder.alpha = 1f
-//                    selectedList.remove(mediaData!!)
-//                }
-//            }
-//        }
-//    }
-
-//    private val onItemClickListener: (View, RecyclerView.ViewHolder, MutableList<MediaData>, MediaData) -> Unit =
-//        { itemView, viewHolder, list, mediadata ->
-//
-//            multiSelection = !selectedList.isEmpty()
-//            if (!multiSelection) {
-//                when (mediadata.mediaType) {
-//                    MediaType.IMAGE -> {
-//                        val intent = Intent(requireContext(), PreviewPhotoActivity::class.java)
-//                        intent.putExtra("mediaData", mediadata)
-//                        startActivity(intent)
-//                    }
-//                    MediaType.VIDEO -> {
-//                        val intent = Intent(requireContext(), PreviewVideoActivity::class.java)
-//                        intent.putExtra("mediaData", mediadata)
-//                        startActivity(intent)
-//
-//                    }
-//                    else -> {
-//                        requireActivity().supportFragmentManager.beginTransaction()
-//                            .replace(R.id.container, PlaylistFragment.newInstance(mediadata.name))
-//                            .addToBackStack(null)
-//                            .commit()
-//
-//                    }
-//                }
-//            } else {
-//                toggleSelection(viewHolder, mediadata, list)
-//                multiSelection = !selectedList.isEmpty()
-//                if (!multiSelection) {
-//                    checkmultiselection()
-//                }
-//            }
-//
-//        }
 
 
     override fun onCreateView(
@@ -181,10 +83,12 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
         viewModel = ViewModelProviders.of(this).get(CollectionViewModel::class.java)
         initViews()
         initObservers()
+
+        selectedList = mediaAdapter.getSelectedList()
     }
 
-    private fun checkmultiselection() {
-        if (multiSelection) {
+    private fun checkmultiselection(multiselection: Boolean) {
+        if (multiselection) {
             constraintDel.visibility = View.VISIBLE
         } else {
             constraintDel.visibility = View.GONE
@@ -203,6 +107,8 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
         progressDialog = ProgressDialog(requireContext())
         toolbar.setNavigationIcon(R.drawable.ic_back_black)
         toolbar.setNavigationOnClickListener { activity!!.onBackPressed() }
+
+        mediaAdapter.setItemClick(this)
 
         btnGallery.setOnClickListener {
 
@@ -227,34 +133,6 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
             bundle.putParcelableArrayList("videoFileList", selectedList)
             intent.putExtras(bundle)
             startActivity(intent)
-
-//            if (selectedList.size > 1) {
-//
-//                val fileList = mutableListOf<File>()
-//                selectedList.forEach {
-//                    if (it.filePath.contains("mp4"))
-//                        fileList.add(File(it.filePath))
-//                }
-//
-//                val outputFile = context?.let { it1 -> OptiUtils.createVideoFile(it1) }
-//
-//                outputFile?.let {
-//                    OptiVideoEditor.with(context!!)
-//                        .setType(OptiConstant.MERGE_VIDEO)
-//                        .setMutlipleFiles(fileList)
-//                        .setOutputPath(it.path)
-//                        .setCallback(this)
-//                        .main()
-//                }
-//            } else if (selectedList.isEmpty()) {
-//                toast("Please select video files to merge and play")
-//            } else {
-//                val intent = Intent(requireContext(), PlayActivity::class.java)
-//                intent.putExtra("videoFilePath", selectedList[0].filePath)
-//                startActivity(intent)
-////        viewModel.editedImageFiles(convertedFile, playlistName)
-//                progressDialog!!.dismiss()
-//            }
 
         }
 
@@ -355,6 +233,10 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback {
             }
         }, 1000)
 
+    }
+
+    override fun onItemClick(multiselection: Boolean) {
+        checkmultiselection(multiselection)
     }
 
 

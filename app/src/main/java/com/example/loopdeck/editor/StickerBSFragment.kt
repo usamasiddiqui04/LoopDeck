@@ -2,16 +2,9 @@ package com.example.loopdeck.editor
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.app.DownloadManager
 import android.app.ProgressDialog
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Context.DOWNLOAD_SERVICE
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.net.Uri
-import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,11 +15,11 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.loopdeck.R
-import com.example.loopdeck.editor.Utils.StringConverter
 import com.example.loopdeck.editor.api.ApiClient
 import com.example.loopdeck.editor.api.SearchApi
 import com.example.loopdeck.editor.entities.ItemEntity
 import com.example.loopdeck.editor.entities.SearchEntity
+import com.example.loopdeck.progressbar.CustomProgressDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.squareup.picasso.Picasso
@@ -40,7 +33,8 @@ class StickerBSFragment : BottomSheetDialogFragment() {
 
     private var items = mutableListOf<ItemEntity>()
 
-    var progressDialog: ProgressDialog? = null
+    private val progressDialog = CustomProgressDialog()
+
     val stickerAdapter = StickerAdapter()
     var mStickerListener: StickerListener? = null
     fun setStickerListener(stickerListener: StickerListener?) {
@@ -75,7 +69,6 @@ class StickerBSFragment : BottomSheetDialogFragment() {
         dialog.setContentView(contentView)
 
         items = ArrayList()
-        progressDialog = ProgressDialog(context)
 
         val searchEntities: Call<SearchEntity> = searchApi.getSearchResult(query = "sticker")
         searchEntities.enqueue(callback)
@@ -156,19 +149,6 @@ class StickerBSFragment : BottomSheetDialogFragment() {
 
             init {
                 imgSticker = itemView.findViewById(R.id.imgSticker)
-//                itemView.setOnClickListener(View.OnClickListener {
-//
-//                    downloadImage()
-//                    if (mStickerListener != null) {
-//                        mStickerListener!!.onStickerClick(
-//                            BitmapFactory.decodeResource(
-//                                resources,
-//                                items!![adapterPosition].webformatURL.toInt()
-//                            )
-//                        )
-//                    }
-//                    dismiss()
-//                })
             }
         }
 
@@ -204,13 +184,16 @@ class StickerBSFragment : BottomSheetDialogFragment() {
         val target = object : Target {
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
                 Toast.makeText(context, "Download Started", Toast.LENGTH_SHORT).show()
+                progressDialog.show(context!!, "Downloading please Wait...")
             }
 
             override fun onBitmapFailed(errorDrawable: Drawable?) {
                 Toast.makeText(context, "Download Failed", Toast.LENGTH_SHORT).show()
+                progressDialog.dialog.dismiss()
             }
 
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                progressDialog.dialog.dismiss()
                 mStickerListener?.let {
                     it.onStickerClick(bitmap)
                     dismiss()
@@ -220,40 +203,5 @@ class StickerBSFragment : BottomSheetDialogFragment() {
         }
         Picasso.with(requireContext()).load(sticker.webformatURL).into(target)
 
-    }
-
-    private fun downloadImage(sticker: ItemEntity) {
-        val url = sticker.webformatURL
-        val name = StringConverter.getImageNameFromUrl(url)
-        val downloadManager =
-            requireActivity().getSystemService(DOWNLOAD_SERVICE) as DownloadManager?
-
-        val request = DownloadManager.Request(Uri.parse(url))
-
-        request.setAllowedNetworkTypes(
-            DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE
-        )
-            .setAllowedOverRoaming(false)
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, name);
-
-        downloadManager?.enqueue(request) ?: showErrorToast()
-
-        val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-
-        val ImgPath = "$path/$name.png"
-//        mStickerListener!!.onStickerClick(Uri.parse(ImgPath))
-
-
-    }
-
-
-    inner class DownloadBroadcastReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent) {
-            val action: String? = intent.action
-            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE == action) {
-                Toast.makeText(context, "Download Complete", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 }
