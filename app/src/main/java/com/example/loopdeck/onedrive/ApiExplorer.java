@@ -42,6 +42,8 @@ public class ApiExplorer extends AppCompatActivity implements ItemFragment.OnFra
      *
      * @param savedInstanceState The instance information
      */
+
+    private String playListName;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,13 +53,15 @@ public class ApiExplorer extends AppCompatActivity implements ItemFragment.OnFra
         setContentView(R.layout.activity_api_explorer);
 
         application.goToWifiSettingsIfDisconnected();
+
+        playListName = getIntent().getStringExtra("playlistName");
     }
 
     @Override
     public void onFragmentInteraction(final DisplayItem item) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment, ItemFragment.newInstance(item.getId()))
+                .replace(R.id.fragment, ItemFragment.newInstance(item.getId(), playListName))
                 .addToBackStack(null)
                 .commit();
     }

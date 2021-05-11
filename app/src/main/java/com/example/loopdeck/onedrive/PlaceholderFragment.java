@@ -48,6 +48,7 @@ public class PlaceholderFragment extends Fragment {
     }
 
     Button button;
+    String playListName = null;
 
     /**
      * Handle creation of the view
@@ -94,7 +95,7 @@ public class PlaceholderFragment extends Fragment {
     private void navigateToRoot() {
         requireFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment, ItemFragment.newInstance("root"))
+                .replace(R.id.fragment, ItemFragment.newInstance("root", null))
                 .addToBackStack(null)
                 .commit();
     }

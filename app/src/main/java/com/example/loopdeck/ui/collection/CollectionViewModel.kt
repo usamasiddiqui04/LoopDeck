@@ -68,9 +68,9 @@ class CollectionViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    fun createPlaylist(file: File) {
+    fun createPlaylist(file: File, playlistName: String?) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.addMediaOrPlaylist(file)
+            repository.addMediaOrPlaylist(file, playlistName)
         }
     }
 

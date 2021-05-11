@@ -50,6 +50,7 @@ import com.onedrive.sdk.extensions.*
 import com.onedrive.sdk.options.Option
 import com.onedrive.sdk.options.QueryOption
 import com.example.loopdeck.BitmapUtils.ROOT_DIRECTORY_NAME
+import com.example.loopdeck.ui.collection.playlist.PlaylistFragment
 import kotlinx.android.synthetic.main.activity_api_explorer.*
 import org.json.JSONObject
 import java.io.File
@@ -104,6 +105,10 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
             (activity?.findViewById<View>(R.id.fragment_label) as TextView).text = null
         }
         setHasOptionsMenu(true)
+    }
+
+    private val playlistName by lazy {
+        arguments?.getString(ItemFragment.ARG_PLAYLIST_NAME)
     }
 
     override fun onCreateView(
@@ -308,10 +313,10 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
         return object : DefaultCallback<Item?>(context) {
             override fun success(result: Item?) {
                 mItem = result
-                if (result!!.photo != null) {
+                if (result?.photo != null) {
                     download(mItem!!)
                 }
-                if (result.video != null) {
+                if (result?.video != null) {
                     download(mItem!!)
                 }
                 if (view != null) {
@@ -741,7 +746,7 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
         )
         val file = File(storageDir.absolutePath, item.name)
         toast(file.toString())
-        viewModel!!.createPlaylist(file)
+        viewModel?.createPlaylist(file, playlistName)
         if (item.file != null) {
             request.setMimeType(item.file.mimeType)
         }
@@ -790,7 +795,7 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
         itemPath.inputType = InputType.TYPE_CLASS_TEXT
         val itemCallback: DefaultCallback<Item?> = object : DefaultCallback<Item?>(activity) {
             override fun success(result: Item?) {
-                val fragment = newInstance(result!!.id)
+                val fragment = newInstance(result!!.id, playlistName!!)
                 navigateToFragment(fragment)
             }
         }
@@ -914,6 +919,7 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
          * The item id argument string
          */
         private const val ARG_ITEM_ID = "itemId"
+        private const val ARG_PLAYLIST_NAME = "playlistName"
 
         /**
          * The request code for simple upload
@@ -958,10 +964,11 @@ class ItemFragment : Fragment(), AdapterView.OnItemClickListener {
          * @return The fragment
          */
         @JvmStatic
-        fun newInstance(itemId: String?): ItemFragment {
+        fun newInstance(itemId: String?, playListName: String? = null): ItemFragment {
             val fragment = ItemFragment()
             val args = Bundle()
             args.putString(ARG_ITEM_ID, itemId)
+            args.putString(ARG_PLAYLIST_NAME, playListName)
             fragment.arguments = args
             return fragment
         }

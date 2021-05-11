@@ -28,6 +28,7 @@ import com.example.loopdeck.onedrive.ItemFragment
 import com.example.loopdeck.ui.adapters.MediaAdaptor
 import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.ui.collection.move.MoveToPlaylistFragment
+import com.example.loopdeck.ui.collection.playlist.PlaylistFragment
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.example.loopdeck.utils.extensions.toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -84,15 +85,6 @@ class RecentsFragment : Fragment(),
         selectedList = mediaAdapter.getSelectedList()
     }
 
-
-    private fun navigateToRoot() {
-        requireFragmentManager()
-            .beginTransaction()
-            .replace(R.id.fragment, ItemFragment.newInstance("root"))
-            .addToBackStack(null)
-            .commit()
-    }
-
     private fun initViews() {
         addfiles.setOnClickListener {
             val i = Intent(requireActivity(), PickerActivity::class.java)
@@ -112,7 +104,7 @@ class RecentsFragment : Fragment(),
         recyclerview.layoutManager = GridLayoutManager(requireContext(), 3)
         btnCreateRecents.setOnClickListener {
             savePlaylistNameDialog(requireContext()) {
-                viewModel.createPlaylist(it)
+                viewModel.createPlaylist(it, playlistName = null)
             }
         }
 
@@ -126,13 +118,13 @@ class RecentsFragment : Fragment(),
             i.putExtra("IMAGES_LIMIT", 1000)
             i.putExtra("VIDEOS_LIMIT", 1000)
             i.putExtra("REQUEST_RESULT_CODE", REQUEST_RESULT_CODE)
-            i.putExtra("playlistName", "")
+            i.putExtra("playlistName", "name")
             startActivityForResult(i, REQUEST_RESULT_CODE)
         }
 
         fbAddPlaylist.setOnClickListener {
             savePlaylistNameDialog(requireContext()) {
-                viewModel.createPlaylist(it)
+                viewModel.createPlaylist(it, playlistName = null)
             }
         }
 
@@ -192,7 +184,7 @@ class RecentsFragment : Fragment(),
     private fun showPlaylistNameDialog(context: Context, mediaList: ArrayList<GalleryData>) {
 
         savePlaylistNameDialog(context) { file ->
-            viewModel.createPlaylist(file)
+            viewModel.createPlaylist(file, playlistName = null)
             viewModel.addMediaFiles(mediaList, file.name)
         }
     }

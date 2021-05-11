@@ -54,12 +54,18 @@ class PickerActivity : AppCompatActivity() {
         REQUEST_RESULT_CODE = i.getIntExtra("REQUEST_RESULT_CODE", 0)
         playlistName = intent!!.getStringExtra("playlistName")
 
+        if (playlistName.equals("name"))
+            playlistName = null
+
         setUpViewPager(viewpager)
         tabs.setupWithViewPager(viewpager)
         setupTabIcons()
 
         onedrive.setOnClickListener {
-            startActivity(Intent(applicationContext, ApiExplorer::class.java))
+
+            val intent = Intent(applicationContext, ApiExplorer::class.java)
+            intent.putExtra("playlistName", playlistName)
+            startActivity(intent)
         }
 
         btnGoogleDrive.setOnClickListener {
