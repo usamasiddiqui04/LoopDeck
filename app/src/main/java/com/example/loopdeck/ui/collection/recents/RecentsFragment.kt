@@ -91,7 +91,7 @@ class RecentsFragment : Fragment(),
             i.putExtra("IMAGES_LIMIT", 100)
             i.putExtra("VIDEOS_LIMIT", 100)
             i.putExtra("REQUEST_RESULT_CODE", REQUEST_RESULT_CODE)
-            i.putExtra("playlistName", "")
+            i.putExtra("playlistName", "name")
             startActivityForResult(i, REQUEST_RESULT_CODE)
         }
 
