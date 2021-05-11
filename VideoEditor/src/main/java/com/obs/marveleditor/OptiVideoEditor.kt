@@ -230,6 +230,26 @@ class OptiVideoEditor private constructor(private val context: Context) {
         Log.v(tagName, "outputFilePath: $outputFilePath")
         var cmd: Array<String>? = null
 
+        fun mergeImageAndAudio(): Array<String> {
+            val inputs: ArrayList<String> = ArrayList()
+            inputs.apply {
+                add("-y")
+                add("-loop")
+                add("1")
+                add("-i")
+                add(imageFile!!.path)
+                add("-i")
+                add(audioFile!!.path)
+                add("-shortest")
+                add("-c:a")
+                add("copy")
+                add("-preset")
+                add("ultrafast")
+                add(outputFile.path)
+            }
+            return inputs.toArray(arrayOfNulls<String>(inputs.size))
+        }
+
         when (type) {
             OptiConstant.VIDEO_FLIRT -> {
                 //Video filter - Need video file, filter command & output file
@@ -374,34 +394,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
 //                cmd = arrayOf("-loop" ,"1","-vframes" ,"14490" , "-i" ,imageFile!!.path
 //                 , "-i",audioFile!!.path , "-y", "-r","30","-b","2500k","-acodec","ac3","-ab","384k"
 //                ,"-vcodec","mpeg4",outputFile.path)
-
-                cmd = arrayOf(
-                    "-y",
-                    "-loop",
-                    "1",
-                    "-r",
-                    "1",
-                    "-i",
-                    imageFile!!.path,
-                    "-i",
-                    audioFile!!.path,
-                    "-acodec",
-                    "aac",
-                    "-vcodec",
-                    "mpeg4",
-                    "-s",
-                    "480x320",
-                    "-strict",
-                    "experimental",
-                    "-b:a",
-                    "32k",
-                    "-shortest",
-                    "-f",
-                    "mp4",
-                    "-r",
-                    "2",
-                    outputFile.path
-                )
+                cmd = mergeImageAndAudio()
             }
 
             OptiConstant.VIDEO_AUDIO_OVERRIDE -> {
@@ -559,6 +552,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
 //                }
 //            })
 
+
         try {
             FFmpeg.getInstance(context).execute(cmd, object : ExecuteBinaryResponseHandler() {
                 override fun onStart() {
@@ -591,4 +585,5 @@ class OptiVideoEditor private constructor(private val context: Context) {
             callback!!.onNotAvailable(e2)
         }
     }
+
 }

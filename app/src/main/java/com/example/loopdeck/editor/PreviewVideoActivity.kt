@@ -130,17 +130,20 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 
         //        binding = DataBindingUtil.setContentView(this, R.layout.activity_preview_video);
         mediaData = intent!!.getParcelableExtra("mediaData")
-        mediaData!!.let {
+        mediaData?.let {
             playlistName = mediaData!!.playListName
             masterVideoFile = File(mediaData!!.filePath)
         }
+
 
         initViews()
         //        Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
 //        Glide.with(this).load(getIntent().getStringExtra("DATA")).into(binding.ivImage.getSource());
         ivImage!!.source?.let { Glide.with(this).load(R.drawable.trans).centerCrop().into(it) }
         val retriever = MediaMetadataRetriever()
-        retriever.setDataSource(mediaData!!.filePath)
+        mediaData?.let {
+            retriever.setDataSource(masterVideoFile!!.path)
+        }
         val metaRotation =
             retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)
         val rotation = metaRotation?.toInt() ?: 0
@@ -220,9 +223,6 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         )
 
 //        filepath = arguments?.getString(ARG_KEY_URI) ?: ""
-        filename =
-            masterVideoFile!!.toString().substring(masterVideoFile.toString().lastIndexOf("/") + 1)
-        filterFilepath = "$mAppPath/MP4_$filename"
         videoSurface = findViewById(R.id.videoSurface)
         ivImage = findViewById(R.id.ivImage)
         imgClose = findViewById(R.id.imgClose)

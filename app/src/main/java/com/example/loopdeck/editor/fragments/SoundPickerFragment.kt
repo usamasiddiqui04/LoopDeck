@@ -14,8 +14,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.loopdeck.data.MediaData
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.imagevideoeditor.R
+import com.imagevideoeditor.fragments.AddMusicFragment
 import com.imagevideoeditor.soundpicker.SongAdaptor
 import com.imagevideoeditor.soundpicker.Songinfo
 import kotlinx.android.synthetic.main.fragment_sound_picker.*
@@ -37,13 +39,15 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
     var mediaPlayer: MediaPlayer? = null
     var listener: SoundPickerListener? = null
 
+    var mediaData: MediaData? = null
+
     var selectForVideo = true
-    private lateinit var addMusicListener: AddMusicFragment.AddMusicFragmentListener
+    private lateinit var addMusicListener: com.example.loopdeck.editor.fragments.AddMusicFragment.AddMusicFragmentListener
 
     companion object {
         fun newInstance(
             soundPickerListener: SoundPickerListener,
-            musicListener: AddMusicFragment.AddMusicFragmentListener,
+            musicListener: com.example.loopdeck.editor.fragments.AddMusicFragment.AddMusicFragmentListener,
             selectForVideo: Boolean = true
         ) = SoundPickerFragment().apply {
             listener = soundPickerListener
@@ -56,10 +60,11 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
     private val onItemClickListener: (View, RecyclerView.ViewHolder, Songinfo) -> Unit =
         { itemView, viewHolder, songinfo ->
 
-            AddMusicFragment.newInstance().apply {
+            com.example.loopdeck.editor.fragments.AddMusicFragment.newInstance().apply {
                 if (selectForVideo) {
                     setAudioVideoFilePaths(File(songinfo.SongUrl!!), videofile!!, videoDuration!!)
                 } else {
+                    setMediadata(mediaData!!)
                     setAudioImageFilePaths(File(songinfo.SongUrl!!), imagefile!!, videoDuration!!)
                 }
 
@@ -141,6 +146,10 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
         imagefile = file
     }
 
+    @JvmName("setMediaData1")
+    fun setMediaData(mediaData: MediaData) {
+        this.mediaData = mediaData
+    }
 
     fun setDuartion(timeInMillis: Long) {
         videoDuration = timeInMillis

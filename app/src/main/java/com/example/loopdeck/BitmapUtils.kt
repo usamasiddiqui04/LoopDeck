@@ -16,6 +16,8 @@ import java.util.*
 internal object BitmapUtils {
     private const val FILE_PROVIDER_AUTHORITY = "com.example.android.fileprovider"
 
+    var FRAME_RATE: Int = 25
+
     const val ROOT_DIRECTORY_NAME = "Loopdeck Media Files"
 
     @Throws(IOException::class)

@@ -9,6 +9,7 @@ package com.example.loopdeck.editor.fragments
 
 import android.Manifest
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -28,6 +29,10 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.app.ActivityCompat
 import com.daasuu.epf.EPlayerView
 import com.example.loopdeck.R
+import com.example.loopdeck.SizeOfImage
+import com.example.loopdeck.data.MediaData
+import com.example.loopdeck.editor.PreviewVideoActivity
+import com.example.loopdeck.utils.extensions.getMediaType
 import com.github.guilhe.views.SeekBarRangedView
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.TrackGroupArray
@@ -42,6 +47,7 @@ import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.*
 import com.obs.marveleditor.utils.VideoUtils.secToTime
 import java.io.File
+import java.util.*
 import kotlin.math.roundToLong
 
 class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
@@ -50,6 +56,7 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
     private var tagName: String = AddMusicFragment::class.java.simpleName
     private var audioFile: File? = null
     private var videoFile: File? = null
+    var progressDialog: ProgressDialog? = null
     private var imageFile: File? = null
     private var playWhenReady: Boolean? = false
     private var exoPlayer: SimpleExoPlayer? = null
@@ -75,6 +82,7 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
     private var minSeekValue: Float = 0F
     private var maxSeekValue: Float = 0F
     private var mContext: Context? = null
+    private var mediaData: MediaData? = null
 
     lateinit var player: SimpleExoPlayer
     lateinit var ePlayerView: EPlayerView
@@ -96,6 +104,8 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
 
 
     private fun initView(inflate: View?) {
+
+        progressDialog = ProgressDialog(requireContext())
 
         flLoadingView = inflate?.findViewById(R.id.flLoadingView)
         acbCrop = inflate?.findViewById(R.id.acbCrop)
@@ -332,6 +342,10 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
         fun newInstance() = AddMusicFragment()
     }
 
+    fun setMediadata(mediaData: MediaData) {
+        this.mediaData = mediaData
+    }
+
     fun checkPermission(requestCode: Int, permission: String) {
         requestPermissions(arrayOf(permission), requestCode)
     }
@@ -432,9 +446,19 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
 
     override fun onProgress(progress: String) {
         Log.v(tagName, "onProgress()")
-        if (nextAction == 1) {
-            flLoadingView?.visibility = View.VISIBLE
-            acbCrop?.visibility = View.GONE
+        when (nextAction) {
+            1 -> {
+                flLoadingView?.visibility = View.VISIBLE
+                acbCrop?.visibility = View.GONE
+            }
+            2 -> {
+                helper?.showLoading(true)
+            }
+            3 -> {
+                dismiss()
+                progressDialog?.setMessage(progress)
+                progressDialog?.show()
+            }
         }
     }
 
@@ -451,15 +475,32 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
             } else if (imageFile != null) {
                 muxImagePlayer()
             }
-
-
-        } else {
+        } else if (nextAction == 2) {
+            outputFile?.let { addMusicListener.onSuccessAddMusic(it) }
             helper?.showLoading(false)
-            helper?.onFileProcessed(convertedFile)
             dialog?.dismiss()
+        } else if (nextAction == 3) {
+            progressDialog?.dismiss()
+            activity!!.finish()
+            val timestamp = Date()
+            val mediaType = outputFile!!.getMediaType()
+            val mediaDatapass = outputFile.let {
+                MediaData(
+                    id = 0,
+                    name = it!!.name,
+                    extension = it.extension,
+                    filePath = it.absolutePath,
+                    createdAt = timestamp,
+                    modifiedAt = timestamp,
+                    playListName = mediaData!!.playListName,
+                    sequence = mediaData!!.sequence,
+                    mediaType = mediaType
+                )
+            }
+            val i = Intent(requireActivity(), PreviewVideoActivity::class.java)
+            i.putExtra("mediaData", mediaDatapass)
+            startActivity(i)
         }
-
-        outputFile?.let { addMusicListener.onSuccessAddMusic(it) }
     }
 
     override fun onFailure(error: Exception) {
@@ -528,10 +569,11 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
         if (!isRunning()) {
             //output file is generated and send to video processing
             outputFile = OptiUtils.createVideoFile(requireContext())
+            val size = SizeOfImage(imageFile!!.path)
 
             outputFile?.let {
                 Log.v(tagName, "outputFile: ${it.absolutePath}")
-                nextAction = 2
+                nextAction = 3
                 if (audioFile != null && imageFile != null) {
                     OptiVideoEditor.with(context!!)
                         .setType(OptiConstant.IMAGE_AUDIO_MERGE)

@@ -194,6 +194,7 @@ class PreviewPhotoActivity : AppCompatActivity(), OnPhotoEditorListener,
                 10L * 1000L//OptiUtils.getVideoDuration(applicationContext, masterImageFile!!)
             soundPickerFragment.setImageFilePath(masterImageFile!!)
             soundPickerFragment.setDuartion(timeInMillis)
+            soundPickerFragment.setMediaData(mediaData!!)
             showBottomSheetDialogFragment(soundPickerFragment)
 
         }

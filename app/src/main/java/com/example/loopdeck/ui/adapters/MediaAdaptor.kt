@@ -242,7 +242,6 @@ class MediaAdaptor(
 
                 }
                 else -> {
-
                     val intent = Intent(context, PlaylistActivity::class.java)
                     intent.putExtra("mediaData", mediadata)
                     context.startActivity(intent)
