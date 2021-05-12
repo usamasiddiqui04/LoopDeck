@@ -27,7 +27,7 @@ class OptiConstant {
         const val VIDEO_AUDIO_OVERRIDE = 11
         const val CHANGE_VIDEO_SOUND_FREQUENCY = 12
         const val IMAGE_AUDIO_MERGE = 13
-        const val ADD_DUMMY_SOUND = 14
+        const val MERGE_IMAGES = 14
 
         const val FLIRT = "filter"
         const val TRIM = "trim"

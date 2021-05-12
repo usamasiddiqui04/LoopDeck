@@ -146,6 +146,7 @@ class RecentsFragment : Fragment(), MediaAdaptor.OnItemClick {
             val intent = Intent(requireContext(), PlayActivity::class.java)
             val bundle = Bundle()
             bundle.putParcelableArrayList("videoFileList", selectedList)
+            bundle.putBoolean("isPublishedVideo", false)
             intent.putExtras(bundle)
             startActivity(intent)
         }

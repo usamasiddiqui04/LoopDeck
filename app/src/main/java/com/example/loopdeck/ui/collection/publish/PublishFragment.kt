@@ -23,7 +23,8 @@ class PublishFragment : Fragment() {
 
     private val publishAdaptor by lazy {
         PublishAdaptors(
-            mList = mutableListOf()
+            mList = mutableListOf(),
+            requireContext()
         )
     }
 
