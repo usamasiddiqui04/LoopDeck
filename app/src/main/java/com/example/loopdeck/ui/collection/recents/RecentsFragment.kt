@@ -38,8 +38,7 @@ import kotlinx.android.synthetic.main.fragment_recents.*
 import java.io.File
 import java.util.*
 
-class RecentsFragment : Fragment(),
-    OptiFFMpegCallback, MediaAdaptor.OnItemClick {
+class RecentsFragment : Fragment(), MediaAdaptor.OnItemClick {
 
     private var drawer: AdvanceDrawerLayout? = null
     private var selectedList = ArrayList<MediaData>()
@@ -288,37 +287,6 @@ class RecentsFragment : Fragment(),
 
         mediaAdapter.setSeletedList()
         mediaAdapter.notifyDataSetChanged()
-    }
-
-    override fun onProgress(progress: String) {
-        progressDialog!!.setMessage("Playing please wait")
-        progressDialog!!.setCanceledOnTouchOutside(false)
-        progressDialog!!.show()
-    }
-
-    override fun onSuccess(convertedFile: File, type: String) {
-        toast("Success")
-        val intent = Intent(requireContext(), PlayActivity::class.java)
-        intent.putExtra("videoFilePath", convertedFile.absolutePath)
-        startActivity(intent)
-//        viewModel.editedImageFiles(convertedFile, playlistName)
-        progressDialog!!.dismiss()
-    }
-
-    override fun onFailure(error: Exception) {
-        progressDialog!!.dismiss()
-        Log.d(tagName, "onFailure " + error.message)
-
-        toast(error.toString())
-    }
-
-    override fun onNotAvailable(error: Exception) {
-        Log.d(tagName, "onNotAvailable() " + error.message)
-        Log.v(tagName, "Exception: ${error.localizedMessage}")
-    }
-
-    override fun onFinish() {
-        Log.d(tagName, "onFinish()")
     }
 
     private fun showBottomSheetDialogFragment(bottomSheetDialogFragment: BottomSheetDialogFragment) {

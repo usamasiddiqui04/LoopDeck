@@ -31,7 +31,9 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
     private var mediaList = ArrayList<MediaData>()
     var progressDialog: ProgressDialog? = null
     private var tagName: String = PlayActivity::class.java.simpleName
-
+    private var isHavingAudio = true
+    val listOfImages = mutableListOf<File>()
+    val listOfVidoes = mutableListOf<File>()
     private lateinit var viewModel: PublishViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +46,16 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
             bundle!!.getParcelableArrayList<MediaData>("videoFileList") as ArrayList<MediaData>
         videoView = findViewById<View>(R.id.playVideo) as VideoView
 
+        isHavingAudio = OptiUtils.isVideoHaveAudioTrack(mediaList[0].filePath)
+        Log.d(tagName, "isHavingAudio $isHavingAudio")
+
+        mediaList.forEach {
+            if (it.mediaType == "image") {
+                listOfImages.add(File(it.filePath))
+            }
+        }
         setMediaController()
+
 
 
 
@@ -92,7 +103,7 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
 
             val outputFile = applicationContext.let { it1 -> OptiUtils.createVideoFile(it1) }
 
-            outputFile?.let {
+            outputFile.let {
                 OptiVideoEditor.with(applicationContext)
                     .setType(OptiConstant.MERGE_VIDEO)
                     .setMutlipleFiles(fileList)
@@ -153,7 +164,7 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
 
 
     override fun onProgress(progress: String) {
-        progressDialog!!.setMessage("Publishing please wait")
+        progressDialog!!.setMessage(progress)
         progressDialog!!.setCanceledOnTouchOutside(false)
         progressDialog!!.show()
     }
@@ -174,10 +185,13 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
     override fun onNotAvailable(error: Exception) {
         Log.d(tagName, "onNotAvailable() " + error.message)
         Log.v(tagName, "Exception: ${error.localizedMessage}")
+
+        progressDialog?.dismiss()
     }
 
     override fun onFinish() {
         Log.d(tagName, "onFinish()")
+        progressDialog?.dismiss()
     }
 
 

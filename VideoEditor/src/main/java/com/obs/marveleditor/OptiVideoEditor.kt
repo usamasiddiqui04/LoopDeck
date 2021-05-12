@@ -24,9 +24,8 @@ class OptiVideoEditor private constructor(private val context: Context) {
     private var tagName: String = OptiVideoEditor::class.java.simpleName
     private var videoFile: File? = null
     private var imageFile: File? = null
-
+    var FRAME_RATE: Int = 25
     private var multipleVideoFiles = mutableListOf<File>()
-
     private var videoFileTwo: File? = null
     private var callback: OptiFFMpegCallback? = null
     private var outputFilePath = ""
@@ -248,6 +247,66 @@ class OptiVideoEditor private constructor(private val context: Context) {
                 add(outputFile.path)
             }
             return inputs.toArray(arrayOfNulls<String>(inputs.size))
+        }
+
+        fun getResult(
+            inputs: java.util.ArrayList<String>,
+            query: String?,
+            queryAudio: String?,
+            paths: List<File>,
+            output: String
+        ): Array<String> {
+            inputs.apply {
+                add("-f")
+                add("lavfi")
+                add("-t")
+                add("0.1")
+                add("-i")
+                add("anullsrc")
+                add("-filter_complex")
+                add(query + queryAudio + "concat=n=" + paths.size + ":v=1:a=1 [v][a]")
+                add("-map")
+                add("[v]")
+                add("-map")
+                add("[a]")
+                add("-preset")
+                add("ultrafast")
+                add(output)
+            }
+            return inputs.toArray(arrayOfNulls<String>(inputs.size))
+        }
+
+
+        fun combineImagesAndVideos(
+            paths: List<File>,
+            width: Int?,
+            height: Int?,
+            second: String,
+            output: String
+        ): Array<String> {
+            val inputs: ArrayList<String> = ArrayList()
+            for (i in 0 until paths.size) {
+                //for input
+                inputs.add("-loop")
+                inputs.add("1")
+                inputs.add("-framerate")
+                inputs.add("$FRAME_RATE")
+                inputs.add("-t")
+                inputs.add(second)
+                inputs.add("-i")
+                inputs.add(paths[i].path)
+            }
+
+            var query: String? = ""
+            var queryAudio: String? = ""
+            for (i in 0 until paths.size) {
+                query = query?.trim()
+                query += "[" + i + ":v]scale=${width}x${height},setdar=$width/$height[" + i + "v];"
+
+                queryAudio = queryAudio?.trim()
+                queryAudio += "[" + i + "v][" + paths.size + ":a]"
+            }
+            return getResult(inputs, query, queryAudio, paths, output)
         }
 
         when (type) {

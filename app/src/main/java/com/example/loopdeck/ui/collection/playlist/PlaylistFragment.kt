@@ -126,13 +126,17 @@ class PlaylistFragment : Fragment(), OptiFFMpegCallback, MediaAdaptor.OnItemClic
 
         btnplay.setOnClickListener {
 
-            val videoFileList = ArrayList<MediaData>()
-            val intent = Intent(requireContext(), PlayActivity::class.java)
-            val bundle = Bundle()
+            if (selectedList.size > 0) {
+                val intent = Intent(requireContext(), PlayActivity::class.java)
+                val bundle = Bundle()
 
-            bundle.putParcelableArrayList("videoFileList", selectedList)
-            intent.putExtras(bundle)
-            startActivity(intent)
+                bundle.putParcelableArrayList("videoFileList", selectedList)
+                intent.putExtras(bundle)
+                startActivity(intent)
+            } else {
+                toast("please select a file to merge and play")
+            }
+
 
         }
 
