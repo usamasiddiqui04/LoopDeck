@@ -29,12 +29,10 @@ class PublishAdaptors(private var mList: MutableList<PublishData>, private var c
         when (holder) {
             is PublishViewHolder -> {
                 holder.bind(mList[position])
-
                 holder.itemView.setOnClickListener {
-                    selectedList.add(mList[position])
                     val intent = Intent(context, PlayActivity::class.java)
                     val bundle = Bundle()
-                    bundle.putParcelableArrayList("videoFileList", selectedList)
+                    bundle.putString("filePath", mList[position].filePath)
                     bundle.putBoolean("isPublishedVideo", true)
                     intent.putExtras(bundle)
                     context.startActivity(intent)

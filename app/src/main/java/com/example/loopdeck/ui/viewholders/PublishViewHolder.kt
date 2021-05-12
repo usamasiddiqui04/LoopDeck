@@ -1,13 +1,16 @@
 package com.example.loopdeck.ui.viewholders
 
+import android.content.Intent
 import android.media.MediaMetadataRetriever
 import android.media.ThumbnailUtils
 import android.net.Uri
+import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.loopdeck.data.MediaData
 import com.example.loopdeck.data.PublishData
+import com.example.loopdeck.editor.PlayActivity
 import kotlinx.android.synthetic.main.item_recent_list_images.view.*
 import kotlinx.android.synthetic.main.publish_row_item.view.*
 import java.text.SimpleDateFormat
@@ -31,6 +34,7 @@ class PublishViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.fileImage.setImageBitmap(bitmap)
         itemView.filename.text = publishData.name
         itemView.fileduration.text = time.toString()
+
     }
 
     private fun getDate(milliSeconds: Long, dateFormat: String?): String? {

@@ -34,6 +34,7 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
     var progressDialog: ProgressDialog? = null
     private var tagName: String = PlayActivity::class.java.simpleName
     private var isHavingAudio = true
+    var filePath: String? = null
     val listOfImages = mutableListOf<File>()
     val listOfVidoes = mutableListOf<File>()
     private lateinit var viewModel: PublishViewModel
@@ -49,16 +50,9 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
 
         if (isPublishedVideo) {
             publish.visibility = View.GONE
-            mediaList2 =
-                bundle.getParcelableArrayList<PublishData>("videoFileList") as ArrayList<PublishData>
-            mediaList2.forEach {
-                if (it.mediaType == "image") {
-                    listOfImages.add(File(it.filePath))
-                }
-                if (it.mediaType == "video") {
-                    listOfVidoes.add(File(it.filePath))
-                }
-            }
+            filePath =
+                bundle.getString("filePath")
+            listOfVidoes.addAll(listOf(File(filePath!!)))
         } else {
             publish.visibility = View.VISIBLE
             mediaList =
