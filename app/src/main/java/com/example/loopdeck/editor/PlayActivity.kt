@@ -21,9 +21,6 @@ import com.obs.marveleditor.utils.OptiUtils
 import kotlinx.android.synthetic.main.activity_play.*
 import kotlinx.android.synthetic.main.fragment_googlrdrive.toolbar
 import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -85,11 +82,6 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
         Log.d(tagName, "isHavingAudio $isHavingAudio")
 
 
-        setMediaController()
-
-
-
-
         publish.setOnClickListener {
             nextAction = 2
             publishData()
@@ -103,7 +95,6 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
             videoView!!.start()
 
         }
-
         btnrestart.setOnClickListener {
             videoIncrementer = 0
             btnplay.visibility = View.GONE
@@ -122,12 +113,15 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
         toolbar.setNavigationIcon(R.drawable.ic_back_black)
         toolbar.setNavigationOnClickListener { onBackPressed() }
 
-        applySoundOnImages(listOfImages[count].path)
-
+        if (listOfImages.isNotEmpty()) {
+            applySoundOnImages(listOfImages[count].path)
+        } else {
+            setMediaController()
+        }
     }
 
     private fun applySoundOnImages(path: String) {
-        saveSilentFileToMobileDevice()
+        viewModel.saveSilentFileToMobileDevice()
         val file = File(downloadsDirectoryPath, "silent.mp3")
         nextAction = 1
         val outputFile = applicationContext.let { it1 -> OptiUtils.createVideoFile(it1) }
@@ -175,7 +169,7 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
 
                 videoView!!.start()
 
-                val time = getDate(videoView!!.duration.toLong(), "mm:ss")
+                val time = viewModel.getDate(videoView!!.duration.toLong(), "mm:ss")
                 videoTime.text = time.toString()
             }
 
@@ -203,16 +197,6 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
         }
     }
 
-    private fun getDate(milliSeconds: Long, dateFormat: String?): String? {
-        // Create a DateFormatter object for displaying date in specified format.
-        val formatter = SimpleDateFormat(dateFormat)
-
-        // Create a calendar object that will convert the time value in milliseconds to date.
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = milliSeconds
-        return formatter.format(calendar.time)
-    }
-
 
     override fun onProgress(progress: String) {
         progressDialog!!.setMessage(progress)
@@ -228,15 +212,15 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
         }
 
         if (nextAction == 1) {
-
-            if (count == listOfImages.size - 1) {
+            listOfVidoes.add(convertedFile)
+            toast(listOfVidoes.size.toString())
+            if (count == listOfImages.size - 1) {  // size = 2  ,   count = 1
                 progressDialog!!.dismiss()
+                setMediaController()
+                toast("All images converted to video successfully")
             } else {
-                listOfVidoes.add(convertedFile)
-                toast(listOfVidoes.size.toString())
                 count += 1
                 applySoundOnImages(listOfImages[count].path)
-                setMediaController()
             }
         }
     }
@@ -245,7 +229,7 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
         progressDialog!!.dismiss()
         Log.d(tagName, "onFailure " + error.message)
 
-        toast(error.toString())
+        toast("Failure : $error")
     }
 
     override fun onNotAvailable(error: Exception) {
@@ -260,30 +244,5 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
         progressDialog?.dismiss()
     }
 
-    fun saveSilentFileToMobileDevice() {
-
-        val file = File(downloadsDirectoryPath, "silent.mp3")
-
-        if (!file.exists()) {
-            var input: InputStream? = null
-            var fout: FileOutputStream? = null
-
-            try {
-                input = resources.openRawResource(R.raw.silent)
-                fout = FileOutputStream(File(downloadsDirectoryPath, "silent.mp3"))
-
-                val data = ByteArray(1024)
-
-                var count: Int
-                while (input.read(data, 0, 1024).also { count = it } != -1) {
-                    fout.write(data, 0, count)
-                }
-            } finally {
-                input?.close()
-                fout?.close()
-            }
-        }
-
-    }
 
 }
