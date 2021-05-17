@@ -3,6 +3,7 @@ package com.example.loopdeck.editor
 import android.app.ProgressDialog
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.VideoView
@@ -14,20 +15,23 @@ import com.example.loopdeck.ui.collection.publish.PublishViewModel
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.example.loopdeck.utils.extensions.toast
 import com.obs.marveleditor.OptiVideoEditor
-import com.obs.marveleditor.Paths
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.utils.OptiUtils
 import kotlinx.android.synthetic.main.activity_play.*
 import kotlinx.android.synthetic.main.fragment_googlrdrive.toolbar
 import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
 
     var videoIncrementer = 0
     var duration = 0
+    private var nextAction: Int = 1
     var videoView: VideoView? = null
     private var mediaList = ArrayList<MediaData>()
     private var mediaList2 = ArrayList<PublishData>()
@@ -38,13 +42,22 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
     val listOfImages = mutableListOf<File>()
     val listOfVidoes = mutableListOf<File>()
     private lateinit var viewModel: PublishViewModel
-    var isPublishedVideo = false
+    private var silentsound: String? = null
+    private var isPublishedVideo = false
+
+    var downloadsDirectoryPath: String? = null
+    var count: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play)
         viewModel = activityViewModelProvider()
         progressDialog = ProgressDialog(this)
+
+        downloadsDirectoryPath =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
+
+
         val bundle = intent.extras
         isPublishedVideo = bundle!!.getBoolean("isPublishedVideo")
 
@@ -78,6 +91,7 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
 
 
         publish.setOnClickListener {
+            nextAction = 2
             publishData()
         }
 
@@ -108,17 +122,31 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
         toolbar.setNavigationIcon(R.drawable.ic_back_black)
         toolbar.setNavigationOnClickListener { onBackPressed() }
 
+        applySoundOnImages(listOfImages[count].path)
+
+    }
+
+    private fun applySoundOnImages(path: String) {
+        saveSilentFileToMobileDevice()
+        val file = File(downloadsDirectoryPath, "silent.mp3")
+        nextAction = 1
+        val outputFile = applicationContext.let { it1 -> OptiUtils.createVideoFile(it1) }
+        OptiVideoEditor.with(applicationContext)
+            .setType(OptiConstant.IMAGE_AUDIO_MERGE)
+            .setImageFile(File(path))
+            .setAudioFile(file)
+            .setOutputPath(outputFile.path)
+            .setCallback(this)
+            .main()
     }
 
     private fun publishData() {
-        if (mediaList.size > 1) {
+        if (listOfVidoes.size > 1) {
 
             val fileList = mutableListOf<File>()
-            mediaList.forEach {
-                if (it.filePath.contains("mp4"))
-                    fileList.add(File(it.filePath))
+            listOfVidoes.forEach {
+                fileList.add(File(it.path))
             }
-
             val outputFile = applicationContext.let { it1 -> OptiUtils.createVideoFile(it1) }
 
             outputFile.let {
@@ -132,7 +160,7 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
         } else if (mediaList.isEmpty()) {
             toast("Please select video files to merge and play")
         } else {
-            viewModel.publishedFiles(File(mediaList[0].filePath))
+            viewModel.publishedFiles(File(listOfVidoes[0].path))
             toast("Saved to publish")
         }
 
@@ -193,9 +221,24 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
     }
 
     override fun onSuccess(convertedFile: File, type: String) {
-        toast("Saved to publish")
-        viewModel.publishedFiles(convertedFile)
-        progressDialog!!.dismiss()
+        if (nextAction == 2) {
+            toast("Saved to publish")
+            viewModel.publishedFiles(convertedFile)
+            progressDialog!!.dismiss()
+        }
+
+        if (nextAction == 1) {
+
+            if (count == listOfImages.size - 1) {
+                progressDialog!!.dismiss()
+            } else {
+                listOfVidoes.add(convertedFile)
+                toast(listOfVidoes.size.toString())
+                count += 1
+                applySoundOnImages(listOfImages[count].path)
+                setMediaController()
+            }
+        }
     }
 
     override fun onFailure(error: Exception) {
@@ -217,35 +260,30 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
         progressDialog?.dismiss()
     }
 
-    fun combineImages() {
-        val pathsList = ArrayList<Paths>()
+    fun saveSilentFileToMobileDevice() {
 
-        for (element in mediaList) {
-            if (element.mediaType == "image") {
-                val paths = Paths()
-                paths.filePath = element.filePath
-                paths.isImageFile = true
-                pathsList.add(paths)
+        val file = File(downloadsDirectoryPath, "silent.mp3")
+
+        if (!file.exists()) {
+            var input: InputStream? = null
+            var fout: FileOutputStream? = null
+
+            try {
+                input = resources.openRawResource(R.raw.silent)
+                fout = FileOutputStream(File(downloadsDirectoryPath, "silent.mp3"))
+
+                val data = ByteArray(1024)
+
+                var count: Int
+                while (input.read(data, 0, 1024).also { count = it } != -1) {
+                    fout.write(data, 0, count)
+                }
+            } finally {
+                input?.close()
+                fout?.close()
             }
-
-            val fileList = mutableListOf<File>()
-            mediaList.forEach {
-                if (it.filePath.contains("mp4"))
-                    fileList.add(File(it.filePath))
-            }
-
-            val outputFile = applicationContext.let { it1 -> OptiUtils.createVideoFile(it1) }
-            outputFile.let {
-                OptiVideoEditor.with(applicationContext)
-                    .setType(OptiConstant.MERGE_IMAGES)
-                    .setPathList(pathsList)
-                    .setOutputPath(outputFile.path)
-                    .setCallback(this)
-                    .main()
-            }
-
         }
-    }
 
+    }
 
 }
