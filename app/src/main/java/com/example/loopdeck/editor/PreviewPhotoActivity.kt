@@ -31,6 +31,9 @@ import com.example.loopdeck.editor.fragments.SoundPickerFragment
 import com.example.loopdeck.editor.photoeditor.*
 import com.example.loopdeck.ui.collection.CollectionViewModel
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
+import com.github.hiteshsondhi88.libffmpeg.FFmpeg
+import com.github.hiteshsondhi88.libffmpeg.FFmpegLoadBinaryResponseHandler
+import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.activity_preview.*
 import java.io.File
@@ -42,6 +45,7 @@ class PreviewPhotoActivity : AppCompatActivity(), OnPhotoEditorListener,
     FilterListener, BrushArtListener, SoundPickerFragment.SoundPickerListener,
     AddMusicFragment.AddMusicFragmentListener {
 
+    private var fFmpeg: FFmpeg? = null
     var videoSurface: TextureView? = null
     var playListName: String? = null
     var ivImage: PhotoEditorView? = null
@@ -80,6 +84,7 @@ class PreviewPhotoActivity : AppCompatActivity(), OnPhotoEditorListener,
         )
         setContentView(R.layout.activity_preview)
         viewModel = activityViewModelProvider()
+        fFmpeg = FFmpeg.getInstance(this)
         initViews()
 
 
@@ -141,6 +146,28 @@ class PreviewPhotoActivity : AppCompatActivity(), OnPhotoEditorListener,
             main_menu.visibility = View.VISIBLE
             layoutfilter.visibility = View.GONE
             showFilter(false)
+        }
+
+        try {
+            fFmpeg?.loadBinary(object : FFmpegLoadBinaryResponseHandler {
+                override fun onFailure() {
+                    Log.d("binaryLoad", "onFailure")
+                }
+
+                override fun onSuccess() {
+                    Log.d("binaryLoad", "onSuccess")
+                }
+
+                override fun onStart() {
+                    Log.d("binaryLoad", "onStart")
+                }
+
+                override fun onFinish() {
+                    Log.d("binaryLoad", "onFinish")
+                }
+            })
+        } catch (e: FFmpegNotSupportedException) {
+            e.printStackTrace()
         }
 
     }

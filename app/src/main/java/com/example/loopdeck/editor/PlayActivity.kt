@@ -14,6 +14,9 @@ import com.example.loopdeck.data.PublishData
 import com.example.loopdeck.ui.collection.publish.PublishViewModel
 import com.example.loopdeck.utils.extensions.activityViewModelProvider
 import com.example.loopdeck.utils.extensions.toast
+import com.github.hiteshsondhi88.libffmpeg.FFmpeg
+import com.github.hiteshsondhi88.libffmpeg.FFmpegLoadBinaryResponseHandler
+import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException
 import com.obs.marveleditor.OptiVideoEditor
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.OptiConstant
@@ -28,6 +31,7 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
 
     var videoIncrementer = 0
     var duration = 0
+    private var fFmpeg: FFmpeg? = null
     private var nextAction: Int = 1
     var videoView: VideoView? = null
     private var mediaList = ArrayList<MediaData>()
@@ -50,6 +54,8 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
         setContentView(R.layout.activity_play)
         viewModel = activityViewModelProvider()
         progressDialog = ProgressDialog(this)
+        fFmpeg = FFmpeg.getInstance(this)
+        loadffmpeg()
 
         downloadsDirectoryPath =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
@@ -117,6 +123,30 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
             applySoundOnImages(listOfImages[count].path)
         } else {
             setMediaController()
+        }
+    }
+
+    private fun loadffmpeg() {
+        try {
+            fFmpeg?.loadBinary(object : FFmpegLoadBinaryResponseHandler {
+                override fun onFailure() {
+                    Log.d("binaryLoad", "onFailure")
+                }
+
+                override fun onSuccess() {
+                    Log.d("binaryLoad", "onSuccess")
+                }
+
+                override fun onStart() {
+                    Log.d("binaryLoad", "onStart")
+                }
+
+                override fun onFinish() {
+                    Log.d("binaryLoad", "onFinish")
+                }
+            })
+        } catch (e: FFmpegNotSupportedException) {
+            e.printStackTrace()
         }
     }
 
