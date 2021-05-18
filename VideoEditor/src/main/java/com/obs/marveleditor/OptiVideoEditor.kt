@@ -25,19 +25,13 @@ class OptiVideoEditor private constructor(private val context: Context) {
     private var videoFile: File? = null
     private var imageFile: File? = null
     var pathsList = java.util.ArrayList<Paths>()
-    var FRAME_RATE: Int = 25
     private var multipleVideoFiles = mutableListOf<File>()
     var outputFile: File? = null
-
-    private var videoFileTwo: File? = null
     private var callback: OptiFFMpegCallback? = null
     private var outputFilePath = ""
     private var type: Int? = null
     private var position: String? = null
-    var videoPathOne: String? = null
     var videoFileThree: File? = null
-
-    //for adding text
     private var font: File? = null
     private var text: String? = null
     private var color: String? = null
