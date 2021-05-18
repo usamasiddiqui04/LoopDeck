@@ -121,11 +121,11 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
     }
 
     private fun applySoundOnImages(path: String) {
-        viewModel.saveSilentFileToMobileDevice()
+        viewModel.saveSilentFileToMobileDevice(this)
         val file = File(downloadsDirectoryPath, "silent.mp3")
         nextAction = 1
         val outputFile = applicationContext.let { it1 -> OptiUtils.createVideoFile(it1) }
-        OptiVideoEditor.with(applicationContext)
+        OptiVideoEditor.with(this)
             .setType(OptiConstant.IMAGE_AUDIO_MERGE)
             .setImageFile(File(path))
             .setAudioFile(file)
@@ -144,7 +144,7 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
             val outputFile = applicationContext.let { it1 -> OptiUtils.createVideoFile(it1) }
 
             outputFile.let {
-                OptiVideoEditor.with(applicationContext)
+                OptiVideoEditor.with(this)
                     .setType(OptiConstant.MERGE_VIDEO)
                     .setMutlipleFiles(fileList)
                     .setOutputPath(it.path)

@@ -20,6 +20,7 @@ android {
         useLibrary 'org.apache.http.legacy'
     }
 
+
     buildTypes {
         release {
             minifyEnabled false
@@ -112,7 +113,7 @@ dependencies {
 
     // Include supported authentication methods for your application
     implementation 'com.microsoft.services.msa:msa-auth:0.8.4'
-
+    
 
 //
 //    implementation 'com.google.http-client:google-http-client-gson:1.26.0'

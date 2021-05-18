@@ -27,6 +27,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
     var pathsList = java.util.ArrayList<Paths>()
     var FRAME_RATE: Int = 25
     private var multipleVideoFiles = mutableListOf<File>()
+    var outputFile: File? = null
 
     private var videoFileTwo: File? = null
     private var callback: OptiFFMpegCallback? = null
@@ -44,6 +45,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
     private var border: String? = null
     private var BORDER_FILLED = ": box=1: boxcolor=black@0.5:boxborderw=5"
     private var BORDER_EMPTY = ""
+
 
     //for clip art
     private var imagePath: String? = null
@@ -197,93 +199,26 @@ class OptiVideoEditor private constructor(private val context: Context) {
         return this
     }
 
-
-    fun combineImagesAndVideos(
-        paths: ArrayList<Paths>,
-        width: Int?,
-        height: Int?,
-        second: String,
-        output: String
-    ): Array<String> {
+    fun mergeImageAndAudio(): Array<String> {
         val inputs: ArrayList<String> = ArrayList()
-        for (i in 0 until paths.size) {
-            //for input
-            if (paths[i].isImageFile) {
-                inputs.add("-loop")
-                inputs.add("1")
-                inputs.add("-framerate")
-                inputs.add("$FRAME_RATE")
-                inputs.add("-t")
-                inputs.add(second)
-                inputs.add("-i")
-                inputs.add(paths[i].filePath)
-            } else {
-                inputs.add("-i")
-                inputs.add(paths[i].filePath)
-            }
-        }
-
-        var query: String? = ""
-        var queryAudio: String? = ""
-        for (i in 0 until paths.size) {
-            query = query?.trim()
-            query += "[" + i + ":v]scale=${width}x${height},setdar=$width/$height[" + i + "v];"
-
-            queryAudio = queryAudio?.trim()
-            queryAudio += if (paths[i].isImageFile) {
-                "[" + i + "v][" + paths.size + ":a]"
-            } else {
-                "[" + i + "v][" + i + ":a]"
-            }
-
-            inputs.apply {
-                add("-f")
-                add("lavfi")
-                add("-t")
-                add("0.1")
-                add("-i")
-                add("anullsrc")
-                add("-filter_complex")
-                add(query + queryAudio + "concat=n=" + paths.size + ":v=1:a=1 [v][a]")
-                add("-map")
-                add("[v]")
-                add("-map")
-                add("[a]")
-                add("-preset")
-                add("ultrafast")
-                add(output)
-            }
+        inputs.apply {
+            add("-y")
+            add("-loop")
+            add("1")
+            add("-i")
+            add(imageFile!!.path)
+            add("-i")
+            add(audioFile!!.path)
+            add("-shortest")
+            add("-c:a")
+            add("copy")
+            add("-preset")
+            add("ultrafast")
+            add(outputFile!!.path)
         }
         return inputs.toArray(arrayOfNulls<String>(inputs.size))
     }
 
-//    fun getResult(
-//        inputs: java.util.ArrayList<String>,
-//        query: String?,
-//        queryAudio: String?,
-//        paths: ArrayList<Paths>,
-//        output: String
-//    ): Array<String> {
-//        inputs.apply {
-//            add("-f")
-//            add("lavfi")
-//            add("-t")
-//            add("0.1")
-//            add("-i")
-//            add("anullsrc")
-//            add("-filter_complex")
-//            add(query + queryAudio + "concat=n=" + paths.size + ":v=1:a=1 [v][a]")
-//            add("-map")
-//            add("[v]")
-//            add("-map")
-//            add("[a]")
-//            add("-preset")
-//            add("ultrafast")
-//            add(output)
-//        }
-//
-//        return inputs.toArray(arrayOfNulls<String>(inputs.size)
-//
 
     fun main() {
         if (type == OptiConstant.AUDIO_TRIM) {
@@ -319,29 +254,9 @@ class OptiVideoEditor private constructor(private val context: Context) {
             }
         }
 
-        val outputFile = File(outputFilePath)
+        outputFile = File(outputFilePath)
         Log.v(tagName, "outputFilePath: $outputFilePath")
         var cmd: Array<String>? = null
-
-        fun mergeImageAndAudio(): Array<String> {
-            val inputs: ArrayList<String> = ArrayList()
-            inputs.apply {
-                add("-y")
-                add("-loop")
-                add("1")
-                add("-i")
-                add(imageFile!!.path)
-                add("-i")
-                add(audioFile!!.path)
-                add("-shortest")
-                add("-c:a")
-                add("copy")
-                add("-preset")
-                add("ultrafast")
-                add(outputFile.path)
-            }
-            return inputs.toArray(arrayOfNulls<String>(inputs.size))
-        }
 
 
         when (type) {
@@ -353,7 +268,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
                     videoFile!!.path,
                     "-vf",
                     filterCommand!!,
-                    outputFile.path
+                    outputFile!!.path
                 )
             }
 
@@ -371,7 +286,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
                     "copy",
                     "-movflags",
                     "+faststart",
-                    outputFile.path
+                    outputFile!!.path
                 )
             }
 
@@ -387,12 +302,11 @@ class OptiVideoEditor private constructor(private val context: Context) {
                     position!!,
                     "-codec:a",
                     "copy",
-                    outputFile.path
+                    outputFile!!.path
                 )
             }
 
             OptiConstant.MERGE_IMAGES -> {
-                cmd = combineImagesAndVideos(pathsList, 640, 480, "2", outputFile.path)
 
             }
 
@@ -454,7 +368,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
                         "[v]",
                         "-map",
                         "[a]",
-                        outputFile.path
+                        outputFile!!.path
                     )
                 } else {
                     arrayOf(
@@ -463,7 +377,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
                         videoFile!!.path,
                         "-filter:v",
                         ffmpegFS!!,
-                        outputFile.path
+                        outputFile!!.path
                     )
                 }
             }
@@ -480,7 +394,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
                     endTime,
                     "-c",
                     "copy",
-                    outputFile.path
+                    outputFile!!.path
                 )
             }
 
@@ -498,24 +412,12 @@ class OptiVideoEditor private constructor(private val context: Context) {
                     "0:v:0",
                     "-map",
                     "1:a:0",
-                    outputFile.path
+                    outputFile!!.path
                 )
             }
 
 
             OptiConstant.IMAGE_AUDIO_MERGE -> {
-//                ffmpeg -i still.png -i narrate.wav -acodec libvo_aacenc -vcodec libx264 final.flv
-//                -shortest -acodec copy -vcodec mjpeg
-//                ffmpeg -loop 1 -i image.jpg -i audio.wav -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -shortest out.mp4
-
-
-//                -loop_input -vframes 14490 -i imagine.jpg -i audio.mp3 -y -r 30
-//                -b 2500k -acodec ac3 -ab 384k -vcodec mpeg4 result.mp4
-
-
-//                cmd = arrayOf("-loop" ,"1","-vframes" ,"14490" , "-i" ,imageFile!!.path
-//                 , "-i",audioFile!!.path , "-y", "-r","30","-b","2500k","-acodec","ac3","-ab","384k"
-//                ,"-vcodec","mpeg4",outputFile.path)
                 cmd = mergeImageAndAudio()
             }
 
@@ -554,7 +456,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
                     "-c:a",
                     "aac",
                     "-shortest",
-                    outputFile.path
+                    outputFile!!.path
                 )
 
 
@@ -580,7 +482,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
                     endTime,
                     "-c",
                     "copy",
-                    outputFile.path
+                    outputFile!!.path
                 )
             }
 
@@ -594,7 +496,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
                     "copy",
                     "-vf",
                     "fade=t=in:st=0:d=5",
-                    outputFile.path
+                    outputFile!!.path
                 )
             }
 
@@ -616,7 +518,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
                     "192k",
                     "-ac",
                     "2",
-                    outputFile.path
+                    outputFile!!.path
                 )
             }
 
@@ -628,51 +530,12 @@ class OptiVideoEditor private constructor(private val context: Context) {
                     videoFile!!.path,
                     "-filter_complex",
                     "afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=10:overlap=0.75",
-                    outputFile.path
+                    outputFile!!.path
                 )
-
-//                cmd = arrayOf(
-//                    "-y",
-//                    "-i",
-//                    videoFile!!.path ,
-//                    "-c",
-//                    "copy",
-//                    "-an",
-//                    outputFile.path
-//                )
             }
 
 
         }
-
-//        val executionId = com.arthenica.mobileffmpeg.FFmpeg.executeAsync(
-//            "-i ${videoFile!!.path} -filter_complex afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=10:overlap=0.75 ${outputFile.path}",
-//            object : ExecuteCallback {
-//
-//                override fun apply(executionId: Long, returnCode: Int) {
-//
-//                    if (returnCode == RETURN_CODE_SUCCESS) {
-//                        Log.i(
-//                            Config.TAG,
-//                            "Async command execution completed successfully."
-//                        )
-//
-//                    } else if (returnCode == RETURN_CODE_CANCEL) {
-//                        Log.i(
-//                            Config.TAG,
-//                            "Async command execution cancelled by user."
-//                        )
-//                    } else {
-//                        Log.i(
-//                            Config.TAG,
-//                            String.format(
-//                                "Async command execution failed with returnCode=%d.",
-//                                returnCode
-//                            )
-//                        )
-//                    }
-//                }
-//            })
 
 
         try {
@@ -687,12 +550,12 @@ class OptiVideoEditor private constructor(private val context: Context) {
                 }
 
                 override fun onSuccess(message: String?) {
-                    callback!!.onSuccess(outputFile, OptiOutputType.TYPE_VIDEO)
+                    callback!!.onSuccess(outputFile!!, OptiOutputType.TYPE_VIDEO)
                 }
 
                 override fun onFailure(message: String?) {
-                    if (outputFile.exists()) {
-                        outputFile.delete()
+                    if (outputFile!!.exists()) {
+                        outputFile!!.delete()
                     }
                     callback!!.onFailure(IOException(message))
                 }

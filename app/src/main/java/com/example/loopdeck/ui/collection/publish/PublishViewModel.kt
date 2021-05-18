@@ -1,6 +1,7 @@
 package com.example.loopdeck.ui.collection.publish
 
 import android.app.Application
+import android.os.Environment
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
@@ -8,7 +9,7 @@ import com.example.loopdeck.R
 import com.example.loopdeck.data.MediaDatabase
 import com.example.loopdeck.data.MediaRepository
 import com.example.loopdeck.data.PublishData
-import com.example.loopdeck.gallery.model.GalleryData
+import com.example.loopdeck.editor.PlayActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -16,7 +17,6 @@ import java.io.FileOutputStream
 import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.coroutines.coroutineContext
 
 class PublishViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -27,6 +27,8 @@ class PublishViewModel(application: Application) : AndroidViewModel(application)
     init {
         val mediaDao = MediaDatabase.getDatabase(application).mediaDao()
         repository = MediaRepository(mediaDao, application.applicationContext)
+        downloadsDirectoryPath =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
         getPublish()
     }
 
@@ -43,7 +45,7 @@ class PublishViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun saveSilentFileToMobileDevice() {
+    fun saveSilentFileToMobileDevice(playActivity: PlayActivity) {
 
         val file = File(downloadsDirectoryPath, "silent.mp3")
 
@@ -52,7 +54,7 @@ class PublishViewModel(application: Application) : AndroidViewModel(application)
             var fout: FileOutputStream? = null
 
             try {
-                input = getApplication<Application>().resources.openRawResource(R.raw.silent)
+                input = playActivity.resources.openRawResource(R.raw.silent)
                 fout = FileOutputStream(File(downloadsDirectoryPath, "silent.mp3"))
 
                 val data = ByteArray(1024)
