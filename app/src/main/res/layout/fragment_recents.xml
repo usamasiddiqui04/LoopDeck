@@ -79,8 +79,8 @@
         android:id="@+id/bottomLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
-        android:visibility="gone"
         android:gravity="center_vertical"
+        android:visibility="gone"
         android:background="@color/white"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -140,6 +140,34 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/btnEditRecents"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/iconduplicateplaylist"
+                app:layout_constraintBottom_toTopOf="@id/editCreate"
+                app:layout_constraintEnd_toEndOf="@id/editCreate"
+                app:layout_constraintStart_toStartOf="@id/editCreate" />
+
+            <TextView
+                android:id="@+id/editCreate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Create"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -149,7 +177,7 @@
                 android:id="@+id/btndublicate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_iconplaylistadd"
+                android:src="@drawable/ic_iconduplicate"
                 app:layout_constraintBottom_toTopOf="@id/textDublicate"
                 app:layout_constraintEnd_toEndOf="@id/textDublicate"
                 app:layout_constraintStart_toStartOf="@id/textDublicate" />
@@ -178,7 +206,7 @@
                 android:id="@+id/btnmove"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_iconduplicate"
+                android:src="@drawable/iconmove"
                 app:layout_constraintBottom_toTopOf="@id/textMove"
                 app:layout_constraintEnd_toEndOf="@id/textMove"
                 app:layout_constraintStart_toStartOf="@id/textMove" />

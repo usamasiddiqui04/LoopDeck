@@ -113,7 +113,7 @@
                 android:id="@+id/btnDublicate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_iconplaylistadd"
+                android:src="@drawable/iconduplicateplaylist"
                 app:layout_constraintBottom_toTopOf="@id/textDublicate"
                 app:layout_constraintEnd_toEndOf="@id/textDublicate"
                 app:layout_constraintStart_toStartOf="@id/textDublicate" />
