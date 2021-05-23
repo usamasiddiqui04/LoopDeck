@@ -1,4 +1,4 @@
-<com.example.loopdeck.squarelayout.SquareRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.xorbics.loopdeck.squarelayout.SquareRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/containerimages"
     android:layout_width="match_parent"
@@ -35,4 +35,4 @@
     </androidx.cardview.widget.CardView>
 
 
-</com.example.loopdeck.squarelayout.SquareRelativeLayout>
+</com.xorbics.loopdeck.squarelayout.SquareRelativeLayout>

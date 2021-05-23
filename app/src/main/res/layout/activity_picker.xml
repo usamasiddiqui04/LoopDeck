@@ -17,7 +17,7 @@
         android:elevation="8dp"
         app:tabIndicatorHeight="2dp" />
 
-    <com.example.loopdeck.gallery.utils.AnimationlessViewpager
+    <com.xorbics.loopdeck.gallery.utils.AnimationlessViewpager
         android:id="@+id/viewpager"
         app:layout_constraintTop_toBottomOf="@id/tabs"
         app:layout_constraintStart_toStartOf="parent"

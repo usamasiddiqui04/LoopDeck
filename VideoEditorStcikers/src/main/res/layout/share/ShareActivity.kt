@@ -1,4 +1,4 @@
-package com.mikkipastel.fildeo.share
+package layout.share
 
 import android.content.Context
 import android.content.Intent
@@ -6,7 +6,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Window
 import android.view.WindowManager
-import com.example.loopdeck.R
+import com.imagevideoeditor.R
+import com.imagevideoeditor.filter.share.FragmentShare
 
 class ShareActivity : AppCompatActivity() {
 
