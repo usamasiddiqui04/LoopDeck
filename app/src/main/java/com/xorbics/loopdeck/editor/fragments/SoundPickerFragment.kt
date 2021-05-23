@@ -59,7 +59,7 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
     private val onItemClickListener: (View, RecyclerView.ViewHolder, Songinfo) -> Unit =
         { itemView, viewHolder, songinfo ->
 
-            com.xorbics.loopdeck.editor.fragments.AddMusicFragment.newInstance().apply {
+            AddMusicFragment.newInstance().apply {
                 if (selectForVideo) {
                     setAudioVideoFilePaths(File(songinfo.SongUrl!!), videofile!!, videoDuration!!)
                 } else {
