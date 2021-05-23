@@ -6,7 +6,7 @@ buildscript {
         google()
         jcenter()
     }
-    ext.compileSdk = 30
+    ext.compileSdk = 29
     ext.minSdk = 24
     ext.targetSdk = 29
 

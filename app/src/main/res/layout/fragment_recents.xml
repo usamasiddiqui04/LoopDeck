@@ -79,6 +79,7 @@
         android:id="@+id/bottomLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
+        android:baselineAligned="false"
         android:gravity="center_vertical"
         android:visibility="gone"
         android:background="@color/white"
