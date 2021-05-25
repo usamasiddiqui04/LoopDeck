@@ -14,4 +14,6 @@
     <color name="coral">#ff5c3d</color>
     <color name="reddishpink">#ff2a5f</color>
 
+    <color name="black_trasp">#99000000</color>
+
 </resources>
