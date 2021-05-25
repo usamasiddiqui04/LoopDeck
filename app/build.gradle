@@ -9,7 +9,10 @@ android {
     compileSdkVersion 29
     buildToolsVersion "30.0.3"
 
-
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
     defaultConfig {
         applicationId "com.xorbics.loopdeck"
         minSdkVersion 24
