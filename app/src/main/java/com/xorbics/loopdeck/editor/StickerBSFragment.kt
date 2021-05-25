@@ -140,7 +140,7 @@ class StickerBSFragment : BottomSheetDialogFragment() {
         }
 
         override fun getItemCount(): Int {
-            return items!!.size
+            return items.size
         }
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

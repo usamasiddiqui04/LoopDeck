@@ -42,6 +42,7 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.xorbics.loopdeck.editor.filter.EditVideoActivity
 import com.xorbics.loopdeck.editor.filter.FilterVideoFragment
 import com.xorbics.loopdeck.editor.filter.interfaces.AddFilterListener
@@ -78,7 +79,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
 
     var output: File? = null
     private var tagName: String = PreviewVideoActivity::class.java.simpleName
-    var imgDelete: ImageView? = null
+    var imgDelete: FloatingActionButton? = null
     var imgDraw: ImageView? = null
     var imgText: ImageView? = null
     var imgUndo: ImageView? = null
@@ -228,6 +229,7 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
         imgDone = findViewById(R.id.imgDone)
         imgDraw = findViewById(R.id.iconBrushes)
         imgText = findViewById(R.id.iconText)
+        imgDelete = findViewById(R.id.imgDelete)
 //        imgTrim = findViewById(R.id.imgTrim)
         imgFilters = findViewById(R.id.iconFilters)
         imgSticker = findViewById(R.id.imgSticker)

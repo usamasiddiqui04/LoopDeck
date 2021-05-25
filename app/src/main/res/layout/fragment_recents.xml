@@ -5,26 +5,41 @@
     android:background="@color/grey"
     android:layout_height="match_parent">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        app:cardCornerRadius="@dimen/_360sdp"
         android:id="@+id/fbAddPlaylist"
-        android:src="@drawable/ic_iconplaylistadd"
-        android:tint="@color/white"
+        android:backgroundTint="@color/warmBlue"
         app:layout_constraintEnd_toEndOf="parent"
-        android:backgroundTint="#3458F3"
         app:layout_constraintBottom_toTopOf="@id/addmedia"
-        android:layout_margin="@dimen/_20sdp" />
+        android:layout_margin="@dimen/_20sdp">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_iconplaylistadd"
+            android:layout_gravity="center"
+            app:tint="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        app:cardCornerRadius="@dimen/_360sdp"
         android:id="@+id/addmedia"
-        android:src="@drawable/ic_iconplaylistaddcopy2"
+        android:backgroundTint="@color/warmBlue"
         app:layout_constraintEnd_toEndOf="parent"
-        android:backgroundTint="#3458F3"
         app:layout_constraintBottom_toTopOf="@id/bottomLayout"
-        android:layout_margin="@dimen/_20sdp" />
+        android:layout_margin="@dimen/_20sdp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_iconplaylistaddcopy2"
+            android:layout_gravity="center" />
+    </androidx.cardview.widget.CardView>
 
     <LinearLayout
         android:layout_width="match_parent"

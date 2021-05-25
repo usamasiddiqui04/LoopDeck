@@ -58,7 +58,7 @@ class PhotoEditor private constructor(builder: Builder) : BrushViewChangeListene
             }
 
             override fun onLongClick() {
-                imageView.visibility = View.GONE
+
             }
         })
         multiTouchListener.setOnMultiTouchListener(this)
@@ -131,7 +131,7 @@ class PhotoEditor private constructor(builder: Builder) : BrushViewChangeListene
             }
 
             override fun onLongClick() {
-                textInputTv.visibility = View.GONE
+
             }
         })
         multiTouchListener.setOnMultiTouchListener(this)

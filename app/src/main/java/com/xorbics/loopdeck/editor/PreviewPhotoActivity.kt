@@ -35,6 +35,7 @@ import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.FFmpegLoadBinaryResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_preview.*
 import java.io.File
 import java.io.IOException
@@ -51,7 +52,7 @@ class PreviewPhotoActivity : AppCompatActivity(), OnPhotoEditorListener,
     var ivImage: PhotoEditorView? = null
     var imgClose: ImageView? = null
     var imgDone: TextView? = null
-    var imgDelete: ImageView? = null
+    var imgDelete: FloatingActionButton? = null
     var imgDraw: ImageView? = null
     var imgText: ImageView? = null
     var imgUndo: ImageView? = null
@@ -99,6 +100,7 @@ class PreviewPhotoActivity : AppCompatActivity(), OnPhotoEditorListener,
 
     private fun initViews() {
         videoSurface = findViewById(R.id.videoSurface)
+        imgDelete = findViewById(R.id.imgDelete)
         ivImage = findViewById(R.id.ivImage)
         imgClose = findViewById(R.id.imgClose)
         imgDone = findViewById(R.id.imgDone)
