@@ -13,8 +13,16 @@ import com.xorbics.loopdeck.R
 
 class WebviewLoginActivity : AppCompatActivity() {
 
+
+    companion object {
+
+        const val website = "loopdeck-dev-webapp.azurewebsites.net"
+        const val base_url = "http://$website"
+        const val main_page = "$base_url/mainpage"
+    }
+
     private lateinit var webView: WebView
-    private var url = "https://loopdeck-dev-login-app.azurewebsites.net/mainpage"
+
 //    private var url = "https://wedevelop.ca/temp/Login_Updated/login.html"
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -27,7 +35,7 @@ class WebviewLoginActivity : AppCompatActivity() {
 
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                if (url!!.indexOf("loopdeck-dev-login-app.azurewebsites.net") > -1)
+                if (url!!.indexOf(website) > -1)
                     return false
                 else {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -38,7 +46,7 @@ class WebviewLoginActivity : AppCompatActivity() {
             }
 
         }
-        webView.loadUrl(url)
+        webView.loadUrl(main_page)
 
 
     }
