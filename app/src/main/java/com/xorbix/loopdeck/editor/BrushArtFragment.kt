@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xorbix.loopdeck.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.imagevideoeditor.photoeditor.PhotoEditor
+import com.xorbix.loopdeck.editor.photoeditor.PhotoEditor
 import kotlinx.android.synthetic.main.fragment_properties_dialog.*
 
 class BrushArtFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChangeListener {

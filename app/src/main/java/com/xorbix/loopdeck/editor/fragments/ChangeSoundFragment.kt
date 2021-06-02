@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.imagevideoeditor.R
 import com.obs.marveleditor.OptiVideoEditor
 import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.utils.OptiUtils
+import com.xorbix.loopdeck.R
 import kotlinx.android.synthetic.main.fragment_change_sound.*
 import java.io.File
 

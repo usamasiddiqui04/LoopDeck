@@ -16,8 +16,8 @@
 package com.xorbix.loopdeck.editor.photoeditor
 
 import android.opengl.GLES20
-import com.imagevideoeditor.photoeditor.GLToolbox.checkGlError
-import com.imagevideoeditor.photoeditor.GLToolbox.createProgram
+import com.xorbix.loopdeck.editor.photoeditor.GLToolbox.checkGlError
+import com.xorbix.loopdeck.editor.photoeditor.GLToolbox.createProgram
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer

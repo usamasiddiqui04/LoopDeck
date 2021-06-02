@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Window
 import android.view.WindowManager
-import com.imagevideoeditor.R
+import com.xorbix.loopdeck.R
 
 class EditVideoActivity : AppCompatActivity() {
 

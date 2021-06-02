@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.xorbix.loopdeck.editor.photoeditor.PhotoFilter
-import com.imagevideoeditor.R
 import com.makeramen.roundedimageview.RoundedImageView
+import com.xorbix.loopdeck.R
 import java.io.IOException
 import java.io.InputStream
 import java.util.*

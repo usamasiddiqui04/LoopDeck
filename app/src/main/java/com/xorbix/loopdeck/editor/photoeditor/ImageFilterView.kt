@@ -13,8 +13,8 @@ import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
 import android.util.Log
-import com.imagevideoeditor.photoeditor.BitmapUtil.createBitmapFromGLSurface
-import com.imagevideoeditor.photoeditor.GLToolbox.initTexParams
+import com.xorbix.loopdeck.editor.photoeditor.BitmapUtil.createBitmapFromGLSurface
+import com.xorbix.loopdeck.editor.photoeditor.GLToolbox.initTexParams
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 

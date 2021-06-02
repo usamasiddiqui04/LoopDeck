@@ -11,8 +11,8 @@ import android.view.Surface
 import android.view.TextureView
 import androidx.appcompat.app.AppCompatActivity
 import com.xorbix.loopdeck.R
-import com.imagevideoeditor.Utils.DimensionData
-import com.imagevideoeditor.Utils.Utils
+import com.xorbix.loopdeck.editor.Utils.DimensionData
+import com.xorbix.loopdeck.editor.Utils.Utils
 import kotlinx.android.synthetic.main.activity_video_preview.*
 import java.io.IOException
 

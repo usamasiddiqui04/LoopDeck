@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xorbix.loopdeck.data.MediaData
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.imagevideoeditor.R
-import com.imagevideoeditor.soundpicker.SongAdaptor
-import com.imagevideoeditor.soundpicker.Songinfo
+import com.xorbix.loopdeck.R
+import com.xorbix.loopdeck.editor.soundpicker.SongAdaptor
+import com.xorbix.loopdeck.editor.soundpicker.Songinfo
 import kotlinx.android.synthetic.main.fragment_sound_picker.*
 import java.io.File
 

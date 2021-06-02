@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
-import com.imagevideoeditor.R
+import com.xorbix.loopdeck.R
 
 class SongAdaptor(
     private var mList: ArrayList<Songinfo>,

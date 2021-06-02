@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.imagevideoeditor.R
+import com.xorbix.loopdeck.R
 import com.xorbix.loopdeck.editor.filter.adapter.AddFilterAdapter
 import com.xorbix.loopdeck.editor.filter.interfaces.AddFilterListener
 import kotlinx.android.synthetic.main.fragment_preview_filter.*

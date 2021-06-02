@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">loopdeck</string>
+    <string name="title_main">Choose video from …</string>
+    <string name="msg_camera">Camera</string>
+    <string name="msg_gallery">Gallery</string>
+
+    <string name="permission_title_rationale">Permission needed</string>
+    <string name="permission_read_storage_rationale">Storage read permission is needed to pick files.</string>
+    <string name="toast_cannot_retrieve_selected_video">Cannot retrieve selected video</string>
+    <string name="label_select_video">Select Video</string>
 
     <string name="welcome">Welcome to the OneDrive API Explorer!</string>
     <string name="start_exploring">Start Browsing Your OneDrive</string>

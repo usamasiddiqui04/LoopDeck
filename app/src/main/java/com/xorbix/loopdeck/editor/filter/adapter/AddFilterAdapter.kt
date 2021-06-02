@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.imagevideoeditor.R
+import com.xorbix.loopdeck.R
 import com.xorbix.loopdeck.editor.filter.utils.FilterType
 import com.xorbix.loopdeck.editor.filter.utils.MotionTouchListener
 import jp.co.cyberagent.android.gpuimage.GPUImage

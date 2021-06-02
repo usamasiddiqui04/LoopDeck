@@ -13,7 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.appcompat.app.AlertDialog
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import com.imagevideoeditor.R
+import com.xorbix.loopdeck.R
 import com.xorbix.loopdeck.editor.filter.utils.FileUtils
 import kotlinx.android.synthetic.main.filter_activity_main.*
 
@@ -185,7 +185,7 @@ class FilterMainActivity : AppCompatActivity() {
                     ) {
                         AlertDialog.Builder(this)
                             .setMessage(getString(R.string.permission_title_rationale))
-                            .setPositiveButton(getString(R.string.label_ok)) { _, _ ->
+                            .setPositiveButton("OK") { _, _ ->
                                 onBackPressed()
                                 startInstalledAppDetailsActivity()
                             }
@@ -205,7 +205,7 @@ class FilterMainActivity : AppCompatActivity() {
                 ) {
                     AlertDialog.Builder(this)
                         .setMessage(getString(R.string.permission_title_rationale))
-                        .setPositiveButton(getString(R.string.label_ok)) { _, _ ->
+                        .setPositiveButton("OK") { _, _ ->
                             onBackPressed()
                             startInstalledAppDetailsActivity()
                         }

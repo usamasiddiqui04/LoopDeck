@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.imagevideoeditor.R
 import com.obs.marveleditor.OptiVideoEditor
 import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
 import com.obs.marveleditor.interfaces.OptiDialogueHelper
@@ -16,6 +15,7 @@ import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.interfaces.OptiPlaybackSpeedListener
 import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.utils.OptiUtils
+import com.xorbix.loopdeck.R
 import kotlinx.android.synthetic.main.fragment_playbackspeed.*
 import kotlinx.android.synthetic.main.fragment_trim.iv_done
 import java.io.File
@@ -30,7 +30,7 @@ class SpeedFragment : BottomSheetDialogFragment(), OptiDialogueHelper, OptiFFMpe
     private var helper: OptiBaseCreatorDialogFragment.CallBacks? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var playbackSpeed: ArrayList<String> = ArrayList()
-    private lateinit var optiPlaybackSpeedAdapter: com.imagevideoeditor.adaptors.OptiPlaybackSpeedAdapter
+//    private lateinit var optiPlaybackSpeedAdapter: com.imagevideoeditor.adaptors.OptiPlaybackSpeedAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,9 +44,9 @@ class SpeedFragment : BottomSheetDialogFragment(), OptiDialogueHelper, OptiFFMpe
         super.onViewCreated(view, savedInstanceState)
 
         linearLayoutManager = LinearLayoutManager(activity!!.applicationContext)
-        iv_done.setOnClickListener {
-            optiPlaybackSpeedAdapter.setPlayback()
-        }
+//        iv_done.setOnClickListener {
+//            optiPlaybackSpeedAdapter.setPlayback()
+//        }
 
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         rvPlaybackSpeed.layoutManager = linearLayoutManager
@@ -58,13 +58,13 @@ class SpeedFragment : BottomSheetDialogFragment(), OptiDialogueHelper, OptiFFMpe
         playbackSpeed.add(OptiConstant.SPEED_1_25)
         playbackSpeed.add(OptiConstant.SPEED_1_5)
 
-        optiPlaybackSpeedAdapter = com.imagevideoeditor.adaptors.OptiPlaybackSpeedAdapter(
-            playbackSpeed,
-            activity!!.applicationContext,
-            this
-        )
-        rvPlaybackSpeed.adapter = optiPlaybackSpeedAdapter
-        optiPlaybackSpeedAdapter.notifyDataSetChanged()
+//        optiPlaybackSpeedAdapter = com.imagevideoeditor.adaptors.OptiPlaybackSpeedAdapter(
+//            playbackSpeed,
+//            activity!!.applicationContext,
+//            this
+//        )
+//        rvPlaybackSpeed.adapter = optiPlaybackSpeedAdapter
+//        optiPlaybackSpeedAdapter.notifyDataSetChanged()
     }
 
 

@@ -18,7 +18,7 @@ import com.afollestad.materialdialogs.BuildConfig
 import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.imagevideoeditor.R
+import com.xorbix.loopdeck.R
 import com.xorbix.loopdeck.editor.filter.utils.MotionTouchListener
 
 class FragmentShare : Fragment() {

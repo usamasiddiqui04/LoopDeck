@@ -20,8 +20,8 @@ import androidx.annotation.ColorInt
 import androidx.annotation.IntRange
 import androidx.annotation.RequiresPermission
 import androidx.annotation.UiThread
-import com.imagevideoeditor.R
-import com.imagevideoeditor.photoeditor.BitmapUtil.removeTransparency
+import com.xorbix.loopdeck.R
+import com.xorbix.loopdeck.editor.photoeditor.BitmapUtil.removeTransparency
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*

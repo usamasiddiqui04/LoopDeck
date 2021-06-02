@@ -7,7 +7,6 @@ import android.util.AttributeSet;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.imagevideoeditor.Utils.InfinitePagerAdapter;
 
 /**
  * A {@link ViewPager} that allows pseudo-infinite paging with a wrap-around effect. Should be used with an {@link
