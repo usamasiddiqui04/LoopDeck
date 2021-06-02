@@ -8,7 +8,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/main_menu">
 
-    <com.xorbics.loopdeck.editor.photoeditor.PhotoEditorView
+    <com.xorbix.loopdeck.editor.photoeditor.PhotoEditorView
         android:id="@+id/ivImage"
         android:layout_marginBottom="70dp"
         android:layout_width="match_parent"

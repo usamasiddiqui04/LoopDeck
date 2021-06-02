@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.xorbics.loopdeck.editor.photoeditor.PhotoEditorView
+    <com.xorbix.loopdeck.editor.photoeditor.PhotoEditorView
         android:id="@+id/ivImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
