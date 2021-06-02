@@ -15,9 +15,9 @@ android {
     }
     defaultConfig {
         applicationId "com.xorbix.loopdeck"
-        minSdkVersion 24
+        minSdkVersion minSdk
         targetSdkVersion targetSdk
-        versionCode 3
+        versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -116,16 +116,7 @@ dependencies {
 
     // Include supported authentication methods for your application
     implementation 'com.microsoft.services.msa:msa-auth:0.8.4'
-    
 
-//
-//    implementation 'com.google.http-client:google-http-client-gson:1.26.0'
-//    implementation('com.google.api-client:google-api-client-android:1.26.0') {
-//        exclude group: 'org.apache.httpcomponents'
-//    }
-//    implementation('com.google.apis:google-api-services-drive:v3-rev136-1.25.0') {
-//        exclude group: 'org.apache.httpcomponents'
-//    }
 
     implementation 'com.google.api-client:google-api-client:1.30.4'
     implementation 'com.google.oauth-client:google-oauth-client-jetty:1.30.4'
@@ -147,11 +138,12 @@ dependencies {
     implementation 'com.writingminds:FFmpegAndroid:0.3.2'
     implementation 'com.arthenica:mobile-ffmpeg-full:4.4'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
-    implementation 'com.github.bumptech.glide:compiler:4.9.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation "androidx.core:core-ktx:+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+
 
     implementation 'com.google.android.exoplayer:exoplayer-core:2.10.2'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.10.2'
