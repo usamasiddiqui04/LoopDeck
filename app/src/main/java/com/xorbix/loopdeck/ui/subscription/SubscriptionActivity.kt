@@ -19,7 +19,7 @@ class SubscriptionActivity : AppCompatActivity(), PurchasesUpdatedListener {
 
     val PREF_FILE = "MyPref"
     val SUBSCRIBE_KEY = "subscribe"
-    val ITEM_SKU_SUBSCRIBE = "one"
+    val ITEM_SKU_SUBSCRIBE = "loopdeck"
 
     var premiumContent: TextView? = null
     var subscriptionStatus: TextView? = null
