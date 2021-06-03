@@ -6,10 +6,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name="com.xorbix.loopdeck.BaseApplication"
+        android:name=".BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_loopdeck"
         android:label="@string/app_name"
@@ -18,25 +19,26 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon,android:allowBackup,android:roundIcon">
-        <activity android:name="com.xorbix.loopdeck.ui.changepassword.ChangePasswordActivity" />
-        <activity android:name="com.xorbix.loopdeck.ui.profilescreen.ProfileActivity" />
-        <activity android:name="com.xorbix.loopdeck.ui.collection.playlist.PlaylistActivity" />
-        <activity android:name="com.xorbix.loopdeck.editor.PlayActivity" />
-        <activity android:name="com.xorbix.loopdeck.ui.onboardingscreen.OnBoardingScreenActivity" />
-        <activity android:name="com.xorbix.loopdeck.ui.login.WebviewLoginActivity" />
-        <activity android:name="com.xorbix.loopdeck.gallery.view.PickerActivity" />
-        <activity android:name="com.xorbix.loopdeck.ui.collection.CollectionActivity" />
-        <activity android:name="com.xorbix.loopdeck.ui.googledrive.GoogleDriveActivity" />
-        <activity android:name="com.xorbix.loopdeck.editor.PreviewPhotoActivity" />
-        <activity android:name="com.xorbix.loopdeck.editor.PreviewVideoActivity" />
-        <activity android:name="com.xorbix.loopdeck.ui.main.MainActivity">
+        <activity android:name=".ui.subscription.SubscriptionActivity" />
+        <activity android:name=".ui.changepassword.ChangePasswordActivity" />
+        <activity android:name=".ui.profilescreen.ProfileActivity" />
+        <activity android:name=".ui.collection.playlist.PlaylistActivity" />
+        <activity android:name=".editor.PlayActivity" />
+        <activity android:name=".ui.onboardingscreen.OnBoardingScreenActivity" />
+        <activity android:name=".ui.login.WebviewLoginActivity" />
+        <activity android:name=".gallery.view.PickerActivity" />
+        <activity android:name=".ui.collection.CollectionActivity" />
+        <activity android:name=".ui.googledrive.GoogleDriveActivity" />
+        <activity android:name=".editor.PreviewPhotoActivity" />
+        <activity android:name=".editor.PreviewVideoActivity" />
+        <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.xorbix.loopdeck.onedrive.ApiExplorer" />
+        <activity android:name=".onedrive.ApiExplorer" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -52,7 +54,6 @@
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
-
     </application>
 
 </manifest>

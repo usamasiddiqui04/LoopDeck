@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.xorbix.loopdeck.R
 import com.xorbix.loopdeck.ui.collection.CollectionActivity
 import com.xorbix.loopdeck.ui.login.WebviewLoginActivity
+import com.xorbix.loopdeck.ui.subscription.SubscriptionActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -39,6 +40,15 @@ class MainActivity : AppCompatActivity() {
                 Intent(
                     this@MainActivity,
                     WebviewLoginActivity::class.java
+                )
+            )
+        }
+
+        btn_subscription.setOnClickListener {
+            startActivity(
+                Intent(
+                    this@MainActivity,
+                    SubscriptionActivity::class.java
                 )
             )
         }

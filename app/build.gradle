@@ -15,7 +15,7 @@ android {
     }
     defaultConfig {
         applicationId "com.xorbix.loopdeck"
-        minSdkVersion minSdk
+        minSdkVersion 24
         targetSdkVersion targetSdk
         versionCode 1
         versionName "1.0"

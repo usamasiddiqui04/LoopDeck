@@ -55,5 +55,19 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_recents" />
 
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_subscription"
+        android:text="Subscription"
+        android:textStyle="bold"
+        android:background="@drawable/button_back"
+        android:textColor="@color/black"
+        android:padding="10dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_recents" />
+
 
 </LinearLayout>
