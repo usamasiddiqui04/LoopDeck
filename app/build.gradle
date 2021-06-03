@@ -17,7 +17,7 @@ android {
         applicationId "com.xorbix.loopdeck"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 4
+        versionCode 5
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
