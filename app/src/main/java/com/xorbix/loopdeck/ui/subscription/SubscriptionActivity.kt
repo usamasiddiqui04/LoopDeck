@@ -72,7 +72,6 @@ class SubscriptionActivity : AppCompatActivity(), PurchasesUpdatedListener {
             subscribe?.visibility = View.VISIBLE
             subscriptionStatus?.text = "Subscription Status : Not Subscribed"
         }
-
     }
 
     fun subscribe(view: View?) {
