@@ -4,6 +4,7 @@ import android.media.MediaMetadataRetriever
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.soundpickerlayout.view.*
+import java.lang.IllegalArgumentException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -57,13 +58,16 @@ class SongViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
     }
 
     fun getDuration(uri: String): Long {
-        val retriever = MediaMetadataRetriever()
-        retriever.setDataSource(uri)
-        val duration =
-            java.lang.Long.parseLong(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION))
-        retriever.release()
 
-        return duration
-//    }
+        try {
+            val retriever = MediaMetadataRetriever()
+            retriever.setDataSource(uri)
+            val duration =
+                java.lang.Long.parseLong(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION))
+            retriever.release()
+            return duration
+        } catch (e: IllegalArgumentException) {
+            return 0
+        }
     }
 }
