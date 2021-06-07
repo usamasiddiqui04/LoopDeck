@@ -1,4 +1,3 @@
 
-include ':VideoEditor'
 include ':app'
 rootProject.name = "LoopDeck"

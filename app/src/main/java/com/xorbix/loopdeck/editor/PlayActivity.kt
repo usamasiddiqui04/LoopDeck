@@ -17,10 +17,10 @@ import com.xorbix.loopdeck.utils.extensions.toast
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.FFmpegLoadBinaryResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException
-import com.obs.marveleditor.OptiVideoEditor
-import com.obs.marveleditor.interfaces.OptiFFMpegCallback
-import com.obs.marveleditor.utils.OptiConstant
-import com.obs.marveleditor.utils.OptiUtils
+import com.xorbix.loopdeck.videoeditor.interfaces.OptiFFMpegCallback
+import com.xorbix.loopdeck.videoeditor.utils.OptiConstant
+import com.xorbix.loopdeck.videoeditor.utils.OptiUtils
+import com.xorbix.loopdeck.videoeditor.OptiVideoEditor
 import kotlinx.android.synthetic.main.activity_play.*
 import kotlinx.android.synthetic.main.fragment_googlrdrive.toolbar
 import java.io.File

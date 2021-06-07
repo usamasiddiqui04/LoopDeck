@@ -88,4 +88,9 @@ class CollectionActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
         drawer_layout!!.closeDrawer(GravityCompat.START)
         return true
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
+    }
 }

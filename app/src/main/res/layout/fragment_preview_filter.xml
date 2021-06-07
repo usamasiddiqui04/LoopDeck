@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/recyclerView"
-        app:srcCompat="@drawable/ic_baseline_done_24px"
+        app:srcCompat="@drawable/ic_baseline_done_24"
         app:tint="@color/white" />
 
     <ImageView
@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/recyclerView"
-        app:srcCompat="@drawable/ic_baseline_close_24px"
+        app:srcCompat="@drawable/ic_baseline_close_24"
         app:tint="@color/white" />
 
     <TextView

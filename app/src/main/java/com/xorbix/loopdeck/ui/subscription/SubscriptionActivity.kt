@@ -1,5 +1,6 @@
 package com.xorbix.loopdeck.ui.subscription
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.SkuType.SUBS
 import com.xorbix.loopdeck.R
+import com.xorbix.loopdeck.ui.collection.CollectionActivity
 import com.xorbix.loopdeck.ui.subscription.Security.verifyPurchase
 import java.io.IOException
 
@@ -26,8 +28,6 @@ class SubscriptionActivity : AppCompatActivity(), PurchasesUpdatedListener {
     var subscribe: Button? = null
 
     private var billingClient: BillingClient? = null
-
-    private val skusWithSkuDetails = mutableMapOf<String, SkuDetails>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,8 +74,20 @@ class SubscriptionActivity : AppCompatActivity(), PurchasesUpdatedListener {
         }
     }
 
-    fun subscribe(view: View?) {
-        //check if service is already connected
+    override fun onStart() {
+        super.onStart()
+
+        if (getSubscribeValueFromPref()) {
+            startActivity(
+                Intent(
+                    this,
+                    CollectionActivity::class.java
+                )
+            )
+            return
+        }
+
+
         if (billingClient!!.isReady) {
             initiatePurchase()
         } else {
@@ -100,6 +112,11 @@ class SubscriptionActivity : AppCompatActivity(), PurchasesUpdatedListener {
                 }
             })
         }
+    }
+
+    fun subscribe(view: View?) {
+        //check if service is already connected
+
     }
 
     private fun getPreferenceObject(): SharedPreferences {
@@ -163,16 +180,29 @@ class SubscriptionActivity : AppCompatActivity(), PurchasesUpdatedListener {
     ) {
         if (billingResult.responseCode === BillingClient.BillingResponseCode.OK && purchases != null) {
             handlePurchases(purchases)
+            startActivity(
+                Intent(
+                    this,
+                    CollectionActivity::class.java
+                )
+            )
         } else if (billingResult.responseCode === BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
+            Toast.makeText(applicationContext, "Item already purchased", Toast.LENGTH_SHORT).show()
             val queryAlreadyPurchasesResult = billingClient!!.queryPurchases(SUBS)
             val alreadyPurchases = queryAlreadyPurchasesResult.purchasesList
             alreadyPurchases?.let { handlePurchases(it) }
+            startActivity(
+                Intent(
+                    this,
+                    CollectionActivity::class.java
+                )
+            )
         } else if (billingResult.responseCode === BillingClient.BillingResponseCode.USER_CANCELED) {
             Toast.makeText(applicationContext, "Purchase Canceled", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(
                 applicationContext,
-                "Error " + billingResult.getDebugMessage(),
+                "Error " + billingResult.debugMessage,
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -194,21 +224,6 @@ class SubscriptionActivity : AppCompatActivity(), PurchasesUpdatedListener {
                 }
                 // else purchase is valid
                 //if item is purchased and not acknowledged
-                if (!purchase.isAcknowledged) {
-                    val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
-                        .setPurchaseToken(purchase.purchaseToken)
-                        .build()
-                    billingClient!!.acknowledgePurchase(acknowledgePurchaseParams, ackPurchase)
-                } else {
-                    // Grant entitlement to the user on item purchase
-                    // restart activity
-                    if (!getSubscribeValueFromPref()) {
-                        saveSubscribeValueToPref(true)
-                        Toast.makeText(applicationContext, "Item Purchased", Toast.LENGTH_SHORT)
-                            .show()
-                        recreate()
-                    }
-                }
             } else if (ITEM_SKU_SUBSCRIBE == purchase.skus.toString() && purchase.purchaseState == Purchase.PurchaseState.PENDING) {
                 Toast.makeText(
                     applicationContext,
@@ -221,6 +236,23 @@ class SubscriptionActivity : AppCompatActivity(), PurchasesUpdatedListener {
                 subscriptionStatus!!.text = "Subscription Status : Not Subscribed"
                 Toast.makeText(applicationContext, "Purchase Status Unknown", Toast.LENGTH_SHORT)
                     .show()
+            } else if (!purchase.isAcknowledged) {
+                val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                    .setPurchaseToken(purchase.purchaseToken)
+                    .build()
+                billingClient!!.acknowledgePurchase(acknowledgePurchaseParams, ackPurchase)
+            } else {
+                // Grant entitlement to the user on item purchase
+                // restart activity
+                if (getSubscribeValueFromPref()) {
+                    saveSubscribeValueToPref(true)
+                    Toast.makeText(applicationContext, "Item Purchased", Toast.LENGTH_SHORT)
+                        .show()
+                    recreate()
+
+                }
+
+
             }
         }
     }

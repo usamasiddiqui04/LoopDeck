@@ -8,13 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.github.guilhe.views.SeekBarRangedView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.obs.marveleditor.OptiVideoEditor
-import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
-import com.obs.marveleditor.interfaces.OptiFFMpegCallback
-import com.obs.marveleditor.utils.OptiConstant
-import com.obs.marveleditor.utils.OptiUtils
-import com.obs.marveleditor.utils.VideoUtils
+import com.xorbix.loopdeck.videoeditor.interfaces.OptiFFMpegCallback
+import com.xorbix.loopdeck.videoeditor.utils.OptiConstant
+import com.xorbix.loopdeck.videoeditor.utils.OptiUtils
+import com.xorbix.loopdeck.videoeditor.utils.VideoUtils
 import com.xorbix.loopdeck.R
+import com.xorbix.loopdeck.videoeditor.OptiVideoEditor
+import com.xorbix.loopdeck.videoeditor.fragment.OptiBaseCreatorDialogFragment
 import kotlinx.android.synthetic.main.fragment_trim.*
 import java.io.File
 

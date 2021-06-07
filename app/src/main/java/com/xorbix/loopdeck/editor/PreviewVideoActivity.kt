@@ -52,9 +52,9 @@ import com.xorbix.loopdeck.editor.fragments.SoundPickerFragment
 import com.xorbix.loopdeck.editor.photoeditor.*
 import com.xorbix.loopdeck.ui.collection.CollectionViewModel
 import com.xorbix.loopdeck.utils.extensions.activityViewModelProvider
-import com.obs.marveleditor.fragments.OptiBaseCreatorDialogFragment
-import com.obs.marveleditor.interfaces.OptiFFMpegCallback
-import com.obs.marveleditor.utils.OptiUtils
+import com.xorbix.loopdeck.videoeditor.fragment.OptiBaseCreatorDialogFragment
+import com.xorbix.loopdeck.videoeditor.interfaces.OptiFFMpegCallback
+import com.xorbix.loopdeck.videoeditor.utils.OptiUtils
 import kotlinx.android.synthetic.main.activity_preview_video.*
 import java.io.File
 import java.io.IOException
