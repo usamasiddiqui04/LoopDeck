@@ -27,7 +27,7 @@ import com.xorbix.loopdeck.ui.adapters.MediaAdaptor
 import com.xorbix.loopdeck.ui.collection.CollectionViewModel
 import com.xorbix.loopdeck.utils.callbacks.ItemMoveCallback
 import com.xorbix.loopdeck.utils.extensions.toast
-import com.obs.marveleditor.interfaces.OptiFFMpegCallback
+import com.xorbix.loopdeck.videoeditor.interfaces.OptiFFMpegCallback
 import kotlinx.android.synthetic.main.fragment_playlist.*
 import kotlinx.android.synthetic.main.fragment_playlist.btnDelete
 import kotlinx.android.synthetic.main.fragment_playlist.btnplay

@@ -14,10 +14,9 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/app_name"
         android:padding="10dp"
-        android:tint="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_close_24px" />
+        app:srcCompat="@drawable/ic_baseline_close_24" />
 
     <ImageView
         android:id="@+id/iv_done"
@@ -25,10 +24,9 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/app_name"
         android:padding="10dp"
-        android:tint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_done_24px" />
+        app:srcCompat="@drawable/ic_baseline_done_24" />
 
     <com.github.guilhe.views.SeekBarRangedView
         android:id="@+id/VideoTrim"
