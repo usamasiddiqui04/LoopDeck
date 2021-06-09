@@ -209,12 +209,12 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
                     ).show()
                 } else {
                     //output file is generated and send to video processing
-                    val outputFile = OptiUtils.createAudioFile(context!!)
+                    val outputFile = OptiUtils.createAudioFile(requireContext())
                     Log.v(tagName, "outputFile: ${outputFile.absolutePath}")
 
                     nextAction = 1
 
-                    OptiVideoEditor.with(context!!)
+                    OptiVideoEditor.with(requireContext())
                         .setType(OptiConstant.AUDIO_TRIM)
                         .setAudioFile(masterAudioFile!!)
                         .setOutputPath(outputFile.absolutePath)
@@ -384,7 +384,7 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
                             intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
                             val uri = Uri.fromParts(
                                 "package",
-                                context!!.applicationContext.packageName,
+                                requireContext().applicationContext.packageName,
                                 null
                             )
                             intent.data = uri
@@ -481,7 +481,7 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
             dialog?.dismiss()
         } else if (nextAction == 3) {
             progressDialog?.dismiss()
-            activity!!.finish()
+            requireActivity().finish()
             val timestamp = Date()
             val mediaType = outputFile!!.getMediaType()
             val mediaDatapass = outputFile.let {
@@ -544,7 +544,7 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
                 Log.v(tagName, "outputFile: ${it.absolutePath}")
                 nextAction = 2
                 if (audioFile != null && videoFile != null) {
-                    OptiVideoEditor.with(context!!)
+                    OptiVideoEditor.with(requireContext())
                         .setType(OptiConstant.VIDEO_AUDIO_MERGE)
                         .setVideoFile(videoFile!!)
                         .setAudioFile(audioFile!!)
@@ -575,7 +575,7 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
                 Log.v(tagName, "outputFile: ${it.absolutePath}")
                 nextAction = 3
                 if (audioFile != null && imageFile != null) {
-                    OptiVideoEditor.with(context!!)
+                    OptiVideoEditor.with(requireContext())
                         .setType(OptiConstant.IMAGE_AUDIO_MERGE)
                         .setImageFile(imageFile!!)
                         .setAudioFile(audioFile!!)
