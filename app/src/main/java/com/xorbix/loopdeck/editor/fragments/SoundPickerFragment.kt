@@ -102,7 +102,7 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
         Log.e("List of songs: ", listSongs.toString())
         Toast.makeText(requireContext(), listSongs.size.toString(), Toast.LENGTH_SHORT).show()
 
-        stickersearch.addTextChangedListener(object : TextWatcher {
+        soundSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }

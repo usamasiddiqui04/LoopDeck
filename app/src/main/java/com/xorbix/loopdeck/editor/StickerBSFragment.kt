@@ -77,7 +77,7 @@ class StickerBSFragment : BottomSheetDialogFragment() {
         if (behavior != null && behavior is BottomSheetBehavior<*>) {
             behavior.setBottomSheetCallback(mBottomSheetBehaviorCallback)
         }
-        editTextSearch = contentView.findViewById(R.id.stickersearch)
+        editTextSearch = contentView.findViewById(R.id.soundSearch)
 
         editTextSearch?.setOnEditorActionListener { textView, _, _ ->
             val q = textView.text.toString()

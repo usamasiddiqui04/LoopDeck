@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:src="@drawable/ic_baseline_done_24" />
+            android:src="@drawable/ic_baseline_done_white" />
 
         <ImageView
             android:id="@+id/close"

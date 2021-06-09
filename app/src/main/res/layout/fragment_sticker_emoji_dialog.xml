@@ -7,7 +7,7 @@
     android:background="#100C1C">
 
     <EditText
-        android:id="@+id/stickersearch"
+        android:id="@+id/soundSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Search for stickers"
@@ -36,7 +36,7 @@
         tools:listitem="@layout/row_sticker"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stickersearch" />
+        app:layout_constraintTop_toBottomOf="@id/soundSearch" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
