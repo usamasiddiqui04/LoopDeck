@@ -167,6 +167,19 @@ class PreviewVideoActivity : AppCompatActivity(), OnPhotoEditorListener, OptiFFM
             ">>",
             "width>> " + newCanvasWidth + "height>> " + newCanvasHeight + " rotation >> " + rotation
         )
+
+        btnpause.setOnClickListener {
+            player.playWhenReady = false
+            btnplay.visibility = View.VISIBLE
+            btnpause.visibility = View.GONE
+        }
+
+
+        btnplay.setOnClickListener {
+            player.playWhenReady = true
+            btnplay.visibility = View.GONE
+            btnpause.visibility = View.VISIBLE
+        }
     }
 
     fun setplayer(soundListner: SoundListner) {

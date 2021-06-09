@@ -180,23 +180,25 @@ class SubscriptionActivity : AppCompatActivity(), PurchasesUpdatedListener {
     ) {
         if (billingResult.responseCode === BillingClient.BillingResponseCode.OK && purchases != null) {
             handlePurchases(purchases)
-            startActivity(
-                Intent(
-                    this,
-                    CollectionActivity::class.java
-                )
-            )
+//            startActivity(
+//                Intent(
+//                    this,
+//                    CollectionActivity::class.java
+//                )
+//            )
+            saveSubscribeValueToPref(true)
         } else if (billingResult.responseCode === BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
             Toast.makeText(applicationContext, "Item already purchased", Toast.LENGTH_SHORT).show()
             val queryAlreadyPurchasesResult = billingClient!!.queryPurchases(SUBS)
             val alreadyPurchases = queryAlreadyPurchasesResult.purchasesList
             alreadyPurchases?.let { handlePurchases(it) }
-            startActivity(
-                Intent(
-                    this,
-                    CollectionActivity::class.java
-                )
-            )
+//            startActivity(
+//                Intent(
+//                    this,
+//                    CollectionActivity::class.java
+//                )
+//            )
+            saveSubscribeValueToPref(true)
         } else if (billingResult.responseCode === BillingClient.BillingResponseCode.USER_CANCELED) {
             Toast.makeText(applicationContext, "Purchase Canceled", Toast.LENGTH_SHORT).show()
         } else {

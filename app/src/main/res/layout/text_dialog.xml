@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/add_text_color_picker_recyclerview"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:src="@drawable/ic_baseline_done_24"
+                android:src="@drawable/ic_baseline_done_white"
                 android:layout_margin="20dp" />
 
             <ImageView

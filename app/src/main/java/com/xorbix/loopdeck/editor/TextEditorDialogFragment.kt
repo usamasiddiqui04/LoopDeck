@@ -71,7 +71,7 @@ class TextEditorDialogFragment : DialogFragment() {
         mAddTextEditText = view.findViewById(R.id.add_text_edit_text)
         close = view.findViewById(R.id.close)
         mInputMethodManager =
-            activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         mAddTextDoneTextView = view.findViewById(R.id.add_text_done_tv)
         mAddTextEditText!!.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -125,7 +125,7 @@ class TextEditorDialogFragment : DialogFragment() {
         reyFonts?.layoutManager = layoutManagerFonts
         addTextColorPickerRecyclerView?.setHasFixedSize(true)
         reyFonts?.setHasFixedSize(true)
-        val colorPickerAdapter = ColorPickerAdapter(activity!!)
+        val colorPickerAdapter = ColorPickerAdapter(requireActivity())
         //This listener will change the text color when clicked on any color from picker
 
         colorPickerAdapter.setOnColorPickerClickListener(object :
@@ -137,10 +137,10 @@ class TextEditorDialogFragment : DialogFragment() {
         })
 
         addTextColorPickerRecyclerView?.adapter = colorPickerAdapter
-        position = arguments!!.getInt(SELECTED_POSITION)
+        position = requireArguments().getInt(SELECTED_POSITION)
         val fontPickerAdapter = getDefaultFontIds(activity)?.let {
             FontPickerAdapter(
-                activity!!, position, getDefaultFonts(activity)!!,
+                requireActivity(), position, getDefaultFonts(activity)!!,
                 it
             )
         }
@@ -154,10 +154,10 @@ class TextEditorDialogFragment : DialogFragment() {
         })
 
         reyFonts?.adapter = fontPickerAdapter
-        mAddTextEditText?.setText(arguments!!.getString(EXTRA_INPUT_TEXT))
-        mColorCode = arguments!!.getInt(EXTRA_COLOR_CODE)
+        mAddTextEditText?.setText(requireArguments().getString(EXTRA_INPUT_TEXT))
+        mColorCode = requireArguments().getInt(EXTRA_COLOR_CODE)
         mAddTextEditText?.setTextColor(mColorCode)
-        val typeface = ResourcesCompat.getFont(activity!!, fontIds!![position])
+        val typeface = ResourcesCompat.getFont(requireActivity(), fontIds!![position])
         mAddTextEditText?.setTypeface(typeface)
         mInputMethodManager!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 

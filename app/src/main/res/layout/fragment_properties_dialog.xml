@@ -102,8 +102,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/rvColors"
-        app:layout_constraintStart_toStartOf="parent"
-        android:src="@drawable/ic_baseline_done_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/ic_baseline_done_white"
         android:layout_margin="15dp" />
 
     <ImageView
@@ -111,8 +111,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/rvColors"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/ic_baseline_close_24"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/ic_close"
         android:layout_margin="15dp" />
 
     <TextView

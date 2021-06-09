@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(
                 Intent(
                     this@MainActivity,
-                    SubscriptionActivity::class.java
+                    CollectionActivity::class.java
                 )
             )
         }

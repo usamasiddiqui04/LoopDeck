@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.xorbix.loopdeck.R
 import com.xorbix.loopdeck.editor.filter.utils.FilterType
 import com.xorbix.loopdeck.editor.filter.utils.MotionTouchListener
@@ -43,9 +44,52 @@ class AddFilterAdapter(
                 setOnTouchListener(MotionTouchListener())
             }
 
+            val filterText = itemView.findViewById(R.id.filterName) as TextView
+
+
             var bitmap = ThumbnailUtils.createVideoThumbnail(
                 filename,
                 MediaStore.Video.Thumbnails.MICRO_KIND
+            )
+
+            val filterFileText = arrayListOf<String>()
+            filterFileText.addAll(
+                listOf(
+                    "afterglow",
+                    "wonderland",
+                    "ambers",
+                    "aurora",
+                    "blue poppies",
+                    "blue yellow field",
+                    "carousel",
+                    "cold desert",
+                    "cold heart",
+                    "digital film",
+                    "documentary",
+                    "electric",
+                    "ghosts head",
+                    "good luck charm",
+                    "green envy",
+                    "hummingbirds",
+                    "kiss",
+                    "left hand blues",
+                    "light parades",
+                    "lullabye",
+                    "moth wings",
+                    "moth wings",
+                    "old postcard",
+                    "old postcard",
+                    "peacock feathers",
+                    "pistol",
+                    "ragdoll",
+                    "rose thorns",
+                    "rose thorns",
+                    "set you free",
+                    "snow white",
+                    "toes in the ocean",
+                    "wild at heart",
+                    "window warmth"
+                )
             )
 
             val filterFile = arrayListOf<String>()
@@ -92,6 +136,8 @@ class AddFilterAdapter(
             gpuImage.setImage(bitmap)
 
             val gpuFilter = GPUImageToneCurveFilter()
+
+            filterText.text = filterFileText[position]
 
             when (position) {
                 1 -> gpuImage.setFilter(GPUImageGrayscaleFilter())
