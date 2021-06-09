@@ -41,12 +41,12 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
     var mediaData: MediaData? = null
 
     var selectForVideo = true
-    private lateinit var addMusicListener: com.xorbix.loopdeck.editor.fragments.AddMusicFragment.AddMusicFragmentListener
+    private lateinit var addMusicListener: AddMusicFragment.AddMusicFragmentListener
 
     companion object {
         fun newInstance(
             soundPickerListener: SoundPickerListener,
-            musicListener: com.xorbix.loopdeck.editor.fragments.AddMusicFragment.AddMusicFragmentListener,
+            musicListener: AddMusicFragment.AddMusicFragmentListener,
             selectForVideo: Boolean = true
         ) = SoundPickerFragment().apply {
             listener = soundPickerListener
@@ -69,7 +69,7 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
 
                 setAddMusicListener(addMusicListener)
 
-            }.show(fragmentManager!!, "AddMusicFragment")
+            }.show(requireFragmentManager(), "AddMusicFragment")
         }
 
     override fun onCreateView(
@@ -120,7 +120,7 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         val selection = MediaStore.Audio.Media.IS_MUSIC + "!=0"
 
-        val resultset = context!!.contentResolver.query(uri, null, selection, null, null)
+        val resultset = requireContext().contentResolver.query(uri, null, selection, null, null)
         if (resultset != null) {
             while (resultset.moveToNext()) {
                 val songurl =
@@ -132,7 +132,9 @@ class SoundPickerFragment : BottomSheetDialogFragment() {
                 val duration =
                     resultset.getString(resultset.getColumnIndex(MediaStore.Audio.Media.DURATION))
 
-                listSongs.add(Songinfo(title, author, songurl, duration))
+                if (songurl.contains(".mp3")) {
+                    listSongs.add(Songinfo(title, author, songurl, duration))
+                }
             }
         }
     }

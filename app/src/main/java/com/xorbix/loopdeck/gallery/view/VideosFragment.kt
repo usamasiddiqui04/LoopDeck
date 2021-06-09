@@ -1,7 +1,6 @@
 package com.xorbix.loopdeck.gallery.view
 
 import android.Manifest
-import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -186,7 +185,6 @@ class VideosFragment : Fragment(), ImagePickerContract {
         }
     }
 
-    @TargetApi(android.os.Build.VERSION_CODES.JELLY_BEAN)
     fun checkReadWritePermission(): Boolean {
         requestPermissions(
             arrayOf(
