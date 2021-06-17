@@ -34,7 +34,7 @@ class AddFilterAdapter(
     }
 
     override fun getItemCount(): Int {
-        return FilterType.createFilterList().size
+        return 33
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -55,8 +55,8 @@ class AddFilterAdapter(
             val filterFileText = arrayListOf<String>()
             filterFileText.addAll(
                 listOf(
-                    "afterglow",
-                    "wonderland",
+                    "after glow",
+                    "wonder land",
                     "ambers",
                     "aurora",
                     "blue poppies",
@@ -70,15 +70,14 @@ class AddFilterAdapter(
                     "ghosts head",
                     "good luck charm",
                     "green envy",
-                    "hummingbirds",
+                    "humming birds",
                     "kiss",
                     "left hand blues",
                     "light parades",
                     "lullabye",
                     "moth wings",
-                    "moth wings",
                     "old postcard",
-                    "old postcard",
+                    "postcard",
                     "peacock feathers",
                     "pistol",
                     "ragdoll",
@@ -116,7 +115,6 @@ class AddFilterAdapter(
                     "acv/light_parades.acv",
                     "acv/lullabye.acv",
                     "acv/moth_wings.acv",
-                    "acv/moth_wings.acv",
                     "acv/old_postcards_01.acv",
                     "acv/old_postcards_02.acv",
                     "acv/peacock_feathers.acv",
@@ -137,7 +135,6 @@ class AddFilterAdapter(
 
             val gpuFilter = GPUImageToneCurveFilter()
 
-            filterText.text = filterFileText[position]
 
             when (position) {
                 1 -> gpuImage.setFilter(GPUImageGrayscaleFilter())
@@ -157,6 +154,7 @@ class AddFilterAdapter(
                 itemView.apply {
                     thumbnails.setImageBitmap(bitmap)
                 }
+                filterText.text = filterFileText[position]
             } catch (e: NullPointerException) {
                 //TODO something with get photo from Google Photos
             }

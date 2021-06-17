@@ -29,7 +29,7 @@ internal class FilterViewAdapter(private val mFilterListener: FilterListener) :
         val filterPair = mPairList[position]
         val fromAsset = getBitmapFromAsset(holder.itemView.context, filterPair.first)
         holder.mImageFilterView.setImageBitmap(fromAsset)
-        holder.mTxtFilterName.text = filterPair.second.name.replace("_", " ")
+        holder.mTxtFilterName.text = filterPair.second.name.replace("_", " ").toLowerCase()
     }
 
     override fun getItemCount(): Int {
@@ -64,7 +64,7 @@ internal class FilterViewAdapter(private val mFilterListener: FilterListener) :
     }
 
     private fun setupFilters() {
-        mPairList.add(Pair("filters/original.jpg", PhotoFilter.NONE))
+        mPairList.add(Pair("filters/original.jpg", PhotoFilter.None))
         mPairList.add(Pair("filters/auto_fix.png", PhotoFilter.AUTO_FIX))
         mPairList.add(Pair("filters/brightness.png", PhotoFilter.BRIGHTNESS))
         mPairList.add(Pair("filters/contrast.png", PhotoFilter.CONTRAST))
@@ -83,9 +83,9 @@ internal class FilterViewAdapter(private val mFilterListener: FilterListener) :
         mPairList.add(Pair("filters/temprature.png", PhotoFilter.TEMPERATURE))
         mPairList.add(Pair("filters/tint.png", PhotoFilter.TINT))
         mPairList.add(Pair("filters/vignette.png", PhotoFilter.VIGNETTE))
-        mPairList.add(Pair("filters/cross_process.png", PhotoFilter.CROSS_PROCESS))
+        mPairList.add(Pair("filters/cross_process.png", PhotoFilter.Cross))
         mPairList.add(Pair("filters/b_n_w.png", PhotoFilter.BLACK_WHITE))
-        mPairList.add(Pair("filters/flip_horizental.png", PhotoFilter.FLIP_HORIZONTAL))
+        mPairList.add(Pair("filters/flip_horizental.png", PhotoFilter.Flip))
         mPairList.add(Pair("filters/flip_vertical.png", PhotoFilter.FLIP_VERTICAL))
         mPairList.add(Pair("filters/rotate.png", PhotoFilter.ROTATE))
     }

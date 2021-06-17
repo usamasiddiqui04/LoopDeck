@@ -229,7 +229,7 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
 
 
     override fun onProgress(progress: String) {
-        progressDialog!!.setMessage(progress)
+        progressDialog!!.setMessage("Merge the files , please wait")
         progressDialog!!.setCanceledOnTouchOutside(false)
         progressDialog!!.show()
     }

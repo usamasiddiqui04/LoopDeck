@@ -44,6 +44,7 @@ class StickerBSFragment : BottomSheetDialogFragment() {
         ApiClient.getSearchApi()
     }
 
+
     var editTextSearch: EditText? = null
 
     interface StickerListener {
@@ -92,6 +93,17 @@ class StickerBSFragment : BottomSheetDialogFragment() {
         val gridLayoutManager = GridLayoutManager(activity, 4)
         rvEmoji.layoutManager = gridLayoutManager
         rvEmoji.adapter = stickerAdapter
+
+        val stickerDone: ImageView = contentView.findViewById(R.id.stickerDone);
+        val stickerClose: ImageView = contentView.findViewById(R.id.stickerClose);
+
+        stickerDone.setOnClickListener {
+            dismiss()
+        }
+
+        stickerClose.setOnClickListener {
+            dismiss()
+        }
 
     }
 

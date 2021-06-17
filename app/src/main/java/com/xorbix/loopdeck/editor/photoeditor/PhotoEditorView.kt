@@ -105,7 +105,7 @@ class PhotoEditorView : RelativeLayout {
         imgFilterParam.addRule(ALIGN_BOTTOM, imgSrcId)
         mImgSource!!.setOnImageChangedListener(object : FilterImageView.OnImageChangedListener {
             override fun onBitmapLoaded(sourceBitmap: Bitmap?) {
-                mImageFilterView!!.setFilterEffect(PhotoFilter.NONE)
+                mImageFilterView!!.setFilterEffect(PhotoFilter.None)
                 mImageFilterView!!.setSourceBitmap(sourceBitmap)
                 Log.d(TAG, "onBitmapLoaded() called with: sourceBitmap = [$sourceBitmap]")
             }

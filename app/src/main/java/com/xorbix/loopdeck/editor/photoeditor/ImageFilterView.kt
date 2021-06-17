@@ -54,7 +54,7 @@ internal class ImageFilterView : GLSurfaceView, GLSurfaceView.Renderer {
         setEGLContextClientVersion(2)
         setRenderer(this)
         renderMode = RENDERMODE_WHEN_DIRTY
-        setFilterEffect(PhotoFilter.NONE)
+        setFilterEffect(PhotoFilter.None)
     }
 
     fun setSourceBitmap(sourceBitmap: Bitmap?) {
@@ -78,7 +78,7 @@ internal class ImageFilterView : GLSurfaceView, GLSurfaceView.Renderer {
             loadTextures()
             mInitialized = true
         }
-        if (mCurrentEffect != PhotoFilter.NONE || mCustomEffect != null) {
+        if (mCurrentEffect != PhotoFilter.None || mCustomEffect != null) {
             //if an effect is chosen initialize it and apply it to the texture
             initEffect()
             applyEffect()
@@ -161,7 +161,7 @@ internal class ImageFilterView : GLSurfaceView, GLSurfaceView.Renderer {
                     mEffect = effectFactory.createEffect(EffectFactory.EFFECT_CONTRAST)
                     mEffect?.setParameter("contrast", 1.4f)
                 }
-                PhotoFilter.CROSS_PROCESS -> mEffect =
+                PhotoFilter.Cross -> mEffect =
                     effectFactory.createEffect(EffectFactory.EFFECT_CROSSPROCESS)
                 PhotoFilter.DOCUMENTARY -> mEffect =
                     effectFactory.createEffect(EffectFactory.EFFECT_DOCUMENTARY)
@@ -178,7 +178,7 @@ internal class ImageFilterView : GLSurfaceView, GLSurfaceView.Renderer {
                     mEffect = effectFactory.createEffect(EffectFactory.EFFECT_FISHEYE)
                     mEffect?.setParameter("scale", .5f)
                 }
-                PhotoFilter.FLIP_HORIZONTAL -> {
+                PhotoFilter.Flip -> {
                     mEffect = effectFactory.createEffect(EffectFactory.EFFECT_FLIP)
                     mEffect?.setParameter("horizontal", true)
                 }
@@ -196,7 +196,7 @@ internal class ImageFilterView : GLSurfaceView, GLSurfaceView.Renderer {
                     effectFactory.createEffect(EffectFactory.EFFECT_LOMOISH)
                 PhotoFilter.NEGATIVE -> mEffect =
                     effectFactory.createEffect(EffectFactory.EFFECT_NEGATIVE)
-                PhotoFilter.NONE -> {
+                PhotoFilter.None -> {
                 }
                 PhotoFilter.POSTERIZE -> mEffect =
                     effectFactory.createEffect(EffectFactory.EFFECT_POSTERIZE)
@@ -233,7 +233,7 @@ internal class ImageFilterView : GLSurfaceView, GLSurfaceView.Renderer {
     }
 
     private fun renderResult() {
-        if (mCurrentEffect != PhotoFilter.NONE || mCustomEffect != null) {
+        if (mCurrentEffect != PhotoFilter.None || mCustomEffect != null) {
             // if no effect is chosen, just render the original bitmap
             mTexRenderer!!.renderTexture(mTextures[1])
         } else {
