@@ -81,7 +81,7 @@ class AddFilterAdapter(
                     "peacock feathers",
                     "pistol",
                     "ragdoll",
-                    "rose thorns",
+                    "rose ",
                     "rose thorns",
                     "set you free",
                     "snow white",

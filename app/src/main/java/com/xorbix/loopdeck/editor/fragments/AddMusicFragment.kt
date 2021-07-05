@@ -456,7 +456,7 @@ class AddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
             }
             3 -> {
                 dismiss()
-                progressDialog?.setMessage(progress)
+                progressDialog?.setMessage("Sound applying please wait")
                 progressDialog?.show()
             }
         }

@@ -34,25 +34,6 @@
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:src="@drawable/iconviewimages" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/iconviewlist" />
-            </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.tabs.TabLayout

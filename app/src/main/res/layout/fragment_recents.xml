@@ -10,6 +10,7 @@
         android:layout_height="@dimen/_50sdp"
         app:cardCornerRadius="@dimen/_360sdp"
         android:id="@+id/fbAddPlaylist"
+        android:visibility="gone"
         android:backgroundTint="@color/warmBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/addmedia"

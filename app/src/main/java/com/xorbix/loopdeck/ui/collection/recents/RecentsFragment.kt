@@ -242,6 +242,8 @@ class RecentsFragment : Fragment(), MediaAdaptor.OnItemClick {
                     recyclerview.visibility = View.INVISIBLE
                     no_mediafile.visibility = View.VISIBLE
                     bottomLayout.visibility = View.GONE
+                    fbAddPlaylist.visibility = View.GONE
+                    addmedia.visibility = View.GONE
                     return@Observer
                 }
                 recyclerview.visibility = View.VISIBLE
