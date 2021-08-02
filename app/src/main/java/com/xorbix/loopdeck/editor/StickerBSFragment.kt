@@ -146,7 +146,7 @@ class StickerBSFragment : BottomSheetDialogFragment() {
             val entity = items!![position]
             setThumbnailImage(entity.previewURL, holder.imgSticker)
 
-            holder.imgSticker.setOnClickListener {
+            holder.itemView.setOnClickListener {
                 downloadViaPicasso(items[position])
             }
         }
