@@ -1,6 +1,7 @@
 package com.xorbix.loopdeck.editor
 
 import android.app.ProgressDialog
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -17,6 +18,7 @@ import com.xorbix.loopdeck.utils.extensions.toast
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.FFmpegLoadBinaryResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException
+import com.xorbix.loopdeck.utils.extensions.getMediaType
 import com.xorbix.loopdeck.videoeditor.interfaces.OptiFFMpegCallback
 import com.xorbix.loopdeck.videoeditor.utils.OptiConstant
 import com.xorbix.loopdeck.videoeditor.utils.OptiUtils
@@ -31,6 +33,8 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
 
     var videoIncrementer = 0
     var duration = 0
+    var mediaFile: File? = null
+    var mediaData: MediaData? = null
     private var fFmpeg: FFmpeg? = null
     private var nextAction: Int = 1
     var videoView: VideoView? = null
@@ -80,6 +84,17 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
                 if (it.mediaType == "video") {
                     listOfVidoes.add(File(it.filePath))
                 }
+            }
+        }
+
+        cardviewedit.setOnClickListener {
+            if (listOfVidoes.size > 1 && mediaFile == null) {
+                nextAction = 3
+                publishData()
+            } else if (mediaFile != null) {
+                goToEditActivity()
+            } else {
+                goToEditActivity()
             }
         }
 
@@ -183,11 +198,39 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
             }
         } else if (mediaList.isEmpty()) {
             toast("Please select video files to merge and play")
-        } else {
+        } else if (nextAction == 2) {
             viewModel.publishedFiles(File(listOfVidoes[0].path))
             toast("Saved to publish")
+        } else if (nextAction == 3) {
+            goToEditActivity()
         }
 
+    }
+
+    private fun goToEditActivity() {
+
+        if (mediaFile == null)
+            mediaFile = File(listOfVidoes[0].path)
+
+
+        val timestamp = Date()
+        mediaData = mediaFile.let {
+            MediaData(
+                id = 0,
+                name = it!!.name,
+                extension = it.extension,
+                filePath = it.absolutePath,
+                createdAt = timestamp,
+                modifiedAt = timestamp,
+                playListName = "",
+                sequence = 0,
+                mediaType = "video"
+            )
+        }
+
+        val i = Intent(this, PreviewVideoActivity::class.java)
+        i.putExtra("mediaData", mediaData)
+        startActivity(i)
     }
 
     private fun setMediaController() {
@@ -235,13 +278,36 @@ class PlayActivity : AppCompatActivity(), OptiFFMpegCallback {
     }
 
     override fun onSuccess(convertedFile: File, type: String) {
+        mediaFile = convertedFile
         if (nextAction == 2) {
             toast("Saved to publish")
             viewModel.publishedFiles(convertedFile)
             progressDialog!!.dismiss()
         }
 
+        if (nextAction == 3) {
+            progressDialog!!.dismiss()
+            val timestamp = Date()
+            mediaData = mediaFile.let {
+                MediaData(
+                    id = 0,
+                    name = it!!.name,
+                    extension = it.extension,
+                    filePath = it.absolutePath,
+                    createdAt = timestamp,
+                    modifiedAt = timestamp,
+                    playListName = "",
+                    sequence = 0,
+                    mediaType = "video"
+                )
+            }
+            val i = Intent(this, PreviewVideoActivity::class.java)
+            i.putExtra("mediaData", mediaData)
+            startActivity(i)
+        }
+
         if (nextAction == 1) {
+
             listOfVidoes.add(convertedFile)
             toast(listOfVidoes.size.toString())
             if (count == listOfImages.size - 1) {  // size = 2  ,   count = 1
