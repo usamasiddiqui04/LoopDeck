@@ -94,12 +94,8 @@ class StickerBSFragment : BottomSheetDialogFragment() {
         rvEmoji.layoutManager = gridLayoutManager
         rvEmoji.adapter = stickerAdapter
 
-        val stickerDone: ImageView = contentView.findViewById(R.id.stickerDone);
         val stickerClose: ImageView = contentView.findViewById(R.id.stickerClose);
 
-        stickerDone.setOnClickListener {
-            dismiss()
-        }
 
         stickerClose.setOnClickListener {
             dismiss()
