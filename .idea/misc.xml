@@ -6,8 +6,10 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.10923309788092836" />
         <entry key="app/src/main/res/layout/activity_play.xml" value="0.10166498486377397" />
         <entry key="app/src/main/res/layout/activity_recents.xml" value="0.21" />
+        <entry key="app/src/main/res/layout/fragment_sound_picker.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_sticker_emoji_dialog.xml" value="0.10166498486377397" />
         <entry key="app/src/main/res/layout/soundpickerlayout.xml" value="0.10166498486377397" />
+        <entry key="app/src/main/res/layout/text_dialog.xml" value="0.1" />
       </map>
     </option>
   </component>
